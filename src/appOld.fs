@@ -59,20 +59,13 @@ module Framework =
         member inline _.For(sequence: seq<'a>, body: 'a -> RuntimeTypedAppGen<'o> list) : RuntimeTypedAppGen<'o> list =
             [ for x in sequence do yield! body x ]
 
-    //type ViewBuilder() =
-    //    inherit Gen.GenBuilder()
     type ViewBuilder() =
         member inline _.Bind(m, [<InlineIfLambda>] f) = Gen.bind m f
         member _.Yield(x: AppGen<'o,'s>) = x
         member inline _.Delay([<InlineIfLambda>] f) = f ()
-        member inline _.Combine(a, b) : Gen<_,_,_> =
-            printfn "COMBINE"
-            loop {
-                let! a = a
-                let! b = b
-                return [a;b]
-            }
-        member _.Zero() : AppGen<unit list, unit> = Gen.ofValue []
+        member inline _.Combine(a, b: Bottom) : Gen<_,_,_> = a
+        member _.Zero() = ()
+    and Bottom private () = class end
     let pview = ViewBuilder()
 
 
@@ -156,25 +149,24 @@ let comp =
                 text $"END for ..."
             }
         }
-        text "xxxx"
     }
 
 
-//let view() =
-//    pview {
-//        div [] {
-//            comp
-//            div [] {
-//                text "Hurz"
-//                comp
-//            }
-//        }
-//    }
+let view() =
+   pview {
+       div [] {
+           comp
+           div [] {
+               text "Hurz"
+               comp
+           }
+       }
+   }
     
 
-//do
-//    App(
-//        document,
-//        document.querySelector("#app"),
-//        view() |> Gen.toEvaluable
-//    ).Run()
+do
+   App(
+       document,
+       document.querySelector("#app"),
+       view() |> Gen.toEvaluable
+   ).Run()
