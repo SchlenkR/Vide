@@ -83,7 +83,7 @@ module Framework =
         member _.Zero() = []
         member _.Run<'o when 'o :> Node>(children: list<RuntimeTypedAppGen<'o>>) =
             loop {
-                let! (node: Node) = nodeGen
+                let! node = nodeGen
                 do! syncChildren node children
                 return node
             }
