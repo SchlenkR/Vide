@@ -96,22 +96,28 @@ type YieldedOrCombined<'a> = YieldedOrCombined of 'a list
 type Delayed<'a> = Delayed of 'a list
 
 type Builder() =
-    member inline _.Bind(m: Gen<'a,'s1>, f: 'a -> Gen<'b,'s2>) : Gen<'b,RTState> =
+    member inline _.Bind(m: Gen<'a,'s1>, f: 'a -> Gen<'b,'s2>) : Gen<'b,_> =
         printfn $"BIND     -  m.value = {m.value}"
-        let res = bind m f
+        let fres = bind m f
         {
-            value = res.value
-            state = toRTState res.state
+            value = fres.value
+            state = toRTState (m.state, fres.state)
         }
-    member _.Yield(x: Gen<_,_>) =
+    member _.Yield(x: Gen<'a,'s>) =
         printfn $"YIELD    -  x.value = {x.value}"
-        { value = YieldedOrCombined [x.value]; state = x.state }
-    member _.Delay(f: unit -> Gen<YieldedOrCombined<_>, _>) : Gen<Delayed<_>,_> =
+        { 
+            value = YieldedOrCombined [x.value]
+            state = toRTState x.state
+        }
+    member _.Delay(f: unit -> Gen<YieldedOrCombined<'a>,RTState>) : Gen<Delayed<'a>,RTState> =
         let fres = f()
         let (YieldedOrCombined fvalue) = fres.value
         printfn $"DELAY    -  f() = {fvalue}"
-        { value = Delayed fvalue; state = fres.state }
-    member _.Combine(a: Gen<YieldedOrCombined<'a>, 's>, b: Gen<Delayed<'a>, RTState>) =
+        { 
+            value = Delayed fvalue
+            state = fres.state 
+        }
+    member _.Combine(a: Gen<YieldedOrCombined<'a>,'s>, b: Gen<Delayed<'a>,RTState>) =
         printfn $"COMBINE  -  a.value = {a.value}  -  b.value = {b.value}"
         let (YieldedOrCombined avalues) = a.value
         let (Delayed bvalues) = b.value
@@ -119,6 +125,13 @@ type Builder() =
             value = YieldedOrCombined (avalues @ bvalues)
             state = toRTState (a.state, b.state)
         }
+    member inline _.For(
+            sequence: seq<'a>,
+            body: 'a -> Gen<YieldedOrCombined<'o>, _>
+            ) : Gen<YieldedOrCombined<'o>,_> =
+        [ for x in sequence do
+            yield! body x
+        ]
     // member _.Zero() = 
     //     printfn $"ZERO"
     //     []
@@ -139,10 +152,28 @@ let x =
         { value = c + d; state = 10.0 }
 
         { value = -77; state = 20.0 }
+        for i in 0..3 do
+            { value = -77; state = 20.0 }
 
         let! e = { value = -2; state = [909090] }
         let! f = { value = -3; state = (0.1, 0.2, 0.3) }
+        // for i in 0..3 do
+        //     { value = e + f + i; state = ("Hello", "World") }
+        //     { value = e + f + i; state = ("Hello", "World") }
+        //     { value = e + f + i; state = ("Hello", "World") }
+
         { value = e + f; state = ("Hello", "World") }
     }
 
-    // |> ignore
+
+let y =
+    test {
+        let! a = { value = 100; state = "a" }
+        let! b = { value = 200; state = 44.2 }
+        { value = a + b; state = 20UL }
+        
+        let! c = { value = 33; state = "c" }
+        let! d = { value = 66; state = 44.1 }
+        { value = c + d; state = 10.0 }
+        { value = -77; state = 20.0 }
+    }
