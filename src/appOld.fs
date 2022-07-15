@@ -39,7 +39,12 @@ module HelperAndExtensions =
 [<AutoOpen>]
 module Framework =
 
-    type RuntimeTypedAppGen<'o> = Type * Gen<'o,obj,App>
+    type BoxedState = BoxedState of obj
+    type RuntimeTypedAppGen<'o> = Type * Gen<'o, BoxedState, App>
+    type SyncChildOp =
+        | Added of Node * idx: int
+        | Removed of int
+        | Moved of Node * oldIdx: int * newIdx: int
 
     let inline syncAttributes (elem: Node) attributes =
         do for aname,avalue in attributes do
@@ -47,57 +52,79 @@ module Framework =
             if elemAttr.value <> avalue then
                 elemAttr.value <- avalue
 
-    let inline syncChildren (elem: Node) (children: RuntimeTypedAppGen<_> list) =
+    let inline syncChildren (children: RuntimeTypedAppGen<_> list) =
         Gen <| fun s r ->
-            let s = s |> Option.defaultWith (fun () -> ResizeArray())
-            let newState =
-                [ for childType, (Gen childGen) in children do
-                    let stateIdx = s |> Seq.tryFindIndex (fun (typ,_) -> typ = childType)
-                    let newChildState =
-                        match stateIdx with
-                        | Some idx ->
-                            let childState = s[idx]
-                            do s.RemoveAt(idx)
-                            childGen (childState |> snd |> Some) r |> snd
-                        | None ->
-                            let o,s = childGen None r
-                            do elem.appendChild o |> ignore
-                            s
-                    yield childType,newChildState
+            let s = s |> Option.defaultWith (fun () -> []) |> List.indexed
+            let mutable removedIndexes = []
+            let elementsAndState =
+                [ 
+                    for newIdx, (childType, (Gen childGen)) in children |> List.indexed do
+                        let state = 
+                            s 
+                            |> List.filter (fun (i,(typ,_)) -> 
+                                removedIndexes |> List.contains i |> not
+                                && typ = childType
+                            )
+                            |> List.tryHead
+                        let syncOp,newChildState =
+                            match state with
+                            | Some (lastIdx, (typ, childState)) ->
+                                do removedIndexes <- lastIdx :: removedIndexes
+                                let child,newChildState = childGen (Some childState) r
+                                Moved (child,lastIdx,newIdx), newChildState
+                            | None ->
+                                let child,newChildState = childGen None r
+                                Added (child,newIdx), newChildState
+                        yield syncOp, Some (childType,newChildState)
                 ]
-            (), ResizeArray newState
+                @ [
+                    for lastIdx,_ in s do
+                        if removedIndexes |> List.contains lastIdx then
+                            Removed lastIdx, None
+                ]
+            let syncOps = elementsAndState |> List.map fst
+            let newState = elementsAndState |> List.map snd |> List.choose id
+            syncOps, newState
+    
+    let syncOpsToNode (node: Node) (ops: SyncChildOp list) =
+        ()
 
-    let inline boxGen (stateType: Type) (Gen g: Gen<'o,'s,App>) : RuntimeTypedAppGen<'o> =
+    let inline toRuntimeTypedGen (stateType: Type) (Gen g: Gen<'o,'s,App>) : RuntimeTypedAppGen<'o> =
         // fable requires runtime-resolution and passing the stateType from callsite due to erasure
         let g = Gen <| fun s r ->
             let o,s = g (unbox s) r
-            o, box s
+            o, BoxedState (box s)
         stateType, g
 
     // TODO: Add overloads for yield (string, int, etc.)
     type ChildrenBuilder<'o,'s when 'o :> Node>(nodeGen: Gen<'o,'s,App>) =
-        member inline _.Yield<'o,'s1>(x: Gen<'o,'s1,App>) = [boxGen typeof<'s1> x]
-        member inline _.YieldFrom<'o,'s1>(x: Gen<'o list,'s1,App>) = [boxGen typeof<'s1> x]
-        member inline _.Delay([<InlineIfLambda>] f) = f ()
-        member _.Combine(a, b) = List.append a b
+        member inline _.Yield<'o,'s1>(x: Gen<'o,'s1,App>) = [toRuntimeTypedGen typeof<'s1> x]
+        // member inline _.YieldFrom<'o,'s1>(x: Gen<'o list,'s1,App>) = [toRuntimeTypedGen typeof<'s1> x]
         member _.Zero() = []
+        member inline _.Delay([<InlineIfLambda>] f) = f ()
+        member _.Combine(a, b) = a @ b
         member _.Run<'o when 'o :> Node>(children: list<RuntimeTypedAppGen<'o>>) =
             loop {
                 let! node = nodeGen
-                do! syncChildren node children
+                let! childOps = syncChildren children
+                do syncOpsToNode node childOps
                 return node
             }
-
         member inline _.For(sequence: seq<'a>, body: 'a -> RuntimeTypedAppGen<'o> list) : RuntimeTypedAppGen<'o> list =
             [ for x in sequence do yield! body x ]
 
     type ViewBuilder() =
         member inline _.Bind(m, [<InlineIfLambda>] f) = Gen.bind m f
-        member _.Yield(x: Gen<#Node,'s,App>) = x
-        member inline _.Delay([<InlineIfLambda>] f) = f ()
-        member _.Combine(a, b: Bottom) : Gen<_,_,_> = a
-        member _.Zero() = Bottom.Instance
-    and Bottom private () = static member internal Instance = Bottom()
+        member inline _.Yield<'o,'s1>(x) = [toRuntimeTypedGen typeof<'s1> x]
+        member inline _.Return<'o,'s1>(x) = Gen.ofValue x
+        member inline _.ReturnFrom<'o,'s1>(x) = x
+
+        // member inline _.YieldFrom<'o,'s1>(x: Gen<'o list,'s1,App>) = [toRuntimeTypedGen typeof<'s1> x]
+        // member _.Zero() = []
+        // member inline _.Delay([<InlineIfLambda>] f) = f ()
+        // member _.Run(children) = syncChildren children
+        // member _.Combine(a, b) = a @ b
+
     let pview = ViewBuilder()
 
 
@@ -145,35 +172,38 @@ module HtmlElementsApi =
 let comp =
     pview {
         let! count, setCount = Gen.ofMutable 0
-        div [] {
-            div []  {
-                text $"BEGIN for ..."
-                for x in 0..3 do
-                    text $"count = {count}"
-                    button [] (fun () -> setCount (count + 1)) { text "..." }
-                    text $"    (another x = {x})"
-                    text $"    (another x = {x})"
-                text $"END for ..."
-            }
-        }
+        yield div [] { empty }
+
+
+        // div [] {
+        //     div []  {
+        //         text $"BEGIN for ..."
+        //         for x in 0..3 do
+        //             text $"count = {count}"
+        //             button [] (fun () -> setCount (count + 1)) { text "..." }
+        //             text $"    (another x = {x})"
+        //             text $"    (another x = {x})"
+        //         text $"END for ..."
+        //     }
+        // }
     }
 
 
-let view() =
-   pview {
-       div [] {
-           comp
-           div [] {
-               text "Hurz"
-               comp
-           }
-       }
-   }
+// let view() =
+//    pview {
+//        div [] {
+//            comp
+//            div [] {
+//                text "Hurz"
+//                comp
+//            }
+//        }
+//    }
     
 
-do
-   App(
-       document,
-       document.querySelector("#app"),
-       view() |> Gen.toEvaluable
-   ).Run()
+// do
+//    App(
+//        document,
+//        document.querySelector("#app"),
+//        view() |> Gen.toEvaluable
+//    ).Run()
