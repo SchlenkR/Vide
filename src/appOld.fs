@@ -12,67 +12,67 @@ open Browser
 open Browser.Types
 
 
-[<AutoOpen>]
-module TODO =
-    type NodeList with
-        member this.elements = seq { for i in 0 .. this.length-1 do this.Item i }
-    type Node with
-        member this.clearChildren() = this.textContent <- "" // TODO: really?
-
-    and App(document: Document, appElement: Element, triggerUpdate: App -> Node list) =
-        member _.Document = document
-        member this.Run() =
-            for elem in triggerUpdate this do
-                appElement.appendChild elem |> ignore
-        member this.TriggerUpdate() =
-            printfn $"Trigger update"
-            let element = triggerUpdate this
-            // TODO: Sync returned element(s) with current
-            ()
-
-
-type AppGen<'v,'s> = Gen<'v,'s,App>
 type BoxedState = BoxedState of obj
-type BoxedAppGen<'v> = AppGen<'v,BoxedState>
-type RTAppGen<'v> = { stateType: Type; appGen: AppGen<'v,BoxedState> }
-type YieldedOrCombined<'a> = YieldedOrCombined of 'a list
-type Delayed<'a> = Delayed of 'a list
+type RTGen<'v,'r> = { stateType: Type; appGen: Gen<'v,BoxedState,'r> }
 
 type SyncChildOp =
     | Added of Node * idx: int
     | Removed of int
     | Moved of Node * oldIdx: int * newIdx: int
 
-let inline syncChildren (elem: Node) (children: RTAppGen<'elem list>) =
-    failwith "TODO synhChildren"
-    // Gen <| fun s r ->
-    //     let s = s |> Option.defaultWith (fun () -> []) |> List.indexed
-    //     let mutable removedIndexes = []
-    //     let elementsAndState =
-    //         [  for newIdx, (childType, (Gen childGen)) in children |> List.indexed do
-    //             let state = 
-    //                 s 
-    //                 |> List.filter (fun (i,(typ,_)) -> 
-    //                     removedIndexes |> List.contains i |> not
-    //                     && typ = childType
-    //                 )
-    //                 |> List.tryHead
-    //             let syncOp,newChildState =
-    //                 match state with
-    //                 | Some (lastIdx, (typ, childState)) ->
-    //                     do removedIndexes <- lastIdx :: removedIndexes
-    //                     let child,newChildState = childGen (Some childState) r
-    //                     Moved (child,lastIdx,newIdx), newChildState
-    //                 | None ->
-    //                     let child,newChildState = childGen None r
-    //                     Added (child,newIdx), newChildState
-    //             yield syncOp, Some (childType,newChildState)                 ]
-    //         @ [ for lastIdx,_ in s do
-    //             if removedIndexes |> List.contains lastIdx then
-    //                 Removed lastIdx, None ]
-    //     let syncOps = elementsAndState |> List.map fst
-    //     let newState = elementsAndState |> List.map snd |> List.choose id
-    //     syncOps, newState
+[<AutoOpen>]
+module DomExtensions =
+    type NodeList with
+        member this.elements = seq { for i in 0 .. this.length-1 do this.Item i }
+    type Node with
+        member this.clearChildren() = this.textContent <- "" // TODO: really?
+
+// let inline syncChildren (elem: Node) (children: RTGen<'elem list, 'r>) =
+//     Gen <| fun s r ->
+//         let s = s |> Option.defaultWith (fun () -> []) |> List.indexed
+//         let mutable removedIndexes = []
+//         let elementsAndState =
+//             [  for newIdx,child in children |> List.indexed do
+//                 let state = 
+//                     s 
+//                     |> List.filter (fun (i,(typ,_)) -> 
+//                         removedIndexes |> List.contains i |> not
+//                         && typ = childType
+//                     )
+//                     |> List.tryHead
+//                 let syncOp,newChildState =
+//                     match state with
+//                     | Some (lastIdx, (typ, childState)) ->
+//                         do removedIndexes <- lastIdx :: removedIndexes
+//                         let child,newChildState = childGen (Some childState) r
+//                         Moved (child,lastIdx,newIdx), newChildState
+//                     | None ->
+//                         let child,newChildState = childGen None r
+//                         Added (child,newIdx), newChildState
+//                 yield syncOp, Some (childType,newChildState)                 ]
+//             @ [ for lastIdx,_ in s do
+//                 if removedIndexes |> List.contains lastIdx then
+//                     Removed lastIdx, None ]
+//         let syncOps = elementsAndState |> List.map fst
+//         let newState = elementsAndState |> List.map snd |> List.choose id
+//         syncOps, newState
+
+type App(document: Document, appElement: Element, triggerUpdate: App -> Node list) =
+    member _.Document = document
+    member this.Run() =
+        for elem in triggerUpdate this do
+            appElement.appendChild elem |> ignore
+    member this.TriggerUpdate() =
+        printfn $"Trigger update"
+        let element = triggerUpdate this
+        // TODO: Sync returned element(s) with current
+        ()
+
+type AppGen<'v,'s> = Gen<'v,'s,App>
+type BoxedAppGen<'v> = AppGen<'v,BoxedState>
+type RTAppGen<'v> = RTGen<'v,App>
+type YieldedOrCombined<'a> = YieldedOrCombined of 'a list
+type Delayed<'a> = Delayed of 'a list
 
 
 let runDelayed (Delayed x) = x
@@ -184,10 +184,9 @@ type ViewBuilder<'elem,'ret>([<InlineIfLambda>] run: RTAppGen<'elem list> -> 're
         printfn $"RUN"
         children |> mapRTGen runDelayed
 
-
+let pov = ViewBuilder<Node,_>(id)
 
 let app : AppGen<_,_> = Gen (fun s r -> r,NoState)
-let pov = ViewBuilder(id)
 
 
 
@@ -211,7 +210,7 @@ module HtmlElementsApi =
         gen {
             let! elem = baseElem<'elem> name
             do syncAttributes elem attributes
-            do! syncChildren elem children
+            // do! syncChildren elem children
             return elem
         }
     
@@ -240,8 +239,9 @@ module HtmlElementsApi =
             }
 
 let textInst = text "test"
-let divInst = div [] { () }
-let buttonInst = button [] id { () }
+// TODO: Value restriction
+// let divInst = div [] { () }
+// let buttonInst = button [] id { () }
 
 let comp : RTAppGen<Node list> =
     pov {
@@ -274,9 +274,10 @@ let view() =
    }
     
 
-do
-   App(
-       document,
-       document.querySelector("#app"),
-       view() |> Gen.toEvaluable
-   ).Run()
+// do
+//    App(
+//        document,
+//        document.querySelector("#app"),
+//        view() |> Gen.toEvaluable
+//    ).Run()
+
