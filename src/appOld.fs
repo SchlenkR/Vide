@@ -97,6 +97,9 @@ let toRTAppGen (g: AppGen<'v,'s>) : RTAppGen<'v> =
 //     |> Gen
 
 // let ofValue v : AppGen<_,_> = { value = v; state = NoState }
+let mapRTGen (proj: 'a -> 'b) (g: RTAppGen<'a>) : RTAppGen<'b> =
+    let a = g.appGen |> Gen.map proj
+    { stateType = g.stateType; appGen = a }
 
 // TODO: Could it be that we neet "toRTAppGen" only in bind?
 // TODO: Generalize (App, so that this can be used in any context / framework)
@@ -104,7 +107,7 @@ type ViewBuilder<'elem,'ret>([<InlineIfLambda>] run: RTAppGen<'elem list> -> 're
     member inline _.Bind(
         m: AppGen<'v1,'s1>,
         f: 'v1 -> RTAppGen<'v2>)
-        : RTAppGen<'v2>
+        : RTAppGen<'v3>
         =
         failwith "TODO"
         // printfn $"BIND     -  m.value = {m.value}"
@@ -114,18 +117,27 @@ type ViewBuilder<'elem,'ret>([<InlineIfLambda>] run: RTAppGen<'elem list> -> 're
         // |> toRTAppGen
     member _.Yield(
         x: AppGen<'v,'s>)
-        : RTAppGen<YieldedOrCombined<'v>>
+        : RTAppGen<YieldedOrCombined<'node>>
         =
         failwith "TODO"
         // printfn $"YIELD    -  x.value = {x.value}"
         // { value = YieldedOrCombined [x.value]
         //   state = x.state }
         // |> toRTAppGen
-    member _.Return(
-        x: 'v)
-        : RTAppGen<YieldedOrCombined<'v>>
+    member _.Yield(
+        x: RTAppGen<'v>)
+        : RTAppGen<YieldedOrCombined<'node>>
         =
         failwith "TODO"
+        // printfn $"YIELD    -  x.value = {x.value}"
+        // { value = YieldedOrCombined [x.value]
+        //   state = x.state }
+        // |> toRTAppGen
+    // member _.Return(
+    //     x: 'v)
+    //     : RTAppGen<YieldedOrCombined<'v>>
+    //     =
+    //     failwith "TODO"
     member _.Delay(
         f: unit -> RTAppGen<YieldedOrCombined<'v>>)
         : RTAppGen<Delayed<'v>>
@@ -153,8 +165,8 @@ type ViewBuilder<'elem,'ret>([<InlineIfLambda>] run: RTAppGen<'elem list> -> 're
         // |> toRTAppGen
     member inline _.For(
         s: seq<'a>,
-        body: 'a -> RTAppGen<YieldedOrCombined<'v>>)
-        : RTAppGen<YieldedOrCombined<'v>>
+        body: 'a -> RTAppGen<YieldedOrCombined<'b>>)
+        : RTAppGen<YieldedOrCombined<'c>>
         =
         failwith "TODO"
         // [ for x in sequence do
@@ -170,8 +182,7 @@ type ViewBuilder<'elem,'ret>([<InlineIfLambda>] run: RTAppGen<'elem list> -> 're
         // |> toRTAppGen
     member inline _.Run(children) =
         printfn $"RUN"
-        let a = children.appGen |> Gen.map runDelayed
-        run { stateType = children.stateType; appGen = a }
+        children |> mapRTGen runDelayed
 
 
 
@@ -182,56 +193,57 @@ let pov = ViewBuilder(id)
 
 [<AutoOpen>]
 module HtmlElementsApi =
-    let inline elem name attributes (children: RTAppGen<'elem list>) =
-        let inline syncAttributes (elem: Node) =
-            do for aname,avalue in attributes do
-                let elemAttr = elem.attributes.getNamedItem aname
-                if elemAttr.value <> avalue then
-                    elemAttr.value <- avalue
-        pov {
+    let inline syncAttributes (elem: Node) attributes =
+        do for aname,avalue in attributes do
+            let elemAttr = elem.attributes.getNamedItem aname
+            if elemAttr.value <> avalue then
+                elemAttr.value <- avalue
+
+    let inline baseElem<'elem when 'elem :> HTMLElement and 'elem: equality> name =
+        gen {
             let! app = app
-            let! elem = Gen.preserve (fun () -> app.Document.createElement name :> Node)
+            let! elem = Gen.preserve (fun () -> app.Document.createElement name :?> 'elem)
             printfn $"Eval: {name} ({elem.GetHashCode()})"
-            do syncAttributes elem
+            return elem
+        }
+
+    let inline elem<'elem when 'elem :> HTMLElement and 'elem: equality> name attributes (children: RTAppGen<'elem list>) =
+        gen {
+            let! elem = baseElem<'elem> name
+            do syncAttributes elem attributes
             do! syncChildren elem children
             return elem
         }
     
     let text text =
-        fun children ->
-            pov {
-                let! app = app
-                let! elem = Gen.preserve (fun () -> app.Document.createTextNode text :> Node)
-                do if elem.textContent <> text then
-                    elem.textContent <- text
-                return elem
-            }
-        |> ViewBuilder
-        |> fun vb -> vb { () }
+        gen {
+            let! elem = baseElem<HTMLSpanElement> "span"
+            do if elem.textContent <> text then
+                elem.textContent <- text
+            return elem
+        }
 
-    let div attributes = ViewBuilder(elem "div" attributes)
+    let div attributes = ViewBuilder <| elem "div" attributes
 
-    let p attributes = ViewBuilder(elem "p" attributes)
+    let p attributes = ViewBuilder <| elem "p" attributes
 
     let button attributes click =
-        fun children ->
+        ViewBuilder <| fun children ->
             gen {
                 let! app = app
-                // TODO: Optimize the map afterwards; that's not necessary
-                let! button =
-                    SYNC CHILDREN!!!!
-                    elem "button" attributes children
-                    |> Gen.map (fun x -> x :?> HTMLButtonElement)
+                let! button = elem<HTMLButtonElement> "button" attributes children
                 button.onclick <- fun _ ->
                     printfn "-----CLICK"
                     click ()
                     app.TriggerUpdate()
                 return button :> Node // TODO: It's crap that we have to cast everything to "Node"
             }
-        |> ViewBuilder
 
+let textInst = text "test"
+let divInst = div [] { () }
+let buttonInst = button [] id { () }
 
-let comp =
+let comp : RTAppGen<Node list> =
     pov {
         let! count, setCount = Gen.ofMutable 0
         div [] {
@@ -239,7 +251,9 @@ let comp =
                 text $"BEGIN for ..."
                 for x in 0..3 do
                     text $"count = {count}"
-                    button [] (fun () -> setCount (count + 1)) { text "..." }
+                    button [] (fun () -> setCount (count + 1)) { 
+                        text "..." 
+                    }
                     text $"    (another x = {x})"
                     text $"    (another x = {x})"
                 text $"END for ..."
