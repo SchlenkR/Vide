@@ -3,7 +3,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ceTest.fs" />
     <Compile Include="coreOld.fs" />
     <Compile Include="appOld.fs" />
   </ItemGroup>

@@ -11,7 +11,6 @@ open LocSta
 open Browser
 open Browser.Types
 
-
 type BoxedState = BoxedState of obj
 type RTGen<'v,'r> = { stateType: Type; appGen: Gen<'v,BoxedState,'r> }
 
@@ -77,8 +76,7 @@ type Delayed<'a> = Delayed of 'a list
 
 let runDelayed (Delayed x) = x
 let runBoxedState (BoxedState x) = x
-let toRTAppGen (g: AppGen<'v,'s>) : RTAppGen<'v> =
-    let stateType = typeof<'s>
+let toRTAppGen (stateType: Type) (g: AppGen<'v,'s>) : RTAppGen<'v> =
     // fable requires runtime-resolution and passing the stateType from callsite due to erasure
     let g : BoxedAppGen<'v> =
         Gen <| fun s r ->
