@@ -11,6 +11,13 @@ open LocSta
 open Browser
 open Browser.Types
 
+[<AutoOpen>]
+module DomExtensions =
+    type NodeList with
+        member this.elements = seq { for i in 0 .. this.length-1 do this.Item i }
+    type Node with
+        member this.clearChildren() = this.textContent <- "" // TODO: really?
+
 type BoxedState = BoxedState of obj
 type RTGen<'v,'r> = { stateType: Type; appGen: Gen<'v,BoxedState,'r> }
 
@@ -18,13 +25,6 @@ type SyncChildOp =
     | Added of Node * idx: int
     | Removed of int
     | Moved of Node * oldIdx: int * newIdx: int
-
-[<AutoOpen>]
-module DomExtensions =
-    type NodeList with
-        member this.elements = seq { for i in 0 .. this.length-1 do this.Item i }
-    type Node with
-        member this.clearChildren() = this.textContent <- "" // TODO: really?
 
 // let inline syncChildren (elem: Node) (children: RTGen<'elem list, 'r>) =
 //     Gen <| fun s r ->
@@ -95,92 +95,60 @@ let toRTAppGen (stateType: Type) (g: AppGen<'v,'s>) : RTAppGen<'v> =
 //     |> Gen
 
 // let ofValue v : AppGen<_,_> = { value = v; state = NoState }
-let mapRTGen (proj: 'a -> 'b) (g: RTAppGen<'a>) : RTAppGen<'b> =
-    let a = g.appGen |> Gen.map proj
-    { stateType = g.stateType; appGen = a }
+// let mapRTGen (proj: 'a -> 'b) (g: RTAppGen<'a>) : RTAppGen<'b> =
+//     let a = g.appGen |> Gen.map proj
+//     { stateType = g.stateType; appGen = a }
 
 // TODO: Could it be that we neet "toRTAppGen" only in bind?
 // TODO: Generalize (App, so that this can be used in any context / framework)
-type ViewBuilder<'elem,'ret>([<InlineIfLambda>] run: RTAppGen<'elem list> -> 'ret) =
+type ViewBuilder<'elem,'ret>([<InlineIfLambda>] run: RTAppGen<'elem> list -> 'ret) =
     member inline _.Bind(
         m: AppGen<'v1,'s1>,
-        f: 'v1 -> RTAppGen<'v2>)
-        : RTAppGen<'v3>
+        f: 'v1 -> YieldedOrCombined<RTAppGen<'v2>>)
+        : YieldedOrCombined<RTAppGen<'v3>>
         =
         failwith "TODO"
-        // printfn $"BIND     -  m.value = {m.value}"
-        // let fres = bind m' f
-        // { value = fres.value
-        //   state = m.state, fres.state }
-        // |> toRTAppGen
     member _.Yield(
         x: AppGen<'v,'s>)
-        : RTAppGen<YieldedOrCombined<'node>>
+        : YieldedOrCombined<RTAppGen<'node>>
         =
         failwith "TODO"
-        // printfn $"YIELD    -  x.value = {x.value}"
-        // { value = YieldedOrCombined [x.value]
-        //   state = x.state }
-        // |> toRTAppGen
+    /// yield for combind
     member _.Yield(
         x: RTAppGen<'v>)
-        : RTAppGen<YieldedOrCombined<'node>>
+        : YieldedOrCombined<RTAppGen<'node>>
         =
         failwith "TODO"
-        // printfn $"YIELD    -  x.value = {x.value}"
-        // { value = YieldedOrCombined [x.value]
-        //   state = x.state }
-        // |> toRTAppGen
     // member _.Return(
     //     x: 'v)
     //     : RTAppGen<YieldedOrCombined<'v>>
     //     =
     //     failwith "TODO"
     member _.Delay(
-        f: unit -> RTAppGen<YieldedOrCombined<'v>>)
-        : RTAppGen<Delayed<'v>>
+        f: unit -> YieldedOrCombined<RTAppGen<'v>>)
+        : Delayed<RTAppGen<'v>>
         =
         failwith "TODO"
-        // let fres = f()
-        // let (YieldedOrCombined fvalue) = fres.appGen.value
-        // printfn $"DELAY    -  f() = {fvalue}"
-        // { value = Delayed fvalue
-        //   state = fres.appGen.state }
-        // |> toRTAppGen
     member _.Combine(
-        a: RTAppGen<YieldedOrCombined<'v>>,
-        b: RTAppGen<Delayed<'v>>)
-        : RTAppGen<YieldedOrCombined<'v>>
+        a: YieldedOrCombined<RTAppGen<'v>>,
+        b: Delayed<RTAppGen<'v>>)
+        : YieldedOrCombined<RTAppGen<'v>>
         =
         failwith "TODO"
-        // printfn $"COMBINE  -  a.appGen.value = {a.appGen.value}  -  b.appGen.value = {b.appGen.value}"
-        // let (YieldedOrCombined avalues) = a.appGen.value
-        // let (Delayed bvalues) = b.appGen.value
-        // let (BoxedState astate) = a.appGen.state
-        // let (BoxedState bstate) = b.appGen.state
-        // { value = YieldedOrCombined (List.append avalues bvalues)
-        //   state = List.append (downcast astate) (downcast bstate) }
-        // |> toRTAppGen
     member inline _.For(
         s: seq<'a>,
-        body: 'a -> RTAppGen<YieldedOrCombined<'b>>)
-        : RTAppGen<YieldedOrCombined<'c>>
+        body: 'a -> YieldedOrCombined<RTAppGen<'b>>)
+        : YieldedOrCombined<RTAppGen<'c>>
         =
         failwith "TODO"
-        // [ for x in sequence do
-        //     yield! body x
-        // ]
     member inline _.Zero()
-        : RTAppGen<YieldedOrCombined<'v>>
+        : YieldedOrCombined<RTAppGen<'v>>
         =
         failwith "TODO"
-        // printfn $"ZERO"
-        // { value = YieldedOrCombined []
-        //   state = NoState }
-        // |> toRTAppGen
     member inline _.Run(children) =
         printfn $"RUN"
-        children |> mapRTGen runDelayed
+        let (Delayed children) = children
+        run children
 
 let pov = ViewBuilder<Node,_>(id)
 
@@ -204,7 +172,7 @@ module HtmlElementsApi =
             return elem
         }
 
-    let inline elem<'elem when 'elem :> HTMLElement and 'elem: equality> name attributes (children: RTAppGen<'elem list>) =
+    let inline elem<'elem when 'elem :> HTMLElement and 'elem: equality> name attributes (children: RTAppGen<'elem> list) =
         gen {
             let! elem = baseElem<'elem> name
             do syncAttributes elem attributes
@@ -238,10 +206,68 @@ module HtmlElementsApi =
 
 let textInst = text "test"
 // TODO: Value restriction
-// let divInst = div [] { () }
-// let buttonInst = button [] id { () }
+let divInst : AppGen<_,_> = div [] { () }
+let divInst2 : AppGen<_,_> = 
+    div [] {
+        text "xxxx"
+    }
+let buttonInst = button [] id { () }
 
-let comp : RTAppGen<Node list> =
+let test1 =
+    pov {
+        text "test"
+    }
+
+let test2 =
+    pov {
+        text "test 1"
+        text "test 2"
+    }
+
+let test3 =
+    pov {
+        text "test 1"
+        div [] {
+            ()
+        }
+        text "test 2"
+    }
+
+let test4 =
+    pov {
+        text "test 1"
+        div [] {
+            text "inner 1"
+            text "inner 2"
+        }
+        text "test 2"
+    }
+
+let test5 =
+    pov {
+        let! count, setCount = Gen.ofMutable 0
+        text "test 1"
+
+        div [] {
+            text "inner 1"
+            text "inner 2"
+        }
+        text "test 2"
+    }
+
+let test6 =
+    pov {
+        let! c1,_ = Gen.ofMutable 0
+        text $"c1 = {c1}"
+        
+        let! c2,_ = Gen.ofMutable 0
+        div [] {
+            text $"c2 = {c2}"
+            text $"c2 (again) = {c2}"
+        }
+    }
+
+let comp =
     pov {
         let! count, setCount = Gen.ofMutable 0
         div [] {

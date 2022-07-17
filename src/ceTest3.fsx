@@ -7,6 +7,7 @@ type App = App
 type AppGen<'v,'s> = Gen<'v,'s,App>
 type BoxedState = BoxedState of obj
 type RTAppGen<'v> = { stateType: Type; appGen: AppGen<'v,BoxedState> }
+
 type YieldedOrCombined<'a> = YieldedOrCombined of 'a list
 type Delayed<'a> = Delayed of 'a list
 
@@ -29,7 +30,7 @@ let ofValue v : AppGen<_,_> = { value = v; state = NoState }
 // TODO: Could it be that we neet "toRTAppGen" only in bind?
 type Builder() =
     member inline _.Bind(
-        m: RTAppGen<'v1>,
+        m: AppGen<'v1,'s>,
         f: 'v1 -> RTAppGen<'v2>)
         : RTAppGen<'v2>
         =
@@ -41,40 +42,44 @@ type Builder() =
         // |> toRTAppGen
     member _.Yield(
         x: AppGen<'elem,'s>)
-        : RTAppGen<YieldedOrCombined<'elem>>
+        : RTAppGen<YieldedOrCombined<'node>>
         =
-        printfn $"YIELD    -  x.value = {x.value}"
-        { value = YieldedOrCombined [x.value]
-          state = x.state }
-        |> toRTAppGen
+        failwith ""
+        // printfn $"YIELD    -  x.value = {x.value}"
+        // { value = YieldedOrCombined [x.value]
+        //   state = x.state }
+        // |> toRTAppGen
     member _.Delay(
         f: unit -> RTAppGen<YieldedOrCombined<'elem>>)
-        : RTAppGen<Delayed<'elem>>
+        : RTAppGen<Delayed<'node>>
         =
-        let fres = f()
-        let (YieldedOrCombined fvalue) = fres.appGen.value
-        printfn $"DELAY    -  f() = {fvalue}"
-        { value = Delayed fvalue
-          state = fres.appGen.state }
-        |> toRTAppGen
+        failwith ""
+        // let fres = f()
+        // let (YieldedOrCombined fvalue) = fres.appGen.value
+        // printfn $"DELAY    -  f() = {fvalue}"
+        // { value = Delayed fvalue
+        //   state = fres.appGen.state }
+        // |> toRTAppGen
     member _.Combine(
         a: RTAppGen<YieldedOrCombined<'elem>>,
         b: RTAppGen<Delayed<'elem>>)
         : RTAppGen<YieldedOrCombined<'elem>>
         =
-        printfn $"COMBINE  -  a.appGen.value = {a.appGen.value}  -  b.appGen.value = {b.appGen.value}"
-        let (YieldedOrCombined avalues) = a.appGen.value
-        let (Delayed bvalues) = b.appGen.value
-        let (BoxedState astate) = a.appGen.state
-        let (BoxedState bstate) = b.appGen.state
-        { value = YieldedOrCombined (List.append avalues bvalues)
-          state = List.append (downcast astate) (downcast bstate) }
-        |> toRTAppGen
+        failwith ""
+        // printfn $"COMBINE  -  a.appGen.value = {a.appGen.value}  -  b.appGen.value = {b.appGen.value}"
+        // let (YieldedOrCombined avalues) = a.appGen.value
+        // let (Delayed bvalues) = b.appGen.value
+        // let (BoxedState astate) = a.appGen.state
+        // let (BoxedState bstate) = b.appGen.state
+        // { value = YieldedOrCombined (List.append avalues bvalues)
+        //   state = List.append (downcast astate) (downcast bstate) }
+        // |> toRTAppGen
     member inline _.For(
         s: seq<'ret>,
         body: 'ret -> RTAppGen<YieldedOrCombined<'elem>>)
         : RTAppGen<YieldedOrCombined<'elem>>
         =
+        printfn $"FOR"
         failwith "TODO"
         // [ for x in sequence do
         //     yield! body x
@@ -82,16 +87,19 @@ type Builder() =
     member inline _.Zero()
         : RTAppGen<YieldedOrCombined<'elem>>
         =
-        printfn $"ZERO"
-        { value = YieldedOrCombined []
-          state = NoState }
-        |> toRTAppGen
+        // printfn $"ZERO"
+        failwith ""
+        // { value = YieldedOrCombined []
+        //   state = NoState }
+        // |> toRTAppGen
     member _.Run(
         children: RTAppGen<Delayed<'elem>>)
         : 'ret
         =
         printfn $"RUN"
-        children
+        let (Delayed elems) = children.appGen.value
+        { stateType = children.stateType
+          appGen = { value = elems; state = children.appGen.state} }
 
 let test = Builder()
 
