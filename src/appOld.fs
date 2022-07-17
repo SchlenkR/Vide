@@ -185,11 +185,11 @@ module HtmlElementsApi =
             return elem
         }
     
-    let text text =
+    let span content =
         gen {
             let! elem = baseElem<HTMLSpanElement> "span"
-            do if elem.textContent <> text then
-                elem.textContent <- text
+            do if elem.textContent <> content then
+                elem.textContent <- content
             return elem
         }
 
@@ -211,67 +211,77 @@ module HtmlElementsApi =
 
 
 
-let textInst = text "test"
+let spanInst = span "test"
 // TODO: Value restriction
 let divInst() : AppGen<_,_> = div [] { () }
-let divInst2() : AppGen<_,_> = 
-    div [] {
-        text "xxxx"
-    }
+let divInst2() = div [] { span "xxxx" }
 let buttonInst = button [] id { () }
 
 let test1 =
     pov {
-        text "test"
+        span "test"
     }
 
 let test2 =
     pov {
-        text "test 1"
-        text "test 2"
+        span "test 1"
+        span "test 2"
     }
 
 let test3 =
     pov {
-        text "test 1"
+        span "test 1"
         div [] {
             ()
         }
-        text "test 2"
+        span "test 2"
     }
 
 let test4 =
     pov {
-        text "test 1"
+        span "test 1"
         div [] {
-            text "inner 1"
-            text "inner 2"
+            span "inner 1"
+            span "inner 2"
         }
-        text "test 2"
+        span "test 2"
     }
 
 let test5 =
     pov {
-        let! count, setCount = Gen.ofMutable 0
-        text "test 1"
+        let! c1, setCount = Gen.ofMutable 0
+        span $"c1 = {c1}"
 
         div [] {
-            text "inner 1"
-            text "inner 2"
+            span "inner 1"
+            span "inner 2"
         }
-        text "test 2"
+        span "test 2"
+        div [] {()}
     }
 
 let test6 =
     pov {
         let! c1,_ = Gen.ofMutable 0
-        text $"c1 = {c1}"
+        span $"c1 = {c1}"
         
         let! c2,_ = Gen.ofMutable 0
         div [] {
-            text $"c2 = {c2}"
-            text $"c2 (again) = {c2}"
+            span $"c2 = {c2}"
+            
+            let! c3,_ = Gen.ofMutable 0
+            span $"c3 = {c3}"
         }
+    }
+
+let test7 =
+    pov {
+        // TODO: document that this is not working (yield) and not useful. Maybe make a Gen.iter ?
+        let! spanElememt = span "test 1"
+        printfn $"Span inner text: {spanElememt.innerText}"
+
+        // yield spanElememt
+        span "test 2"
     }
 
 let comp =
@@ -279,15 +289,15 @@ let comp =
         let! count, setCount = Gen.ofMutable 0
         div [] {
             div []  {
-                text $"BEGIN for ..."
+                span $"BEGIN for ..."
                 for x in 0..3 do
-                    text $"count = {count}"
+                    span $"count = {count}"
                     button [] (fun () -> setCount (count + 1)) { 
-                        text "..." 
+                        span "..." 
                     }
-                    text $"    (another x = {x})"
-                    text $"    (another x = {x})"
-                text $"END for ..."
+                    span $"    (another x = {x})"
+                    span $"    (another x = {x})"
+                span $"END for ..."
             }
         }
     }
@@ -298,7 +308,7 @@ let view() =
        div [] {
            comp
            div [] {
-               text "Hurz"
+               span "Hurz"
                comp
            }
        }
