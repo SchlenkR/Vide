@@ -19,7 +19,7 @@ module DomExtensions =
         member this.clearChildren() = this.textContent <- "" // TODO: really?
 
 type BoxedState = BoxedState of obj
-type RTGen<'v,'r> = { stateType: Type; appGen: Gen<'v,BoxedState,'r> }
+type RTGen<'v,'r> = { stateType: Type list; appGen: Gen<'v,BoxedState,'r> }
 
 type SyncChildOp =
     | Added of Node * idx: int
@@ -75,7 +75,9 @@ type Delayed<'a> = Delayed of 'a list
 
 
 let runDelayed (Delayed x) = x
+
 let runBoxedState (BoxedState x) = x
+
 let toRTAppGen (stateType: Type) (g: AppGen<'v,'s>) : RTAppGen<'v> =
     // fable requires runtime-resolution and passing the stateType from callsite due to erasure
     let g : BoxedAppGen<'v> =
@@ -83,7 +85,7 @@ let toRTAppGen (stateType: Type) (g: AppGen<'v,'s>) : RTAppGen<'v> =
             let (Gen g) = g
             let o,s = g (unbox s) r
             o, BoxedState s
-    { stateType = stateType
+    { stateType = [stateType]
       appGen = g }
 // let inline unboxAppGen<'v,'s> (g: RTAppGen<'v>) : AppGen<'v,'s> =
 //     fun s r ->
@@ -108,22 +110,25 @@ type ViewBuilder<'elem,'ret>([<InlineIfLambda>] run: RTAppGen<'elem> list -> 're
         : YieldedOrCombined<RTAppGen<'v3>>
         =
         failwith "TODO"
+    
+    // used for yielding html elements
     member _.Yield(
         x: AppGen<'v,'s>)
         : YieldedOrCombined<RTAppGen<'node>>
         =
         failwith "TODO"
-    /// yield for combind
+    // used for yielding pov components
     member _.Yield(
-        x: RTAppGen<'v>)
+        x: RTAppGen<'v> list) // that's the output of `run` when `id` is passed into the builder
         : YieldedOrCombined<RTAppGen<'node>>
         =
         failwith "TODO"
-    // member _.Return(
-    //     x: 'v)
-    //     : RTAppGen<YieldedOrCombined<'v>>
-    //     =
-    //     failwith "TODO"
+
+    member _.Return(
+        x: 'v)
+        : RTAppGen<YieldedOrCombined<'v>>
+        =
+        failwith "TODO"
     member _.Delay(
         f: unit -> YieldedOrCombined<RTAppGen<'v>>)
         : Delayed<RTAppGen<'v>>
@@ -201,13 +206,15 @@ module HtmlElementsApi =
                     printfn "-----CLICK"
                     click ()
                     app.TriggerUpdate()
-                return button :> Node // TODO: It's crap that we have to cast everything to "Node"
+                return button
             }
+
+
 
 let textInst = text "test"
 // TODO: Value restriction
-let divInst : AppGen<_,_> = div [] { () }
-let divInst2 : AppGen<_,_> = 
+let divInst() : AppGen<_,_> = div [] { () }
+let divInst2() : AppGen<_,_> = 
     div [] {
         text "xxxx"
     }
