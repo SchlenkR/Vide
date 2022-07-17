@@ -7,127 +7,229 @@
 module App
 
 open System
-
 open LocSta
-open LocSta.Gen
-
 open Browser
 open Browser.Types
 
-[<AutoOpen>]
-module Application =
-    type App(document: Document, appElement: Element, triggerUpdate: App -> Node) =
-        member _.Document = document
-        member this.Run() =
-            let initialElement = triggerUpdate this
-            appElement.appendChild initialElement |> ignore
-        member this.TriggerUpdate() =
-            printfn $"Trigger update"
-            let element = triggerUpdate this
-            // TODO: Sync returned element(s) with current
-            ()
-    let app = Gen (fun s (r: App) -> r,())
 
 [<AutoOpen>]
-module HelperAndExtensions =
+module TODO =
     type NodeList with
         member this.elements = seq { for i in 0 .. this.length-1 do this.Item i }
     type Node with
         member this.clearChildren() = this.textContent <- "" // TODO: really?
 
-[<AutoOpen>]
-module Framework =
+    and App(document: Document, appElement: Element, triggerUpdate: App -> Node list) =
+        member _.Document = document
+        member this.Run() =
+            for elem in triggerUpdate this do
+                appElement.appendChild elem |> ignore
+        member this.TriggerUpdate() =
+            printfn $"Trigger update"
+            let element = triggerUpdate this
+            // TODO: Sync returned element(s) with current
+            ()
 
-    type AppGen<'o,'s> = Gen<'o,'s,App>
 
-    // TODO: Add overloads for yield (string, int, etc.)
-    type ChildrenBuilder<'o,'s>(run: Gen<'o> list -> AppGen<'o,'s>) =
-        member inline _.Yield<'o,'s1>(x: Gen<'o,'s1,App>) = [x]
-        member inline _.Delay([<InlineIfLambda>] f: unit -> list<Gen<_,_,_>>) = f ()
-        member _.Combine(a, b) = List.append a b
-        member _.Zero() = []
-        member _.Run(children) = run children
-        // member inline _.For(sequence: seq<'a>, body: 'a -> Gen<'o,_,_> list) : list<Gen<'o,_,_> list> =
-        //     [ for x in sequence do body x ]
+type AppGen<'v,'s> = Gen<'v,'s,App>
+type BoxedState = BoxedState of obj
+type BoxedAppGen<'v> = AppGen<'v,BoxedState>
+type RTAppGen<'v> = { stateType: Type; appGen: AppGen<'v,BoxedState> }
+type YieldedOrCombined<'a> = YieldedOrCombined of 'a list
+type Delayed<'a> = Delayed of 'a list
 
-    type ViewBuilder() =
-        member inline _.Bind(m, [<InlineIfLambda>] f) = Gen.bind m f
-        member _.Yield(x: AppGen<'o,'s>) = x
-        member inline _.Delay([<InlineIfLambda>] f) = f ()
-        member inline _.Combine(a, b: Bottom) : Gen<_,_,_> = a
-        member _.Zero() = ()
-    and Bottom private () = class end
-    let pview = ViewBuilder()
+type SyncChildOp =
+    | Added of Node * idx: int
+    | Removed of int
+    | Moved of Node * oldIdx: int * newIdx: int
+
+let inline syncChildren (elem: Node) (children: RTAppGen<'elem list>) =
+    failwith "TODO synhChildren"
+    // Gen <| fun s r ->
+    //     let s = s |> Option.defaultWith (fun () -> []) |> List.indexed
+    //     let mutable removedIndexes = []
+    //     let elementsAndState =
+    //         [  for newIdx, (childType, (Gen childGen)) in children |> List.indexed do
+    //             let state = 
+    //                 s 
+    //                 |> List.filter (fun (i,(typ,_)) -> 
+    //                     removedIndexes |> List.contains i |> not
+    //                     && typ = childType
+    //                 )
+    //                 |> List.tryHead
+    //             let syncOp,newChildState =
+    //                 match state with
+    //                 | Some (lastIdx, (typ, childState)) ->
+    //                     do removedIndexes <- lastIdx :: removedIndexes
+    //                     let child,newChildState = childGen (Some childState) r
+    //                     Moved (child,lastIdx,newIdx), newChildState
+    //                 | None ->
+    //                     let child,newChildState = childGen None r
+    //                     Added (child,newIdx), newChildState
+    //             yield syncOp, Some (childType,newChildState)                 ]
+    //         @ [ for lastIdx,_ in s do
+    //             if removedIndexes |> List.contains lastIdx then
+    //                 Removed lastIdx, None ]
+    //     let syncOps = elementsAndState |> List.map fst
+    //     let newState = elementsAndState |> List.map snd |> List.choose id
+    //     syncOps, newState
+
+
+let runDelayed (Delayed x) = x
+let runBoxedState (BoxedState x) = x
+let toRTAppGen (g: AppGen<'v,'s>) : RTAppGen<'v> =
+    let stateType = typeof<'s>
+    // fable requires runtime-resolution and passing the stateType from callsite due to erasure
+    let g : BoxedAppGen<'v> =
+        Gen <| fun s r ->
+            let (Gen g) = g
+            let o,s = g (unbox s) r
+            o, BoxedState s
+    { stateType = stateType
+      appGen = g }
+// let inline unboxAppGen<'v,'s> (g: RTAppGen<'v>) : AppGen<'v,'s> =
+//     fun s r ->
+//         let (Gen g) = g.appGen
+//         match s with
+//         | Some s ->
+//             let gres = g (BoxedState s) r
+//             gres
+//     |> Gen
+
+// let ofValue v : AppGen<_,_> = { value = v; state = NoState }
+
+// TODO: Could it be that we neet "toRTAppGen" only in bind?
+// TODO: Generalize (App, so that this can be used in any context / framework)
+type ViewBuilder<'elem,'ret>([<InlineIfLambda>] run: RTAppGen<'elem list> -> 'ret) =
+    member inline _.Bind(
+        m: AppGen<'v1,'s1>,
+        f: 'v1 -> RTAppGen<'v2>)
+        : RTAppGen<'v2>
+        =
+        failwith "TODO"
+        // printfn $"BIND     -  m.value = {m.value}"
+        // let fres = bind m' f
+        // { value = fres.value
+        //   state = m.state, fres.state }
+        // |> toRTAppGen
+    member _.Yield(
+        x: AppGen<'elem,'s>)
+        : RTAppGen<YieldedOrCombined<'elem>>
+        =
+        failwith "TODO"
+        // printfn $"YIELD    -  x.value = {x.value}"
+        // { value = YieldedOrCombined [x.value]
+        //   state = x.state }
+        // |> toRTAppGen
+    member _.Delay(
+        f: unit -> RTAppGen<YieldedOrCombined<'elem>>)
+        : RTAppGen<Delayed<'elem>>
+        =
+        failwith "TODO"
+        // let fres = f()
+        // let (YieldedOrCombined fvalue) = fres.appGen.value
+        // printfn $"DELAY    -  f() = {fvalue}"
+        // { value = Delayed fvalue
+        //   state = fres.appGen.state }
+        // |> toRTAppGen
+    member _.Combine(
+        a: RTAppGen<YieldedOrCombined<'elem>>,
+        b: RTAppGen<Delayed<'elem>>)
+        : RTAppGen<YieldedOrCombined<'elem>>
+        =
+        failwith "TODO"
+        // printfn $"COMBINE  -  a.appGen.value = {a.appGen.value}  -  b.appGen.value = {b.appGen.value}"
+        // let (YieldedOrCombined avalues) = a.appGen.value
+        // let (Delayed bvalues) = b.appGen.value
+        // let (BoxedState astate) = a.appGen.state
+        // let (BoxedState bstate) = b.appGen.state
+        // { value = YieldedOrCombined (List.append avalues bvalues)
+        //   state = List.append (downcast astate) (downcast bstate) }
+        // |> toRTAppGen
+    member inline _.For(
+        s: seq<'ret>,
+        body: 'ret -> RTAppGen<YieldedOrCombined<'elem>>)
+        : RTAppGen<YieldedOrCombined<'elem>>
+        =
+        failwith "TODO"
+        // [ for x in sequence do
+        //     yield! body x
+        // ]
+    member inline _.Zero()
+        : RTAppGen<YieldedOrCombined<'elem>>
+        =
+        failwith "TODO"
+        // printfn $"ZERO"
+        // { value = YieldedOrCombined []
+        //   state = NoState }
+        // |> toRTAppGen
+    member _.Run(
+        children: RTAppGen<Delayed<'elem>>)
+        : 'ret
+        =
+        printfn $"RUN"
+        let a = children.appGen |> Gen.map runDelayed
+        run { stateType = children.stateType; appGen = a }
+
+
+
+let app : AppGen<_,_> = Gen (fun s r -> r,NoState)
+let pov = ViewBuilder(id)
+
 
 
 [<AutoOpen>]
 module HtmlElementsApi =
-
-    let inline elem name attributes children =
-        let syncAttributes (elem: Node) =
+    
+    let inline elem name attributes (children: RTAppGen<'elem list>) =
+        let inline syncAttributes (elem: Node) =
             do for aname,avalue in attributes do
                 let elemAttr = elem.attributes.getNamedItem aname
                 if elemAttr.value <> avalue then
                     elemAttr.value <- avalue
-        let syncChildren (elem: Node) = Gen <| fun s r ->
-            let s = s |> Option.defaultWith (fun () -> ResizeArray())
-            let newState = seq {
-                for childType, (Gen childGen) in children do
-                    let stateIdx = s |> Seq.tryFindIndex (fun (typ,_) -> typ = childType)
-                    let newChildState =
-                        match stateIdx with
-                        | Some idx ->
-                            let childState = s[idx]
-                            do s.RemoveAt(idx)
-                            childGen (childState |> snd |> Some) r |> snd
-                        | None ->
-                            let o,s = childGen None r
-                            do elem.appendChild o |> ignore
-                            s
-                    yield childType,newChildState
-            }
-            (), ResizeArray newState
-        loop {
+        gen {
             let! app = app
-            let! elem = preserve (fun () -> app.Document.createElement name :> Node)
+            let! elem = Gen.preserve (fun () -> app.Document.createElement name :> Node)
             printfn $"Eval: {name} ({elem.GetHashCode()})"
             do syncAttributes elem
-            do! syncChildren elem
+            do! syncChildren elem children
             return elem
         }
 
     let text text =
-        loop {
+        gen {
             let! app = app
-            let! elem = preserve (fun () -> app.Document.createTextNode text)
+            let! elem = Gen.preserve (fun () -> app.Document.createTextNode text)
             do if elem.textContent <> text then
                 elem.textContent <- text
             return elem :> Node
         }
 
-    let div attributes = ChildrenBuilder(elem "div" attributes)
+    let div attributes = ViewBuilder(elem "div" attributes)
 
-    let p attributes = ChildrenBuilder(elem "p" attributes)
+    let p attributes = ViewBuilder(elem "p" attributes)
 
     let button attributes click =
-        ChildrenBuilder(fun children -> loop {
-            let! app = app
-            // TODO: Optimize the map afterwards; that's not necessary
-            let! button =
-                elem "button" attributes children
-                |> Gen.map (fun x -> x :?> HTMLButtonElement)
-            button.onclick <- fun _ ->
-                printfn "-----CLICK"
-                click ()
-                app.TriggerUpdate()
-            return button :> Node // TODO: It's crap that we have to cast everything to "Node"
-        })
+        fun children ->
+            gen {
+                let! app = app
+                // TODO: Optimize the map afterwards; that's not necessary
+                let! button =
+                    elem "button" attributes children
+                    |> Gen.map (fun x -> x :?> HTMLButtonElement)
+                button.onclick <- fun _ ->
+                    printfn "-----CLICK"
+                    click ()
+                    app.TriggerUpdate()
+                return button :> Node // TODO: It's crap that we have to cast everything to "Node"
+            }
+        |> ViewBuilder
 
     let nothing = text ""
 
 
 let comp =
-    pview {
+    pov {
         let! count, setCount = Gen.ofMutable 0
         div [] {
             div []  {
@@ -144,7 +246,7 @@ let comp =
 
 
 let view() =
-   pview {
+   pov {
        div [] {
            comp
            div [] {

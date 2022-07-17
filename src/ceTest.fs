@@ -125,8 +125,8 @@ type Builder() =
           state = toRTState (a.state, b.state) }
     member inline _.For(
             sequence: seq<'a>,
-            body: 'a -> AppGen<YieldedOrCombined<'o>, _>
-            ) : AppGen<YieldedOrCombined<'o>, _> =
+            body: 'a -> AppGen<YieldedOrCombined<'o>, RTState>
+            ) : AppGen<YieldedOrCombined<'o>, RTState> =
         failwith "TODO"
         // [ for x in sequence do
         //     yield! body x
@@ -135,9 +135,9 @@ type Builder() =
         printfn $"ZERO"
         { value = YieldedOrCombined []
           state = toRTState NoState }
-    // member _.Run(x) =
-    //     printfn $"RUN      -   {x}"
-    //     x
+    member _.Run(elements: AppGen<Delayed<'v>, RTState>) =
+        printfn $"RUN"
+        elements
 
 let test = Builder()
 

@@ -1,19 +1,19 @@
 
-namespace LocSta
+module LocSta
 
 open System
 
 // TODO: struct tuples
 
-type Gen<'o,'s,'r> = Gen of ('s option -> 'r -> ('o * 's))
+type Gen<'v,'s,'r> = Gen of ('s option -> 'r -> ('v * 's))
+type NoState = NoState
 
 module Gen =
-    
     /// Bind with transparent (nested) state typing.
     let inline bind 
-        (Gen m: Gen<'o1,'s1,'r>)
-        ([<InlineIfLambda>] f: 'o1 -> Gen<'o2,'s2,'r>)
-        : Gen<'o2, 's1 * 's2, 'r>
+        (Gen m: Gen<'v1,'s1,'r>)
+        ([<InlineIfLambda>] f: 'v1 -> Gen<'v2,'s2,'r>)
+        : Gen<'v2, 's1 * 's2, 'r>
         =
         fun mfState r ->
             // unpack the previous state (may be None or Some)
@@ -41,45 +41,9 @@ module Gen =
             fOut, resultingState
         |> Gen
 
-    /// Bind with hidden (boxed) state typing.
-    module BindBoxed =
-        type BoxedState = { stateType: Type; state: obj }
-        type CombinedBoxedState = { mState: BoxedState; fState: BoxedState }
-        
-        let internal unboxState<'t> state =
-            match state with
-            | None -> None
-            | Some x -> Some (x.state :?> 't)
+    let inline ofValue x = Gen (fun s r -> x, NoState)
 
-        let inline bind
-            (Gen m: Gen<'o1,'s1,'r>)
-            ([<InlineIfLambda>] f: 'o1 -> Gen<'o2,'s2,'r>)
-            : Gen<'o2, CombinedBoxedState, 'r>
-            =
-            fun mfState r ->
-                let mState,fState =
-                    match mfState with
-                    | None -> None,None
-                    | Some mfState -> Some mfState.mState, Some mfState.fState
-                let mOut,mState' = m (unboxState mState) r
-                let (Gen fgen) = f mOut
-                let fOut,fState' = fgen (unboxState fState) r
-                let resultingState =
-                    { mState = { stateType = mState'.GetType(); state = mState' }
-                      fState = { stateType = fState'.GetType(); state = fState' }
-                    }
-                fOut, resultingState
-            |> Gen
-
-    let inline ofValue x = Gen (fun s r -> x,())
-
-    type GenBuilder() =
-        member inline _.Bind(m, [<InlineIfLambda>] f) = bind m f
-        member _.Return(x) = ofValue x
-        member _.ReturnFrom(x) : Gen<_,_,_> = x
-
-    let loop = GenBuilder()
-
+    // TODO: Some of them should not be auto-opened
     let inline map proj (Gen g) = 
         Gen <| fun s r ->
             let o,s = g s r in proj o, s
@@ -110,3 +74,10 @@ module Gen =
     let inline withState (Gen g) =
         Gen <| fun s r ->
             let o,s = g s r in (o,s),s
+
+    type GenBuilder() =
+        member inline _.Bind(m, [<InlineIfLambda>] f) = bind m f
+        member _.Return(x) = ofValue x
+        member _.ReturnFrom(x) : Gen<_,_,_> = x
+
+let gen = Gen.GenBuilder()
