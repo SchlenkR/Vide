@@ -113,17 +113,22 @@ type ViewBuilder<'elem,'ret>([<InlineIfLambda>] run: RTAppGen<'elem list> -> 're
         //   state = m.state, fres.state }
         // |> toRTAppGen
     member _.Yield(
-        x: AppGen<'elem,'s>)
-        : RTAppGen<YieldedOrCombined<'elem>>
+        x: AppGen<'v,'s>)
+        : RTAppGen<YieldedOrCombined<'v>>
         =
         failwith "TODO"
         // printfn $"YIELD    -  x.value = {x.value}"
         // { value = YieldedOrCombined [x.value]
         //   state = x.state }
         // |> toRTAppGen
+    member _.Return(
+        x: 'v)
+        : RTAppGen<YieldedOrCombined<'v>>
+        =
+        failwith "TODO"
     member _.Delay(
-        f: unit -> RTAppGen<YieldedOrCombined<'elem>>)
-        : RTAppGen<Delayed<'elem>>
+        f: unit -> RTAppGen<YieldedOrCombined<'v>>)
+        : RTAppGen<Delayed<'v>>
         =
         failwith "TODO"
         // let fres = f()
@@ -133,9 +138,9 @@ type ViewBuilder<'elem,'ret>([<InlineIfLambda>] run: RTAppGen<'elem list> -> 're
         //   state = fres.appGen.state }
         // |> toRTAppGen
     member _.Combine(
-        a: RTAppGen<YieldedOrCombined<'elem>>,
-        b: RTAppGen<Delayed<'elem>>)
-        : RTAppGen<YieldedOrCombined<'elem>>
+        a: RTAppGen<YieldedOrCombined<'v>>,
+        b: RTAppGen<Delayed<'v>>)
+        : RTAppGen<YieldedOrCombined<'v>>
         =
         failwith "TODO"
         // printfn $"COMBINE  -  a.appGen.value = {a.appGen.value}  -  b.appGen.value = {b.appGen.value}"
@@ -147,26 +152,23 @@ type ViewBuilder<'elem,'ret>([<InlineIfLambda>] run: RTAppGen<'elem list> -> 're
         //   state = List.append (downcast astate) (downcast bstate) }
         // |> toRTAppGen
     member inline _.For(
-        s: seq<'ret>,
-        body: 'ret -> RTAppGen<YieldedOrCombined<'elem>>)
-        : RTAppGen<YieldedOrCombined<'elem>>
+        s: seq<'a>,
+        body: 'a -> RTAppGen<YieldedOrCombined<'v>>)
+        : RTAppGen<YieldedOrCombined<'v>>
         =
         failwith "TODO"
         // [ for x in sequence do
         //     yield! body x
         // ]
     member inline _.Zero()
-        : RTAppGen<YieldedOrCombined<'elem>>
+        : RTAppGen<YieldedOrCombined<'v>>
         =
         failwith "TODO"
         // printfn $"ZERO"
         // { value = YieldedOrCombined []
         //   state = NoState }
         // |> toRTAppGen
-    member _.Run(
-        children: RTAppGen<Delayed<'elem>>)
-        : 'ret
-        =
+    member inline _.Run(children) =
         printfn $"RUN"
         let a = children.appGen |> Gen.map runDelayed
         run { stateType = children.stateType; appGen = a }
@@ -180,14 +182,13 @@ let pov = ViewBuilder(id)
 
 [<AutoOpen>]
 module HtmlElementsApi =
-    
     let inline elem name attributes (children: RTAppGen<'elem list>) =
         let inline syncAttributes (elem: Node) =
             do for aname,avalue in attributes do
                 let elemAttr = elem.attributes.getNamedItem aname
                 if elemAttr.value <> avalue then
                     elemAttr.value <- avalue
-        gen {
+        pov {
             let! app = app
             let! elem = Gen.preserve (fun () -> app.Document.createElement name :> Node)
             printfn $"Eval: {name} ({elem.GetHashCode()})"
@@ -195,15 +196,18 @@ module HtmlElementsApi =
             do! syncChildren elem children
             return elem
         }
-
+    
     let text text =
-        gen {
-            let! app = app
-            let! elem = Gen.preserve (fun () -> app.Document.createTextNode text)
-            do if elem.textContent <> text then
-                elem.textContent <- text
-            return elem :> Node
-        }
+        fun children ->
+            pov {
+                let! app = app
+                let! elem = Gen.preserve (fun () -> app.Document.createTextNode text :> Node)
+                do if elem.textContent <> text then
+                    elem.textContent <- text
+                return elem
+            }
+        |> ViewBuilder
+        |> fun vb -> vb { () }
 
     let div attributes = ViewBuilder(elem "div" attributes)
 
@@ -215,6 +219,7 @@ module HtmlElementsApi =
                 let! app = app
                 // TODO: Optimize the map afterwards; that's not necessary
                 let! button =
+                    SYNC CHILDREN!!!!
                     elem "button" attributes children
                     |> Gen.map (fun x -> x :?> HTMLButtonElement)
                 button.onclick <- fun _ ->
@@ -225,8 +230,6 @@ module HtmlElementsApi =
             }
         |> ViewBuilder
 
-    let nothing = text ""
-
 
 let comp =
     pov {
@@ -234,11 +237,11 @@ let comp =
         div [] {
             div []  {
                 text $"BEGIN for ..."
-                // for x in 0..3 do
-                //     text $"count = {count}"
-                //     button [] (fun () -> setCount (count + 1)) { text "..." }
-                //     text $"    (another x = {x})"
-                //     text $"    (another x = {x})"
+                for x in 0..3 do
+                    text $"count = {count}"
+                    button [] (fun () -> setCount (count + 1)) { text "..." }
+                    text $"    (another x = {x})"
+                    text $"    (another x = {x})"
                 text $"END for ..."
             }
         }
