@@ -9,6 +9,8 @@ type Gen<'v,'s,'r> = Gen of ('s option -> 'r -> ('v * 's))
 type NoState = NoState
 
 module Gen =
+    let run (Gen g) = g
+    
     /// Bind with transparent (nested) state typing.
     let inline bind 
         (Gen m: Gen<'v1,'s1,'r>)
