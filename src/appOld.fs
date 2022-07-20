@@ -152,6 +152,7 @@ module HtmlElementsApi =
             // TODO: Performance
             do elem.clearChildren()
             do for child in children do
+                printfn $"Sync child: {child.nodeName}"
                 elem.appendChild child |> ignore
             return ()
         }
@@ -160,7 +161,7 @@ module HtmlElementsApi =
         gen {
             let! app = app
             let! elem = Gen.preserve (fun () -> app.Document.createElement name :?> 'elem)
-            printfn $"Eval: {name} ({elem.GetHashCode()})"
+            // printfn $"Eval: {name} ({elem.GetHashCode()})"
             return elem
         }
 
@@ -209,110 +210,145 @@ let divInst()  = div [] { () }
 let divInst2() = div [] { span "xxxx" }
 let buttonInst() = button [] id { () }
 
-let test1() =
-    pov {
-        span "test"
-    }
-
-let test2() =
-    pov {
-        span "test 1"
-        span "test 2"
-    }
-
-let test3() =
-    pov {
-        span "test 1"
-        div [] {
-            ()
+module Tests =
+    let test1() =
+        pov {
+            span "test"
         }
-        span "test 2"
-    }
 
-let test4() =
-    pov {
-        span "test 1"
-        div [] {
-            span "inner 1"
-            span "inner 2"
+    let test2() =
+        pov {
+            span "test 1"
+            span "test 2"
         }
-        span "test 2"
-    }
 
-let test5() =
-    pov {
-        let! c1, setCount = Gen.ofMutable 0
-        span $"c1 = {c1}"
-
-        div [] {
-            span "inner 1"
-            span "inner 2"
+    let test3() =
+        pov {
+            span "test 1"
+            div [] {
+                ()
+            }
+            span "test 2"
         }
-        span "test 2"
-        div [] {()}
-    }
 
-let test6() =
-    pov {
-        let! c1,_ = Gen.ofMutable 0
-        span $"c1 = {c1}"
-        
-        let! c2,_ = Gen.ofMutable 0
-        div [] {
-            span $"c2 = {c2}"
+    let test4() =
+        pov {
+            span "test 1"
+            div [] {
+                span "inner 1"
+                span "inner 2"
+            }
+            span "test 2"
+        }
+
+    let test5() =
+        pov {
+            let! c1, setCount = Gen.ofMutable 0
+            span $"c1 = {c1}"
+
+            div [] {
+                span "inner 1"
+                span "inner 2"
+            }
+            span "test 2"
+            div [] {()}
+        }
+
+    let test6() =
+        pov {
+            let! c1,_ = Gen.ofMutable 0
+            span $"c1 = {c1}"
             
-            let! c3,_ = Gen.ofMutable 0
-            span $"c3 = {c3}"
-        }
-    }
-
-let test7() =
-    pov {
-        // TODO: document that this is not working (yield) and not useful.
-        // - Maybe Gen.iter?
-        // - or `wrap` to emit the spanElement afterwards?
-        // - make also a "preserve" example
-        let! spanElememt = span "test 1"
-        printfn $"Span inner text: {spanElememt.innerText}"
-
-        // yield spanElememt
-        span "test 2"
-    }
-
-let comp() =
-    pov {
-        let! count, setCount = Gen.ofMutable 0
-        div [] {
-            div []  {
-                span $"BEGIN for ..."
-                for x in 0..3 do
-                    span $"count = {count}"
-                    button [] (fun () -> setCount (count + 1)) { 
-                        span "..." 
-                    }
-                    span $"    (another x = {x})"
-                    span $"    (another x = {x})"
-                span $"END for ..."
+            let! c2,_ = Gen.ofMutable 0
+            div [] {
+                span $"c2 = {c2}"
+                
+                let! c3,_ = Gen.ofMutable 0
+                span $"c3 = {c3}"
             }
         }
-    }
 
+    let test7() =
+        pov {
+            // TODO: document that this is not working (yield) and not useful.
+            // - Maybe Gen.iter?
+            // - or `wrap` to emit the spanElement afterwards?
+            // - make also a "preserve" example
+            let! spanElememt = span "test 1"
+            printfn $"Span inner text: {spanElememt.innerText}"
 
-let view() =
-   pov {
-       div [] {
-           comp()
-           div [] {
-               span "Hurz"
-               comp()
-           }
-       }
-   }
-    
+            // yield spanElememt
+            span "test 2"
+        }
 
-do
+let runApp view =
    App(
        document,
        document.querySelector("#app"),
-       view() |> Gen.toEvaluable
+       view |> Gen.toEvaluable
    ).Run()
+
+
+module ViewTest1 =
+
+    // TODO: Example: Parametrized components
+    let comp =
+        pov {
+            let! count, setCount = Gen.ofMutable 0
+            div [] {
+                div []  {
+                    span $"BEGIN for ..."
+                    for x in 0..3 do
+                        span $"count = {count}"
+                        button [] (fun () -> setCount (count + 1)) { 
+                            span "..." 
+                        }
+                        span $"    (another x = {x})"
+                        span $"    (another x = {x})"
+                    span $"END for ..."
+                }
+            }
+        }
+
+
+    let view =
+        pov {
+            div [] {
+                comp
+                div [] {
+                    span "Hurz"
+                    comp
+                }
+            }
+        }
+        
+
+module ChangeTypeDuringRuntime =
+    let view =
+        pov {
+            div [] {
+                let! count,setCount = Gen.ofMutable 0
+                
+                p [] { span $"count = {count}     /     count / 5 = {count % 5}" }
+                button [] (fun () -> setCount (count + 1)) { 
+                    span "Increment (+)" 
+                }
+
+                if count % 5 = 0 then
+                    printfn "A"
+                    div [] {
+                        span "YES!!!!"
+                        span " ... it's a multiple of 5!"
+                    }
+                else
+                    printfn "B"
+                    div [] {
+                        button [] (fun () -> setCount (count + 1)) { 
+                            span "click me :)" 
+                        }
+                    }
+            }
+        }
+
+runApp ChangeTypeDuringRuntime.view
+
