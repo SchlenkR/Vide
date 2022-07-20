@@ -1,8 +1,7 @@
 // TODOs:
 //  - Don't calc the whole tree when triggering Update
 //  - first class task/async support (in gen)
-//  - implement "for" in ChildBuilder
-//  - hide all the crazy generic type signatures
+//  - Generalize (App, so that this can be used in any context / framework)
 
 module App
 
@@ -17,9 +16,6 @@ module DomExtensions =
         member this.elements = seq { for i in 0 .. this.length-1 do this.Item i }
     type Node with
         member this.clearChildren() = this.textContent <- "" // TODO: really?
-
-type BoxedState = BoxedState of obj
-type RTGen<'v,'r> = { stateType: Type list; appGen: Gen<'v,BoxedState,'r> }
 
 type SyncChildOp =
     | Added of Node * idx: int
@@ -67,87 +63,56 @@ type App(document: Document, appElement: Element, triggerUpdate: App -> Node lis
         // TODO: Sync returned element(s) with current
         ()
 
-type AppGen<'v,'s> = Gen<'v,'s,App>
-type BoxedAppGen<'v> = AppGen<'v,BoxedState>
-type RTAppGen<'v> = RTGen<'v,App>
+type BoxedState = BoxedState of obj
+type CompoundState<'s> = { mState: 's; fStates: BoxedState list }
+type RTGen<'v,'s,'r> = { stateType: Type; appGen: Gen<'v,'s,'r> }
+
+// TODO: Do we really need both? What they discriminate?
 type YieldedOrCombined<'a> = YieldedOrCombined of 'a list
 type Delayed<'a> = Delayed of 'a list
 
 
-let runDelayed (Delayed x) = x
-
-let runBoxedState (BoxedState x) = x
-
-let toRTAppGen (stateType: Type) (g: AppGen<'v,'s>) : RTAppGen<'v> =
-    // fable requires runtime-resolution and passing the stateType from callsite due to erasure
-    let g : BoxedAppGen<'v> =
-        Gen <| fun s r ->
-            let (Gen g) = g
-            let o,s = g (unbox s) r
-            o, BoxedState s
-    { stateType = [stateType]
-      appGen = g }
-// let inline unboxAppGen<'v,'s> (g: RTAppGen<'v>) : AppGen<'v,'s> =
-//     fun s r ->
-//         let (Gen g) = g.appGen
-//         match s with
-//         | Some s ->
-//             let gres = g (BoxedState s) r
-//             gres
-//     |> Gen
-
-// let ofValue v : AppGen<_,_> = { value = v; state = NoState }
-// let mapRTGen (proj: 'a -> 'b) (g: RTAppGen<'a>) : RTAppGen<'b> =
-//     let a = g.appGen |> Gen.map proj
-//     { stateType = g.stateType; appGen = a }
-
-// TODO: Could it be that we neet "toRTAppGen" only in bind?
-// TODO: Generalize (App, so that this can be used in any context / framework)
-type ViewBuilder<'elem,'ret>([<InlineIfLambda>] run: RTAppGen<'elem> list -> 'ret) =
+type ViewBuilder<'elem,'ret>([<InlineIfLambda>] run: RTGen<'elem,BoxedState,App> list -> 'ret) =
     member inline _.Bind(
-        m: AppGen<'v1,'s1>,
-        f: 'v1 -> YieldedOrCombined<RTAppGen<'v2>>)
-        : YieldedOrCombined<RTAppGen<'v3>>
+        Gen m: Gen<'v1,'s,App>,
+        f: 'v1 -> YieldedOrCombined<RTGen<'v2,BoxedState,App>>)
+        : YieldedOrCombined<RTGen<'v2,BoxedState,App>>
         =
         failwith "TODO"
-    
+
     // used for yielding html elements
     member _.Yield(
-        x: AppGen<'v,'s>)
-        : YieldedOrCombined<RTAppGen<'node>>
-        =
-        failwith "TODO"
-    // used for yielding pov components
-    member _.Yield(
-        x: RTAppGen<'v> list) // that's the output of `run` when `id` is passed into the builder
-        : YieldedOrCombined<RTAppGen<'node>>
+        x: Gen<'v,'s,App>)
+        : YieldedOrCombined<RTGen<'node,BoxedState,App>>
         =
         failwith "TODO"
 
-    member _.Return(
-        x: 'v)
-        : RTAppGen<YieldedOrCombined<'v>>
+    // used for yielding pov components
+    member _.Yield(
+        x: RTGen<'v,BoxedState,App> list) // that's the output of `run` when `id` is passed into the builder
+        : YieldedOrCombined<RTGen<'node,BoxedState,App>>
         =
         failwith "TODO"
+
     member _.Delay(
-        f: unit -> YieldedOrCombined<RTAppGen<'v>>)
-        : Delayed<RTAppGen<'v>>
+        f: unit -> YieldedOrCombined<RTGen<'v,BoxedState,App>>)
+        : Delayed<RTGen<'v,BoxedState,App>>
         =
         failwith "TODO"
     member _.Combine(
-        a: YieldedOrCombined<RTAppGen<'v>>,
-        b: Delayed<RTAppGen<'v>>)
-        : YieldedOrCombined<RTAppGen<'v>>
+        a: YieldedOrCombined<RTGen<'v,BoxedState,App>>,
+        b: Delayed<RTGen<'v,BoxedState,App>>)
+        : YieldedOrCombined<RTGen<'v,BoxedState,App>>
         =
         failwith "TODO"
     member inline _.For(
         s: seq<'a>,
-        body: 'a -> YieldedOrCombined<RTAppGen<'b>>)
-        : YieldedOrCombined<RTAppGen<'c>>
+        body: 'a -> YieldedOrCombined<RTGen<'b,BoxedState,App>>)
+        : YieldedOrCombined<RTGen<'c,BoxedState,App>>
         =
         failwith "TODO"
     member inline _.Zero()
-        : YieldedOrCombined<RTAppGen<'v>>
+        : YieldedOrCombined<RTGen<'v,BoxedState,App>>
         =
         failwith "TODO"
     member inline _.Run(children) =
@@ -157,7 +122,7 @@ type ViewBuilder<'elem,'ret>([<InlineIfLambda>] run: RTAppGen<'elem> list -> 're
 
 let pov = ViewBuilder<Node,_>(id)
 
-let app : AppGen<_,_> = Gen (fun s r -> r,NoState)
+let app : Gen<_,_,App> = Gen (fun s r -> r,NoState)
 
 
 
@@ -177,7 +142,7 @@ module HtmlElementsApi =
             return elem
         }
 
-    let inline elem<'elem when 'elem :> HTMLElement and 'elem: equality> name attributes (children: RTAppGen<'elem> list) =
+    let inline elem<'elem when 'elem :> HTMLElement and 'elem: equality> name attributes (children: RTGen<'elem,BoxedState,App> list) =
         gen {
             let! elem = baseElem<'elem> name
             do syncAttributes elem attributes
@@ -213,7 +178,7 @@ module HtmlElementsApi =
 
 let spanInst = span "test"
 // TODO: Value restriction
-let divInst() : AppGen<_,_> = div [] { () }
+let divInst() : Gen<_,_,App> = div [] { () }
 let divInst2() = div [] { span "xxxx" }
 let buttonInst = button [] id { () }
 
@@ -276,7 +241,10 @@ let test6 =
 
 let test7 =
     pov {
-        // TODO: document that this is not working (yield) and not useful. Maybe make a Gen.iter ?
+        // TODO: document that this is not working (yield) and not useful.
+        // - Maybe Gen.iter?
+        // - or `wrap` to emit the spanElement afterwards?
+        // - make also a "preserve" example
         let! spanElememt = span "test 1"
         printfn $"Span inner text: {spanElememt.innerText}"
 

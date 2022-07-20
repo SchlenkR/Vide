@@ -37,8 +37,7 @@ module Gen =
             // but this time with state of 2 gens packed together.
             let fOut,fState' = fgen fState r
 
-            let resultingState = mState', fState'
-            fOut, resultingState
+            fOut, (mState', fState')
         |> Gen
 
     let inline ofValue x = Gen (fun s r -> x, NoState)

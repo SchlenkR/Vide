@@ -66,11 +66,6 @@
 
 
 
-#if INTERACTIVE
-#else
-module Test
-#endif
-
 open System
 
 type App = App
