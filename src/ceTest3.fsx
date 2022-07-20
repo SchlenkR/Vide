@@ -34,12 +34,11 @@ type Builder() =
         f: 'v1 -> RTAppGen<'v2>)
         : RTAppGen<'v2>
         =
-        failwith "TODO"
-        // printfn $"BIND     -  m.value = {m.value}"
-        // let fres = bind m' f
-        // { value = fres.value
-        //   state = m.state, fres.state }
-        // |> toRTAppGen
+        printfn $"BIND     -  m.value = {m.value}"
+        let fres = bind m f
+        { value = fres.value
+          state = m.state, fres.state }
+        |> toRTAppGen
     member _.Yield(
         x: AppGen<'elem,'s>)
         : RTAppGen<YieldedOrCombined<'node>>
@@ -96,16 +95,17 @@ type Builder() =
         children: RTAppGen<Delayed<'elem>>)
         : 'ret
         =
-        printfn $"RUN"
-        let (Delayed elems) = children.appGen.value
-        { stateType = children.stateType
-          appGen = { value = elems; state = children.appGen.state} }
+        failwith ""
+        // printfn $"RUN"
+        // let (Delayed elems) = children.appGen.value
+        // { stateType = children.stateType
+        //   appGen = { value = elems; state = children.appGen.state} }
 
 let test = Builder()
 
 
 
-let a =
+let a() =
     test {
         let! a = { value = 100; state = "a" }
         let! b = { value = 200; state = 44.2 }
@@ -130,7 +130,7 @@ let a =
     }
 
 
-let b =
+let b() =
     test {
         let! a = { value = 100; state = "a" }
         let! b = { value = 200; state = 44.2 }
@@ -143,18 +143,18 @@ let b =
     }
 
 
-let c =
+let c() =
     test {
         { value = 33; state = 20UL }
         { value = -77; state = 20.0 }
     }
 
-let d =
+let d() =
     test {
         { value = -77; state = 20.0 }
     }
 
-let e =
+let e() =
     test {
         if true then
             { value = -77; state = 20.0 }
