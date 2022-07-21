@@ -81,6 +81,9 @@ type ViewBuilder<'ret>([<InlineIfLambda>] emitResult: RTAppGen<Node list> -> 're
                 | Some s ->
                     // we want a nominal generic type parameter that is 's1 * 's2
                     let mState,fState = s.boxedState :?> 'stateType
+                    printfn "BIND"
+                    printfn $"        mstate = {mState}"
+                    printfn $"        fstate = {fState}"
                     Some mState, Some fState
             let mOut,mState' = m mState r
             let (Gen fgen) = f mOut
@@ -335,17 +338,18 @@ module ChangeTypeDuringRuntime =
                 }
 
                 if count % 5 = 0 then
-                    printfn "A"
                     div [] {
                         span "YES!!!!"
                         span " ... it's a multiple of 5!"
                     }
                 else
-                    printfn "B"
+                    let! start = Gen.preserve (fun () -> DateTime.Now.ToString())
+                    // let! btnCount,setBtnCount = Gen.ofMutable 0
                     div [] {
-                        button [] (fun () -> setCount (count + 1)) { 
-                            span "click me :)" 
+                        button [] id (*(fun () -> setBtnCount (btnCount + 1))*) {
+                            span "You clicked me {btnCount} times" 
                         }
+                        span $"State started: {start}"
                     }
             }
         }
