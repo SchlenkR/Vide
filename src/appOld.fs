@@ -43,6 +43,7 @@ let toBoxedGen
     (Gen x: Gen<'v,State<'s>,'r>)
     : Gen<'v,RTState,'r>
     =
+    printfn "toBoxedGen"
     fun s r ->
         let s =
             match s with
@@ -61,24 +62,28 @@ type ViewBuilder<'ret>(run: RTAppGen<Node list> -> 'ret) =
         f: 'v1 -> AppGen<'v2, State<'s2>>)
         : RTAppGen<'v2>
         =
+        printfn "Bind"
         Gen.bind m f |> toBoxedGen
     
     member _.Yield(
         x: AppGen<'v,State<'s>>)
         : RTAppGen<Node list>
         =
+        printfn "Yield (single)"
         toBoxedGen x |> Gen.map (fun xv -> [xv :> Node])
 
     member _.Yield(
         x: AppGen<'v list, State<'s>>)
         : RTAppGen<Node list>
         =
+        printfn "Yield (many)"
         toBoxedGen x |> Gen.map (List.map (fun x -> x :> Node))
     
     member _.Delay(
         f: unit -> RTAppGen<Node list>)
         : RTAppGen<Node list>
         =
+        printfn "Delay"
         f()
 
     member _.Combine(
@@ -86,6 +91,7 @@ type ViewBuilder<'ret>(run: RTAppGen<Node list> -> 'ret) =
         b: RTAppGen<Node list>)
         : RTAppGen<Node list>
         =
+        printfn "Combine"
         gen {
             let! aNodes = a
             let! bNodes = b
@@ -98,6 +104,7 @@ type ViewBuilder<'ret>(run: RTAppGen<Node list> -> 'ret) =
         body: 'a -> RTAppGen<Node list>)
         : RTAppGen<Node list>
         =
+        printfn "For"
         s
         |> Seq.map body
         |> Seq.fold (fun curr next -> this.Combine(curr, next)) (this.Zero())
@@ -106,9 +113,11 @@ type ViewBuilder<'ret>(run: RTAppGen<Node list> -> 'ret) =
         : RTAppGen<Node list>
         =
         // 's: same reason as in Combine
+        printfn "Zero"
         Gen.ofValue [] |> toBoxedGen
 
     member _.Run(children) : 'ret =
+        printfn "Run"
         run children
 
 let pov = ViewBuilder<_>(id)
@@ -324,7 +333,8 @@ module ChangeTypeDuringRuntime =
                         span " ... it's a multiple of 5!"
                     }
                 else
-                    let! start = Gen.preserve (fun () -> DateTime.Now.ToString())
+                    let! start = Gen.preserve (fun () -> DateTime.Now.Ticks)
+                    let start = start + 100L
                     // let! btnCount,setBtnCount = Gen.ofMutable 0
                     div [] {
                         button [] id (*(fun () -> setBtnCount (btnCount + 1))*) {
@@ -340,19 +350,14 @@ module ChangeTypeDuringRuntimeSimple =
         pov {
             div [] {
                 let! count,setCount = Gen.ofMutable 0
-                
-                button [] (fun () -> setCount (count + 1)) { 
-                    ()
-                }
+                button [] (fun () -> setCount (count + 1)) {()}
 
                 if count % 3 = 0 && count <> 0 then
-                    let! start = Gen.preserve (fun () -> DateTime.Now.ToString())
-                    button [] id (*(fun () -> setBtnCount (btnCount + 1))*) {
-                        span $"{start}" 
-                    }
-                else
                     span "YES!!!!"
+                else
+                    let! start = Gen.preserve (fun () -> DateTime.Now.ToString())
+                    div [] {()}
             }
         }
 
-App.Run ChangeTypeDuringRuntimeSimple.view |> ignore
+App.Run ChangeTypeDuringRuntime.view |> ignore

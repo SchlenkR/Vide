@@ -2,6 +2,7 @@
 module LocSta
 
 open System
+open Fable.Core
 
 // TODO: struct tuples
 
@@ -24,10 +25,10 @@ module State =
     let none = create "NoState" NoState
 
 module Gen =
-    let run (Gen g) = g
+    let inline run (Gen g) = g
 
     /// Bind with transparent (nested) state typing.
-    let bind 
+    let inline bind 
         (Gen m: Gen<'v1, State<'s1>, 'r>)
         (f: 'v1 -> Gen<'v2, State<'s2>, 'r>)
         : Gen<'v2, State<State<'s1> * State<'s2>>, 'r>
@@ -38,9 +39,17 @@ module Gen =
                 match mfState with
                 | None -> None,None
                 | Some { value = mState,fState } -> Some mState, Some fState
-            let mOut,mState' = m mState r
+            let mOut,mState' =
+                try m mState r
+                with ex ->
+                    printfn $"BIND CATCHING EX when invoking m"
+                    m None r
             let (Gen fgen) = f mOut
             let fOut,fState' = fgen fState r
+            printfn $"BIND-F:    mOut = {mOut}    fOut = {fOut}"
+            match mOut with
+            | :? State
+            | _ -> ()
             let newState =
                 let newStateValue = mState', fState'
                 let typeChain = mState'.typeChain + "  ::  " + fState'.typeChain
@@ -48,19 +57,19 @@ module Gen =
             fOut, newState
         |> Gen
 
-    let ofValue x =
+    let inline ofValue x =
         Gen <| fun s r -> x, State.none
 
-    let read<'r> : Gen<'r,_,'r> =
+    let inline read<'r> : Gen<'r,_,'r> =
         Gen <| fun s r -> r, State.none
 
-    let statesAndValue (Gen g) =
+    let inline statesAndValue (Gen g) =
         Gen <| fun s r ->
             let v,s' = g s r
             {| inState = s; value = v; outState = s' |}, s'
 
     // TODO: Some of them should not be auto-opened
-    let map proj (Gen g) = 
+    let inline map proj (Gen g) = 
         Gen <| fun s r -> let o,s = g s r in proj o, s
 
     let inline preserve (factory: unit -> 's) = 
@@ -81,17 +90,16 @@ module Gen =
             let setter = fun value -> refCell.contents <- value
             (refCell.contents, setter), state
 
-    let toEvaluable (Gen g: Gen<_,State<'s>,_>) =
+    let inline toEvaluable (Gen g: Gen<_,State<'s>,_>) =
         let mutable state = None
         fun r ->
             let fOut,fState = g state r
             state <- Some fState
-            printfn $"State Chain after eval: \n\n{fState.typeChain}"
             fOut
 
     type GenBuilder() =
-        member _.Bind(m, f) = bind m f
-        member _.Return(x) = ofValue x
-        member _.ReturnFrom(x) : Gen<_,_,_> = x
+        member inline _.Bind(m, f) = bind m f
+        member inline _.Return(x) = ofValue x
+        member inline _.ReturnFrom(x) : Gen<_,_,_> = x
 
 let gen = Gen.GenBuilder()
