@@ -5,76 +5,75 @@ open System
 
 // TODO: struct tuples
 
+type State<'s> = { typeChain: string list; value: 's }
 type Gen<'v,'s,'r> = Gen of ('s option -> 'r -> ('v * 's))
 type NoState = NoState
 
+module State =
+    let create typeChain value =  { typeChain = typeChain; value = value }
+    let none = create ["NoState"] NoState
+
 module Gen =
     let run (Gen g) = g
-    
+
     /// Bind with transparent (nested) state typing.
     let inline bind 
-        (Gen m: Gen<'v1,'s1,'r>)
-        ([<InlineIfLambda>] f: 'v1 -> Gen<'v2,'s2,'r>)
-        : Gen<'v2, 's1 * 's2, 'r>
+        (Gen m: Gen<'v1, State<'s1>, 'r>)
+        ([<InlineIfLambda>] f: 'v1 -> Gen<'v2, State<'s2>, 'r>)
+        : Gen<'v2, State<State<'s1> * State<'s2>>, 'r>
         =
         fun mfState r ->
             // unpack the previous state (may be None or Some)
             let mState,fState =
                 match mfState with
                 | None -> None,None
-                | Some (mState,fState) -> Some mState, Some fState
-
-            // The result of m is made up of an actual value and a state that
-            // has to be "recorded" by packing it together with the state of the
-            // next gen.
+                | Some { value = mState,fState } -> Some mState, Some fState
             let mOut,mState' = m mState r
-
-            // Continue evaluating the computation:
-            // passing the actual output value of m to the rest of the computation
-            // gives us access to the next gen in the computation:
             let (Gen fgen) = f mOut
-
-            // Evaluate the next gen and build up the result of this bind function
-            // as a gen, so that it can be used as a bindable element itself -
-            // but this time with state of 2 gens packed together.
             let fOut,fState' = fgen fState r
-
-            fOut, (mState', fState')
+            let newStateValue = mState', fState'
+            let newState = State.create (mState'.typeChain @ fState'.typeChain) newStateValue
+            fOut, newState
         |> Gen
 
-    let inline ofValue x = Gen (fun s r -> x, NoState)
+    let inline ofValue x =
+        Gen <| fun s r -> x, State.none
+
+    let read<'r> : Gen<'r,_,'r> =
+        Gen <| fun s r -> r, State.none
+
+    let inline statesAndValue (Gen g) =
+        Gen <| fun s r ->
+            let v,s' = g s r
+            {| inState = s; value = v; outState = s' |}, s'
 
     // TODO: Some of them should not be auto-opened
     let inline map proj (Gen g) = 
-        Gen <| fun s r ->
-            let o,s = g s r in proj o, s
+        Gen <| fun s r -> let o,s = g s r in proj o, s
 
-    let preserve factory = 
+    let inline preserve (factory: unit -> 's) = 
         Gen <| fun s r ->
-            let state = s |> Option.defaultWith factory
-            state,state
+            let state = s |> Option.defaultWith (fun () ->
+                let stateValue = factory()
+                State.create [typeof<'s>.Name] stateValue)
+            state.value, state
 
-    let ofMutable initialValue = 
+    let inline ofMutable (initialValue: 'a) = 
         Gen <| fun s r ->
-            let refCell = s |> Option.defaultWith (fun () -> ref initialValue)
+            let state = s |> Option.defaultWith (fun () ->
+                let stateValue = ref initialValue
+                State.create [typeof<'a>.Name] stateValue)
+            let refCell = state.value
             let setter = fun value -> refCell.contents <- value
-            (refCell.contents, setter), refCell
+            (refCell.contents, setter), state
 
-    let inline toEvaluable (Gen g) =
+    let inline toEvaluable (Gen g: Gen<_,State<'s>,_>) =
         let mutable state = None
         fun r ->
             let fOut,fState = g state r
             state <- Some fState
+            printfn $"State Chain after eval: \n\n{fState.typeChain}"
             fOut
-
-    // TODO: use toEvaluable
-    let inline toSeq r g =
-        let evaluable = toEvaluable g
-        seq { while true do yield evaluable r  }
-
-    let inline withState (Gen g) =
-        Gen <| fun s r ->
-            let o,s = g s r in (o,s),s
 
     type GenBuilder() =
         member inline _.Bind(m, [<InlineIfLambda>] f) = bind m f

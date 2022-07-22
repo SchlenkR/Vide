@@ -20,103 +20,78 @@ module DomExtensions =
     type Node with
         member this.clearChildren() = this.textContent <- "" // TODO: really?
 
-type App(document: Document, appElement: Element, triggerUpdate: App -> Node list) =
-    member _.Document = document
-    member this.Run() =
+type App(document: Document, appElement: Element, triggerUpdate: App -> Node list) as this =
+    do
         for elem in triggerUpdate this do
             appElement.appendChild elem |> ignore
+    member _.Document = document
     member this.TriggerUpdate() =
-        printfn $"Trigger update"
+        printfn $">>>> Trigger update"
         let element = triggerUpdate this
         // TODO: Sync returned element(s) with current
         ()
+    static member Run(view) =
+        App(document, document.querySelector("#app"), view |> Gen.toEvaluable)
+
+
 
 type AppGen<'v,'s> = Gen<'v,'s,App>
-type RTState = { stateType: Type; boxedState: obj }
+type RTState = State<obj>
 type RTAppGen<'v> = AppGen<'v,RTState>
 
-module ViewBuilderFunctions =
-    let inline typedGenToRTGen
-        (typeofState: Type)
-        (Gen x: Gen<'v,'s,'r>)
-        : Gen<'v,RTState,'r>
-        =
-        fun s r ->
-            let s =
-                match s with
-                | None -> None
-                | Some (s: RTState) -> Some (s.boxedState :?> 's)
-            let xv,xs = x s r
-            xv, { stateType = typeofState; boxedState = xs }
-        |> Gen
-
-    let inline combine
-        (a: RTAppGen<Node list>)
-        (b: RTAppGen<Node list>)
-        : RTAppGen<Node list>
-        =
-        // we need 's as a denominator for the state type
-        // (it's statically known, but it's safer in case it changes)
-        let g : Gen<_,'s,_> = 
-            gen {
-                let! aNodes = a
-                let! bNodes = b
-                return List.append aNodes bNodes
-            }
-        typedGenToRTGen typeof<'s> g
+let inline toBoxedGen
+    (Gen x: Gen<'v,State<'s>,'r>)
+    : Gen<'v,RTState,'r>
+    =
+    fun s r ->
+        let s =
+            match s with
+            | None -> None
+            | Some (s: RTState) -> Some (State.create s.typeChain (s.value :?> 's))
+        let xv,xs = x s r
+        xv, (State.create xs.typeChain (xs.value :> obj))
+    |> Gen
 
 // TODO: Could it be that we neet "toRTAppGen" only in bind?
 // TODO: Generalize (App, so that this can be used in any context / framework)
-type ViewBuilder<'ret>([<InlineIfLambda>] emitResult: RTAppGen<Node list> -> 'ret) =
+type ViewBuilder<'ret>([<InlineIfLambda>] run: RTAppGen<Node list> -> 'ret) =
 
     member inline _.Bind(
-        Gen m: AppGen<'v1,'s1>,
-        f: 'v1 -> AppGen<'v2,'s2>)
+        m: AppGen<'v1, State<'s1>>,
+        f: 'v1 -> AppGen<'v2, State<'s2>>)
         : RTAppGen<'v2>
         =
-        fun mfState r ->
-            let mState,fState =
-                match mfState with
-                | None -> None,None
-                | Some s ->
-                    // we want a nominal generic type parameter that is 's1 * 's2
-                    let mState,fState = s.boxedState :?> 'stateType
-                    printfn "BIND"
-                    printfn $"        mstate = {mState}"
-                    printfn $"        fstate = {fState}"
-                    Some mState, Some fState
-            let mOut,mState' = m mState r
-            let (Gen fgen) = f mOut
-            let fOut,fState' = fgen fState r
-
-            let state : 'stateType = mState', fState'
-            fOut, { stateType = typeof<'stateType>; boxedState = state }
-        |> Gen
+        Gen.bind m f |> toBoxedGen
     
     member inline _.Yield(
-        x: AppGen<'v,'s>)
+        x: AppGen<'v,State<'s>>)
         : RTAppGen<Node list>
         =
-        ViewBuilderFunctions.typedGenToRTGen (typeof<'s>) x |> Gen.map (fun xv -> [xv :> Node])
+        toBoxedGen x |> Gen.map (fun xv -> [xv :> Node])
 
     member inline _.Yield(
-        x: AppGen<'v list,'s>)
+        x: AppGen<'v list, State<'s>>)
         : RTAppGen<Node list>
         =
-        ViewBuilderFunctions.typedGenToRTGen (typeof<'s>) x |> Gen.map (List.map (fun x -> x :> Node))
+        toBoxedGen x |> Gen.map (List.map (fun x -> x :> Node))
     
-    member _.Delay(
+    member inline _.Delay(
         f: unit -> RTAppGen<Node list>)
         : RTAppGen<Node list>
         =
         f()
 
-    member _.Combine(
+    member inline _.Combine(
         a: RTAppGen<Node list>,
         b: RTAppGen<Node list>)
         : RTAppGen<Node list>
         =
-        ViewBuilderFunctions.combine a b
+        gen {
+            let! aNodes = a
+            let! bNodes = b
+            return List.append aNodes bNodes
+        }
+        |> toBoxedGen
 
     member inline this.For(
         s: seq<'a>,
@@ -125,23 +100,22 @@ type ViewBuilder<'ret>([<InlineIfLambda>] emitResult: RTAppGen<Node list> -> 're
         =
         s
         |> Seq.map body
-        |> Seq.fold ViewBuilderFunctions.combine (this.Zero())
+        |> Seq.fold (fun curr next -> this.Combine(curr, next)) (this.Zero())
 
     member inline _.Zero()
         : RTAppGen<Node list>
         =
         // 's: same reason as in Combine
-        let res : Gen<_,'s,_> = Gen.ofValue []
-        res |> ViewBuilderFunctions.typedGenToRTGen typeof<'s>
+        Gen.ofValue [] |> toBoxedGen
 
     member inline _.Run(children) : 'ret =
-        emitResult children
+        run children
 
 let pov = ViewBuilder<_>(id)
 
 [<AutoOpen>]
 module HtmlElementsApi =
-    let app : AppGen<_,_> = Gen (fun s r -> r,NoState)
+    let app = Gen.read<App>
 
     let inline syncAttributes (elem: Node) attributes =
         do for aname,avalue in attributes do
@@ -156,7 +130,10 @@ module HtmlElementsApi =
             do elem.clearChildren()
             do for child in children do
                 printfn $"Sync child: {child.nodeName}"
-                elem.appendChild child |> ignore
+                try elem.appendChild child |> ignore
+                with ex ->
+                    printfn $"EXCEPTION:::: {ex}"
+                    printfn $"    Element is: {elem}"
             return ()
         }
 
@@ -164,9 +141,22 @@ module HtmlElementsApi =
         gen {
             let! app = app
             let! elem = Gen.preserve (fun () -> app.Document.createElement name :?> 'elem)
-            // printfn $"Eval: {name} ({elem.GetHashCode()})"
             return elem
         }
+        // gen {
+        //     let! res =
+        //         gen {
+        //             let! app = app
+        //             let! elem = Gen.preserve (fun () -> app.Document.createElement name :?> 'elem)
+        //             return elem
+        //         }
+        //         |> Gen.statesAndValue
+        //     let elem = res.value
+        //     printfn $"Eval: {elem.nodeName} ({elem.GetHashCode()})"
+        //     // printfn $"    IN state:  {res.inState}"
+        //     // printfn $"    OUT state: {res.outState}"
+        //     return res.value
+        // }
 
     let inline elem<'elem when 'elem :> HTMLElement and 'elem: equality> name attributes (children: RTAppGen<Node list>) =
         gen {
@@ -184,11 +174,11 @@ module HtmlElementsApi =
             return elem
         }
 
-    let div attributes = ViewBuilder <| elem "div" attributes
+    let inline div attributes = ViewBuilder <| elem "div" attributes
 
-    let p attributes = ViewBuilder <| elem "p" attributes
+    let inline p attributes = ViewBuilder <| elem "p" attributes
 
-    let button attributes click =
+    let inline button attributes click =
         ViewBuilder <| fun children ->
             gen {
                 let! app = app
@@ -209,9 +199,9 @@ let textInst = span "test"
 
 let spanInst = span "test"
 // TODO: Value restriction
-let divInst()  = div [] { () }
-let divInst2() = div [] { span "xxxx" }
-let buttonInst() = button [] id { () }
+let inline divInst()  = div [] { () }
+let inline divInst2() = div [] { span "xxxx" }
+let inline buttonInst() = button [] id { () }
 
 module Tests =
     let test1() =
@@ -284,14 +274,6 @@ module Tests =
             span "test 2"
         }
 
-let runApp view =
-   App(
-       document,
-       document.querySelector("#app"),
-       view |> Gen.toEvaluable
-   ).Run()
-
-
 module ViewTest1 =
 
     // TODO: Example: Parametrized components
@@ -354,5 +336,4 @@ module ChangeTypeDuringRuntime =
             }
         }
 
-runApp ChangeTypeDuringRuntime.view
-
+App.Run ChangeTypeDuringRuntime.view |> ignore
