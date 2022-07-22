@@ -39,7 +39,7 @@ type AppGen<'v,'s> = Gen<'v,'s,App>
 type RTState = State<obj>
 type RTAppGen<'v> = AppGen<'v,RTState>
 
-let inline toBoxedGen
+let toBoxedGen
     (Gen x: Gen<'v,State<'s>,'r>)
     : Gen<'v,RTState,'r>
     =
@@ -54,34 +54,34 @@ let inline toBoxedGen
 
 // TODO: Could it be that we neet "toRTAppGen" only in bind?
 // TODO: Generalize (App, so that this can be used in any context / framework)
-type ViewBuilder<'ret>([<InlineIfLambda>] run: RTAppGen<Node list> -> 'ret) =
+type ViewBuilder<'ret>(run: RTAppGen<Node list> -> 'ret) =
 
-    member inline _.Bind(
+    member _.Bind(
         m: AppGen<'v1, State<'s1>>,
         f: 'v1 -> AppGen<'v2, State<'s2>>)
         : RTAppGen<'v2>
         =
         Gen.bind m f |> toBoxedGen
     
-    member inline _.Yield(
+    member _.Yield(
         x: AppGen<'v,State<'s>>)
         : RTAppGen<Node list>
         =
         toBoxedGen x |> Gen.map (fun xv -> [xv :> Node])
 
-    member inline _.Yield(
+    member _.Yield(
         x: AppGen<'v list, State<'s>>)
         : RTAppGen<Node list>
         =
         toBoxedGen x |> Gen.map (List.map (fun x -> x :> Node))
     
-    member inline _.Delay(
+    member _.Delay(
         f: unit -> RTAppGen<Node list>)
         : RTAppGen<Node list>
         =
         f()
 
-    member inline _.Combine(
+    member _.Combine(
         a: RTAppGen<Node list>,
         b: RTAppGen<Node list>)
         : RTAppGen<Node list>
@@ -93,7 +93,7 @@ type ViewBuilder<'ret>([<InlineIfLambda>] run: RTAppGen<Node list> -> 'ret) =
         }
         |> toBoxedGen
 
-    member inline this.For(
+    member this.For(
         s: seq<'a>,
         body: 'a -> RTAppGen<Node list>)
         : RTAppGen<Node list>
@@ -102,13 +102,13 @@ type ViewBuilder<'ret>([<InlineIfLambda>] run: RTAppGen<Node list> -> 'ret) =
         |> Seq.map body
         |> Seq.fold (fun curr next -> this.Combine(curr, next)) (this.Zero())
 
-    member inline _.Zero()
+    member _.Zero()
         : RTAppGen<Node list>
         =
         // 's: same reason as in Combine
         Gen.ofValue [] |> toBoxedGen
 
-    member inline _.Run(children) : 'ret =
+    member _.Run(children) : 'ret =
         run children
 
 let pov = ViewBuilder<_>(id)
@@ -306,7 +306,6 @@ module ViewTest1 =
                 }
             }
         }
-        
 
 module ChangeTypeDuringRuntime =
     let view =
@@ -319,7 +318,7 @@ module ChangeTypeDuringRuntime =
                     span "Increment (+)" 
                 }
 
-                if count % 5 = 0 then
+                if count % 5 = 0 && count <> 0 then
                     div [] {
                         span "YES!!!!"
                         span " ... it's a multiple of 5!"
@@ -336,4 +335,24 @@ module ChangeTypeDuringRuntime =
             }
         }
 
-App.Run ChangeTypeDuringRuntime.view |> ignore
+module ChangeTypeDuringRuntimeSimple =
+    let view =
+        pov {
+            div [] {
+                let! count,setCount = Gen.ofMutable 0
+                
+                button [] (fun () -> setCount (count + 1)) { 
+                    ()
+                }
+
+                if count % 3 = 0 && count <> 0 then
+                    let! start = Gen.preserve (fun () -> DateTime.Now.ToString())
+                    button [] id (*(fun () -> setBtnCount (btnCount + 1))*) {
+                        span $"{start}" 
+                    }
+                else
+                    span "YES!!!!"
+            }
+        }
+
+App.Run ChangeTypeDuringRuntimeSimple.view |> ignore
