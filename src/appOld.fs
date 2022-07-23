@@ -7,7 +7,7 @@
 module App
 
 open System
-open LocSta
+open LocSta.Core
 open Browser
 open Browser.Types
 
@@ -36,11 +36,11 @@ type App(document: Document, appElement: Element, triggerUpdate: App -> Node lis
 
 
 type AppGen<'v,'s> = Gen<'v,'s,App>
-type RTState = State<obj>
+type RTState = obj
 type RTAppGen<'v> = AppGen<'v,RTState>
 
 let toBoxedGen
-    (Gen x: Gen<'v,State<'s>,'r>)
+    (Gen x: Gen<'v,'s,'r>)
     : Gen<'v,RTState,'r>
     =
     printfn "toBoxedGen"
@@ -48,9 +48,11 @@ let toBoxedGen
         let s =
             match s with
             | None -> None
-            | Some (s: RTState) -> Some (State.create s.typeChain (s.value :?> 's))
+            | Some (s: RTState) ->
+                try Some (s :?> 's)
+                with _ -> None
         let xv,xs = x s r
-        xv, (State.create xs.typeChain (xs.value :> obj))
+        xv, (xs :> obj)
     |> Gen
 
 // TODO: Could it be that we neet "toRTAppGen" only in bind?
@@ -58,22 +60,22 @@ let toBoxedGen
 type ViewBuilder<'ret>(run: RTAppGen<Node list> -> 'ret) =
 
     member _.Bind(
-        m: AppGen<'v1, State<'s1>>,
-        f: 'v1 -> AppGen<'v2, State<'s2>>)
+        m: AppGen<'v1, 's1>,
+        f: 'v1 -> AppGen<'v2, 's2>)
         : RTAppGen<'v2>
         =
         printfn "Bind"
         Gen.bind m f |> toBoxedGen
     
     member _.Yield(
-        x: AppGen<'v,State<'s>>)
+        x: AppGen<'v,'s>)
         : RTAppGen<Node list>
         =
         printfn "Yield (single)"
         toBoxedGen x |> Gen.map (fun xv -> [xv :> Node])
 
     member _.Yield(
-        x: AppGen<'v list, State<'s>>)
+        x: AppGen<'v list, 's>)
         : RTAppGen<Node list>
         =
         printfn "Yield (many)"
@@ -138,11 +140,8 @@ module HtmlElementsApi =
             // TODO: Performance
             do elem.clearChildren()
             do for child in children do
-                printfn $"Sync child: {child.nodeName}"
-                try elem.appendChild child |> ignore
-                with ex ->
-                    printfn $"EXCEPTION:::: {ex}"
-                    printfn $"    Element is: {elem}"
+                // printfn $"Sync child: {child.nodeName}"
+                elem.appendChild child |> ignore
             return ()
         }
 
@@ -175,7 +174,7 @@ module HtmlElementsApi =
             return elem
         }
     
-    let span content =
+    let inline span content =
         gen {
             let! elem = baseElem<HTMLSpanElement> "span"
             do if elem.textContent <> content then
