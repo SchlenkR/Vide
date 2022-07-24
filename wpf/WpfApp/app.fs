@@ -337,5 +337,25 @@ module ChangeTypeDuringRuntimeSimple =
         }
 
 
+
+//type M<'a> = M of (unit -> 'a)
+
+//let ofValue x = M (fun () -> x)
+
+//type Builder() =
+//    member _.Bind(M m, f) =
+//        printfn "BIND"
+//        M <| fun () ->
+//            let (M mf) = m () |> f
+//            mf ()
+//    member _.Return(x) =
+//        printfn "RETURN"
+//        ofValue x
+//    member this.Run(x) =
+//        printfn "RUN"
+//        x
+
+//let b = Builder()
+
 let startWpf (window: Window) =
     App.Run(window, ChangeTypeDuringRuntime.view) |> ignore
