@@ -34,64 +34,45 @@ type App(document: Document, appElement: Element, triggerUpdate: App -> Node lis
         App(document, document.querySelector("#app"), view |> Gen.toEvaluable)
 
 
-
 type AppGen<'v,'s> = Gen<'v,'s,App>
-type RTState = obj
-type RTAppGen<'v> = AppGen<'v,RTState>
-
-let inline toBoxedGen
-    (Gen x: Gen<'v,'s,'r>)
-    : Gen<'v,RTState,'r>
-    =
-    printfn "toBoxedGen"
-    fun s r ->
-        let s =
-            match s with
-            | None -> None
-            | Some (s: RTState) ->
-                Some (TypeInfo.cast<'s> typeof<'s> s)
-        let xv,xs = x s r
-        do printfn $"Boxed state type is: {TypeInfo.get xs}"
-        xv, (xs :> obj)
-    |> Gen
 
 // TODO: Could it be that we neet "toRTAppGen" only in bind?
 // TODO: Generalize (App, so that this can be used in any context / framework)
-type ViewBuilder<'ret>(run: RTAppGen<Node list> -> 'ret) =
+type ViewBuilder<'ret>(run: AppGen<Node list,'s> -> 'ret) =
 
     member inline _.Bind(
         m: AppGen<'v1, 's1>,
         f: 'v1 -> AppGen<'v2, 's2>)
-        : RTAppGen<'v2>
+        : AppGen<'v2,'s1 * 's2>
         =
         printfn "Bind"
-        Gen.bind m f |> toBoxedGen
+        Gen.bind m f
     
     member inline _.Yield(
         x: AppGen<'v,'s>)
-        : RTAppGen<Node list>
+        : AppGen<Node list,'s>
         =
         printfn "Yield (single)"
-        toBoxedGen x |> Gen.map (fun xv -> [xv :> Node])
+        Gen.map (fun xv -> [xv :> Node]) x
 
     member inline _.Yield(
         x: AppGen<'v list, 's>)
-        : RTAppGen<Node list>
+        : AppGen<Node list,'s>
         =
         printfn "Yield (many)"
-        toBoxedGen x |> Gen.map (List.map (fun x -> x :> Node))
+        Gen.map (List.map (fun x -> x :> Node)) x
     
     member inline _.Delay(
-        f: unit -> RTAppGen<Node list>)
-        : RTAppGen<Node list>
+        f: unit -> AppGen<Node list,'s>)
+        : AppGen<Node list,'s>
         =
         printfn "Delay"
         f()
 
     member inline _.Combine(
-        a: RTAppGen<Node list>,
-        b: RTAppGen<Node list>)
-        : RTAppGen<Node list>
+        a: AppGen<Node list,'s1>,
+        b: AppGen<Node list,'s2>)
+        : AppGen<Node list,'s3>
         =
         printfn "Combine"
         gen {
@@ -99,12 +80,11 @@ type ViewBuilder<'ret>(run: RTAppGen<Node list> -> 'ret) =
             let! bNodes = b
             return List.append aNodes bNodes
         }
-        |> toBoxedGen
 
     member inline this.For(
         s: seq<'a>,
-        body: 'a -> RTAppGen<Node list>)
-        : RTAppGen<Node list>
+        body: 'a -> AppGen<Node list,'s1>)
+        : AppGen<Node list,'s1>
         =
         printfn "For"
         s
@@ -112,11 +92,11 @@ type ViewBuilder<'ret>(run: RTAppGen<Node list> -> 'ret) =
         |> Seq.fold (fun curr next -> this.Combine(curr, next)) (this.Zero())
 
     member inline _.Zero()
-        : RTAppGen<Node list>
+        : AppGen<Node list,NoState>
         =
         // 's: same reason as in Combine
         printfn "Zero"
-        Gen.ofValue [] |> toBoxedGen
+        Gen.ofValue []
 
     // TODO: Important: True lazieness so that no logs occur when we start no app
     member inline _.Run(children) : 'ret =
