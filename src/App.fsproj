@@ -4,7 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="coreOld.fs" />
-    <Compile Include="appOld.fs" />
+    <Compile Include="appNew.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Fable.Browser.Dom" Version="2.10.0" />
