@@ -1,49 +1,66 @@
 
-open System
-
 type AppGen<'v,'s> = Gen of ('s option -> 'v * 's)
 type NoState = NoState
 
+let inline unwrapTupledState s =
+    match s with
+    | None -> None,None
+    | Some (ms,fs) -> Some ms, Some fs
+
 type Builder() =
+
     member inline _.Bind(
         Gen m: AppGen<'v1,'s1>,
         f: 'v1 -> AppGen<'v2,'s2>)
         : AppGen<'v2,'s1 * 's2>
         =
         printfn "Bind"
-        Gen <| fun mfState ->
-            let ms,fs =
-                match mfState with
-                | None -> None,None
-                | Some (ms,fs) -> Some ms, Some fs
+        Gen <| fun s ->
+            let ms,fs = unwrapTupledState s
             let mv,ms = m ms
             let (Gen fgen) = f mv
             let fv,fs = fgen fs
             fv, (ms,fs)
+    
+    member inline _.Return(x) =
+        Gen <| fun s -> x,NoState
 
-    // member _.Yield(
-    //     x: AppGen<'elem,'s>)
-    //     : AppGen<'node, 's>
-    //     =
-    //     printfn "Yield"
-    //     failwith ""
-    // member _.Delay(
-    //     f: unit -> AppGen<'elem,'s>)
-    //     : AppGen<'node,'s>
-    //     =
-    //     failwith ""
-    // member _.Combine(
-    //     a: AppGen<'elem,'s1>,
-    //     b: AppGen<'elem,'s2>)
-    //     : AppGen<'elem,'s3>
-    //     =
-    //     printfn "Combine"
-    //     failwith ""
+    member inline _.Yield(
+        x: AppGen<'v,'s>)
+        : AppGen<'v, 's>
+        =
+        printfn "Yield"
+        x
+
+    member inline _.Delay(
+        f: unit -> AppGen<'v,'s>)
+        : AppGen<'v,'s>
+        =
+        printfn "Delay"
+        f()
+
+    member inline this.Combine(
+        Gen a: AppGen<'elem,'s1>,
+        Gen b: AppGen<'elem,'s2>)
+        : AppGen<unit,'s1 * 's2>
+        =
+        printfn "Combine"
+        // this.Bind(a, fun a' ->
+        //     this.Bind(b, fun b' ->
+        //         this.Return(())
+        //     )
+        // )
+        Gen <| fun s ->
+            let sa,sb = unwrapTupledState s
+            let va,sa = a sa
+            let vb,sb = b sb
+            (),(sa,sb)
+
 
     member inline _.For(
         sequence: seq<'a>,
-        body: 'a -> AppGen<'v,'s>)
-        : AppGen<'v list,'s list>
+        body: 'a -> AppGen<unit,'s>)
+        : AppGen<unit,'s list>
         =
         printfn "For"
         Gen <| fun s ->
@@ -54,13 +71,19 @@ type Builder() =
                     let fres = f (s |> List.tryItem i)
                     fres
                 ]
-            res |> List.map fst, res |> List.map snd
+            // res |> List.map fst, res |> List.map snd
+            (), res |> List.map snd
 
     member inline _.Zero()
-        : AppGen<'v,'s>
+        : AppGen<unit,'s>
         =
         printfn "Zero"
-        Gen <| fun _ -> failwith ""
+        Gen <| fun _ ->
+            // We have to be generic because of implicit "else" branch.
+            // TODO: We should not lose that info; so value and state must be
+            // wrapped in all places with (Zero | Value of 'a)
+            (), Unchecked.defaultof<'s>
+
     // member _.Run(
     //     children: AppGen<'s1>)
     //     : 'ret
@@ -69,35 +92,37 @@ type Builder() =
     //     failwith ""
 
 let pov = Builder()
+let eval (Gen g) = g None |> fst
+
+
 let htmlElem x = Gen <| fun s -> (),x
 let state x = Gen <| fun s -> x,()
 
 let inline e() =
     pov {
-        do! htmlElem 1
-        do! htmlElem "2"
-        do! htmlElem 3
+        yield htmlElem 1
+        yield htmlElem "2"
+        yield htmlElem 3
         
         for x in 0..10 do
-            do! htmlElem "4"
+            yield htmlElem "4"
 
             if x % 2 = 0 then
-                do! htmlElem (5 + x )
+                yield htmlElem (5 + x )
     }
 
-let (Gen x: AppGen<unit,'s>) = e()
-x None
+eval (e())
 
 
 
 let d() =
     pov {
-        do! htmlElem 1
-        do! htmlElem "2"
-        do! htmlElem 3
+        yield htmlElem 1
+        yield htmlElem "2"
+        yield htmlElem 3
         for x in 0..10 do
-            do! htmlElem "4"
-            do! htmlElem (5 + x)
+            yield htmlElem "4"
+            yield htmlElem (5 + x)
             // Zero
     }
 
