@@ -100,13 +100,33 @@ let htmlElem x =
             printfn $"using state: {s}"
         (), Some x
 
+let preserve x =
+    Gen <| fun s ->
+        let s = s |> Option.defaultValue x
+        s, Some s
+
+let mut x =
+    Gen <| fun s ->
+        let s = s |> Option.defaultWith (fun () -> ref x)
+        s, Some s
+
+
+
 let inline e() =
     pov {
+        let! runCount = mut 0
+        printfn $"RunCount = {runCount.contents}"
+        runCount.contents <- runCount.contents + 1
+
         htmlElem 1
         htmlElem "2"
         htmlElem 3
         
         for x in 0..10 do
+            let! forCount = mut 0
+            printfn $"ForCount = {forCount.contents}"
+            forCount.contents <- forCount.contents + 1
+            
             htmlElem "4"
 
             if x % 2 = 0 then
