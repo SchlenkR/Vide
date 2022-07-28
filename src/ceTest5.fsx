@@ -86,36 +86,48 @@ type Builder() =
     //     failwith ""
 
 let pov = Builder()
-let eval (Gen g) = g None |> fst
+let eval (Gen g) state = g state
 
+let globalResult = ResizeArray<obj>()
 
-let htmlElem x = Gen <| fun s -> (), Some x
+let htmlElem x =
+    Gen <| fun s ->
+        match s with
+        | None ->
+            printfn $"adding state: {x}"
+            do globalResult.Add x
+        | Some s ->
+            printfn $"using state: {s}"
+        (), Some x
 
 let inline e() =
     pov {
-        yield htmlElem 1
-        yield htmlElem "2"
-        yield htmlElem 3
+        htmlElem 1
+        htmlElem "2"
+        htmlElem 3
         
         for x in 0..10 do
-            yield htmlElem "4"
+            htmlElem "4"
 
             if x % 2 = 0 then
-                yield htmlElem (5 + x)
+                htmlElem $"      IF -  {5 + x}"
     }
 
-eval (e())
+
+let _,s1 = eval (e()) None
+let _,s2 = eval (e()) s1
+
 
 
 
 let d() =
     pov {
-        yield htmlElem 1
-        yield htmlElem "2"
-        yield htmlElem 3
+        htmlElem 1
+        htmlElem "2"
+        htmlElem 3
         for x in 0..10 do
-            yield htmlElem "4"
-            yield htmlElem (5 + x)
+            htmlElem "4"
+            htmlElem (5 + x)
             // Zero
     }
 
