@@ -7,7 +7,7 @@ type App =
     }
 
 // why we return 's option(!!) -> Because of else branch / zero
-type AppGen<'v,'s> = Gen of ('s option -> App -> 'v * 's option)
+type AppGen<'v,'s,'r> = Gen of ('s option -> 'r -> 'v * 's option)
 
 let inline unwrapTupledState s =
     match s with
@@ -18,14 +18,14 @@ let inline printMethod name =
     // printfn $"        Exex:   {name}"
     ()
 
-type PovBuilder<'finState1,'finState2>(
-    run: AppGen<unit,'finState1> -> AppGen<unit,'finState2>)
+type PovBuilder<'finState1,'finState2,'r>(
+    run: AppGen<unit,'finState1,'r> -> AppGen<unit,'finState2,'r>)
     =
     
     member inline _.Bind(
-        Gen m: AppGen<'v1,'s1>,
-        f: 'v1 -> AppGen<'v2,'s2>)
-        : AppGen<'v2,'s1 option * 's2 option>
+        Gen m: AppGen<'v1,'s1,'r>,
+        f: 'v1 -> AppGen<'v2,'s2,'r>)
+        : AppGen<'v2,'s1 option * 's2 option,'r>
         =
         printMethod "Bind"
         Gen <| fun s r ->
@@ -40,29 +40,29 @@ type PovBuilder<'finState1,'finState2>(
         Gen <| fun s r -> x,None
 
     member inline _.Yield(
-        x: AppGen<'v,'s>)
-        : AppGen<'v, 's>
+        x: AppGen<'v,'s,'r>)
+        : AppGen<'v, 's,'r>
         =
         printMethod "Yield"
         x
 
     member inline _.Zero()
-        : AppGen<unit,'s>
+        : AppGen<unit,'s,'r>
         =
         printMethod "Zero"
         Gen <| fun s r ->  (), None
 
     member inline _.Delay(
-        f: unit -> AppGen<'v,'s>)
-        : AppGen<'v,'s>
+        f: unit -> AppGen<'v,'s,'r>)
+        : AppGen<'v,'s,'r>
         =
         printMethod "Delay"
         f()
 
     member inline this.Combine(
-        Gen a: AppGen<'elem,'s1>,
-        Gen b: AppGen<'elem,'s2>)
-        : AppGen<unit,'s1 option * 's2 option>
+        Gen a: AppGen<'elem,'s1,'r>,
+        Gen b: AppGen<'elem,'s2,'r>)
+        : AppGen<unit,'s1 option * 's2 option,'r>
         =
         printMethod "Combine"
         Gen <| fun s r ->
@@ -73,8 +73,8 @@ type PovBuilder<'finState1,'finState2>(
 
     member inline _.For(
         sequence: seq<'a>,
-        body: 'a -> AppGen<unit,'s>)
-        : AppGen<unit,'s option list>
+        body: 'a -> AppGen<unit,'s,'r>)
+        : AppGen<unit,'s option list,'r>
         =
         printMethod "For"
         Gen <| fun s r ->
@@ -88,17 +88,15 @@ type PovBuilder<'finState1,'finState2>(
             (), Some (res |> List.map snd)
 
     member this.Run(
-        childGen: AppGen<unit,'finState1>)
-        : AppGen<unit,'finState2>
+        childGen: AppGen<unit,'finState1,'r>)
+        : AppGen<unit,'finState2,'r>
         =
         printMethod "Run"
         run childGen
 
-let pov<'s> = PovBuilder<'s,'s>(id)
+let pov<'s> = PovBuilder<'s,'s,App>(id)
 
 let eval (Gen g) state = g state
-
-
 
 let createApp parentElement =
     {
@@ -110,7 +108,7 @@ let createApp parentElement =
 // der bei Run() selbst zu einem Gen wird
 let inline htmlElem data =
     let run (Gen childGen) =
-        Gen <| fun s r ->
+        Gen <| fun s (r: App) ->
             let s,cs = unwrapTupledState s
             let element =
                 match s with
@@ -138,7 +136,7 @@ let mut x =
 
 let dummyApp = createApp { data = "ROOT" }
 
-let inline empty (builder: PovBuilder<'s, HtmlElement option * unit option>) = builder { () }
+let inline empty (builder: PovBuilder<'s, HtmlElement option * unit option, App>) = builder { () }
 
 
 
