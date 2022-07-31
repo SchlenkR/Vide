@@ -3,8 +3,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="coreOld.fs" />
-    <Compile Include="appNew.fs" />
+    <Compile Include="core.fs" />
+    <Compile Include="fable.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Fable.Browser.Dom" Version="2.10.0" />

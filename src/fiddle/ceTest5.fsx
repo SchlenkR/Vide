@@ -96,7 +96,24 @@ type PovBuilder<'finState1,'finState2,'r>(
 
 let pov<'s> = PovBuilder<'s,'s,App>(id)
 
-let eval (Gen g) state = g state
+let toEvaluable initialState app createGen =
+    let (Gen g) = createGen ()
+    let mutable state = initialState
+    let eval () =
+        let _,newState = g state app
+        state <- newState
+    eval
+
+let preserve x =
+    Gen <| fun s r ->
+        let s = s |> Option.defaultValue x
+        s, Some s
+
+let mut x =
+    Gen <| fun s r ->
+        let s = s |> Option.defaultWith (fun () -> ref x)
+        s, Some s
+
 
 let createApp parentElement =
     {
@@ -124,16 +141,6 @@ let inline htmlElem data =
             (), Some (Some element, cs)
     PovBuilder(run)
 
-let preserve x =
-    Gen <| fun s r ->
-        let s = s |> Option.defaultValue x
-        s, Some s
-
-let mut x =
-    Gen <| fun s r ->
-        let s = s |> Option.defaultWith (fun () -> ref x)
-        s, Some s
-
 let dummyApp = createApp { data = "ROOT" }
 
 let inline empty (builder: PovBuilder<'s, HtmlElement option * unit option, App>) = builder { () }
@@ -146,7 +153,12 @@ let h () =
     pov {
         htmlElem 1 {
             htmlElem "1_1" |> empty
-            htmlElem 1.2 |> empty
+            
+            let! forCount = mut 0
+            do forCount.Value <- forCount.Value + 1
+            printfn $"----------- forCount = {forCount.Value}"
+
+            htmlElem forCount.Value |> empty
         }
 
         // htmlElem "2" |> empty
@@ -157,9 +169,8 @@ let h () =
         //     // Zero
     }
 
-let _,sh1 = eval (h()) None dummyApp
-let _,sh2 = eval (h()) sh1 dummyApp
-
+let evalH = h |> toEvaluable None dummyApp
+evalH()
 
 
 
