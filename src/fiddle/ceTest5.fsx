@@ -41,7 +41,7 @@ type PovBuilder<'finState1,'finState2,'r>(
 
     member inline _.Yield(
         x: Gen<'v,'s,'r>)
-        : Gen<'v, 's,'r>
+        : Gen<'v,'s,'r>
         =
         printMethod "Yield"
         x
@@ -59,7 +59,7 @@ type PovBuilder<'finState1,'finState2,'r>(
         printMethod "Delay"
         f()
 
-    member inline this.Combine(
+    member inline _.Combine(
         Gen a: Gen<'elem,'s1,'r>,
         Gen b: Gen<'elem,'s2,'r>)
         : Gen<unit,'s1 option * 's2 option,'r>
@@ -93,6 +93,13 @@ type PovBuilder<'finState1,'finState2,'r>(
         =
         printMethod "Run"
         run childGen
+    
+    member inline _.Yield(
+        x: PovBuilder<'s, HtmlElement option * unit option, 'r>)
+        : Gen<unit, HtmlElement option * unit option, 'r>
+        =
+        printMethod "Yield (PovBuilder)"
+        x { () }
 
 let pov<'s> = PovBuilder<'s,'s,App>(id)
 
@@ -142,10 +149,10 @@ let inline htmlElem data =
 
 let dummyApp = createApp { data = "ROOT" }
 
-// TODO: 2 alternatives
-// Provide implicit conversion from builder to Gen?
-let inline empty (builder: PovBuilder<'s, HtmlElement option * unit option, App>) = builder { () }
-let ( / ) (builder: PovBuilder<'s, HtmlElement option * unit option, App>) x = builder {x}
+// // TODO: 2 alternatives
+// // Provide implicit conversion from builder to Gen?
+// let inline empty (builder: PovBuilder<'s, HtmlElement option * unit option, App>) = builder { () }
+// let ( / ) (builder: PovBuilder<'s, HtmlElement option * unit option, App>) x = builder {x}
 
 
 
@@ -154,20 +161,20 @@ let ( / ) (builder: PovBuilder<'s, HtmlElement option * unit option, App>) x = b
 let h =
     pov {
         htmlElem 1 {
-            htmlElem "1_1" /()
+            htmlElem "1_1"
             
             let! forCount = mut 0
             do forCount.Value <- forCount.Value + 1
             printfn $"----------- forCount = {forCount.Value}"
 
-            htmlElem forCount.Value /()
+            htmlElem forCount.Value
         }
 
-        // htmlElem "2" /()
-        // htmlElem 3 /()
+        // htmlElem "2"
+        // htmlElem 3
         // for x in 0..10 do
-        //     htmlElem "4" /()
-        //     htmlElem (5 + x) /()
+        //     htmlElem "4"
+        //     htmlElem (5 + x)
         //     // Zero
     }
 
@@ -178,12 +185,12 @@ evalH()
 
 let d =
     pov {
-        htmlElem 1 /()
-        htmlElem "2" /()
-        htmlElem 3 /()
+        htmlElem 1
+        htmlElem "2"
+        htmlElem 3
         for x in 0..10 do
-            htmlElem "4" /()
-            htmlElem (5 + x) /()
+            htmlElem "4"
+            htmlElem (5 + x)
             // Zero
     }
 
@@ -197,19 +204,19 @@ let e =
         printfn $"RunCount = {runCount.contents}"
         runCount.contents <- runCount.contents + 1
 
-        htmlElem 1 /()
-        htmlElem "2" /()
-        htmlElem 3 /()
+        htmlElem 1
+        htmlElem "2"
+        htmlElem 3
         
         for x in 0..10 do
             let! forCount = mut 0
             printfn $"ForCount = {forCount.contents}"
             forCount.contents <- forCount.contents + 1
             
-            htmlElem "4" /()
+            htmlElem "4"
 
             if x % 2 = 0 then
-                htmlElem $"      IF -  {5 + x}" /()
+                htmlElem $"      IF -  {5 + x}"
     }
 
 
@@ -221,7 +228,7 @@ evalE()
 
 let myComponent =
     pov {
-        htmlElem "a" /()
+        htmlElem "a"
     }
 
 let componentUser =
