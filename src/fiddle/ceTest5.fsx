@@ -7,7 +7,7 @@ type App =
     }
 
 // why we return 's option(!!) -> Because of else branch / zero
-type AppGen<'v,'s,'r> = Gen of ('s option -> 'r -> 'v * 's option)
+type Gen<'v,'s,'r> = Gen of ('s option -> 'r -> 'v * 's option)
 
 let inline unwrapTupledState s =
     match s with
@@ -19,13 +19,13 @@ let inline printMethod name =
     ()
 
 type PovBuilder<'finState1,'finState2,'r>(
-    run: AppGen<unit,'finState1,'r> -> AppGen<unit,'finState2,'r>)
+    run: Gen<unit,'finState1,'r> -> Gen<unit,'finState2,'r>)
     =
     
     member inline _.Bind(
-        Gen m: AppGen<'v1,'s1,'r>,
-        f: 'v1 -> AppGen<'v2,'s2,'r>)
-        : AppGen<'v2,'s1 option * 's2 option,'r>
+        Gen m: Gen<'v1,'s1,'r>,
+        f: 'v1 -> Gen<'v2,'s2,'r>)
+        : Gen<'v2,'s1 option * 's2 option,'r>
         =
         printMethod "Bind"
         Gen <| fun s r ->
@@ -40,29 +40,29 @@ type PovBuilder<'finState1,'finState2,'r>(
         Gen <| fun s r -> x,None
 
     member inline _.Yield(
-        x: AppGen<'v,'s,'r>)
-        : AppGen<'v, 's,'r>
+        x: Gen<'v,'s,'r>)
+        : Gen<'v, 's,'r>
         =
         printMethod "Yield"
         x
 
     member inline _.Zero()
-        : AppGen<unit,'s,'r>
+        : Gen<unit,'s,'r>
         =
         printMethod "Zero"
         Gen <| fun s r ->  (), None
 
     member inline _.Delay(
-        f: unit -> AppGen<'v,'s,'r>)
-        : AppGen<'v,'s,'r>
+        f: unit -> Gen<'v,'s,'r>)
+        : Gen<'v,'s,'r>
         =
         printMethod "Delay"
         f()
 
     member inline this.Combine(
-        Gen a: AppGen<'elem,'s1,'r>,
-        Gen b: AppGen<'elem,'s2,'r>)
-        : AppGen<unit,'s1 option * 's2 option,'r>
+        Gen a: Gen<'elem,'s1,'r>,
+        Gen b: Gen<'elem,'s2,'r>)
+        : Gen<unit,'s1 option * 's2 option,'r>
         =
         printMethod "Combine"
         Gen <| fun s r ->
@@ -73,8 +73,8 @@ type PovBuilder<'finState1,'finState2,'r>(
 
     member inline _.For(
         sequence: seq<'a>,
-        body: 'a -> AppGen<unit,'s,'r>)
-        : AppGen<unit,'s option list,'r>
+        body: 'a -> Gen<unit,'s,'r>)
+        : Gen<unit,'s option list,'r>
         =
         printMethod "For"
         Gen <| fun s r ->
@@ -88,16 +88,15 @@ type PovBuilder<'finState1,'finState2,'r>(
             (), Some (res |> List.map snd)
 
     member this.Run(
-        childGen: AppGen<unit,'finState1,'r>)
-        : AppGen<unit,'finState2,'r>
+        childGen: Gen<unit,'finState1,'r>)
+        : Gen<unit,'finState2,'r>
         =
         printMethod "Run"
         run childGen
 
 let pov<'s> = PovBuilder<'s,'s,App>(id)
 
-let toEvaluable initialState app createGen =
-    let (Gen g) = createGen ()
+let toStateMachine initialState app (Gen g) =
     let mutable state = initialState
     let eval () =
         let _,newState = g state app
@@ -143,79 +142,92 @@ let inline htmlElem data =
 
 let dummyApp = createApp { data = "ROOT" }
 
+// TODO: 2 alternatives
+// Provide implicit conversion from builder to Gen?
 let inline empty (builder: PovBuilder<'s, HtmlElement option * unit option, App>) = builder { () }
+let ( / ) (builder: PovBuilder<'s, HtmlElement option * unit option, App>) x = builder {x}
 
 
 
 
 
-let h () =
+let h =
     pov {
         htmlElem 1 {
-            htmlElem "1_1" |> empty
+            htmlElem "1_1" /()
             
             let! forCount = mut 0
             do forCount.Value <- forCount.Value + 1
             printfn $"----------- forCount = {forCount.Value}"
 
-            htmlElem forCount.Value |> empty
+            htmlElem forCount.Value /()
         }
 
-        // htmlElem "2" |> empty
-        // htmlElem 3 |> empty
+        // htmlElem "2" /()
+        // htmlElem 3 /()
         // for x in 0..10 do
-        //     htmlElem "4" |> empty
-        //     htmlElem (5 + x) |> empty
+        //     htmlElem "4" /()
+        //     htmlElem (5 + x) /()
         //     // Zero
     }
 
-let evalH = h |> toEvaluable None dummyApp
+let evalH = h |> toStateMachine None dummyApp
 evalH()
 
 
 
-let d() =
+let d =
     pov {
-        htmlElem 1 |> empty
-        htmlElem "2" |> empty
-        htmlElem 3 |> empty
+        htmlElem 1 /()
+        htmlElem "2" /()
+        htmlElem 3 /()
         for x in 0..10 do
-            htmlElem "4" |> empty
-            htmlElem (5 + x) |> empty
+            htmlElem "4" /()
+            htmlElem (5 + x) /()
             // Zero
     }
 
-let _,sd1 = eval (d()) None dummyApp
-let _,sd2 = eval (d()) sd1 dummyApp
+let evalD = d |> toStateMachine None dummyApp
+evalD()
 
 
-let inline e() =
+let e =
     pov {
         let! runCount = mut 0
         printfn $"RunCount = {runCount.contents}"
         runCount.contents <- runCount.contents + 1
 
-        htmlElem 1 |> empty
-        htmlElem "2" |> empty
-        htmlElem 3 |> empty
+        htmlElem 1 /()
+        htmlElem "2" /()
+        htmlElem 3 /()
         
         for x in 0..10 do
             let! forCount = mut 0
             printfn $"ForCount = {forCount.contents}"
             forCount.contents <- forCount.contents + 1
             
-            htmlElem "4" |> empty
+            htmlElem "4" /()
 
             if x % 2 = 0 then
-                htmlElem $"      IF -  {5 + x}" |> empty
+                htmlElem $"      IF -  {5 + x}" /()
     }
 
 
-let _,se1 = eval (e()) None dummyApp
-let _,se2 = eval (e()) se1 dummyApp
+let evalE = e |> toStateMachine None dummyApp
+evalE()
 
 
 
+
+let myComponent =
+    pov {
+        htmlElem "a" /()
+    }
+
+let componentUser =
+    pov {
+        myComponent
+    }
 
 // let (Gen x) = d() in x None
 
