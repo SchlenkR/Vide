@@ -1,10 +1,4 @@
 
-type HtmlElement = { data: obj }
-
-type App =
-    { addElement: HtmlElement -> unit
-      keepElement: HtmlElement -> unit
-    }
 
 // why we return 's option(!!) -> Because of else branch / zero
 type Gen<'v,'s,'r> = Gen of ('s option -> 'r -> 'v * 's option)
@@ -18,8 +12,8 @@ let inline printMethod name =
     // printfn $"        Exex:   {name}"
     ()
 
-type PovBuilder<'finState1,'finState2,'r>(
-    run: Gen<unit,'finState1,'r> -> Gen<unit,'finState2,'r>)
+type FiuBuilder<'fs1,'fs2,'r>(
+    run: Gen<unit,'fs1,'r> -> Gen<unit,'fs2,'r>)
     =
     
     member inline _.Bind(
@@ -88,20 +82,11 @@ type PovBuilder<'finState1,'finState2,'r>(
             (), Some (res |> List.map snd)
 
     member this.Run(
-        childGen: Gen<unit,'finState1,'r>)
-        : Gen<unit,'finState2,'r>
+        childGen: Gen<unit,'fs1,'r>)
+        : Gen<unit,'fs2,'r>
         =
         printMethod "Run"
         run childGen
-    
-    member inline _.Yield(
-        x: PovBuilder<'s, HtmlElement option * unit option, 'r>)
-        : Gen<unit, HtmlElement option * unit option, 'r>
-        =
-        printMethod "Yield (PovBuilder)"
-        x { () }
-
-let pov<'s> = PovBuilder<'s,'s,App>(id)
 
 let toStateMachine initialState app (Gen g) =
     let mutable state = initialState
@@ -121,171 +106,184 @@ let mut x =
         s, Some s
 
 
-let createApp parentElement =
-    {
-        addElement = fun childElement -> printfn $"Adding child: {parentElement.data} -> {childElement.data}"
-        keepElement = fun childElement -> printfn $"Keeping child: {parentElement.data} -> {childElement.data}"
-    }
+module Html =
 
-// HtmlElement muss einen Builder zurückgeben,
-// der bei Run() selbst zu einem Gen wird
-let inline htmlElem data =
-    let run (Gen childGen) =
-        Gen <| fun s (r: App) ->
-            let s,cs = unwrapTupledState s
-            let element =
-                match s with
-                | None ->
-                    let element = { data = data }
-                    do r.addElement element
-                    element
-                | Some element ->
-                    do r.keepElement element
-                    element
-            let app = createApp element
-            let cv,cs = childGen cs app
-            (), Some (Some element, cs)
-    PovBuilder(run)
+    type HtmlElement = { data: obj }
 
-let dummyApp = createApp { data = "ROOT" }
-
-// // TODO: 2 alternatives
-// // Provide implicit conversion from builder to Gen?
-// let inline empty (builder: PovBuilder<'s, HtmlElement option * unit option, App>) = builder { () }
-// let ( / ) (builder: PovBuilder<'s, HtmlElement option * unit option, App>) x = builder {x}
-
-
-
-
-
-let h =
-    pov {
-        htmlElem 1 {
-            htmlElem "1_1"
-            
-            let! forCount = mut 0
-            do forCount.Value <- forCount.Value + 1
-            printfn $"----------- forCount = {forCount.Value}"
-
-            htmlElem forCount.Value
+    type App =
+        {
+            addElement: HtmlElement -> unit
+            keepElement: HtmlElement -> unit
         }
 
-        // htmlElem "2"
-        // htmlElem 3
-        // for x in 0..10 do
-        //     htmlElem "4"
-        //     htmlElem (5 + x)
-        //     // Zero
-    }
+    let createApp parentElement =
+        {
+            addElement = fun childElement -> printfn $"Adding child: {parentElement.data} -> {childElement.data}"
+            keepElement = fun childElement -> printfn $"Keeping child: {parentElement.data} -> {childElement.data}"
+        }
 
-let evalH = h |> toStateMachine None dummyApp
-evalH()
+    type FiuBuilder<'fs1,'fs2,'r> with
+        member inline _.Yield(
+            x: FiuBuilder<'s, HtmlElement option * unit option, 'r>)
+            : Gen<unit, HtmlElement option * unit option, 'r>
+            =
+            printMethod "Yield (FiuBuilder)"
+            x { () }
+
+    let fiu<'s> = FiuBuilder<'s,'s,App>(id)
+
+    // HtmlElement muss einen Builder zurückgeben,
+    // der bei Run() selbst zu einem Gen wird
+    let inline htmlElem data =
+        let run (Gen childGen) =
+            Gen <| fun s (r: App) ->
+                let s,cs = unwrapTupledState s
+                let element =
+                    match s with
+                    | None ->
+                        let element = { data = data }
+                        do r.addElement element
+                        element
+                    | Some element ->
+                        do r.keepElement element
+                        element
+                let app = createApp element
+                let cv,cs = childGen cs app
+                (), Some (Some element, cs)
+        FiuBuilder(run)
+
+    let dummyApp = createApp { data = "ROOT" }
 
 
 
-let d =
-    pov {
-        htmlElem 1
-        htmlElem "2"
-        htmlElem 3
-        for x in 0..10 do
-            htmlElem "4"
-            htmlElem (5 + x)
-            // Zero
-    }
+    let h =
+        fiu {
+            htmlElem 1 {
+                htmlElem "1_1"
+                
+                let! forCount = mut 0
+                do forCount.Value <- forCount.Value + 1
+                printfn $"----------- forCount = {forCount.Value}"
 
-let evalD = d |> toStateMachine None dummyApp
-evalD()
+                htmlElem forCount.Value
+            }
+
+            // htmlElem "2"
+            // htmlElem 3
+            // for x in 0..10 do
+            //     htmlElem "4"
+            //     htmlElem (5 + x)
+            //     // Zero
+        }
+
+    let evalH = h |> toStateMachine None dummyApp
+    evalH()
 
 
-let e =
-    pov {
-        let! runCount = mut 0
-        printfn $"RunCount = {runCount.contents}"
-        runCount.contents <- runCount.contents + 1
 
-        htmlElem 1
-        htmlElem "2"
-        htmlElem 3
-        
-        for x in 0..10 do
-            let! forCount = mut 0
-            printfn $"ForCount = {forCount.contents}"
-            forCount.contents <- forCount.contents + 1
+    let d =
+        fiu {
+            htmlElem 1
+            htmlElem "2"
+            htmlElem 3
+            for x in 0..10 do
+                htmlElem "4"
+                htmlElem (5 + x)
+                // Zero
+        }
+
+    let evalD = d |> toStateMachine None dummyApp
+    evalD()
+
+
+    let e =
+        fiu {
+            let! runCount = mut 0
+            printfn $"RunCount = {runCount.contents}"
+            runCount.contents <- runCount.contents + 1
+
+            htmlElem 1
+            htmlElem "2"
+            htmlElem 3
             
-            htmlElem "4"
+            for x in 0..10 do
+                let! forCount = mut 0
+                printfn $"ForCount = {forCount.contents}"
+                forCount.contents <- forCount.contents + 1
+                
+                htmlElem "4"
 
-            if x % 2 = 0 then
-                htmlElem $"      IF -  {5 + x}"
-    }
-
-
-let evalE = e |> toStateMachine None dummyApp
-evalE()
-
-
-
-
-let myComponent =
-    pov {
-        htmlElem "a"
-    }
-
-let componentUser =
-    pov {
-        myComponent
-    }
-
-// let (Gen x) = d() in x None
+                if x % 2 = 0 then
+                    htmlElem $"      IF -  {5 + x}"
+        }
 
 
-// let a() =
-//     test {
-//         let! a = { value = 100; state = "a" }
-//         let! b = { value = 200; state = 44.2 }
-//         { value = a + b; state = 20UL }
-        
-//         let! c = { value = 33; state = "c" }
-//         let! d = { value = 66; state = 44.1 }
-//         { value = c + d; state = 10.0 }
-
-//         { value = -77; state = 20.0 }
-//         for i in 0..3 do
-//             { value = -77; state = 20.0 }
-
-//         let! e = { value = -2; state = [909090] }
-//         let! f = { value = -3; state = (0.1, 0.2, 0.3) }
-//         for i in 0..3 do
-//             { value = e + f + i; state = ("Hello", "World") }
-//             { value = e + f + i; state = ("Hello", "World") }
-//             { value = e + f + i; state = ("Hello", "World") }
-
-//         { value = e + f; state = ("Hello", "World") }
-//     }
+    let evalE = e |> toStateMachine None dummyApp
+    evalE()
 
 
-// let b() =
-//     test {
-//         let! a = { value = 100; state = "a" }
-//         let! b = { value = 200; state = 44.2 }
-//         { value = a + b; state = 20UL }
-        
-//         let! c = { value = 33; state = "c" }
-//         let! d = { value = 66; state = 44.1 }
-//         { value = c + d; state = 10.0 }
-//         { value = -77; state = 20.0 }
-//     }
 
 
-// let c() =
-//     test {
-//         { value = 33; state = 20UL }
-//         { value = -77; state = 20.0 }
-//     }
+    let myComponent =
+        fiu {
+            htmlElem "a"
+        }
+
+    let componentUser =
+        fiu {
+            myComponent
+        }
+
+    // let (Gen x) = d() in x None
 
 
-// let e() =
-//     test {
-//         if true then
-//             { value = -77; state = 20.0 }
-//     }
+    // let a() =
+    //     test {
+    //         let! a = { value = 100; state = "a" }
+    //         let! b = { value = 200; state = 44.2 }
+    //         { value = a + b; state = 20UL }
+            
+    //         let! c = { value = 33; state = "c" }
+    //         let! d = { value = 66; state = 44.1 }
+    //         { value = c + d; state = 10.0 }
+
+    //         { value = -77; state = 20.0 }
+    //         for i in 0..3 do
+    //             { value = -77; state = 20.0 }
+
+    //         let! e = { value = -2; state = [909090] }
+    //         let! f = { value = -3; state = (0.1, 0.2, 0.3) }
+    //         for i in 0..3 do
+    //             { value = e + f + i; state = ("Hello", "World") }
+    //             { value = e + f + i; state = ("Hello", "World") }
+    //             { value = e + f + i; state = ("Hello", "World") }
+
+    //         { value = e + f; state = ("Hello", "World") }
+    //     }
+
+
+    // let b() =
+    //     test {
+    //         let! a = { value = 100; state = "a" }
+    //         let! b = { value = 200; state = 44.2 }
+    //         { value = a + b; state = 20UL }
+            
+    //         let! c = { value = 33; state = "c" }
+    //         let! d = { value = 66; state = 44.1 }
+    //         { value = c + d; state = 10.0 }
+    //         { value = -77; state = 20.0 }
+    //     }
+
+
+    // let c() =
+    //     test {
+    //         { value = 33; state = 20UL }
+    //         { value = -77; state = 20.0 }
+    //     }
+
+
+    // let e() =
+    //     test {
+    //         if true then
+    //             { value = -77; state = 20.0 }
+    //     }
