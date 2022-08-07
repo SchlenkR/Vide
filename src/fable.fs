@@ -27,29 +27,26 @@ type Context(parent: Node) =
     member _.GetObsoleteNodes() =
         parent.childNodes.ToList() |> List.except keptNodes
 
-type FiuBuilder<'fs1,'fs2,'c> with
-    member inline _.Yield(
-        x: FiuBuilder<'s, Node option * unit option, 'c>)
-        : Gen<unit, Node option * unit option, 'c>
-        =
-        printMethod "Yield (FiuBuilder)"
-        x { () }
-
 let fiu<'s> = FiuBuilder<'s,'s,Context>(id)
 
 let inline node
-    (create: Context -> Node) 
-    (update: Node -> unit) 
+    (create: Context -> Node)
+    (update: Node -> unit)
     (attributes: list<string * string>)
-    (events: list<unit -> unit>)
+    (events: list<string * (Event -> unit)>)
+    : FiuBuilder<'s, option<Node * list<string * string>> * option<'s>, Context>
     =
-    let run (Gen childGen) =
-        Gen <| fun s (ctx: Context) ->
+    let run (Fiu childFiu) =
+        Fiu <| fun s (ctx: Context) ->
+            console.log("EXEC")
             let s,cs = unwrapTupledState s
             let node,oldAttributes =
                 match s with
                 | None ->
                     let node = create ctx
+                    // The event list is considered invariant and is thus only evaluated initially
+                    for name,handler in events do
+                        node.addEventListener(name, handler)
                     node,[]
                 | Some (node,oldAttributes) ->
                     do ctx.keepNode node
@@ -70,32 +67,45 @@ let inline node
                     attr.value <- attrValue
                     do node.attributes.setNamedItem(attr) |> ignore
             let ctx = Context(node)
-            let cv,cs = childGen cs ctx
+            let cv,cs = childFiu cs ctx
             for x in ctx.GetObsoleteNodes() do
                 node.removeChild(x) |> ignore
             (), Some (Some (node,attributes), cs)
     FiuBuilder(run)
     
-let inline element tagName attributes =
-    node (fun ctx -> ctx.addElement tagName) ignore attributes
+let inline element tagName attributes events =
+    node (fun ctx -> ctx.addElement tagName) ignore attributes events
 
 module Html =
-    let inline text text attributes =
+    let inline text text attributes events =
         let create (ctx: Context) =
             ctx.addTextNode text :> Node
         let update (node: Node) =
             if node.textContent <> text then
                 node.textContent <- text
-        node create update attributes
-    let inline div attributes = element "div" attributes
-    let inline p attributes = element "p" attributes
+        node create update attributes events
+    let inline div attributes events = element "div" attributes events
+    let inline p attributes events = element "p" attributes events
 
     // TODO: Yield should work for strings
 
+type FinalState<'s> = option<'s> * option<unit>
+
 type FiuBuilder<'fs1,'fs2,'c> with
     member inline _.Yield(
+        f: FiuBuilder<'s1, FinalState<'s2>, 'c>)
+        : Fiu<unit, FinalState<'s2>, 'c>
+        =
+        printMethod "Yield (FiuBuilder)"
+        let res = f { () }
+        res
+    member inline _.Yield(
         x: string)
-        : Gen<_,_,_>
+        : Fiu<unit, FinalState<Node * list<string * string>>, Context>
         =
         printMethod "Yield (string)"
-        Html.text x [] { () }
+        Html.text x [] [] { () }
+
+let start (holder: HTMLElement) (fiu: Fiu<unit,'s,Context>) =
+    let evaluate = fiu |> toStateMachine None (Context holder)
+    evaluate()

@@ -3,7 +3,7 @@
 module Fiu.Core
 
 // why we return 's option(!!) -> Because of else branch / zero
-type Gen<'v,'s,'c> = Gen of ('s option -> 'c -> 'v * 's option)
+type Fiu<'v,'s,'c> = Fiu of ('s option -> 'c -> 'v * 's option)
 
 let inline internal unwrapTupledState s =
     match s with
@@ -11,103 +11,97 @@ let inline internal unwrapTupledState s =
     | Some (ms,fs) -> ms,fs
 
 let inline internal printMethod name =
-    // printfn $"        Exex:   {name}"
-    ()
+    printfn $"        Exex:   {name}"
+    // ()
 
 type FiuBuilder<'fs1,'fs2,'c>(
-    run: Gen<unit,'fs1,'c> -> Gen<unit,'fs2,'c>)
+    run: Fiu<unit,'fs1,'c> -> Fiu<unit,'fs2,'c>)
     =
-    
     member inline _.Bind(
-        Gen m: Gen<'v1,'s1,'c>,
-        f: 'v1 -> Gen<'v2,'s2,'c>)
-        : Gen<'v2,'s1 option * 's2 option,'c>
+        Fiu m: Fiu<'v1,'s1,'c>,
+        f: 'v1 -> Fiu<'v2,'s2,'c>)
+        : Fiu<'v2,'s1 option * 's2 option,'c>
         =
         printMethod "Bind"
-        Gen <| fun s c ->
+        Fiu <| fun s c ->
             let ms,fs = unwrapTupledState s
             let mv,ms = m ms c
-            let (Gen fgen) = f mv
-            let fv,fs = fgen fs c
+            let (Fiu f') = f mv
+            let fv,fs = f' fs c
             fv, Some (ms,fs)
     
     member inline _.Return(x) =
         printMethod "Return"
-        Gen <| fun s c -> x,None
-
+        Fiu <| fun s c -> x,None
     member inline _.Yield(
-        x: Gen<'v,'s,'c>)
-        : Gen<'v,'s,'c>
+        x: Fiu<'v,'s,'c>)
+        : Fiu<'v,'s,'c>
         =
         printMethod "Yield"
         x
-
     member inline _.Zero()
-        : Gen<unit,'s,'c>
+        : Fiu<unit,'s,'c>
         =
         printMethod "Zero"
-        Gen <| fun s c ->  (), None
-
+        Fiu <| fun s c ->  (), None
     member inline _.Delay(
-        f: unit -> Gen<'v,'s,'c>)
-        : Gen<'v,'s,'c>
+        f: unit -> Fiu<'v,'s,'c>)
+        : Fiu<'v,'s,'c>
         =
         printMethod "Delay"
         f()
-
     member inline _.Combine(
-        Gen a: Gen<'elem,'s1,'c>,
-        Gen b: Gen<'elem,'s2,'c>)
-        : Gen<unit,'s1 option * 's2 option,'c>
+        Fiu a: Fiu<'elem,'s1,'c>,
+        Fiu b: Fiu<'elem,'s2,'c>)
+        : Fiu<unit,'s1 option * 's2 option,'c>
         =
         printMethod "Combine"
-        Gen <| fun s c ->
+        Fiu <| fun s c ->
             let sa,sb = unwrapTupledState s
             let va,sa = a sa c
             let vb,sb = b sb c
             (), Some (sa,sb)
-
     member inline _.For(
         sequence: seq<'a>,
-        body: 'a -> Gen<unit,'s,'c>)
-        : Gen<unit,'s option list,'c>
+        body: 'a -> Fiu<unit,'s,'c>)
+        : Fiu<unit,'s option list,'c>
         =
         printMethod "For"
-        Gen <| fun s c ->
+        Fiu <| fun s c ->
             let s = s |> Option.defaultValue []
             let res = 
                 [ for i,x in sequence |> Seq.mapi (fun i x -> i,x) do
-                    let (Gen f) = body x
+                    let (Fiu f) = body x
                     let fres = f (s |> List.tryItem i |> Option.flatten) c
                     fres
                 ]
             (), Some (res |> List.map snd)
-
-    member this.Run(
-        childGen: Gen<unit,'fs1,'c>)
-        : Gen<unit,'fs2,'c>
+    member _.Run(
+        childFiu: Fiu<unit,'fs1,'c>)
+        : Fiu<unit,'fs2,'c>
         =
         printMethod "Run"
-        run childGen
-
-let toStateMachine initialState ctx (Gen g) =
-    let mutable state = initialState
-    let eval () =
-        let _,newState = g state ctx
-        state <- newState
-    eval
+        run childFiu
 
 let preserve x =
-    Gen <| fun s c ->
+    Fiu <| fun s c ->
         let s = s |> Option.defaultValue x
         s, Some s
 
 let mut x =
-    Gen <| fun s c ->
+    Fiu <| fun s c ->
         let s = s |> Option.defaultWith (fun () -> ref x)
         s, Some s
 
+let toStateMachine initialState ctx (Fiu fiu) =
+    let mutable state = initialState
+    let eval () =
+        let _,newState = fiu state ctx
+        state <- newState
+    eval
 
+
+(*
 module private Html =
 
     type HtmlElement = { data: obj }
@@ -127,18 +121,18 @@ module private Html =
     type FiuBuilder<'fs1,'fs2,'c> with
         member inline _.Yield(
             x: FiuBuilder<'s, HtmlElement option * unit option, 'c>)
-            : Gen<unit, HtmlElement option * unit option, 'c>
+            : Fiu<unit, HtmlElement option * unit option, 'c>
             =
             printMethod "Yield (FiuBuilder)"
             x { () }
 
     let fiu<'s> = FiuBuilder<'s,'s,Context>(id)
 
-    // HtmlElement muss einen Builder zurückgeben,
-    // der bei Run() selbst zu einem Gen wird
-    let inline htmlElem data =
-        let run (Gen childGen) =
-            Gen <| fun s (r: Context) ->
+    let inline htmlElem data 
+        : FiuBuilder<'a, option<HtmlElement> * option<'a>,Context> 
+        =
+        let run (Fiu childFiu) =
+            Fiu <| fun s (r: Context) ->
                 let s,cs = unwrapTupledState s
                 let element =
                     match s with
@@ -150,7 +144,7 @@ module private Html =
                         do r.keepElement element
                         element
                 let ctx = createContext element
-                let cv,cs = childGen cs ctx
+                let cv,cs = childFiu cs ctx
                 (), Some (Some element, cs)
         FiuBuilder(run)
 
@@ -289,3 +283,5 @@ module private Html =
     //         if true then
     //             { value = -77; state = 20.0 }
     //     }
+
+*)
