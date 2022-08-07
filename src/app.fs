@@ -9,7 +9,7 @@ let app =
     fiu {
         text "Hello World (1)" [] []
         div [] [] {
-            text "Hello World (1)" [] []
+            text "Hello World (2)" [] []
             p [] []
             p [] []
         }

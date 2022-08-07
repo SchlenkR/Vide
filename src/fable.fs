@@ -13,15 +13,22 @@ module DomExtensions =
         member this.ToSeq() = seq { for i in 0 .. this.length-1 do this.Item i }
         member this.ToList() = this.ToSeq() |> Seq.toList
 
+let internal log (o: obj) =
+    console.log(o)
+    // ()
+
 type Context(parent: Node) =
     let mutable keptNodes = []
     let memory x =
         keptNodes <- (x :> Node) :: keptNodes
         x
+    let append x =
+        do parent.appendChild(x) |> ignore
+        x
     member _.addElement(tagName: string) =
-        document.createElement tagName |> memory
+        document.createElement tagName |> memory |> append
     member _.addTextNode(text: string) =
-        document.createTextNode text |> memory
+        document.createTextNode text |> memory |> append
     member _.keepNode(element: Node) =
         element |> memory |> ignore
     member _.GetObsoleteNodes() =
@@ -38,7 +45,6 @@ let inline node
     =
     let run (Fiu childFiu) =
         Fiu <| fun s (ctx: Context) ->
-            console.log("EXEC")
             let s,cs = unwrapTupledState s
             let node,oldAttributes =
                 match s with
@@ -96,14 +102,14 @@ type FiuBuilder<'fs1,'fs2,'c> with
         f: FiuBuilder<'s1, FinalState<'s2>, 'c>)
         : Fiu<unit, FinalState<'s2>, 'c>
         =
-        printMethod "Yield (FiuBuilder)"
+        log "Yield (FiuBuilder)"
         let res = f { () }
         res
     member inline _.Yield(
         x: string)
         : Fiu<unit, FinalState<Node * list<string * string>>, Context>
         =
-        printMethod "Yield (string)"
+        log "Yield (string)"
         Html.text x [] [] { () }
 
 let start (holder: HTMLElement) (fiu: Fiu<unit,'s,Context>) =

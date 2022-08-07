@@ -10,7 +10,7 @@ let inline internal unwrapTupledState s =
     | None -> None,None
     | Some (ms,fs) -> ms,fs
 
-let inline internal printMethod name =
+let internal log name =
     printfn $"        Exex:   {name}"
     // ()
 
@@ -22,7 +22,7 @@ type FiuBuilder<'fs1,'fs2,'c>(
         f: 'v1 -> Fiu<'v2,'s2,'c>)
         : Fiu<'v2,'s1 option * 's2 option,'c>
         =
-        printMethod "Bind"
+        log "Bind"
         Fiu <| fun s c ->
             let ms,fs = unwrapTupledState s
             let mv,ms = m ms c
@@ -31,31 +31,31 @@ type FiuBuilder<'fs1,'fs2,'c>(
             fv, Some (ms,fs)
     
     member inline _.Return(x) =
-        printMethod "Return"
+        log "Return"
         Fiu <| fun s c -> x,None
     member inline _.Yield(
         x: Fiu<'v,'s,'c>)
         : Fiu<'v,'s,'c>
         =
-        printMethod "Yield"
+        log "Yield"
         x
     member inline _.Zero()
         : Fiu<unit,'s,'c>
         =
-        printMethod "Zero"
+        log "Zero"
         Fiu <| fun s c ->  (), None
     member inline _.Delay(
         f: unit -> Fiu<'v,'s,'c>)
         : Fiu<'v,'s,'c>
         =
-        printMethod "Delay"
+        log "Delay"
         f()
     member inline _.Combine(
         Fiu a: Fiu<'elem,'s1,'c>,
         Fiu b: Fiu<'elem,'s2,'c>)
         : Fiu<unit,'s1 option * 's2 option,'c>
         =
-        printMethod "Combine"
+        log "Combine"
         Fiu <| fun s c ->
             let sa,sb = unwrapTupledState s
             let va,sa = a sa c
@@ -66,7 +66,7 @@ type FiuBuilder<'fs1,'fs2,'c>(
         body: 'a -> Fiu<unit,'s,'c>)
         : Fiu<unit,'s option list,'c>
         =
-        printMethod "For"
+        log "For"
         Fiu <| fun s c ->
             let s = s |> Option.defaultValue []
             let res = 
@@ -80,7 +80,7 @@ type FiuBuilder<'fs1,'fs2,'c>(
         childFiu: Fiu<unit,'fs1,'c>)
         : Fiu<unit,'fs2,'c>
         =
-        printMethod "Run"
+        log "Run"
         run childFiu
 
 let preserve x =
