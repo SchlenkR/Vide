@@ -5,7 +5,7 @@ module Fiu.Core
 // why we return 's option(!!) -> Because of else branch / zero
 type Fiu<'v,'s,'c> = Fiu of ('s option -> 'c -> 'v * 's option)
 
-let inline internal unwrapTupledState s =
+let inline internal separateStatePair s =
     match s with
     | None -> None,None
     | Some (ms,fs) -> ms,fs
@@ -24,7 +24,7 @@ type FiuBuilder<'fs1,'fs2,'c>(
         =
         log "Bind"
         Fiu <| fun s c ->
-            let ms,fs = unwrapTupledState s
+            let ms,fs = separateStatePair s
             let mv,ms = m ms c
             let (Fiu f') = f mv
             let fv,fs = f' fs c
@@ -57,7 +57,7 @@ type FiuBuilder<'fs1,'fs2,'c>(
         =
         log "Combine"
         Fiu <| fun s c ->
-            let sa,sb = unwrapTupledState s
+            let sa,sb = separateStatePair s
             let va,sa = a sa c
             let vb,sb = b sb c
             (), Some (sa,sb)
@@ -86,11 +86,6 @@ type FiuBuilder<'fs1,'fs2,'c>(
 let preserve x =
     Fiu <| fun s c ->
         let s = s |> Option.defaultValue x
-        s, Some s
-
-let mut x =
-    Fiu <| fun s c ->
-        let s = s |> Option.defaultWith (fun () -> ref x)
         s, Some s
 
 let toStateMachine initialState ctx (Fiu fiu) =
