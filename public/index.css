@@ -1,8 +1,14 @@
-@import "https://cdn.jsdelivr.net/gh/yegor256/tacit@gh-pages/tacit-css-1.5.5.min.css";
+@import "https://unpkg.com/marx-css/css/marx.min.css";
 
 .container {
-    display: grid;
-    grid-template-columns: 150px auto;
-    gap: 20px;
+  display: grid;
+  grid-template-columns: 150px auto;
+  gap: 20px;
 }
 
+#menu {
+  display: grid;
+  align-items: stretch;
+  padding: 10px;
+  border-right: 1px solid black;
+}
