@@ -5,6 +5,7 @@
   <ItemGroup>
     <Compile Include="core.fs" />
     <Compile Include="fable.fs" />
+    <Compile Include="demos.fs" />
     <Compile Include="app.fs" />
   </ItemGroup>
   <ItemGroup>

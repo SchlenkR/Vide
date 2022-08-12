@@ -1,19 +1,16 @@
 module App
 
 open Browser.Dom
+open Browser.Types
 open Fiu
-open Fiu.Fable.Html
 
-let app =
-    fiu {
-        text "Hello World (1)" [] []
-        div [] [] {
-            let! count = state 10
-            text $"Hello World ({count.Value})" [] []
-            button [ ("class", "button") ] [ ("click", fun e -> count.Value <- count.Value + 1) ] { "inc" }
-            button [ ("class", "button") ] [ ("click", fun e -> count.Value <- count.Value - 1) ] { "dec" }
-            "Text only"
-        }
-    }
-
-app |> start (document.getElementById("app"))
+let menu = document.getElementById("menu")
+let demoHost = document.getElementById("demo")
+for desc,runDemo in Demos.demos do
+    let btn = document.createElement("button") :?> HTMLButtonElement
+    btn.innerText <- desc
+    btn.addEventListener("click", fun evt ->
+        demoHost.innerHTML <- ""
+        runDemo demoHost
+    )
+    menu.appendChild(btn) |> ignore
