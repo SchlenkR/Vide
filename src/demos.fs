@@ -3,21 +3,29 @@ module Demos
 open Browser.Dom
 open Browser.Types
 open Vide
-open Vide.Fable.Html
+
+// TODO: so many opens -- that sucks
+open type Vide.Fable.Dom.Attributes
+open type Vide.Fable.Dom.Events
+open type Vide.Fable.Dom.Elements
 
 let helloWorld =
     vide {
-        text "Hello World" [] []
+        text "Hello World"
     }
 
 let counter =
     vide {
-        text "Hello World (1)" [] []
-        div [] [] {
-            let! count = state 10
-            text $"Hello World ({count.Value})" [] []
-            button [] [ ("click", fun e -> count.Value <- count.Value - 1) ] { "dec" }
-            button [] [ ("click", fun e -> count.Value <- count.Value + 1) ] { "inc" }
+        text "Hello World (1)"
+        div {
+            let! count = Mutable.value 10
+            text $"Hello World ({count.Value})"
+            
+            let b1 = button ^+ onclick (fun e -> count.Value <- count.Value + 1)
+            b1 { "dec" }
+
+            button ^+ onclick (fun e -> count.Value <- count.Value + 1) { "inc" }
+
             "Text only"
         }
     }
