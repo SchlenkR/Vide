@@ -12,7 +12,7 @@ let inline printMethod name =
     // printfn $"        Exex:   {name}"
     ()
 
-type FiuBuilder<'fs1,'fs2,'r>(
+type VideBuilder<'fs1,'fs2,'r>(
     run: Gen<unit,'fs1,'r> -> Gen<unit,'fs2,'r>)
     =
     
@@ -122,15 +122,15 @@ module Html =
             keepElement = fun childElement -> printfn $"Keeping child: {parentElement.data} -> {childElement.data}"
         }
 
-    type FiuBuilder<'fs1,'fs2,'r> with
+    type VideBuilder<'fs1,'fs2,'r> with
         member inline _.Yield(
-            x: FiuBuilder<'s, HtmlElement option * unit option, 'r>)
+            x: VideBuilder<'s, HtmlElement option * unit option, 'r>)
             : Gen<unit, HtmlElement option * unit option, 'r>
             =
-            printMethod "Yield (FiuBuilder)"
+            printMethod "Yield (VideBuilder)"
             x { () }
 
-    let fiu<'s> = FiuBuilder<'s,'s,App>(id)
+    let vide<'s> = VideBuilder<'s,'s,App>(id)
 
     // HtmlElement muss einen Builder zurückgeben,
     // der bei Run() selbst zu einem Gen wird
@@ -150,14 +150,14 @@ module Html =
                 let app = createApp element
                 let cv,cs = childGen cs app
                 (), Some (Some element, cs)
-        FiuBuilder(run)
+        VideBuilder(run)
 
     let dummyApp = createApp { data = "ROOT" }
 
 
 
     let h =
-        fiu {
+        vide {
             htmlElem 1 {
                 htmlElem "1_1"
                 
@@ -182,7 +182,7 @@ module Html =
 
 
     let d =
-        fiu {
+        vide {
             htmlElem 1
             htmlElem "2"
             htmlElem 3
@@ -197,7 +197,7 @@ module Html =
 
 
     let e =
-        fiu {
+        vide {
             let! runCount = mut 0
             printfn $"RunCount = {runCount.contents}"
             runCount.contents <- runCount.contents + 1
@@ -225,12 +225,12 @@ module Html =
 
 
     let myComponent =
-        fiu {
+        vide {
             htmlElem "a"
         }
 
     let componentUser =
-        fiu {
+        vide {
             myComponent
         }
 

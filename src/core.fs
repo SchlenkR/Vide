@@ -1,9 +1,9 @@
 
 [<AutoOpen>]
-module Fiu.Core
+module Vide.Core
 
 // why we return 's option(!!) -> Because of else branch / zero
-type Fiu<'v,'s,'c> = Fiu of ('s option -> 'c -> 'v * 's option)
+type Vide<'v,'s,'c> = Vide of ('s option -> 'c -> 'v * 's option)
 
 let inline internal separateStatePair s =
     match s with
@@ -14,84 +14,84 @@ let internal log name =
     printfn $"        Exex:   {name}"
     // ()
 
-type FiuBuilder<'fs1,'fs2,'c>(
-    run: Fiu<unit,'fs1,'c> -> Fiu<unit,'fs2,'c>)
+type VideBuilder<'fs1,'fs2,'c>(
+    run: Vide<unit,'fs1,'c> -> Vide<unit,'fs2,'c>)
     =
     member inline _.Bind(
-        Fiu m: Fiu<'v1,'s1,'c>,
-        f: 'v1 -> Fiu<'v2,'s2,'c>)
-        : Fiu<'v2,'s1 option * 's2 option,'c>
+        Vide m: Vide<'v1,'s1,'c>,
+        f: 'v1 -> Vide<'v2,'s2,'c>)
+        : Vide<'v2,'s1 option * 's2 option,'c>
         =
         log "Bind"
-        Fiu <| fun s c ->
+        Vide <| fun s c ->
             let ms,fs = separateStatePair s
             let mv,ms = m ms c
-            let (Fiu f') = f mv
-            let fv,fs = f' fs c
-            fv, Some (ms,fs)
+            let (Vide v) = f mv
+            let vres,fs = v fs c
+            vres, Some (ms,fs)
     
     member inline _.Return(x) =
         log "Return"
-        Fiu <| fun s c -> x,None
+        Vide <| fun s c -> x,None
     member inline _.Yield(
-        x: Fiu<'v,'s,'c>)
-        : Fiu<'v,'s,'c>
+        x: Vide<'v,'s,'c>)
+        : Vide<'v,'s,'c>
         =
         log "Yield"
         x
     member inline _.Zero()
-        : Fiu<unit,'s,'c>
+        : Vide<unit,'s,'c>
         =
         log "Zero"
-        Fiu <| fun s c ->  (), None
+        Vide <| fun s c ->  (), None
     member inline _.Delay(
-        f: unit -> Fiu<'v,'s,'c>)
-        : Fiu<'v,'s,'c>
+        f: unit -> Vide<'v,'s,'c>)
+        : Vide<'v,'s,'c>
         =
         log "Delay"
         f()
     member inline _.Combine(
-        Fiu a: Fiu<'elem,'s1,'c>,
-        Fiu b: Fiu<'elem,'s2,'c>)
-        : Fiu<unit,'s1 option * 's2 option,'c>
+        Vide a: Vide<'elem,'s1,'c>,
+        Vide b: Vide<'elem,'s2,'c>)
+        : Vide<unit,'s1 option * 's2 option,'c>
         =
         log "Combine"
-        Fiu <| fun s c ->
+        Vide <| fun s c ->
             let sa,sb = separateStatePair s
             let va,sa = a sa c
             let vb,sb = b sb c
             (), Some (sa,sb)
     member inline _.For(
         sequence: seq<'a>,
-        body: 'a -> Fiu<unit,'s,'c>)
-        : Fiu<unit,'s option list,'c>
+        body: 'a -> Vide<unit,'s,'c>)
+        : Vide<unit,'s option list,'c>
         =
         log "For"
-        Fiu <| fun s c ->
+        Vide <| fun s c ->
             let s = s |> Option.defaultValue []
             let res = 
                 [ for i,x in sequence |> Seq.mapi (fun i x -> i,x) do
-                    let (Fiu f) = body x
-                    let fres = f (s |> List.tryItem i |> Option.flatten) c
-                    fres
+                    let (Vide v) = body x
+                    let vres = v (s |> List.tryItem i |> Option.flatten) c
+                    vres
                 ]
             (), Some (res |> List.map snd)
     member _.Run(
-        childFiu: Fiu<unit,'fs1,'c>)
-        : Fiu<unit,'fs2,'c>
+        childVide: Vide<unit,'fs1,'c>)
+        : Vide<unit,'fs2,'c>
         =
         log "Run"
-        run childFiu
+        run childVide
 
 let preserve x =
-    Fiu <| fun s c ->
+    Vide <| fun s c ->
         let s = s |> Option.defaultValue x
         s, Some s
 
-let toStateMachine initialState ctx (Fiu fiu) =
+let toStateMachine initialState ctx (Vide vide) =
     let mutable state = initialState
     let eval () =
-        let _,newState = fiu state ctx
+        let _,newState = vide state ctx
         state <- newState
     eval
 
@@ -113,21 +113,21 @@ module private Html =
             keepElement = fun childElement -> printfn $"Keeping child: {parentElement.data} -> {childElement.data}"
         }
 
-    type FiuBuilder<'fs1,'fs2,'c> with
+    type VideBuilder<'fs1,'fs2,'c> with
         member inline _.Yield(
-            x: FiuBuilder<'s, HtmlElement option * unit option, 'c>)
-            : Fiu<unit, HtmlElement option * unit option, 'c>
+            x: VideBuilder<'s, HtmlElement option * unit option, 'c>)
+            : Vide<unit, HtmlElement option * unit option, 'c>
             =
-            printMethod "Yield (FiuBuilder)"
+            printMethod "Yield (VideBuilder)"
             x { () }
 
-    let fiu<'s> = FiuBuilder<'s,'s,Context>(id)
+    let vide<'s> = VideBuilder<'s,'s,Context>(id)
 
     let inline htmlElem data 
-        : FiuBuilder<'a, option<HtmlElement> * option<'a>,Context> 
+        : VideBuilder<'a, option<HtmlElement> * option<'a>,Context> 
         =
-        let run (Fiu childFiu) =
-            Fiu <| fun s (r: Context) ->
+        let run (Vide childVide) =
+            Vide <| fun s (r: Context) ->
                 let s,cs = unwrapTupledState s
                 let element =
                     match s with
@@ -139,16 +139,16 @@ module private Html =
                         do r.keepElement element
                         element
                 let ctx = createContext element
-                let cv,cs = childFiu cs ctx
+                let cv,cs = childVide cs ctx
                 (), Some (Some element, cs)
-        FiuBuilder(run)
+        VideBuilder(run)
 
     let dummyCtx = createContext { data = "ROOT" }
 
 
 
     let h =
-        fiu {
+        vide {
             htmlElem 1 {
                 htmlElem "1_1"
                 
@@ -173,7 +173,7 @@ module private Html =
 
 
     let d =
-        fiu {
+        vide {
             htmlElem 1
             htmlElem "2"
             htmlElem 3
@@ -188,7 +188,7 @@ module private Html =
 
 
     let e =
-        fiu {
+        vide {
             let! runCount = mut 0
             printfn $"RunCount = {runCount.contents}"
             runCount.contents <- runCount.contents + 1
@@ -216,12 +216,12 @@ module private Html =
 
 
     let myComponent =
-        fiu {
+        vide {
             htmlElem "a"
         }
 
     let componentUser =
-        fiu {
+        vide {
             myComponent
         }
 

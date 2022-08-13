@@ -1,8 +1,8 @@
 
 [<AutoOpen>]
-module Fiu.Fable
+module Vide.Fable
 
-open Fiu
+open Vide
 open Browser
 open Browser.Types
 
@@ -40,7 +40,7 @@ and ElementsContext(parent: Node) =
     member _.GetObsoleteNodes() =
         parent.childNodes.ToList() |> List.except keptNodes
 
-let fiu<'s> = FiuBuilder<'s,'s,Context>(id)
+let vide<'s> = VideBuilder<'s,'s,Context>(id)
 
 type MutableState<'a>(init: 'a) =
     let mutable x = init
@@ -52,7 +52,7 @@ type MutableState<'a>(init: 'a) =
             this.EvaluateView()
 
 let state x =
-    Fiu <| fun s (c: Context) ->
+    Vide <| fun s (c: Context) ->
         let s = s |> Option.defaultWith (fun () -> MutableState(x))
         do s.EvaluateView <- c.evaluateView
         s, Some s
@@ -63,8 +63,8 @@ let inline node
     (attributes: list<string * string>)
     (events: list<string * (Event -> unit)>)
     =
-    let run (Fiu childFiu) =
-        Fiu <| fun s (ctx: Context) ->
+    let run (Vide childVide) =
+        Vide <| fun s (ctx: Context) ->
             let s,cs = separateStatePair s
             let node,oldAttributes,oldEvents =
                 match s with
@@ -105,13 +105,13 @@ let inline node
                         evaluateView = ctx.evaluateView
                         elementsContext = ElementsContext(node)
                     }
-                let cv,cs = childFiu cs childCtx
+                let cv,cs = childVide cs childCtx
                 for x in childCtx.elementsContext.GetObsoleteNodes() do
                     node.removeChild(x) |> ignore
                 cv,cs
             let cv,cs = evaluate()
             (), Some (Some (node,attributes,events), cs)
-    FiuBuilder(run)
+    VideBuilder(run)
     
 let inline element tagName attributes events =
     node (fun ctx -> ctx.elementsContext.AddElement tagName) ignore attributes events
@@ -131,28 +131,28 @@ module Html =
     // TODO: Yield should work for strings
 
 type FinalState<'s> = option<'s> * option<unit>
-type FiuBuilder<'fs1,'fs2,'c> with
+type VideBuilder<'fs1,'fs2,'c> with
     member inline _.Yield(
-        f: FiuBuilder<'s1, FinalState<'s2>, 'c>)
-        : Fiu<unit, FinalState<'s2>, 'c>
+        v: VideBuilder<'s1, FinalState<'s2>, 'c>)
+        : Vide<unit, FinalState<'s2>, 'c>
         =
-        log "Yield (FiuBuilder)"
-        let res = f { () }
+        log "Yield (VideBuilder)"
+        let res = v { () }
         res
     member inline _.Yield(
         x: string)
-        : Fiu<unit, FinalState<_>, Context>
+        : Vide<unit, FinalState<_>, Context>
         =
         log "Yield (string)"
         Html.text x [] [] { () }
 
-let start (holder: HTMLElement) (fiu: Fiu<unit,'s,Context>) =
+let start (holder: HTMLElement) (vide: Vide<unit,'s,Context>) =
     let ctx =
         {
             node = holder
             evaluateView = fun () -> ()
             elementsContext = ElementsContext(holder)
         }
-    let evaluate = fiu |> toStateMachine None ctx
+    let evaluate = vide |> toStateMachine None ctx
     do ctx.evaluateView <- evaluate
     evaluate()

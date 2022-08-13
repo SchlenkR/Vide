@@ -2,7 +2,7 @@ module App
 
 open Browser.Dom
 open Browser.Types
-open Fiu
+open Vide
 
 let menu = document.getElementById("menu")
 let demoHost = document.getElementById("demo")

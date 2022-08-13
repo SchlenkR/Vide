@@ -2,16 +2,16 @@ module Demos
 
 open Browser.Dom
 open Browser.Types
-open Fiu
-open Fiu.Fable.Html
+open Vide
+open Vide.Fable.Html
 
 let helloWorld =
-    fiu {
+    vide {
         text "Hello World" [] []
     }
 
 let counter =
-    fiu {
+    vide {
         text "Hello World (1)" [] []
         div [] [] {
             let! count = state 10

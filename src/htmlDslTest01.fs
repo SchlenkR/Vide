@@ -2,13 +2,13 @@ module HtmlDslTest01
 
 open Browser.Dom
 open Browser.Types
-open Fiu
-open Fiu.Fable.Html
+open Vide
+open Vide.Fable.Html
 
 type HtmlBuilder<'fs1,'fs2,'c>(
-    run: Fiu<unit,'fs1,'c> -> Fiu<unit,'fs2,'c>)
+    run: Vide<unit,'fs1,'c> -> Vide<unit,'fs2,'c>)
     =
-    inherit FiuBuilder<'fs1,'fs2,'c>(run)
+    inherit VideBuilder<'fs1,'fs2,'c>(run)
 
     let mutable attributes = Map.empty
     member this.Attributes = attributes
@@ -23,13 +23,13 @@ open System
 type Html =
     static member text
         with get () = DateTime.Now.Ticks
-    
+
 
 open type Html
 
 
 let counter =
-    fiu {
+    vide {
         text "Hello World (1)" [] []
         div [] [] {
             let! count = state 10
