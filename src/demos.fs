@@ -24,7 +24,17 @@ let counter =
             let b1 = button ^+ onclick (fun e -> count.Value <- count.Value + 1)
             b1 { "dec" }
 
-            button ^+ onclick (fun e -> count.Value <- count.Value + 1) { "inc" }
+            // this:
+            // |--------- that whole thing should be a builder ------| |-yield-|
+            button ++ onclick (fun e -> count.Value <- count.Value + 1) { "inc" }
+
+            // ... shall equal this:
+            // |--------- that whole thing is a builder ----------------| |-yield-|
+            (button ++ onclick (fun e -> count.Value <- count.Value + 1)) { "inc" }
+
+            // ...but it seems that it equals this:
+            //        |--- is there some higher-precedence-than-CE operator? -----|
+            button ++ (onclick (fun e -> count.Value <- count.Value + 1) { "inc" })
 
             "Text only"
         }

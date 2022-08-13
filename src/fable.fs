@@ -172,7 +172,7 @@ module Dom =
     type HTMLElementBuilder(createNode, updateNode) =
         inherit NodeBuilder(createNode, updateNode)
         
-        static member inline ( ^+ ) (this: HTMLElementBuilder, EventDefinitions.OnClick handler) =
+        static member inline ( ++ ) (this: HTMLElementBuilder, EventDefinitions.OnClick handler) =
             this.AddEvent("onclick", handler); this
         
         static member inline ( ** ) (this: HTMLElementBuilder, AttributeDefinitions.Id value) =
