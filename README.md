@@ -6,6 +6,8 @@ Vide is a declarative view library written in F#. It implements a core that can 
 
 The prototype implements the core, a Fable API, and a Fable app that demos several use cases.
 
+The basic idea (composing stateful functions) is described in my [contribution to the 2019s 'Applied F# Challenge'](https://github.com/RonaldSchlenker/applied_fsharp_challenge/blob/master/docs/index.md).
+
 ## Requirements
 
 * [dotnet SDK](https://www.microsoft.com/net/download/core) 5.0 or higher
