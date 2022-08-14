@@ -4,9 +4,6 @@ open Browser.Dom
 open Browser.Types
 open Vide
 
-open type Vide.Fable.Dom
-
-
 let counter =
     vide {
         text "Hello World (1)"
