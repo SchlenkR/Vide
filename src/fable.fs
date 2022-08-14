@@ -40,8 +40,7 @@ and ElementsContext(parent: Node) =
     member _.GetObsoleteNodes() =
         parent.childNodes.ToList() |> List.except keptNodes
 
-type VideBuilder() =
-    inherit VideBaseBuilder()
+type VideBuilder() = inherit VideBaseBuilder()
 
 let vide = VideBuilder()
 
@@ -58,10 +57,13 @@ let state x =
         do s.EvaluateView <- c.evaluateView
         s, Some s
 
-type EventHandler = Event -> Unit
-type AttributeList = list<string * string option>
+type AttributeSyncAction<'a> =
+    | Set of 'a
+    | Remove
+type EventHandler = Event -> unit
+type AttributeList = list<string * AttributeSyncAction<string>>
 type EventList = list<string * EventHandler>
-type NodeBuilderState<'s> = option<Node * AttributeList * EventList> * option<'s>
+type NodeBuilderState<'s> = option<Node> * option<'s>
 
 type NodeBuilder(createNode: Context -> Node, updateNode: Node -> unit) =
     inherit VideBaseBuilder()
@@ -73,45 +75,31 @@ type NodeBuilder(createNode: Context -> Node, updateNode: Node -> unit) =
         Vide childVide: Vide<unit,'fs,Context>)
         : Vide<unit, NodeBuilderState<'fs>, Context>
         =
-        log "Run"
         Vide <| fun s (ctx: Context) ->
             let s,cs = separateStatePair s
-            let node,oldAttributes,oldEvents =
+            let node =
                 match s with
                 | None ->
                     let node = createNode ctx
+                    // TODO: Think about variant event declarations
                     for name,handler in this.Events do
-                        log("ADD LISTENER")
                         node.addEventListener(name, handler) |> ignore
-                    node,[],[]
-                | Some (node,oldAttributes,oldEvents) ->
+                    node
+                | Some node ->
                     do
                         ctx.elementsContext.KeepNode(node)
                         updateNode node
-                    node,oldAttributes,oldEvents
+                    node
             let evaluate () =
-                // TODO: Performance all over the place
-                let except currents olds =
-                    [ for a in olds do
-                        if currents |> List.exists (fun a' -> fst a' = fst a) |> not
-                            then yield a ]
                 do
-                    let removedAttrs = oldAttributes |> except this.Attributes
-                    for name,_ in removedAttrs do
-                        node.attributes.removeNamedItem(name) |> ignore
                     for name,value in this.Attributes do
-                        let attr = document.createAttribute(name)
                         match value with
-                        | Some value -> attr.value <- value
-                        | None -> ()
-                        node.attributes.setNamedItem(attr) |> ignore
-                // TODO: Think about variant event declarations
-                // do
-                //     let removedEvents = oldEvents |> except events
-                //     for name,handler in removedEvents do
-                //         node.removeEventListener(name, handler) |> ignore
-                //     for name,handler in events do
-                //         node.addEventListener(name, handler) |> ignore
+                        | Set value ->
+                            let attr = document.createAttribute(name)
+                            attr.value <- value
+                            node.attributes.setNamedItem(attr) |> ignore
+                        | Remove ->
+                            node.attributes.removeNamedItem(name) |> ignore
                 let childCtx =
                     {
                         node = node
@@ -123,7 +111,7 @@ type NodeBuilder(createNode: Context -> Node, updateNode: Node -> unit) =
                     node.removeChild(x) |> ignore
                 cv,cs
             let cv,cs = evaluate()
-            (), Some (Some (node, this.Attributes, this.Events), cs)
+            (), Some (Some node, cs)
 
 type HTMLElementBuilder(createNode, updateNode) = inherit NodeBuilder(createNode, updateNode)
 type HTMLAnchorElementBuilder(createNode, updateNode) = inherit NodeBuilder(createNode, updateNode)
@@ -135,16 +123,19 @@ open System.Runtime.CompilerServices
 type NodeBuilderExtensions() =
     [<Extension>]
     static member inline attrCond(this: #NodeBuilder, name, ?value: string) =
-        match value with
-        | Some value -> do this.Attributes <- (name, Some value) :: this.Attributes
-        | None -> ()
+        let value =
+            match value with
+            | Some value -> Set value
+            | None -> Remove
+        do this.Attributes <- (name, value) :: this.Attributes
         this
     [<Extension>]
-    static member inline attrBool(this: #NodeBuilder, name, ?value: bool) =
-        match value with
-        | None | Some true ->
-            do this.Attributes <- (name, None) :: this.Attributes
-        | Some false -> ()
+    static member inline attrBool(this: #NodeBuilder, name, value: bool) =
+        let value =
+            match value with
+            | true -> Set ""
+            | false -> Remove
+        do this.Attributes <- (name, value) :: this.Attributes
         this
     [<Extension>]
     static member on(this: #NodeBuilder, name, ?handler: EventHandler) =
@@ -162,8 +153,8 @@ type HTMLElementBuilderExtensions() =
     static member inline class'(this: #HTMLElementBuilder, ?value: string) =
         NodeBuilderExtensions.attrCond(this, "class", ?value = value)
     [<Extension>]
-    static member inline hidden(this: #HTMLElementBuilder, ?value: bool) =
-        NodeBuilderExtensions.attrBool(this, "hidden", ?value = value)
+    static member inline hidden(this: #HTMLElementBuilder, value: bool) =
+        NodeBuilderExtensions.attrBool(this, "hidden", value)
 
 [<Extension>]
 type HTMLAnchorElementBuilderExtensions() =
@@ -201,15 +192,12 @@ type VideBaseBuilder with
         v: NodeBuilder)
         : Vide<unit, NodeBuilderState<unit>, Context>
         =
-        log "Yield (VideBuilder)"
-        let res = v { () }
-        res
+        v {()}
     member inline _.Yield(
         x: string)
         : Vide<unit, NodeBuilderState<unit> ,Context>
         =
-        log "Yield (string)"
-        Html.text x { () }
+        Html.text x {()}
 
 let start (holder: HTMLElement) (vide: Vide<unit,'s,Context>) =
     let ctx =

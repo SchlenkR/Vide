@@ -13,22 +13,16 @@ let helloWorld =
 
 let counter =
     vide {
-        text "Hello XXX World (1)"
         div {
-            let! count = state 10
-            let incDec i _ = 
-                printfn $"INC/DEC  {i}"
-                count.value <- count.value + i
+            let! count = state 0
+            let incDec i _ = count.value <- count.value + i
 
-            text $"Hello World ({count.value})"
-            button.on("click", incDec -1) {
-                "dec"
-                div { "yyy" }
+            div {
+                text $"Count = {count.value}"
             }
+
+            button.on("click", incDec -1) { "dec" }
             button.on("click", incDec 1) { "inc" }
-            "Text only<strong>HALLO</strong>"
-            
-            span.hidden(?value = if count.value % 2 = 0 then Some true else None) { "ODD" }
         }
     }
 

@@ -1,14 +1,26 @@
 @import "https://unpkg.com/marx-css/css/marx.min.css";
 
 .container {
-  display: grid;
-  grid-template-columns: 150px auto;
-  gap: 20px;
+    display: grid;
+    grid-template-columns: 150px auto;
+    gap: 20px;
 }
 
 #menu {
-  display: grid;
-  align-items: stretch;
-  padding: 10px;
-  border-right: 1px solid black;
+    display: grid;
+    align-items: stretch;
+    padding: 10px;
+    border-right: 1px solid black;
+}
+
+#demo {
+    padding: 20px
+}
+
+#demo div {
+    margin-bottom: 10px;
+}
+
+#demo button {
+    padding: 3px 15px;
 }
