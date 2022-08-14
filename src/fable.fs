@@ -6,7 +6,7 @@ open Vide
 open Browser
 open Browser.Types
 
-let internal log (o: obj) =
+let log (o: obj) =
     console.log(o)
     // ()
 
@@ -33,6 +33,7 @@ and ElementsContext(parent: Node) =
     member _.AddElement(tagName: string) =
         document.createElement tagName |> memory |> append
     member _.AddTextNode(text: string) =
+        log $"Creating text node: {text}"
         document.createTextNode text |> memory |> append
     member _.KeepNode(element: Node) =
         element |> memory |> ignore
@@ -212,7 +213,7 @@ type VideBuilder<'c> with
     // TODO: Put yield in the appropriate builders
     member inline _.Yield(
         v: VideBuilder<Context>)
-        : Vide<unit, FinalState<'s2>, Context>
+        : Vide<unit, FinalState<unit>, Context>
         =
         log "Yield (VideBuilder)"
         let res = v { () }
