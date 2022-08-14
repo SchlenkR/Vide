@@ -63,14 +63,15 @@ type AttributeList = list<string * string>
 type EventList = list<string * EventHandler>
 type NodeBuilderState<'s> = option<Node * AttributeList * EventList> * option<'s>
 
-type NodeBuilder<'fs>(
+type NodeBuilder(
     createNode: Context -> Node,
-    updateNode: Node -> unit,
-    attributes: list<string * string>,
-    events: list<string * (Event -> unit)>)
+    updateNode: Node -> unit)
     =
     inherit VideBaseBuilder()
-    //inherit VideBaseBuilder<'fs, NodeBuilderState<'fs>, Context>(this.DoRun)
+    
+    let mutable attributes: AttributeList = []
+    let mutable events: EventList = []
+
     member _.Run(
         Vide childVide: Vide<unit,'fs,Context>)
         : Vide<unit, NodeBuilderState<'fs>, Context>
@@ -124,35 +125,26 @@ type NodeBuilder<'fs>(
             let cv,cs = evaluate()
             (), Some (Some (node,attributes,events), cs)
 
-let inline node
-    (createNode: Context -> Node)
-    (updateNode: Node -> unit)
-    (attributes: list<string * string>)
-    (events: list<string * (Event -> unit)>)
-    : NodeBuilder<'s>
-    =
-    NodeBuilder(createNode, updateNode, attributes, events)
-    
-let inline element tagName attributes events =
-    node (fun ctx -> ctx.elementsContext.AddElement tagName) ignore attributes events
+let inline element ctor tagName updateNode =
+    ctor((fun ctx -> ctx.elementsContext.AddElement(tagName) :> Node), updateNode)
 
 module Html =
-    let text text attributes events =
+    let text<'s> text =
         let create (ctx: Context) =
             ctx.elementsContext.AddTextNode text :> Node
         let update (node: Node) =
             if node.textContent <> text then
                 node.textContent <- text
-        node create update attributes events
-    let div attributes events = element "div" attributes events
-    let p attributes events = element "p" attributes events
-    let button attributes events = element "button" attributes events
+        NodeBuilder(create, update)
+    let div = element NodeBuilder "div" ignore
+    let p = element NodeBuilder "p" ignore
+    let button = element NodeBuilder "button" ignore
 
     // TODO: Yield should work for strings
 
 type VideBaseBuilder with
     member inline _.Yield(
-        v: NodeBuilder<unit>)
+        v: NodeBuilder)
         : Vide<unit, NodeBuilderState<unit>, Context>
         =
         log "Yield (VideBuilder)"
@@ -163,7 +155,7 @@ type VideBaseBuilder with
         : Vide<unit, NodeBuilderState<unit> ,Context>
         =
         log "Yield (string)"
-        Html.text x [] [] { () }
+        Html.text x { () }
 
 let start (holder: HTMLElement) (vide: Vide<unit,'s,Context>) =
     let ctx =
