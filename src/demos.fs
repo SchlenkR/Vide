@@ -3,7 +3,8 @@ module Demos
 open Browser.Dom
 open Browser.Types
 open Vide
-open Vide.Fable.Html
+
+open type Vide.Fable.Html
 
 let helloWorld =
     vide {
@@ -15,12 +16,16 @@ let counter =
         text "Hello XXX World (1)"
         div {
             let! count = state 10
-            text $"Hello World ({count.Value})"
-            //button [] [ ("click", fun e -> count.Value <- count.Value - 1) ] {
-            //    "dec"
-            //    div [] [] { "xxxx" }
-            //}
-            //button [] [ ("click", fun e -> count.Value <- count.Value + 1) ] { "inc" }
+            let incDec i _ = 
+                printfn $"INC/DEC  {i}"
+                count.value <- count.value + i
+
+            text $"Hello World ({count.value})"
+            button.on("click", incDec -1) {
+                "dec"
+                div { "yyy" }
+            }
+            button.on("click", incDec 1) { "inc" }
             "Text only<strong>HALLO</strong>"
         }
     }

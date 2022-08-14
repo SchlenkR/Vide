@@ -46,11 +46,11 @@ type VideBuilder() =
 let vide = VideBuilder()
 
 type MutableState<'a>(init: 'a) =
-    let mutable x = init
+    let mutable state = init
     member val EvaluateView = (fun () -> ()) with get,set
-    member this.Value
-        with get() = x
-        and set(value) = x <- value; this.EvaluateView()
+    member this.value
+        with get() = state
+        and set(value) = state <- value; this.EvaluateView()
 
 let state x =
     Vide <| fun s (c: Context) ->
@@ -63,16 +63,13 @@ type AttributeList = list<string * string>
 type EventList = list<string * EventHandler>
 type NodeBuilderState<'s> = option<Node * AttributeList * EventList> * option<'s>
 
-type NodeBuilder(
-    createNode: Context -> Node,
-    updateNode: Node -> unit)
-    =
+type NodeBuilder(createNode: Context -> Node, updateNode: Node -> unit) =
     inherit VideBaseBuilder()
     
-    let mutable attributes: AttributeList = []
-    let mutable events: EventList = []
+    member val Attributes: AttributeList = [] with get, set
+    member val Events: EventList = [] with get, set
 
-    member _.Run(
+    member this.Run(
         Vide childVide: Vide<unit,'fs,Context>)
         : Vide<unit, NodeBuilderState<'fs>, Context>
         =
@@ -83,7 +80,8 @@ type NodeBuilder(
                 match s with
                 | None ->
                     let node = createNode ctx
-                    for name,handler in events do
+                    for name,handler in this.Events do
+                        log("ADD LISTENER")
                         node.addEventListener(name, handler) |> ignore
                     node,[],[]
                 | Some (node,oldAttributes,oldEvents) ->
@@ -98,10 +96,10 @@ type NodeBuilder(
                         if currents |> List.exists (fun a' -> fst a' = fst a) |> not
                             then yield a ]
                 do
-                    let removedAttrs = oldAttributes |> except attributes
+                    let removedAttrs = oldAttributes |> except this.Attributes
                     for name,_ in removedAttrs do
                         node.attributes.removeNamedItem(name) |> ignore
-                    for name,value in attributes do
+                    for name,value in this.Attributes do
                         let attr = document.createAttribute(name)
                         attr.value <- value
                         node.attributes.setNamedItem(attr) |> ignore
@@ -123,22 +121,38 @@ type NodeBuilder(
                     node.removeChild(x) |> ignore
                 cv,cs
             let cv,cs = evaluate()
-            (), Some (Some (node,attributes,events), cs)
+            (), Some (Some (node, this.Attributes, this.Events), cs)
+
+open System.Runtime.CompilerServices
+
+[<Extension>]
+type NodeBuilderExtensions() =
+    [<Extension>]
+    static member attr(this: #NodeBuilder, name, value) =
+        do this.Attributes <- (name, value) :: this.Attributes
+        this
+
+    [<Extension>]
+    static member on(this: #NodeBuilder, name, handler) =
+        do this.Events <- (name, handler) :: this.Events
+        this
 
 let inline element ctor tagName updateNode =
-    ctor((fun ctx -> ctx.elementsContext.AddElement(tagName) :> Node), updateNode)
+    ctor(
+        (fun ctx -> ctx.elementsContext.AddElement(tagName) :> Node),
+        updateNode)
 
-module Html =
-    let text<'s> text =
+// open type (why? -> We need always a new builder)
+type Html =
+    static member text<'s> text =
         let create (ctx: Context) =
             ctx.elementsContext.AddTextNode text :> Node
         let update (node: Node) =
-            if node.textContent <> text then
-                node.textContent <- text
+            if node.textContent <> text then node.textContent <- text
         NodeBuilder(create, update)
-    let div = element NodeBuilder "div" ignore
-    let p = element NodeBuilder "p" ignore
-    let button = element NodeBuilder "button" ignore
+    static member div = element NodeBuilder "div" ignore
+    static member p = element NodeBuilder "p" ignore
+    static member button = element NodeBuilder "button" ignore
 
     // TODO: Yield should work for strings
 
