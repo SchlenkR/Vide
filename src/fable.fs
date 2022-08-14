@@ -72,6 +72,9 @@ module Mutable =
 [<AutoOpen>]
 module Dom =
 
+    open System.Collections.Generic
+    open System.Runtime.CompilerServices
+
     type NodeBuilder(
         createNode: Context -> Node,
         updateNode: Node -> unit)
@@ -82,15 +85,18 @@ module Dom =
         let mutable events = []
 
         member _.Attributes = attributes
-        member _.AddAttribute(name: string, value: string option) =
-            do attributes <- (name, value) :: attributes
+        member _.AddConditionalAttribute(name: string, value: string option) =
+            if value.IsSome then
+                do attributes <- (name, value) :: attributes
+        member _.AddBooleanAttribute(name: string, ?value: bool) =
+            match value with
+            | None | Some true ->
+                do attributes <- (name, None) :: attributes
+            | Some false -> ()
 
         member _.Events = events
         member _.AddEvent(name: string, handler: Event -> unit) =
             do events <- (name, handler) :: events
-
-        static member ( ** ) (b: NodeBuilder, attr: (string * string option)) =
-            b.AddAttribute(attr)
 
         member _.Run(
             childVide: Vide<unit,_,Context>)
@@ -148,44 +154,38 @@ module Dom =
                     (), Some (Some (node,attributes,events), cs)
             run childVide
 
-    // attributes can be mixed in the builder
-    module AttributeDefinitions =
-        type IdAttribute = Id of string
-        type ClassAttribute = Class of string
-        type HiddenAttribute = Hidden
-        type HRefAttribute = HRef of string
-
-    // open this type to access lower case attr names
-    type Attributes =
-        static member id' = AttributeDefinitions.Id
-        static member class' = AttributeDefinitions.Class
-        static member hidden' = AttributeDefinitions.Hidden
-
     type EventHandler = Event -> unit
-
-    module EventDefinitions =
-        type OnClick = OnClick of EventHandler
-
-    type Events =
-        static member onclick = EventDefinitions.OnClick
 
     type HTMLElementBuilder(createNode, updateNode) =
         inherit NodeBuilder(createNode, updateNode)
-        
-        static member inline ( ++ ) (this: HTMLElementBuilder, EventDefinitions.OnClick handler) =
+
+    [<Extension>]
+    type HTMLElementBuilderExtensions =
+        [<Extension>]
+        static member inline onclick(this: #HTMLElementBuilder, handler: EventHandler) =
             this.AddEvent("onclick", handler); this
         
-        static member inline ( ** ) (this: HTMLElementBuilder, AttributeDefinitions.Id value) =
-            this.AddAttribute("id", Some value); this
-        static member inline ( ** ) (this: HTMLElementBuilder, AttributeDefinitions.Class value) =
-            this.AddAttribute("class", Some value); this
-        static member inline ( ** ) (this: HTMLElementBuilder, AttributeDefinitions.Hidden _) =
-            this.AddAttribute("class", None); this
+        [<Extension>]
+        static member inline id(this: #HTMLElementBuilder, ?value: string) =
+            this.AddConditionalAttribute("id", value); this
+        [<Extension>]
+        static member inline class'(this: #HTMLElementBuilder, ?value: string) =
+            this.AddConditionalAttribute("class", value); this
+        [<Extension>]
+        static member inline hidden'(this: #HTMLElementBuilder, ?value: bool) =
+            match value with
+            | None | Some true -> this.AddBooleanAttribute("hidden")
+            | Some false -> ()
+            this
 
     type HTMLAnchorElementBuilder(createNode, updateNode) =
         inherit NodeBuilder(createNode, updateNode)
-        static member inline ( ** ) (this: HTMLAnchorElementBuilder, AttributeDefinitions.HRef value) =
-            this.AddAttribute("href", Some value); this
+
+    [<Extension>]
+    type HTMLAnchorElementBuilderExtensions =
+        [<Extension>]
+        static member inline href(this: #HTMLAnchorElementBuilder, ?value: string) =
+            this.AddConditionalAttribute("href", value); this
 
     let inline element ctor tagName =
         ctor((fun ctx -> ctx.elementsContext.AddElement(tagName) :> Node), ignore)
