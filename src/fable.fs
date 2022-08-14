@@ -169,7 +169,11 @@ type NodeBuilderExtensions() =
 type HTMLAnchorElementBuilderExtensions() =
     [<Extension>]
     static member inline href(this: #HTMLAnchorElementBuilder, ?value: string) =
+        // this is caising the exception on "npm start"
         this.attrCond("href", ?value = value)
+
+        // this is working
+        //NodeBuilderExtensions.attrCond(this, "href", ?value = value)
 
 let inline element ctor tagName updateNode =
     ctor(
