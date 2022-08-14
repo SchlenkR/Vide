@@ -6,7 +6,7 @@ open Vide
 open Browser
 open Browser.Types
 
-let internal log (o: obj) =
+let inline internal log (o: obj) =
     console.log(o)
     // ()
 

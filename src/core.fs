@@ -10,7 +10,7 @@ let inline internal separateStatePair s =
     | None -> None,None
     | Some (ms,fs) -> ms,fs
 
-let internal log name =
+let inline internal log name =
     printfn $"        Exex:   {name}"
     // ()
 
