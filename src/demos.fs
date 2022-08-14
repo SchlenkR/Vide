@@ -27,6 +27,8 @@ let counter =
             }
             button.on("click", incDec 1) { "inc" }
             "Text only<strong>HALLO</strong>"
+            
+            //span.hidden(?value = if count.value % 2 = 0 then Some true else None) { "ODD" }
         }
     }
 

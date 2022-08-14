@@ -59,7 +59,7 @@ let state x =
         s, Some s
 
 type EventHandler = Event -> Unit
-type AttributeList = list<string * string>
+type AttributeList = list<string * string option>
 type EventList = list<string * EventHandler>
 type NodeBuilderState<'s> = option<Node * AttributeList * EventList> * option<'s>
 
@@ -101,7 +101,9 @@ type NodeBuilder(createNode: Context -> Node, updateNode: Node -> unit) =
                         node.attributes.removeNamedItem(name) |> ignore
                     for name,value in this.Attributes do
                         let attr = document.createAttribute(name)
-                        attr.value <- value
+                        match value with
+                        | Some value -> attr.value <- value
+                        | None -> ()
                         node.attributes.setNamedItem(attr) |> ignore
                 // TODO: Think about variant event declarations
                 // do
@@ -123,19 +125,51 @@ type NodeBuilder(createNode: Context -> Node, updateNode: Node -> unit) =
             let cv,cs = evaluate()
             (), Some (Some (node, this.Attributes, this.Events), cs)
 
+type HTMLElementBuilder(createNode, updateNode) = inherit NodeBuilder(createNode, updateNode)
+type HTMLAnchorElementBuilder(createNode, updateNode) = inherit NodeBuilder(createNode, updateNode)
+type HTMLButtonElementBuilder(createNode, updateNode) = inherit NodeBuilder(createNode, updateNode)
+
 open System.Runtime.CompilerServices
 
 [<Extension>]
 type NodeBuilderExtensions() =
     [<Extension>]
-    static member attr(this: #NodeBuilder, name, value) =
-        do this.Attributes <- (name, value) :: this.Attributes
+    static member attrCond(this: #NodeBuilder, name, ?value: string) =
+        match value with
+        | Some value -> do this.Attributes <- (name, Some value) :: this.Attributes
+        | None -> ()
+        this
+    [<Extension>]
+    static member inline attrBool(this: #NodeBuilder, name, ?value: bool) =
+        match value with
+        | None | Some true ->
+            do this.Attributes <- (name, None) :: this.Attributes
+        | Some false -> ()
+        this
+    [<Extension>]
+    static member on(this: #NodeBuilder, name, ?handler: EventHandler) =
+        match handler with
+        | Some handler -> do this.Events <- (name, handler) :: this.Events
+        | None -> ()
         this
 
+//[<Extension>]
+//type HTMLElementBuilderExtensions() =
+//    [<Extension>]
+//    static member inline id(this: #HTMLElementBuilder, ?value: string) =
+//        this.attrCond("id", ?value = value)
+//    [<Extension>]
+//    static member inline class'(this: #HTMLElementBuilder, ?value: string) =
+//        this.attrCond("class", ?value = value)
+//    [<Extension>]
+//    static member inline hidden(this: #HTMLElementBuilder, ?value: bool) =
+//        this.attrBool("hidden", ?value = value)
+
+[<Extension>]
+type HTMLAnchorElementBuilderExtensions() =
     [<Extension>]
-    static member on(this: #NodeBuilder, name, handler) =
-        do this.Events <- (name, handler) :: this.Events
-        this
+    static member inline href(this: #HTMLAnchorElementBuilder, ?value: string) =
+        this.attrCond("href", ?value = value)
 
 let inline element ctor tagName updateNode =
     ctor(
@@ -150,9 +184,11 @@ type Html =
         let update (node: Node) =
             if node.textContent <> text then node.textContent <- text
         NodeBuilder(create, update)
-    static member div = element NodeBuilder "div" ignore
-    static member p = element NodeBuilder "p" ignore
-    static member button = element NodeBuilder "button" ignore
+    static member div = element HTMLElementBuilder "div" ignore
+    static member span = element HTMLElementBuilder "span" ignore
+    static member p = element HTMLElementBuilder "p" ignore
+    static member button = element HTMLButtonElementBuilder "button" ignore
+    static member a = element HTMLAnchorElementBuilder "a" ignore
 
     // TODO: Yield should work for strings
 
