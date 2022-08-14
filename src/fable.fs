@@ -153,27 +153,27 @@ type NodeBuilderExtensions() =
         | None -> ()
         this
 
-//[<Extension>]
-//type HTMLElementBuilderExtensions() =
-//    [<Extension>]
-//    static member inline id(this: #HTMLElementBuilder, ?value: string) =
-//        this.attrCond("id", ?value = value)
-//    [<Extension>]
-//    static member inline class'(this: #HTMLElementBuilder, ?value: string) =
-//        this.attrCond("class", ?value = value)
-//    [<Extension>]
-//    static member inline hidden(this: #HTMLElementBuilder, ?value: bool) =
-//        this.attrBool("hidden", ?value = value)
+[<Extension>]
+type HTMLElementBuilderExtensions() =
+    [<Extension>]
+    static member inline id(this: #HTMLElementBuilder, ?value: string) =
+        NodeBuilderExtensions.attrCond(this, "id", ?value = value)
+    [<Extension>]
+    static member inline class'(this: #HTMLElementBuilder, ?value: string) =
+        NodeBuilderExtensions.attrCond(this, "class", ?value = value)
+    [<Extension>]
+    static member inline hidden(this: #HTMLElementBuilder, ?value: bool) =
+        NodeBuilderExtensions.attrBool(this, "hidden", ?value = value)
 
 [<Extension>]
 type HTMLAnchorElementBuilderExtensions() =
     [<Extension>]
     static member inline href(this: #HTMLAnchorElementBuilder, ?value: string) =
+        // Fable BUG https://github.com/fable-compiler/Fable/issues/3073
         // this is caising the exception on "npm start"
-        this.attrCond("href", ?value = value)
-
+        //this.attrCond("href", ?value = value)
         // this is working
-        //NodeBuilderExtensions.attrCond(this, "href", ?value = value)
+        NodeBuilderExtensions.attrCond(this, "href", ?value = value)
 
 let inline element ctor tagName updateNode =
     ctor(
