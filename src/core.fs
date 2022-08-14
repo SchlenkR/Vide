@@ -14,9 +14,8 @@ let inline internal log name =
     printfn $"        Exex:   {name}"
     // ()
 
-type VideBuilder<'fs1,'fs2,'c>(
-    run: Vide<unit,'fs1,'c> -> Vide<unit,'fs2,'c>)
-    =
+// we need 'fs1 to prevent value restrictions. Why? I'm not completely sure...
+type VideBaseBuilder<'fs1>() =
     member inline _.Bind(
         Vide m: Vide<'v1,'s1,'c>,
         f: 'v1 -> Vide<'v2,'s2,'c>)
@@ -76,12 +75,6 @@ type VideBuilder<'fs1,'fs2,'c>(
                     vres
                 ]
             (), Some (res |> List.map snd)
-    member _.Run(
-        childVide: Vide<unit,'fs1,'c>)
-        : Vide<unit,'fs2,'c>
-        =
-        log "Run"
-        run childVide
 
 let preserve x =
     Vide <| fun s c ->

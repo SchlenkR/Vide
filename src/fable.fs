@@ -40,7 +40,10 @@ and ElementsContext(parent: Node) =
     member _.GetObsoleteNodes() =
         parent.childNodes.ToList() |> List.except keptNodes
 
-let vide<'s> = VideBuilder<'s,'s,Context>(id)
+type VideBuilder<'fs1>() =
+    inherit VideBaseBuilder<'fs1>()
+
+let vide<'fs> = VideBuilder<'fs>()
 
 type MutableState<'a>(init: 'a) =
     let mutable x = init
@@ -64,10 +67,15 @@ type NodeBuilder<'fs>(
     createNode: Context -> Node,
     updateNode: Node -> unit,
     attributes: list<string * string>,
-    events: list<string * (Event -> unit)>) as this
+    events: list<string * (Event -> unit)>)
     =
-    inherit VideBuilder<'fs, NodeBuilderState<'fs>, Context>(this.DoRun)
-    member this.DoRun(Vide childVide) =
+    inherit VideBaseBuilder<'fs>()
+    //inherit VideBaseBuilder<'fs, NodeBuilderState<'fs>, Context>(this.DoRun)
+    member _.Run(
+        Vide childVide: Vide<unit,'fs,Context>)
+        : Vide<unit, NodeBuilderState<'fs>, Context>
+        =
+        log "Run"
         Vide <| fun s (ctx: Context) ->
             let s,cs = separateStatePair s
             let node,oldAttributes,oldEvents =
@@ -116,7 +124,6 @@ type NodeBuilder<'fs>(
             let cv,cs = evaluate()
             (), Some (Some (node,attributes,events), cs)
 
-
 let inline node
     (createNode: Context -> Node)
     (updateNode: Node -> unit)
@@ -143,18 +150,17 @@ module Html =
 
     // TODO: Yield should work for strings
 
-type FinalState<'s> = option<'s> * option<unit>
-type VideBuilder<'fs1,'fs2,'c> with
+type VideBaseBuilder<'fs1> with
     member inline _.Yield(
-        v: VideBuilder<'s1, FinalState<'s2>, 'c>)
-        : Vide<unit, FinalState<'s2>, 'c>
+        v: NodeBuilder<unit>)
+        : Vide<unit, NodeBuilderState<unit>, Context>
         =
         log "Yield (VideBuilder)"
         let res = v { () }
         res
     member inline _.Yield(
         x: string)
-        : Vide<unit, FinalState<_>, Context>
+        : Vide<unit, NodeBuilderState<unit> ,Context>
         =
         log "Yield (string)"
         Html.text x [] [] { () }
