@@ -40,10 +40,10 @@ and ElementsContext(parent: Node) =
     member _.GetObsoleteNodes() =
         parent.childNodes.ToList() |> List.except keptNodes
 
-type VideBuilder<'fs1>() =
-    inherit VideBaseBuilder<'fs1>()
+type VideBuilder() =
+    inherit VideBaseBuilder()
 
-let vide<'fs> = VideBuilder<'fs>()
+let vide = VideBuilder()
 
 type MutableState<'a>(init: 'a) =
     let mutable x = init
@@ -69,7 +69,7 @@ type NodeBuilder<'fs>(
     attributes: list<string * string>,
     events: list<string * (Event -> unit)>)
     =
-    inherit VideBaseBuilder<'fs>()
+    inherit VideBaseBuilder()
     //inherit VideBaseBuilder<'fs, NodeBuilderState<'fs>, Context>(this.DoRun)
     member _.Run(
         Vide childVide: Vide<unit,'fs,Context>)
@@ -150,7 +150,7 @@ module Html =
 
     // TODO: Yield should work for strings
 
-type VideBaseBuilder<'fs1> with
+type VideBaseBuilder with
     member inline _.Yield(
         v: NodeBuilder<unit>)
         : Vide<unit, NodeBuilderState<unit>, Context>

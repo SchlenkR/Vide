@@ -16,9 +16,12 @@ let counter =
         div [] [] {
             let! count = state 10
             text $"Hello World ({count.Value})" [] []
-            button [] [ ("click", fun e -> count.Value <- count.Value - 1) ] { "dec" }
+            button [] [ ("click", fun e -> count.Value <- count.Value - 1) ] {
+                "dec"
+                div [] [] { "xxxx" }
+            }
             button [] [ ("click", fun e -> count.Value <- count.Value + 1) ] { "inc" }
-            "Text only"
+            "Text only<strong>HALLO</strong>"
         }
     }
 

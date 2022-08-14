@@ -14,8 +14,7 @@ let inline internal log name =
     printfn $"        Exex:   {name}"
     // ()
 
-// we need 'fs1 to prevent value restrictions. Why? I'm not completely sure...
-type VideBaseBuilder<'fs1>() =
+type VideBaseBuilder() =
     member inline _.Bind(
         Vide m: Vide<'v1,'s1,'c>,
         f: 'v1 -> Vide<'v2,'s2,'c>)
