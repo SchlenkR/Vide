@@ -47,9 +47,7 @@ type MutableState<'a>(init: 'a) =
     member val EvaluateView = (fun () -> ()) with get,set
     member this.Value
         with get() = x
-        and set(value) =
-            x <- value
-            this.EvaluateView()
+        and set(value) = x <- value; this.EvaluateView()
 
 let state x =
     Vide <| fun s (c: Context) ->
@@ -57,13 +55,19 @@ let state x =
         do s.EvaluateView <- c.evaluateView
         s, Some s
 
-let inline node
-    (createNode: Context -> Node)
-    (updateNode: Node -> unit)
-    (attributes: list<string * string>)
-    (events: list<string * (Event -> unit)>)
+type EventHandler = Event -> Unit
+type AttributeList = list<string * string>
+type EventList = list<string * EventHandler>
+type NodeBuilderState<'s> = option<Node * AttributeList * EventList> * option<'s>
+
+type NodeBuilder<'fs>(
+    createNode: Context -> Node,
+    updateNode: Node -> unit,
+    attributes: list<string * string>,
+    events: list<string * (Event -> unit)>) as this
     =
-    let run (Vide childVide) =
+    inherit VideBuilder<'fs, NodeBuilderState<'fs>, Context>(this.DoRun)
+    member this.DoRun(Vide childVide) =
         Vide <| fun s (ctx: Context) ->
             let s,cs = separateStatePair s
             let node,oldAttributes,oldEvents =
@@ -111,7 +115,16 @@ let inline node
                 cv,cs
             let cv,cs = evaluate()
             (), Some (Some (node,attributes,events), cs)
-    VideBuilder(run)
+
+
+let inline node
+    (createNode: Context -> Node)
+    (updateNode: Node -> unit)
+    (attributes: list<string * string>)
+    (events: list<string * (Event -> unit)>)
+    : NodeBuilder<'s>
+    =
+    NodeBuilder(createNode, updateNode, attributes, events)
     
 let inline element tagName attributes events =
     node (fun ctx -> ctx.elementsContext.AddElement tagName) ignore attributes events

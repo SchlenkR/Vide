@@ -12,7 +12,7 @@ let helloWorld =
 
 let counter =
     vide {
-        text "Hello World (1)" [] []
+        text "Hello XXX World (1)" [] []
         div [] [] {
             let! count = state 10
             text $"Hello World ({count.Value})" [] []
