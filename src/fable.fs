@@ -175,12 +175,12 @@ let inline element ctor tagName updateNode =
 type Html =
     static member text<'s> text =
         let create (ctx: Context) =
-            ctx.elementsContext.AddTextNode text :> Node
+            ctx.elementsContext.AddTextNode(text) :> Node
         let update (node: Node) =
             if node.textContent <> text then node.textContent <- text
         NodeBuilder(create, update)
-    static member div = element HTMLElementBuilder "div" ignore
     static member span = element HTMLElementBuilder "span" ignore
+    static member div = element HTMLElementBuilder "div" ignore
     static member p = element HTMLElementBuilder "p" ignore
     static member button = element HTMLButtonElementBuilder "button" ignore
     static member a = element HTMLAnchorElementBuilder "a" ignore

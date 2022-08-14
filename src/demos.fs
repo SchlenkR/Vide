@@ -26,7 +26,18 @@ let counter =
         }
     }
 
-let demos : list<string * (HTMLElement -> unit)> = [
-    "Hello World", fun host -> helloWorld |> start host
-    "Counter", fun host -> counter |> start host
-]
+let conditionalAttributes =
+    vide {
+        div {
+            let! count = state 0
+
+            button.on("click", fun _ -> count.value <- count.value + 1) {
+                $"Hit me! Count = {count.value}"
+            }
+            div.class'("the-message") {
+                span.hidden(count.value <> 5) {
+                    "You have the right to defend yourself!"
+                }
+            }
+        }
+    }
