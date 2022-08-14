@@ -26,3 +26,8 @@
 .the-message {
     font-weight: bold;
 }
+
+.card {
+    background-color: darkorange;
+    padding: 10px
+}

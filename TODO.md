@@ -1,7 +1,7 @@
 * Optimize "EvaluateView"
 * Events: Immer auch den Context mitgeben
 * let! ctx = context
-* mutable lists
+* mutable lists with fine-grained updates
 * Perf
   * inline (if lambda)
   * diffing
@@ -18,3 +18,8 @@
 	* State-Verschachtelungen (z.B. div in div mit jeweils State)
 * RawSpan
 * All HTML API
+* inputs
+* Docu: Das geht so nicht - Trigger erklären!
+        let! currentItems = Mutable.ofValue (ResizeArray())
+        let addItem item = currentItems.value.Add(item)
+        let removeItem item = currentItems.value.Remove(item) |> ignore

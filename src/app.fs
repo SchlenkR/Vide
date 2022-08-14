@@ -16,9 +16,19 @@ let demos : list<string * string * (HTMLElement -> unit)> = [
         fun host -> Demos.counter |> start host    
     )
     (
-        "Conditional Attributes",
+        "Conditional attributes",
         "Count to 5 and you'll get a surprise!",
         fun host -> Demos.conditionalAttributes |> start host
+    )
+    (
+        "List of elements",
+        "Just an immutable list.",
+        fun host -> Demos.lists |> start host
+    )
+    (
+        "Mutable element list",
+        "Add / Remove items",
+        fun host -> Demos.mutableLists |> start host
     )
 ]
 

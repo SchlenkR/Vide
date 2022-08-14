@@ -44,18 +44,24 @@ type VideBuilder() = inherit VideBaseBuilder()
 
 let vide = VideBuilder()
 
-type MutableState<'a>(init: 'a) =
+type MutableValue<'a>(init: 'a) =
     let mutable state = init
     member val EvaluateView = (fun () -> ()) with get,set
     member this.value
         with get() = state
         and set(value) = state <- value; this.EvaluateView()
 
-let state x =
-    Vide <| fun s (c: Context) ->
-        let s = s |> Option.defaultWith (fun () -> MutableState(x))
-        do s.EvaluateView <- c.evaluateView
-        s, Some s
+module Mutable =
+    let ofValue x =
+        Vide <| fun s (c: Context) ->
+            let s = s |> Option.defaultWith (fun () -> MutableValue(x))
+            do s.EvaluateView <- c.evaluateView
+            s, Some s
+    //let list x =
+    //    Vide <| fun s (c: Context) ->
+    //        let s = s |> Option.defaultWith (fun () -> MutableValue(x))
+    //        do s.EvaluateView <- c.evaluateView
+    //        s, Some s
 
 type AttributeSyncAction<'a> =
     | Set of 'a
@@ -114,8 +120,8 @@ type NodeBuilder(createNode: Context -> Node, updateNode: Node -> unit) =
             (), Some (Some node, cs)
 
 type HTMLElementBuilder(createNode, updateNode) = inherit NodeBuilder(createNode, updateNode)
-type HTMLAnchorElementBuilder(createNode, updateNode) = inherit NodeBuilder(createNode, updateNode)
-type HTMLButtonElementBuilder(createNode, updateNode) = inherit NodeBuilder(createNode, updateNode)
+type HTMLAnchorElementBuilder(createNode, updateNode) = inherit HTMLElementBuilder(createNode, updateNode)
+type HTMLButtonElementBuilder(createNode, updateNode) = inherit HTMLElementBuilder(createNode, updateNode)
 
 open System.Runtime.CompilerServices
 
@@ -138,23 +144,25 @@ type NodeBuilderExtensions() =
         do this.Attributes <- (name, value) :: this.Attributes
         this
     [<Extension>]
-    static member on(this: #NodeBuilder, name, ?handler: EventHandler) =
-        match handler with
-        | Some handler -> do this.Events <- (name, handler) :: this.Events
-        | None -> ()
+    static member on(this: #NodeBuilder, name, handler: EventHandler) =
+        do this.Events <- (name, handler) :: this.Events
         this
 
 [<Extension>]
 type HTMLElementBuilderExtensions() =
     [<Extension>]
-    static member inline id(this: #HTMLElementBuilder, ?value: string) =
+    static member inline id(this: #HTMLElementBuilder, ?value) =
         NodeBuilderExtensions.attrCond(this, "id", ?value = value)
     [<Extension>]
-    static member inline class'(this: #HTMLElementBuilder, ?value: string) =
+    static member inline class'(this: #HTMLElementBuilder, ?value) =
         NodeBuilderExtensions.attrCond(this, "class", ?value = value)
     [<Extension>]
-    static member inline hidden(this: #HTMLElementBuilder, value: bool) =
+    static member inline hidden(this: #HTMLElementBuilder, value) =
         NodeBuilderExtensions.attrBool(this, "hidden", value)
+    
+    [<Extension>]
+    static member inline onclick(this: #HTMLElementBuilder, handler) =
+        NodeBuilderExtensions.on(this, "click", handler)
 
 [<Extension>]
 type HTMLAnchorElementBuilderExtensions() =
