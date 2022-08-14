@@ -134,7 +134,7 @@ open System.Runtime.CompilerServices
 [<Extension>]
 type NodeBuilderExtensions() =
     [<Extension>]
-    static member attrCond(this: #NodeBuilder, name, ?value: string) =
+    static member inline attrCond(this: #NodeBuilder, name, ?value: string) =
         match value with
         | Some value -> do this.Attributes <- (name, Some value) :: this.Attributes
         | None -> ()
