@@ -30,6 +30,11 @@ let demos : list<string * string * (HTMLElement -> unit)> = [
         "Add / Remove items",
         fun host -> Demos.mutableLists |> start host
     )
+    (
+        "State in 'for' loop",
+        "TODO",
+        fun host -> Demos.stateInForLoop |> start host
+    )
 ]
 
 let menu = document.getElementById("menu")

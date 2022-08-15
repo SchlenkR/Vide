@@ -1,7 +1,5 @@
 module Demos
 
-open Browser.Dom
-open Browser.Types
 open Vide
 
 open type Vide.Fable.Html
@@ -14,21 +12,20 @@ let helloWorld =
 let counter =
     vide {
         let! count = Mutable.ofValue 0
-        let incDec i _ = count.Value <- count.Value + i
 
         div {
             text $"Count = {count.Value}"
         }
 
-        button .onclick(incDec -1) { "dec" }
-        button .onclick(incDec 1) { "inc" }
+        button .onclick(fun _ -> count -= 1) { "dec" }
+        button .onclick(fun _ -> count += 1) { "inc" }
     }
 
 let conditionalAttributes =
     vide {
         let! count = Mutable.ofValue 0
 
-        button .onclick(fun _ -> count.Value <- count.Value + 1) {
+        button .onclick(fun _ -> count += 1) {
             $"Hit me! Count = {count.Value}"
         }
         div .class'("the-message") {
@@ -50,14 +47,42 @@ let mutableLists =
     vide {
         let! currentItems = Mutable.ofValue []
         let setItems items = currentItems.Value <- items
+        let add1 _ = currentItems.Value @ [nextNum()] |> setItems
+        let add100 _ = currentItems.Value @ [ for _ in 0..100 do nextNum() ] |> setItems
+        let removeAll _ = setItems []
 
-        button .onclick(fun _ -> currentItems.Value @ [nextNum()] |> setItems) { "Add One" }
-        button .onclick(fun _ -> currentItems.Value @ [ for _ in 0..100 do nextNum() ] |> setItems) { "Add 100" }
-        button .onclick(fun _ -> setItems []) { "Remove All" }
+        button .onclick(add1) { "Add One" }
+        button .onclick(add100) { "Add 100" }
+        button .onclick(removeAll) { "Remove All" }
         
         for x in currentItems.Value do
             div .class'("card") {
-                button.onclick(fun _ -> currentItems.Value <- currentItems.Value |> List.except [x]) { $"Remove {x}" }
+                let removeMe _ = currentItems.Value |> List.except [x] |> setItems
+                button .onclick(removeMe) { $"Remove {x}" }
+        }
+    }
+
+let stateInForLoop =
+    vide {
+        let! currentItems = Mutable.ofValue []
+        let setItems items = currentItems.Value <- items
+        let add1 _ = currentItems.Value @ [nextNum()] |> setItems
+        let add100 _ = currentItems.Value @ [ for _ in 0..100 do nextNum() ] |> setItems
+        let removeAll _ = setItems []
+
+        button .onclick(add1) { "Add One" }
+        button .onclick(add100) { "Add 100" }
+        button .onclick(removeAll) { "Remove All" }
+        
+        for x in currentItems.Value do
+            let! count = Mutable.ofValue 0
+            div .class'("card") {
+                let removeMe _ = currentItems.Value |> List.except [x] |> setItems
+                button .onclick(removeMe) { $"Remove {x}" }
+
+                button .onclick(fun _ -> count -= 1) { "dec" }
+                text $"{count.Value}  "
+                button .onclick(fun _ -> count += 1) { "inc" }
         }
     }
 

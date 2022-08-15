@@ -41,28 +41,36 @@ and ElementsContext(parent: Node) =
         let childNodes = parent.childNodes.ToList()
         childNodes |> List.except keptNodes
 
-type VideBuilder() = inherit VideBaseBuilder()
-
-let vide = VideBuilder()
-
-type MutableValue<'a>(init: 'a) =
-    let mutable state = init
-    member val EvaluateView = (fun () -> ()) with get,set
-    member this.Value
-        with get() = state
-        and set(value) = state <- value; this.EvaluateView()
+let vide = VideBaseBuilder()
 
 module Mutable =
+    type MutableValue<'a>(init: 'a) =
+        let mutable state = init
+        member val EvaluateView = (fun () -> ()) with get,set
+        member this.Value
+            with get() = state
+            and set(value) = state <- value; this.EvaluateView()
+
+    let inline change op (mutVal: MutableValue<_>) x =
+        mutVal.Value <- op mutVal.Value x
+    
     let ofValue x =
         Vide <| fun s (c: Context) ->
             let s = s |> Option.defaultWith (fun () -> MutableValue(x))
             do s.EvaluateView <- c.evaluateView
             s, Some s
+    
     //let list x =
     //    Vide <| fun s (c: Context) ->
     //        let s = s |> Option.defaultWith (fun () -> MutableValue(x))
     //        do s.EvaluateView <- c.evaluateView
     //        s, Some s
+
+let inline ( += ) mutVal x = Mutable.change (+) mutVal x
+let inline ( -= ) mutVal x = Mutable.change (-) mutVal x
+let inline ( *= ) mutVal x = Mutable.change (*) mutVal x
+let inline ( /= ) mutVal x = Mutable.change (/) mutVal x
+
 
 type AttributeSyncAction<'a> =
     | Set of 'a
