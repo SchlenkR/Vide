@@ -148,17 +148,19 @@ type NodeBuilder(getNode: Context -> Node, updateNode: Node -> unit) =
                 // events.RemoveListener(node)
             (), Some (Some node, cs)
 
-let start (holder: Node) (v: Vide<unit,'s,Context>) =
+let prepareStart (holder: Node) (v: Vide<unit,'s,Context>) onEvaluated =
     let ctx =
         {
             node = holder
             evaluateView = fun () -> ()
             elementsContext = ElementsContext(holder)
         }
-    let evaluate =
-        NodeBuilder((fun _ -> holder), ignore) { v }
-        |> toStateMachine None ctx
-    do ctx.evaluateView <- evaluate
-    evaluate()
+    let videMachine = VideMachine(
+        None,
+        ctx,
+        NodeBuilder((fun _ -> holder), ignore) { v },
+        onEvaluated)
+    do ctx.evaluateView <- videMachine.Eval
+    videMachine
 
 let vide = VideBaseBuilder()

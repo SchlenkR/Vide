@@ -72,9 +72,16 @@ let preserve x =
         let s = s |> Option.defaultValue x
         s, Some s
 
-let toStateMachine initialState ctx (Vide vide) =
+type VideMachine<'v,'s,'c>(
+    initialState,
+    ctx,
+    vide: Vide<'v,'s,'c>,
+    onEvaluated: 'v -> 's option -> unit)
+    =
+    let (Vide vide) = vide
     let mutable state = initialState
-    let eval () =
-        let _,newState = vide state ctx
+    member _.CurrentState with get() = state
+    member _.Eval() =
+        let value,newState = vide state ctx
         state <- newState
-    eval
+        onEvaluated value state
