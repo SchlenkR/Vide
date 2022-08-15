@@ -75,14 +75,14 @@ type NodeBuilderState<'s> = option<Node> * option<'s>
 // TODO: Hack
 type EventManager() =
     let eventListeners = Fable.Core.JS.Constructors.WeakMap.Create<Node, list<string * EventHandler>>()
-    member this.AddListener(node: Node, evtName, handler) =
+    member _.AddListener(node: Node, evtName, handler) =
         node.addEventListener(evtName, handler)
         let registrations =
             if eventListeners.has(node)
                 then (evtName, handler) :: eventListeners.get(node)
                 else [ evtName, handler ]
         eventListeners.set(node, registrations) |> ignore
-    member this.RemoveListener(node: Node, evtName) =
+    member _.RemoveListener(node: Node, evtName) =
         let registrations =
             if eventListeners.has(node)
                 then eventListeners.get(node)
@@ -90,10 +90,14 @@ type EventManager() =
         for regEvtName,handler in registrations do
             if regEvtName = evtName then
                 node.removeEventListener(evtName, handler) |> ignore
-        eventListeners.set(node, registrations |> List.filter (fun (n,h) -> n <> evtName)) |> ignore
+        eventListeners
+            .set(
+                node,
+                registrations |> List.filter (fun (n,h) -> n <> evtName))
+            |> ignore
 let events = EventManager()
 
-type NodeBuilder(createNode: Context -> Node, updateNode: Node -> unit) =
+type NodeBuilder(getNode: Context -> Node, updateNode: Node -> unit) =
     inherit VideBaseBuilder()
     
     member val Attributes: AttributeList = [] with get, set
@@ -108,7 +112,7 @@ type NodeBuilder(createNode: Context -> Node, updateNode: Node -> unit) =
             let node =
                 match s with
                 | None ->
-                    createNode ctx
+                    getNode ctx
                 | Some node ->
                     do
                         ctx.elementsContext.KeepNode(node)
@@ -186,9 +190,6 @@ type HTMLAnchorElementBuilderExtensions() =
     [<Extension>]
     static member inline href(this: #HTMLAnchorElementBuilder, ?value: string) =
         // Fable BUG https://github.com/fable-compiler/Fable/issues/3073
-        // this is caising the exception on "npm start"
-        //this.attrCond("href", ?value = value)
-        // this is working
         NodeBuilderExtensions.attrCond(this, "href", ?value = value)
 
 let inline element ctor tagName updateNode =
@@ -231,7 +232,8 @@ let start (holder: HTMLElement) (v: Vide<unit,'s,Context>) =
             evaluateView = fun () -> ()
             elementsContext = ElementsContext(holder)
         }
-    let eventRemovalWorkaround = Html.div { v }
-    let evaluate = eventRemovalWorkaround |> toStateMachine None ctx
+    let evaluate =
+        NodeBuilder((fun _ -> holder :> Node), ignore) { v }
+        |> toStateMachine None ctx
     do ctx.evaluateView <- evaluate
     evaluate()
