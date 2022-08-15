@@ -48,34 +48,36 @@ let nextNum() = System.Random().Next(10000)
 
 let mutableLists =
     vide {
-        let! currentItems = Mutable.ofValue [ nextNum() ]
-        let addItem item = currentItems.Value <- currentItems.Value @ [item]
-        let removeItem item = currentItems.Value <- currentItems.Value |> List.except [item]
+        let! currentItems = Mutable.ofValue []
+        let setItems items = currentItems.Value <- items
 
-        button .onclick(fun _ -> addItem(nextNum())) { "Add" }
+        button .onclick(fun _ -> currentItems.Value @ [nextNum()] |> setItems) { "Add One" }
+        button .onclick(fun _ -> currentItems.Value @ [ for _ in 0..100 do nextNum() ] |> setItems) { "Add 100" }
+        button .onclick(fun _ -> setItems []) { "Remove All" }
+        
         for x in currentItems.Value do
-            div .class'("card") .id($"card_{x}") {
-                button.onclick(fun _ -> removeItem(x)) { $"Remove {x}" }
+            div .class'("card") {
+                button.onclick(fun _ -> currentItems.Value <- currentItems.Value |> List.except [x]) { $"Remove {x}" }
         }
     }
 
-let heterogeneousLists =
-    vide {
-        let! aItems = Mutable.ofValue [ nextNum() ]
-        let addAItem item = aItems.Value <- aItems.Value @ [item]
-        let removeAItem item = aItems.Value <- aItems.Value |> List.except [item]
+// let heterogeneousLists =
+//     vide {
+//         let! aItems = Mutable.ofValue [ nextNum() ]
+//         let addAItem item = aItems.Value <- aItems.Value @ [item]
+//         let removeAItem item = aItems.Value <- aItems.Value |> List.except [item]
 
-        let! bItems = Mutable.ofValue [ nextNum() ]
-        let addBItem item = aItems.Value <- aItems.Value @ [item]
-        let removeBItem item = aItems.Value <- aItems.Value |> List.except [item]
+//         let! bItems = Mutable.ofValue [ nextNum() ]
+//         let addBItem item = aItems.Value <- aItems.Value @ [item]
+//         let removeBItem item = aItems.Value <- aItems.Value |> List.except [item]
 
-        p {
-            button .onclick(fun _ -> addAItem(nextNum())) { "Add A" }
-            button .onclick(fun _ -> addBItem(nextNum())) { "Add B" }
-        }
+//         p {
+//             button .onclick(fun _ -> addAItem(nextNum())) { "Add A" }
+//             button .onclick(fun _ -> addBItem(nextNum())) { "Add B" }
+//         }
 
-        for x in aItems.Value do
-            div .class'("card") .id($"card_{x}") {
-                button.onclick(fun _ -> removeAItem(x)) { $"Remove {x}" }
-        }
-    }
+//         for x in aItems.Value do
+//             div .class'("card") .id($"card_{x}") {
+//                 button.onclick(fun _ -> removeAItem(x)) { $"Remove {x}" }
+//         }
+//     }

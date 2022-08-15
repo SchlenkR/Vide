@@ -15,7 +15,7 @@
 	* Conditional Attributes
 	* Conditional Elements
 	* Elements list + Remove from within element
-	* State-Verschachtelungen (z.B. div in div mit jeweils State)
+	* State-Verschachtelungen (z.B. div in div mit jeweils State) oder State-In-List
   * Heterogene Listen
 * RawSpan
 * All HTML API
