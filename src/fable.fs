@@ -225,7 +225,7 @@ type VideBaseBuilder with
         =
         Html.text x {()}
 
-let start (holder: HTMLElement) (v: Vide<unit,'s,Context>) =
+let start (holder: Node) (v: Vide<unit,'s,Context>) =
     let ctx =
         {
             node = holder
@@ -233,7 +233,7 @@ let start (holder: HTMLElement) (v: Vide<unit,'s,Context>) =
             elementsContext = ElementsContext(holder)
         }
     let evaluate =
-        NodeBuilder((fun _ -> holder :> Node), ignore) { v }
+        NodeBuilder((fun _ -> holder), ignore) { v }
         |> toStateMachine None ctx
     do ctx.evaluateView <- evaluate
     evaluate()
