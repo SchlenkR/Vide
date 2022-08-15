@@ -2,19 +2,15 @@
 [<AutoOpen>]
 module Vide.Fable
 
-open Vide
+open System.Runtime.CompilerServices
 open Browser
 open Browser.Types
+open Vide
 
-let inline internal log (o: obj) =
-    console.log(o)
-    // ()
+type NodeList with 
+    member this.ToSeq() = seq { for i in 0 .. this.length-1 do this.Item i }
+    member this.ToList() = this.ToSeq() |> Seq.toList
 
-[<AutoOpen>]
-module DomExtensions =
-    type NodeList with 
-        member this.ToSeq() = seq { for i in 0 .. this.length-1 do this.Item i }
-        member this.ToList() = this.ToSeq() |> Seq.toList
 module NodeExt =
     let displayString (node: Node) =
         let idOrDefault = try node.attributes.getNamedItem("id").value with _ -> "--"
@@ -78,29 +74,23 @@ type NodeBuilderState<'s> = option<Node> * option<'s>
 
 // TODO: Hack
 type EventManager() =
-    let mutable eventListeners = []
-    let setListeners listeners =
-        eventListeners <- listeners
-        printfn $"Listeners count = {eventListeners.Length}"
+    let eventListeners = Fable.Core.JS.Constructors.WeakMap.Create<Node, list<string * EventHandler>>()
     member this.AddListener(node: Node, evtName, handler) =
         node.addEventListener(evtName, handler)
-        setListeners((node, evtName, handler) :: eventListeners)
+        let registrations =
+            if eventListeners.has(node)
+                then (evtName, handler) :: eventListeners.get(node)
+                else [ evtName, handler ]
+        eventListeners.set(node, registrations) |> ignore
     member this.RemoveListener(node: Node, evtName) =
-        let getListeners inv = 
-            eventListeners  
-            |> List.filter (fun (n,e,h) -> inv(n.isSameNode(node) && e = evtName))
-        for (node,evtName,handler) in getListeners id do
-            printfn "REMOVE"
-            node.removeEventListener(evtName, handler) |> ignore
-        setListeners (getListeners not)
-    member this.RemoveListener(node: Node) =
-        let getListeners inv =
-            eventListeners  
-            |> List.filter (fun (n,e,h) -> inv(n.isSameNode(node)))
-        for (node,evtName,handler) in getListeners id do
-            printfn "REMOVE ALL"
-            node.removeEventListener(evtName, handler) |> ignore
-        setListeners (getListeners not)
+        let registrations =
+            if eventListeners.has(node)
+                then eventListeners.get(node)
+                else []
+        for regEvtName,handler in registrations do
+            if regEvtName = evtName then
+                node.removeEventListener(evtName, handler) |> ignore
+        eventListeners.set(node, registrations |> List.filter (fun (n,h) -> n <> evtName)) |> ignore
 let events = EventManager()
 
 type NodeBuilder(createNode: Context -> Node, updateNode: Node -> unit) =
@@ -144,14 +134,13 @@ type NodeBuilder(createNode: Context -> Node, updateNode: Node -> unit) =
             let cv,cs = childVide cs childCtx
             for x in childCtx.elementsContext.GetObsoleteNodes() do
                 node.removeChild(x) |> ignore
-                events.RemoveListener(node)
+                // we don'tneed this? Weak enough?
+                // events.RemoveListener(node)
             (), Some (Some node, cs)
 
 type HTMLElementBuilder(createNode, updateNode) = inherit NodeBuilder(createNode, updateNode)
 type HTMLAnchorElementBuilder(createNode, updateNode) = inherit HTMLElementBuilder(createNode, updateNode)
 type HTMLButtonElementBuilder(createNode, updateNode) = inherit HTMLElementBuilder(createNode, updateNode)
-
-open System.Runtime.CompilerServices
 
 [<Extension>]
 type NodeBuilderExtensions() =
