@@ -44,20 +44,21 @@ let lists =
             div.class'("card") { $"I'm element no. {x}" }
     }
 
+let nextNum() = System.Random().Next(10000)
+
 let mutableLists =
     vide {
-        let! currentItems = Mutable.ofValue [ System.DateTime.Now ]
-        let addItem item = currentItems.value <- item :: currentItems.value
-        let removeItem item =
-            currentItems.value <- currentItems.value |> List.except [item]
-            printfn "%A" currentItems.value
+        div {
+            let! currentItems = Mutable.ofValue [ nextNum() ]
+            let addItem item =
+                printfn "ADD"
+                currentItems.value <- currentItems.value @ [item]
+            let removeItem item = currentItems.value <- currentItems.value |> List.except [item]
 
-        button.onclick(fun _ -> addItem(System.DateTime.Now)) { "Add" }
-
-        for x in currentItems.value do
-            printfn "xxxx"
-            div.class'("card") {
-                p { $"I was created at {x.ToLongTimeString()}" }
-                button.onclick(fun _ -> removeItem(x)) { "Remove" }
+            button.onclick(fun _ -> addItem(nextNum())) { "Add" }
+            for x in currentItems.value do
+                div.class'("card").id($"card_{x}") {
+                    button.onclick(fun _ -> removeItem(x)) { $"Remove {x}" }
             }
+        }
     }

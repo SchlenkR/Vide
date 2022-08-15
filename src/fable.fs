@@ -15,6 +15,10 @@ module DomExtensions =
     type NodeList with 
         member this.ToSeq() = seq { for i in 0 .. this.length-1 do this.Item i }
         member this.ToList() = this.ToSeq() |> Seq.toList
+module NodeExt =
+    let displayString (node: Node) =
+        let idOrDefault = try node.attributes.getNamedItem("id").value with _ -> "--"
+        $"<{node.nodeName} id='{idOrDefault}'>"
 
 type Context =
     {
@@ -35,10 +39,11 @@ and ElementsContext(parent: Node) =
         document.createElement tagName |> memory |> append
     member _.AddTextNode(text: string) =
         document.createTextNode text |> memory |> append
-    member _.KeepNode(element: Node) =
-        element |> memory |> ignore
+    member _.KeepNode(node: Node) =
+        node |> memory |> ignore
     member _.GetObsoleteNodes() =
-        parent.childNodes.ToList() |> List.except keptNodes
+        let childNodes = parent.childNodes.ToList()
+        childNodes |> List.except keptNodes
 
 type VideBuilder() = inherit VideBaseBuilder()
 
@@ -71,6 +76,33 @@ type AttributeList = list<string * AttributeSyncAction<string>>
 type EventList = list<string * EventHandler>
 type NodeBuilderState<'s> = option<Node> * option<'s>
 
+// TODO: Hack
+type EventManager() =
+    let mutable eventListeners = []
+    let setListeners listeners =
+        eventListeners <- listeners
+        printfn $"Listeners count = {eventListeners.Length}"
+    member this.AddListener(node: Node, evtName, handler) =
+        node.addEventListener(evtName, handler)
+        setListeners((node, evtName, handler) :: eventListeners)
+    member this.RemoveListener(node: Node, evtName) =
+        let getListeners inv = 
+            eventListeners  
+            |> List.filter (fun (n,e,h) -> inv(n.isSameNode(node) && e = evtName))
+        for (node,evtName,handler) in getListeners id do
+            printfn "REMOVE"
+            node.removeEventListener(evtName, handler) |> ignore
+        setListeners (getListeners not)
+    member this.RemoveListener(node: Node) =
+        let getListeners inv =
+            eventListeners  
+            |> List.filter (fun (n,e,h) -> inv(n.isSameNode(node)))
+        for (node,evtName,handler) in getListeners id do
+            printfn "REMOVE ALL"
+            node.removeEventListener(evtName, handler) |> ignore
+        setListeners (getListeners not)
+let events = EventManager()
+
 type NodeBuilder(createNode: Context -> Node, updateNode: Node -> unit) =
     inherit VideBaseBuilder()
     
@@ -86,37 +118,33 @@ type NodeBuilder(createNode: Context -> Node, updateNode: Node -> unit) =
             let node =
                 match s with
                 | None ->
-                    let node = createNode ctx
-                    // TODO: Think about variant event declarations
-                    for name,handler in this.Events do
-                        node.addEventListener(name, handler) |> ignore
-                    node
+                    createNode ctx
                 | Some node ->
                     do
                         ctx.elementsContext.KeepNode(node)
                         updateNode node
                     node
-            let evaluate () =
-                do
-                    for name,value in this.Attributes do
-                        match value with
-                        | Set value ->
-                            let attr = document.createAttribute(name)
-                            attr.value <- value
-                            node.attributes.setNamedItem(attr) |> ignore
-                        | Remove ->
-                            node.attributes.removeNamedItem(name) |> ignore
-                let childCtx =
-                    {
-                        node = node
-                        evaluateView = ctx.evaluateView
-                        elementsContext = ElementsContext(node)
-                    }
-                let cv,cs = childVide cs childCtx
-                for x in childCtx.elementsContext.GetObsoleteNodes() do
-                    node.removeChild(x) |> ignore
-                cv,cs
-            let cv,cs = evaluate()
+            for name,value in this.Attributes do
+                match value with
+                | Set value ->
+                    let attr = document.createAttribute(name)
+                    attr.value <- value
+                    node.attributes.setNamedItem(attr) |> ignore
+                | Remove ->
+                    node.attributes.removeNamedItem(name) |> ignore
+            for name,handler in this.Events do
+                 events.RemoveListener(node, name)
+                 events.AddListener(node, name, handler)
+            let childCtx =
+                {
+                    node = node
+                    evaluateView = ctx.evaluateView
+                    elementsContext = ElementsContext(node)
+                }
+            let cv,cs = childVide cs childCtx
+            for x in childCtx.elementsContext.GetObsoleteNodes() do
+                node.removeChild(x) |> ignore
+                events.RemoveListener(node)
             (), Some (Some node, cs)
 
 type HTMLElementBuilder(createNode, updateNode) = inherit NodeBuilder(createNode, updateNode)
