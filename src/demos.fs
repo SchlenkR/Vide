@@ -14,25 +14,25 @@ let helloWorld =
 let counter =
     vide {
         let! count = Mutable.ofValue 0
-        let incDec i _ = count.value <- count.value + i
+        let incDec i _ = count.Value <- count.Value + i
 
         div {
-            text $"Count = {count.value}"
+            text $"Count = {count.Value}"
         }
 
-        button.onclick(incDec -1) { "dec" }
-        button.onclick(incDec 1) { "inc" }
+        button .onclick(incDec -1) { "dec" }
+        button .onclick(incDec 1) { "inc" }
     }
 
 let conditionalAttributes =
     vide {
         let! count = Mutable.ofValue 0
 
-        button.on("click", fun _ -> count.value <- count.value + 1) {
-            $"Hit me! Count = {count.value}"
+        button .onclick(fun _ -> count.Value <- count.Value + 1) {
+            $"Hit me! Count = {count.Value}"
         }
-        div.class'("the-message") {
-            span.hidden(count.value <> 5) {
+        div .class'("the-message") {
+            span .hidden(count.Value <> 5) {
                 "You have the right to defend yourself!"
             }
         }
@@ -41,24 +41,41 @@ let conditionalAttributes =
 let lists =
     vide {
         for x in 0..5 do
-            div.class'("card") { $"I'm element no. {x}" }
+            div .class'("card") { $"I'm element no. {x}" }
     }
 
 let nextNum() = System.Random().Next(10000)
 
 let mutableLists =
     vide {
-        div {
-            let! currentItems = Mutable.ofValue [ nextNum() ]
-            let addItem item =
-                printfn "ADD"
-                currentItems.value <- currentItems.value @ [item]
-            let removeItem item = currentItems.value <- currentItems.value |> List.except [item]
+        let! currentItems = Mutable.ofValue [ nextNum() ]
+        let addItem item = currentItems.Value <- currentItems.Value @ [item]
+        let removeItem item = currentItems.Value <- currentItems.Value |> List.except [item]
 
-            button.onclick(fun _ -> addItem(nextNum())) { "Add" }
-            for x in currentItems.value do
-                div.class'("card").id($"card_{x}") {
-                    button.onclick(fun _ -> removeItem(x)) { $"Remove {x}" }
-            }
+        button .onclick(fun _ -> addItem(nextNum())) { "Add" }
+        for x in currentItems.Value do
+            div .class'("card") .id($"card_{x}") {
+                button.onclick(fun _ -> removeItem(x)) { $"Remove {x}" }
+        }
+    }
+
+let heterogeneousLists =
+    vide {
+        let! aItems = Mutable.ofValue [ nextNum() ]
+        let addAItem item = aItems.Value <- aItems.Value @ [item]
+        let removeAItem item = aItems.Value <- aItems.Value |> List.except [item]
+
+        let! bItems = Mutable.ofValue [ nextNum() ]
+        let addBItem item = aItems.Value <- aItems.Value @ [item]
+        let removeBItem item = aItems.Value <- aItems.Value |> List.except [item]
+
+        p {
+            button .onclick(fun _ -> addAItem(nextNum())) { "Add A" }
+            button .onclick(fun _ -> addBItem(nextNum())) { "Add B" }
+        }
+
+        for x in aItems.Value do
+            div .class'("card") .id($"card_{x}") {
+                button.onclick(fun _ -> removeAItem(x)) { $"Remove {x}" }
         }
     }

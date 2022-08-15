@@ -13,7 +13,7 @@ let demos : list<string * string * (HTMLElement -> unit)> = [
     (
         "Counter",
         "The famous, one-of-a kind counter.",
-        fun host -> Demos.counter |> start host    
+        fun host -> Demos.counter |> start host
     )
     (
         "Conditional attributes",

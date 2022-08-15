@@ -48,7 +48,7 @@ let vide = VideBuilder()
 type MutableValue<'a>(init: 'a) =
     let mutable state = init
     member val EvaluateView = (fun () -> ()) with get,set
-    member this.value
+    member this.Value
         with get() = state
         and set(value) = state <- value; this.EvaluateView()
 
@@ -224,13 +224,14 @@ type VideBaseBuilder with
         =
         Html.text x {()}
 
-let start (holder: HTMLElement) (vide: Vide<unit,'s,Context>) =
+let start (holder: HTMLElement) (v: Vide<unit,'s,Context>) =
     let ctx =
         {
             node = holder
             evaluateView = fun () -> ()
             elementsContext = ElementsContext(holder)
         }
-    let evaluate = vide |> toStateMachine None ctx
+    let eventRemovalWorkaround = Html.div { v }
+    let evaluate = eventRemovalWorkaround |> toStateMachine None ctx
     do ctx.evaluateView <- evaluate
     evaluate()
