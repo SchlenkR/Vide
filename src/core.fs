@@ -55,17 +55,20 @@ type VideBaseBuilder() =
     member inline _.For(
         sequence: seq<'a>,
         body: 'a -> Vide<unit,'s,'c>)
-        : Vide<unit,'s option list,'c>
+        : Vide<unit, Map<'a, 's option>,'c>
         =
         Vide <| fun s c ->
-            let s = s |> Option.defaultValue []
-            let res = 
-                [ for i,x in sequence |> Seq.mapi (fun i x -> i,x) do
+            let mutable currMap = s |> Option.defaultValue Map.empty
+            let res =
+                [ for i,x in sequence |> Seq.indexed do
                     let (Vide v) = body x
-                    let vres = v (s |> List.tryItem i |> Option.flatten) c
-                    vres
+                    let matchingState = currMap |> Map.tryFind x |> Option.flatten
+                    let _,vs = v matchingState c
+                    do currMap <- currMap |> Map.remove x
+                    x,vs
                 ]
-            (), Some (res |> List.map snd)
+                |> Map.ofList
+            (), Some res
 
 let preserve x =
     Vide <| fun s c ->

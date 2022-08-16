@@ -65,4 +65,4 @@ for title,desc,runDemo in demos do
     menu.appendChild(btn) |> ignore
 
 document.getElementById("logState").onclick <- fun _ ->
-    console.log(JSON.stringify(currentState, space = 4))
+    console.log(JSON.stringify(currentState, space = 2))
