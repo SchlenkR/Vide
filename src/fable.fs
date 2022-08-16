@@ -44,9 +44,10 @@ module Mutable =
     type MutableValue<'a>(init: 'a) =
         let mutable state = init
         member val EvaluateView = (fun () -> ()) with get,set
+        member this.Set(value) = state <- value; this.EvaluateView()
         member this.Value
             with get() = state
-            and set(value) = state <- value; this.EvaluateView()
+            and set(value) = this.Set(value)
 
     let inline change op (mutVal: MutableValue<_>) x =
         mutVal.Value <- op mutVal.Value x
@@ -67,6 +68,7 @@ let inline ( += ) mutVal x = Mutable.change (+) mutVal x
 let inline ( -= ) mutVal x = Mutable.change (-) mutVal x
 let inline ( *= ) mutVal x = Mutable.change (*) mutVal x
 let inline ( /= ) mutVal x = Mutable.change (/) mutVal x
+let inline ( := ) (mutVal: Mutable.MutableValue<_>) x = mutVal.Value <- x
 
 
 type AttributeSyncAction<'a> =

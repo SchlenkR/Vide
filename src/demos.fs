@@ -59,10 +59,9 @@ let nextNum() = System.Random().Next(10000)
 let statelessFor =
     vide {
         let! items = Mutable.ofValue []
-        let setItems newItems = items.Value <- newItems
-        let add1 _ = items.Value @ [nextNum()] |> setItems
-        let add100 _ = items.Value @ [ for _ in 0..100 do nextNum() ] |> setItems
-        let removeAll _ = setItems []
+        let add1 _ = items := items.Value @ [nextNum()]
+        let add100 _ = items := items.Value @ [ for _ in 0..100 do nextNum() ]
+        let removeAll _ = items :=  []
 
         button .onclick(add1) { "Add One" }
         button .onclick(add100) { "Add 100" }
@@ -70,7 +69,7 @@ let statelessFor =
         
         for x in items.Value do
             div .class'("card") {
-                let removeMe _ = items.Value |> List.except [x] |> setItems
+                let removeMe _ = items := items.Value |> List.except [x]
                 button .onclick(removeMe) { $"Remove {x}" }
         }
     }
@@ -78,10 +77,9 @@ let statelessFor =
 let statefulFor =
     vide {
         let! items = Mutable.ofValue []
-        let setItems newItems = items.Value <- newItems
-        let add1 _ = items.Value @ [nextNum()] |> setItems
-        let add100 _ = items.Value @ [ for _ in 0..100 do nextNum() ] |> setItems
-        let removeAll _ = setItems []
+        let add1 _ = items := items.Value @ [nextNum()]
+        let add100 _ = items := items.Value @ [ for _ in 0..100 do nextNum() ]
+        let removeAll _ = items := []
 
         button .onclick(add1) { "Add One" }
         button .onclick(add100) { "Add 100" }
@@ -89,7 +87,7 @@ let statefulFor =
         
         for x in items.Value do
             div .class'("card") {
-                let removeMe _ = items.Value |> List.except [x] |> setItems
+                let removeMe _ = items := items.Value |> List.except [x]
                 button .onclick(removeMe) { $"Remove {x}" }
 
                 let! count = Mutable.ofValue 0
