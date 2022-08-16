@@ -24,4 +24,5 @@
         let! currentItems = Mutable.ofValue (ResizeArray())
         let addItem item = currentItems.value.Add(item)
         let removeItem item = currentItems.value.Remove(item) |> ignore
+* Docu: Operators (+=, :=,. etc)        
 * start: resolve issue "eventRemovalWorkaround with mutableLists example"
