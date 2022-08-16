@@ -34,7 +34,21 @@ let conditionalAttributes =
         }
     }
 
-let lists =
+let conditionalElement =
+    vide {
+        let! count = Mutable.ofValue 0
+
+        button .onclick(fun _ -> count += 1) {
+            $"Hit me! Count = {count.Value}"
+        }
+
+        if count.Value = 5 then
+            div .class'("the-message") { "You have the right to defend yourself!" }
+        else
+            p { "not yet ..." }
+    }
+
+let simpleFor =
     vide {
         for x in 0..5 do
             div .class'("card") { $"I'm element no. {x}" }
@@ -42,7 +56,7 @@ let lists =
 
 let nextNum() = System.Random().Next(10000)
 
-let mutableLists =
+let statelessFor =
     vide {
         let! items = Mutable.ofValue []
         let setItems newItems = items.Value <- newItems
@@ -61,7 +75,7 @@ let mutableLists =
         }
     }
 
-let stateInForLoop =
+let statefulFor =
     vide {
         let! items = Mutable.ofValue []
         let setItems newItems = items.Value <- newItems

@@ -19,30 +19,41 @@ let demos : list<string * string * (HTMLElement -> unit)> =
             "Just a message to the world...",
             start Demos.helloWorld
         )
+
         (
             "Counter",
             "The famous, one-of-a kind counter.",
             start Demos.counter
         )
+        
         (
             "Conditional attributes",
             "Count to 5 and you'll get a surprise!",
             start Demos.conditionalAttributes
         )
+
+        (
+            "Conditional elements (if/else)",
+            "Count to 5 and you'll get another surprise!",
+            start Demos.conditionalElement
+        )
+
         (
             "List of elements",
             "Just an immutable list.",
-            start Demos.lists
+            start Demos.simpleFor
         )
+
         (
             "Mutable element list",
             "Add / Remove items",
-            start Demos.mutableLists
+            start Demos.statelessFor
         )
+
         (
-            "State in 'for' loop",
+            "List with element state",
             "TODO",
-            start Demos.stateInForLoop
+            start Demos.statefulFor
         )
     ]
 
