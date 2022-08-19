@@ -79,7 +79,7 @@ type Html =
 
 [<AutoOpen>]
 module VideBuilderExtensions =
-    type VideBaseBuilder with
+    type VideBuilder with
         member inline _.Yield(
             v: NodeBuilder)
             : Vide<unit, NodeBuilderState<unit>, Context>

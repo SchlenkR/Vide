@@ -34,7 +34,7 @@ let conditionalAttributes =
         }
     }
 
-let conditionalElement =
+let conditionalIfs =
     vide {
         let! count = Mutable.ofValue 0
 
@@ -42,10 +42,32 @@ let conditionalElement =
             $"Hit me! Count = {count.Value}"
         }
 
+        if count.Value = 5 || count.Value = 6 then
+            let! valueString = preserve "Hello String"
+            div .class'("the-message") { 
+                $"You have the right to defend yourself! (string value {valueString})" 
+            }
+        if count.Value <> 5 then
+            let! valueInt = preserve 42
+            p { $"not yet ... with int value {valueInt}" }
+    }
+
+let conditionalIfElse =
+    vide {
+        let! count = Mutable.ofValue 0
+
+        button .onclick(fun _ -> count += 1) {
+            $"Hit me! Count = {count.Value}"
+        }
+
+        // TODO: That should not be used at all? And: That this seems to work
+        // is only an edge case, because state has same type
         if count.Value = 5 then
-            div .class'("the-message") { "You have the right to defend yourself!" }
+            div .class'("the-message") { 
+                $"You have the right to defend yourself!" 
+            }
         else
-            p { "not yet ..." }
+            p { $"not yet ..." }
     }
 
 let simpleFor =

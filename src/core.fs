@@ -13,7 +13,7 @@ let inline internal log name =
 // why we return 's option(!!) -> Because of else branch / zero
 type Vide<'v,'s,'c> = Vide of ('s option -> 'c -> 'v * 's option)
 
-type VideBaseBuilder() =
+type VideBuilder() =
     member inline _.Bind(
         Vide m: Vide<'v1,'s1,'c>,
         f: 'v1 -> Vide<'v2,'s2,'c>)

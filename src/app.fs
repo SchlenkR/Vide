@@ -1,9 +1,9 @@
 module App
 
-open Fable.Core.JS
 open Browser.Dom
 open Browser.Types
 open Vide
+open Fable.Core.JS
 
 let mutable currentState = None
 
@@ -33,9 +33,9 @@ let demos : list<string * string * (HTMLElement -> unit)> =
         )
 
         (
-            "Conditional elements (if/else)",
+            "Conditional elements (multiple if)",
             "Count to 5 and you'll get another surprise!",
-            start Demos.conditionalElement
+            start Demos.conditionalIfs
         )
 
         (
@@ -66,7 +66,7 @@ for title,desc,runDemo in demos do
         let innerDemoHostId = "innerDemoHost"
         demoHost.innerHTML <-
             $"""
-            <h2>{title}</h2>
+            <h2>{title}</h2> 
             <blockquote>{desc}</blockquote>
             <div id={innerDemoHostId}></div>
             """
@@ -76,4 +76,26 @@ for title,desc,runDemo in demos do
     menu.appendChild(btn) |> ignore
 
 document.getElementById("logState").onclick <- fun _ ->
-    console.log(JSON.stringify(currentState, space = 2))
+    let isNode elem = typeof<HTMLElement>.IsInstanceOfType(elem)
+    let isArray elem = Array.isArray(elem)
+    let flattenedState =
+        match currentState with
+        | None -> []
+        | Some state ->
+            let rec flattenState (state: obj) =
+                [
+                    if isArray state then
+                        let arr = state :?> array<obj>
+                        let e0 = arr[0]
+                        let e1 = arr[1]
+                        if isNode e0 
+                            then yield (e0 :?> HTMLElement).tagName
+                            else yield JSON.stringify(e0)
+                        yield! flattenState e1
+                    else
+                        yield JSON.stringify(state)
+                ]
+            flattenState state
+    //console.log(flattenedState |> List.toArray)
+    //console.log(JSON.stringify(currentState, space = 2))
+    console.log(currentState)

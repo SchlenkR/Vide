@@ -106,7 +106,7 @@ type EventManager() =
 let events = EventManager()
 
 type NodeBuilder(getNode: Context -> Node, updateNode: Node -> unit) =
-    inherit VideBaseBuilder()
+    inherit VideBuilder()
     
     member val Attributes: AttributeList = [] with get, set
     member val Events: EventList = [] with get, set
@@ -165,4 +165,4 @@ let prepareStart (holder: Node) (v: Vide<unit,'s,Context>) onEvaluated =
     do ctx.evaluateView <- videMachine.Eval
     videMachine
 
-let vide = VideBaseBuilder()
+let vide = VideBuilder()
