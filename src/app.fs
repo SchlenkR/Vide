@@ -9,7 +9,9 @@ let mutable currentState = None
 
 let demos : list<string * string * (HTMLElement -> unit)> = 
     let inline start demo = fun host ->
-        let onEvaluated _ state = currentState <- state |> Option.map (fun s -> s :> obj)
+        let onEvaluated _ state =
+            currentState <- state |> Option.map (fun s -> s :> obj)
+            console.log("Evaluation done.")
         let videMachine = prepareStart host demo onEvaluated
         videMachine.Eval()
     let demos =
@@ -36,6 +38,12 @@ let demos : list<string * string * (HTMLElement -> unit)> =
                 "Conditional elements (multiple if)",
                 "Count to 5 and you'll get another surprise!",
                 start Demos.conditionalIfs
+            )
+
+            (
+                "Conditional elements (if/else)",
+                "TODO: This must be documented!",
+                start Demos.conditionalIfElse
             )
 
             (

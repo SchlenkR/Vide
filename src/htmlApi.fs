@@ -1,7 +1,9 @@
 
 namespace Vide
 
+open System
 open System.Runtime.CompilerServices
+open Fable.Core.JS
 open Browser.Types
 open Vide
 
@@ -58,7 +60,12 @@ type HTMLAnchorElementBuilderExtensions() =
 module Element =
     let inline create tagName htmlElementBuilderCtor =
         let create ctx = ctx.elementsContext.AddElement(tagName) :> Node
-        let update (node: Node) = Keep
+        let update (node: Node) =
+            match node.nodeName.Equals(tagName, StringComparison.OrdinalIgnoreCase) with
+            | true -> Keep
+            | false ->
+                console.log($"TODO: if/else detection? Expected node name: {tagName}, but was: {node.nodeName}")
+                DiscardAndCreateNew
         htmlElementBuilderCtor(create, update)
     
 // open type (why? -> We need always a new builder)
