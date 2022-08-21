@@ -103,7 +103,9 @@ type EventManager() =
 
 let events = EventManager()
 
-type NodeBuilder(getNode: Context -> Node, updateNode: Node -> unit) =
+type NodeCheckResult = Keep | DiscardAndCreateNew
+
+type NodeBuilder(newNode: Context -> Node, checkOrUpdateNode: Node -> NodeCheckResult) =
     inherit VideBuilder()
     
     member val Attributes: AttributeList = [] with get, set
@@ -128,15 +130,17 @@ type NodeBuilder(getNode: Context -> Node, updateNode: Node -> unit) =
                  events.AddListener(node, name, handler)
         Vide <| fun s (ctx: Context) ->
             let s,cs = separateStatePair s
-            let node =
+            let node,cs =
                 match s with
                 | None ->
-                    getNode ctx
+                    newNode ctx,cs
                 | Some node ->
-                    do
+                    match checkOrUpdateNode node with
+                    | Keep ->
                         ctx.elementsContext.KeepNode(node)
-                        updateNode node
-                    node
+                        node,cs
+                    | DiscardAndCreateNew ->
+                        newNode ctx,None
             do syncAttrs node
             do syncEvents node
             let childCtx =
@@ -162,7 +166,7 @@ let prepareStart (holder: Node) (v: Vide<unit,'s,Context>) onEvaluated =
     let videMachine = VideMachine(
         None,
         ctx,
-        NodeBuilder((fun _ -> holder), ignore) { v },
+        NodeBuilder((fun _ -> holder), fun _ -> Keep) { v },
         onEvaluated)
     do ctx.evaluateView <- videMachine.Eval
     videMachine

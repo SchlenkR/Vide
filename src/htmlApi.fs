@@ -56,24 +56,28 @@ type HTMLAnchorElementBuilderExtensions() =
         NodeBuilderExtensions.attrCond(this, "href", ?value = value)
 
 module Element =
-    let inline create ctor tagName updateNode =
-        ctor(
-            (fun ctx -> ctx.elementsContext.AddElement(tagName) :> Node),
-            updateNode)
-
+    let inline create tagName htmlElementBuilderCtor =
+        let create ctx = ctx.elementsContext.AddElement(tagName) :> Node
+        let update (node: Node) = Keep
+        htmlElementBuilderCtor(create, update)
+    
 // open type (why? -> We need always a new builder)
 type Html =
     static member text<'s> text =
-        let create (ctx: Context) =
-            ctx.elementsContext.AddTextNode(text) :> Node
-        let update (node: Node) =
-            if node.textContent <> text then node.textContent <- text
-        NodeBuilder(create, update)
-    static member span = Element.create HTMLElementBuilder "span" ignore
-    static member div = Element.create HTMLElementBuilder "div" ignore
-    static member p = Element.create HTMLElementBuilder "p" ignore
-    static member button = Element.create HTMLButtonElementBuilder "button" ignore
-    static member a = Element.create HTMLAnchorElementBuilder "a" ignore
+        NodeBuilder(
+            (fun ctx -> ctx.elementsContext.AddTextNode(text) :> Node),
+            (fun node ->
+                if typeof<Text>.IsInstanceOfType(node) then
+                    if node.textContent <> text then node.textContent <- text
+                    Keep
+                else
+                    DiscardAndCreateNew
+            ))
+    static member span = Element.create "span" HTMLElementBuilder
+    static member div = Element.create "div" HTMLElementBuilder
+    static member p = Element.create "p" HTMLElementBuilder
+    static member button = Element.create "button" HTMLButtonElementBuilder
+    static member a = Element.create "a" HTMLAnchorElementBuilder
 
     // TODO: Yield should work for strings
 

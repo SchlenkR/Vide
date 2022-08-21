@@ -63,7 +63,7 @@ let demoHost = document.getElementById("demo")
 for title,desc,runDemo in demos do
     let btn = document.createElement("button") :?> HTMLButtonElement
     btn.innerText <- title
-    btn.addEventListener("click", fun evt ->
+    btn.addEventListener("click", fun _ ->
         let innerDemoHostId = "innerDemoHost"
         demoHost.innerHTML <-
             $"""
