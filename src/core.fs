@@ -60,7 +60,7 @@ type VideBuilder() =
         Vide <| fun s c ->
             let mutable currMap = s |> Option.defaultValue Map.empty
             let res =
-                [ for i,x in sequence |> Seq.indexed do
+                [ for x in sequence do
                     let (Vide v) = body x
                     let matchingState = currMap |> Map.tryFind x |> Option.flatten
                     let _,vs = v matchingState c

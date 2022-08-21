@@ -2,6 +2,7 @@
 [<AutoOpen>]
 module Vide.Fable
 
+open Fable.Core.JS
 open Browser
 open Browser.Types
 open Vide
@@ -79,25 +80,22 @@ type AttributeList = list<string * AttributeSyncAction<string>>
 type EventList = list<string * EventHandler>
 type NodeBuilderState<'s> = option<Node> * option<'s>
 
-// TODO: Hack
+// TODO: Hack? Is there a better way?
 type EventManager() =
-    let eventListeners = Fable.Core.JS.Constructors.WeakMap.Create<Node, list<string * EventHandler>>()
+    let listeners = Constructors.WeakMap.Create<Node, list<string * EventHandler>>()
     member _.AddListener(node: Node, evtName, handler) =
         node.addEventListener(evtName, handler)
         let registrations =
-            if eventListeners.has(node)
-                then (evtName, handler) :: eventListeners.get(node)
+            if listeners.has(node)
+                then (evtName, handler) :: listeners.get(node)
                 else [ evtName, handler ]
-        eventListeners.set(node, registrations) |> ignore
+        listeners.set(node, registrations) |> ignore
     member _.RemoveListener(node: Node, evtName) =
-        let registrations =
-            if eventListeners.has(node)
-                then eventListeners.get(node)
-                else []
+        let registrations = if listeners.has(node) then listeners.get(node) else []
         for regEvtName,handler in registrations do
             if regEvtName = evtName then
                 node.removeEventListener(evtName, handler) |> ignore
-        eventListeners
+        listeners
             .set(
                 node,
                 registrations |> List.filter (fun (n,h) -> n <> evtName))
@@ -115,6 +113,19 @@ type NodeBuilder(getNode: Context -> Node, updateNode: Node -> unit) =
         Vide childVide: Vide<unit,'fs,Context>)
         : Vide<unit, NodeBuilderState<'fs>, Context>
         =
+        let syncAttrs (node: Node) =
+            for name,value in this.Attributes do
+                match value with
+                | Set value ->
+                    let attr = document.createAttribute(name)
+                    attr.value <- value
+                    node.attributes.setNamedItem(attr) |> ignore
+                | Remove ->
+                    node.attributes.removeNamedItem(name) |> ignore
+        let syncEvents (node: Node) =
+            for name,handler in this.Events do
+                 events.RemoveListener(node, name)
+                 events.AddListener(node, name, handler)
         Vide <| fun s (ctx: Context) ->
             let s,cs = separateStatePair s
             let node =
@@ -126,17 +137,8 @@ type NodeBuilder(getNode: Context -> Node, updateNode: Node -> unit) =
                         ctx.elementsContext.KeepNode(node)
                         updateNode node
                     node
-            for name,value in this.Attributes do
-                match value with
-                | Set value ->
-                    let attr = document.createAttribute(name)
-                    attr.value <- value
-                    node.attributes.setNamedItem(attr) |> ignore
-                | Remove ->
-                    node.attributes.removeNamedItem(name) |> ignore
-            for name,handler in this.Events do
-                 events.RemoveListener(node, name)
-                 events.AddListener(node, name, handler)
+            do syncAttrs node
+            do syncEvents node
             let childCtx =
                 {
                     node = node
