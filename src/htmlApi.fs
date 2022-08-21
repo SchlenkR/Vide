@@ -68,7 +68,7 @@ module Element =
                 DiscardAndCreateNew
         htmlElementBuilderCtor(create, update)
     
-// open type (why? -> We need always a new builder)
+// open type (why? -> We need always a new builder on property access)
 type Html =
     static member text<'s> text =
         NodeBuilder(
