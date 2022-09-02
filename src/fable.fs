@@ -71,14 +71,14 @@ let inline ( *= ) mutVal x = Mutable.change (*) mutVal x
 let inline ( /= ) mutVal x = Mutable.change (/) mutVal x
 let inline ( := ) (mutVal: Mutable.MutableValue<_>) x = mutVal.Value <- x
 
-
 type AttributeSyncAction<'a> =
     | Set of 'a
     | Remove
 type EventHandler = Event -> unit
 type AttributeList = list<string * AttributeSyncAction<string>>
 type EventList = list<string * EventHandler>
-type NodeBuilderState<'s> = option<Node> * option<'s>
+type NodeBuilderState<'s, 'n when 'n :> Node> = option<'n> * option<'s>
+type NodeCheckResult = Keep | DiscardAndCreateNew
 
 // TODO: Hack? Is there a better way?
 type EventManager() =
@@ -101,73 +101,82 @@ type EventManager() =
                 registrations |> List.filter (fun (n,h) -> n <> evtName))
             |> ignore
 
-let events = EventManager()
+let eventManager = EventManager()
 
-type NodeCheckResult = Keep | DiscardAndCreateNew
+let inline syncNode
+    (newNode: Context -> #Node)
+    (checkOrUpdateNode: #Node -> NodeCheckResult)
+    (attributes: AttributeList)
+    (events: EventList)
+    (Vide childVide: Vide<unit,'fs,Context>)
+    : Vide<#Node, NodeBuilderState<'fs, #Node>, Context>
+    =
+    let syncAttrs (node: Node) =
+        for name,value in attributes do
+            match value with
+            | Set value ->
+                let attr = document.createAttribute(name)
+                attr.value <- value
+                node.attributes.setNamedItem(attr) |> ignore
+            | Remove ->
+                node.attributes.removeNamedItem(name) |> ignore
+    let syncEvents (node: Node) =
+        for name,handler in events do
+             eventManager.RemoveListener(node, name)
+             eventManager.AddListener(node, name, handler)
+    Vide <| fun s (ctx: Context) ->
+        let s,cs = separateStatePair s
+        let node,cs =
+            match s with
+            | None ->
+                newNode ctx,cs
+            | Some node ->
+                match checkOrUpdateNode node with
+                | Keep ->
+                    ctx.elementsContext.KeepNode(node)
+                    node,cs
+                | DiscardAndCreateNew ->
+                    newNode ctx,None
+        do syncAttrs node
+        do syncEvents node
+        let childCtx =
+            {
+                node = node
+                evaluateView = ctx.evaluateView
+                elementsContext = ElementsContext(node)
+            }
+        let cv,cs = childVide cs childCtx
+        for x in childCtx.elementsContext.GetObsoleteNodes() do
+            node.removeChild(x) |> ignore
+            // we don'tneed this? Weak enough?
+            // events.RemoveListener(node)
+        node, Some (Some node, cs)
 
-type NodeBuilder(newNode: Context -> Node, checkOrUpdateNode: Node -> NodeCheckResult) =
+type NodeBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
     inherit VideBuilder()
-    
     member val Attributes: AttributeList = [] with get, set
     member val Events: EventList = [] with get, set
-
-    member this.Run(
-        Vide childVide: Vide<unit,'fs,Context>)
-        : Vide<unit, NodeBuilderState<'fs>, Context>
+    member this.Run
+        (
+            childVide: Vide<unit,'fs,Context>
+        ) : Vide<unit, NodeBuilderState<'fs, 'n>, Context>
         =
-        let syncAttrs (node: Node) =
-            for name,value in this.Attributes do
-                match value with
-                | Set value ->
-                    let attr = document.createAttribute(name)
-                    attr.value <- value
-                    node.attributes.setNamedItem(attr) |> ignore
-                | Remove ->
-                    node.attributes.removeNamedItem(name) |> ignore
-        let syncEvents (node: Node) =
-            for name,handler in this.Events do
-                 events.RemoveListener(node, name)
-                 events.AddListener(node, name, handler)
-        Vide <| fun s (ctx: Context) ->
-            let s,cs = separateStatePair s
-            let node,cs =
-                match s with
-                | None ->
-                    newNode ctx,cs
-                | Some node ->
-                    match checkOrUpdateNode node with
-                    | Keep ->
-                        ctx.elementsContext.KeepNode(node)
-                        node,cs
-                    | DiscardAndCreateNew ->
-                        newNode ctx,None
-            do syncAttrs node
-            do syncEvents node
-            let childCtx =
-                {
-                    node = node
-                    evaluateView = ctx.evaluateView
-                    elementsContext = ElementsContext(node)
-                }
-            let cv,cs = childVide cs childCtx
-            for x in childCtx.elementsContext.GetObsoleteNodes() do
-                node.removeChild(x) |> ignore
-                // we don'tneed this? Weak enough?
-                // events.RemoveListener(node)
-            (), Some (Some node, cs)
+        syncNode newNode checkOrUpdateNode this.Attributes this.Events childVide
+        |> map ignore
 
-let prepareStart (holder: Node) (v: Vide<unit,'s,Context>) onEvaluated =
+let inline prepareStart (holder: #Node) (v: Vide<unit,'s,Context>) onEvaluated =
     let ctx =
         {
             node = holder
             evaluateView = fun () -> ()
             elementsContext = ElementsContext(holder)
         }
-    let videMachine = VideMachine(
-        None,
-        ctx,
-        NodeBuilder((fun _ -> holder), fun _ -> Keep) { v },
-        onEvaluated)
+    let videMachine =
+        VideMachine(
+            None,
+            ctx,
+            NodeBuilder((fun _ -> holder), fun _ -> Keep) { v },
+            onEvaluated)
     do ctx.evaluateView <- videMachine.Eval
     videMachine
 

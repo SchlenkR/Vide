@@ -26,5 +26,6 @@
         let removeItem item = currentItems.value.Remove(item) |> ignore
 * Docu: Operators (+=, :=,. etc)        
 * start: resolve issue "eventRemovalWorkaround with mutableLists example"
+* Input, checkbox, etc.
 * Vide as no single case DU -> inlineIfLambda
 * Module / NS restructuring

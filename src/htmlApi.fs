@@ -7,14 +7,14 @@ open Fable.Core.JS
 open Browser.Types
 open Vide
 
-type HTMLElementBuilder(createNode, updateNode) = inherit NodeBuilder(createNode, updateNode)
+type HTMLElementBuilder(createNode, updateNode) = inherit NodeBuilder<Node>(createNode, updateNode)
 type HTMLAnchorElementBuilder(createNode, updateNode) = inherit HTMLElementBuilder(createNode, updateNode)
 type HTMLButtonElementBuilder(createNode, updateNode) = inherit HTMLElementBuilder(createNode, updateNode)
 
 [<Extension>]
 type NodeBuilderExtensions() =
     [<Extension>]
-    static member inline attrCond(this: #NodeBuilder, name, ?value: string) =
+    static member inline attrCond(this: #NodeBuilder<_>, name, ?value: string) =
         let value =
             match value with
             | Some value -> Set value
@@ -22,7 +22,7 @@ type NodeBuilderExtensions() =
         do this.Attributes <- (name, value) :: this.Attributes
         this
     [<Extension>]
-    static member inline attrBool(this: #NodeBuilder, name, value: bool) =
+    static member inline attrBool(this: #NodeBuilder<_>, name, value: bool) =
         let value =
             match value with
             | true -> Set ""
@@ -30,7 +30,7 @@ type NodeBuilderExtensions() =
         do this.Attributes <- (name, value) :: this.Attributes
         this
     [<Extension>]
-    static member on(this: #NodeBuilder, name, handler: EventHandler) =
+    static member on(this: #NodeBuilder<_>, name, handler: EventHandler) =
         do this.Events <- (name, handler) :: this.Events
         this
 
@@ -91,13 +91,13 @@ type Html =
 [<AutoOpen>]
 module VideBuilderExtensions =
     type VideBuilder with
-        member inline _.Yield(
-            v: NodeBuilder)
-            : Vide<unit, NodeBuilderState<unit>, Context>
+        member inline _.Yield
+            (v: NodeBuilder<_>)
+            : Vide<unit, NodeBuilderState<unit,_>, Context>
             =
             v { () }
-        member inline _.Yield(
-            x: string)
-            : Vide<unit, NodeBuilderState<unit> ,Context>
+        member inline _.Yield
+            (x: string)
+            : Vide<unit, NodeBuilderState<unit,_> ,Context>
             =
             Html.text x { () }
