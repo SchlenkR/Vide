@@ -103,66 +103,72 @@ type EventManager() =
 
 let eventManager = EventManager()
 
-let inline syncNode
-    (newNode: Context -> #Node)
-    (checkOrUpdateNode: #Node -> NodeCheckResult)
-    (attributes: AttributeList)
-    (events: EventList)
-    (Vide childVide: Vide<unit,'fs,Context>)
-    : Vide<#Node, NodeBuilderState<'fs, #Node>, Context>
-    =
-    let syncAttrs (node: Node) =
-        for name,value in attributes do
-            match value with
-            | Set value ->
-                let attr = document.createAttribute(name)
-                attr.value <- value
-                node.attributes.setNamedItem(attr) |> ignore
-            | Remove ->
-                node.attributes.removeNamedItem(name) |> ignore
-    let syncEvents (node: Node) =
-        for name,handler in events do
-             eventManager.RemoveListener(node, name)
-             eventManager.AddListener(node, name, handler)
-    Vide <| fun s (ctx: Context) ->
-        let s,cs = separateStatePair s
-        let node,cs =
-            match s with
-            | None ->
-                newNode ctx,cs
-            | Some node ->
-                match checkOrUpdateNode node with
-                | Keep ->
-                    ctx.elementsContext.KeepNode(node)
-                    node,cs
-                | DiscardAndCreateNew ->
-                    newNode ctx,None
-        do syncAttrs node
-        do syncEvents node
-        let childCtx =
-            {
-                node = node
-                evaluateView = ctx.evaluateView
-                elementsContext = ElementsContext(node)
-            }
-        let cv,cs = childVide cs childCtx
-        for x in childCtx.elementsContext.GetObsoleteNodes() do
-            node.removeChild(x) |> ignore
-            // we don'tneed this? Weak enough?
-            // events.RemoveListener(node)
-        node, Some (Some node, cs)
-
-type NodeBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
+type NodeBaseBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
     inherit VideBuilder()
     member val Attributes: AttributeList = [] with get, set
     member val Events: EventList = [] with get, set
+    member this.SyncNode
+        (Vide childVide: Vide<unit,'fs,Context>)
+        : Vide<'n, NodeBuilderState<'fs, 'n>, Context>
+        =
+        let syncAttrs (node: Node) =
+            for name,value in this.Attributes do
+                match value with
+                | Set value ->
+                    let attr = document.createAttribute(name)
+                    attr.value <- value
+                    node.attributes.setNamedItem(attr) |> ignore
+                | Remove ->
+                    node.attributes.removeNamedItem(name) |> ignore
+        let syncEvents (node: Node) =
+            for name,handler in this.Events do
+                 eventManager.RemoveListener(node, name)
+                 eventManager.AddListener(node, name, handler)
+        Vide <| fun s (ctx: Context) ->
+            let s,cs = separateStatePair s
+            let node,cs =
+                match s with
+                | None ->
+                    newNode ctx,cs
+                | Some node ->
+                    match checkOrUpdateNode node with
+                    | Keep ->
+                        ctx.elementsContext.KeepNode(node)
+                        node,cs
+                    | DiscardAndCreateNew ->
+                        newNode ctx,None
+            do syncAttrs node
+            do syncEvents node
+            let childCtx =
+                {
+                    node = node
+                    evaluateView = ctx.evaluateView
+                    elementsContext = ElementsContext(node)
+                }
+            let cv,cs = childVide cs childCtx
+            for x in childCtx.elementsContext.GetObsoleteNodes() do
+                node.removeChild(x) |> ignore
+                // we don'tneed this? Weak enough?
+                // events.RemoveListener(node)
+            node, Some (Some node, cs)
+
+type EmitNodeBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
+    inherit NodeBaseBuilder<'n>(newNode, checkOrUpdateNode)
+    member this.Run
+        (
+            childVide: Vide<unit,'fs,Context>
+        ) : Vide<'n, NodeBuilderState<'fs, 'n>, Context>
+        =
+        this.SyncNode(childVide)
+
+type DiscardNodeBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
+    inherit NodeBaseBuilder<'n>(newNode, checkOrUpdateNode)
     member this.Run
         (
             childVide: Vide<unit,'fs,Context>
         ) : Vide<unit, NodeBuilderState<'fs, 'n>, Context>
         =
-        syncNode newNode checkOrUpdateNode this.Attributes this.Events childVide
-        |> map ignore
+        this.SyncNode(childVide) |> map ignore
 
 let inline prepareStart (holder: #Node) (v: Vide<unit,'s,Context>) onEvaluated =
     let ctx =
@@ -175,7 +181,7 @@ let inline prepareStart (holder: #Node) (v: Vide<unit,'s,Context>) onEvaluated =
         VideMachine(
             None,
             ctx,
-            NodeBuilder((fun _ -> holder), fun _ -> Keep) { v },
+            DiscardNodeBuilder((fun _ -> holder), fun _ -> Keep) { v },
             onEvaluated)
     do ctx.evaluateView <- videMachine.Eval
     videMachine
