@@ -29,11 +29,11 @@ type VideBuilder() =
     
     member inline _.Return(x) =
         Vide <| fun s c -> x,None
-    member inline _.Yield
-        (x: Vide<'v,'s,'c>)
-        : Vide<'v,'s,'c>
-        =
-        x
+    //member inline _.Yield
+    //    (x: Vide<'v,'s,'c>)
+    //    : Vide<'v,'s,'c>
+    //    =
+    //    x
     member inline _.Zero()
         : Vide<unit,'s,'c>
         =

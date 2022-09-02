@@ -31,8 +31,8 @@ and ElementsContext(parent: Node) =
     let append x =
         do parent.appendChild(x) |> ignore
         x
-    member _.AddElement(tagName: string) =
-        document.createElement tagName |> memory |> append
+    member _.AddElement<'n when 'n :> HTMLElement>(tagName: string) =
+        document.createElement tagName |> memory |> append :?> 'n
     member _.AddTextNode(text: string) =
         document.createTextNode text |> memory |> append
     member _.KeepNode(node: Node) =
@@ -103,11 +103,11 @@ type EventManager() =
 
 let eventManager = EventManager()
 
-type NodeBaseBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
+type NodeBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
     inherit VideBuilder()
     member val Attributes: AttributeList = [] with get, set
     member val Events: EventList = [] with get, set
-    member this.SyncNode
+    member this.Run
         (Vide childVide: Vide<unit,'fs,Context>)
         : Vide<'n, NodeBuilderState<'fs, 'n>, Context>
         =
@@ -152,23 +152,15 @@ type NodeBaseBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
                 // events.RemoveListener(node)
             node, Some (Some node, cs)
 
-type EmitNodeBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
-    inherit NodeBaseBuilder<'n>(newNode, checkOrUpdateNode)
-    member this.Run
-        (
-            childVide: Vide<unit,'fs,Context>
-        ) : Vide<'n, NodeBuilderState<'fs, 'n>, Context>
-        =
-        this.SyncNode(childVide)
-
-type DiscardNodeBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
-    inherit NodeBaseBuilder<'n>(newNode, checkOrUpdateNode)
-    member this.Run
-        (
-            childVide: Vide<unit,'fs,Context>
-        ) : Vide<unit, NodeBuilderState<'fs, 'n>, Context>
-        =
-        this.SyncNode(childVide) |> map ignore
+// we always use EmitBuilder and "map ignore" the result in yield or use it in bind
+////type DiscardNodeBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
+////    inherit NodeBaseBuilder<'n>(newNode, checkOrUpdateNode)
+////    member this.Run
+////        (
+////            childVide: Vide<unit,'fs,Context>
+////        ) : Vide<unit, NodeBuilderState<'fs, 'n>, Context>
+////        =
+////        this.SyncNode(childVide) |> map ignore
 
 let inline prepareStart (holder: #Node) (v: Vide<unit,'s,Context>) onEvaluated =
     let ctx =
@@ -181,7 +173,7 @@ let inline prepareStart (holder: #Node) (v: Vide<unit,'s,Context>) onEvaluated =
         VideMachine(
             None,
             ctx,
-            DiscardNodeBuilder((fun _ -> holder), fun _ -> Keep) { v },
+            NodeBuilder((fun _ -> holder), fun _ -> Keep) { v },
             onEvaluated)
     do ctx.evaluateView <- videMachine.Eval
     videMachine
