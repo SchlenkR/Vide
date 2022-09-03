@@ -79,7 +79,7 @@ let preserve x =
         s, Some s
 
 // TODO: Think about which function is "global" and module-bound
-let map proj (Vide v) =
+let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
     Vide <| fun s c ->
         let v,s = v s c
         proj v, s

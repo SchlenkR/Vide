@@ -2,8 +2,8 @@ module App
 
 open Browser.Dom
 open Browser.Types
-open Vide
 open Fable.Core.JS
+open Vide.Fable
 
 let mutable currentState = None
 
@@ -62,6 +62,12 @@ let demos : list<string * string * (HTMLElement -> unit)> =
                 "List with element state",
                 "TODO",
                 start Demos.statefulFor
+            )
+
+            (
+                "Syntax_Test1",
+                "TODO",
+                start Demos.SyntaxTests.test1
             )
         ]
     demos

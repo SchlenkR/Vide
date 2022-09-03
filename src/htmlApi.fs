@@ -6,6 +6,7 @@ open System.Runtime.CompilerServices
 open Fable.Core.JS
 open Browser.Types
 open Vide
+open Vide.Fable
 
 type HTMLElementBuilder<'n when 'n :> Node>(createNode, updateNode) =
     inherit NodeBuilder<'n>(createNode, updateNode)
@@ -77,6 +78,7 @@ module Element =
     
 // open type (why? -> We need always a new builder on property access)
 type Html =
+    // TODO: This is something special
     static member text text =
         NodeBuilder(
             (fun ctx -> ctx.elementsContext.AddTextNode(text)),
@@ -98,18 +100,23 @@ type Html =
 [<AutoOpen>]
 module VideBuilderExtensions =
     type VideBuilder with
-        member inline _.Yield
-            (x: Vide<'v,'s,'c>)
-            : Vide<'v,'s,'c>
+        //member inline _.Yield
+        //    (v: NodeBuilder<'n>)
+        //    : Vide<unit, NodeBuilderState<'n,_>, Context>
+        //    =
+        //    v { () } |> map ignore
+        member inline _.Yield<'n,'s,'c when 'n :> Node>
+            (v: Vide<'n,'s,'c>)
+            : Vide<unit,'s,'c>
             =
-            x
+            v |> map ignore
         member inline _.Yield
-            (v: NodeBuilder<_>)
-            : Vide<unit, NodeBuilderState<unit,_>, Context>
+            (x: NodeBuilder<'n>)
+            : Vide<unit, NodeBuilderState<'n,unit> ,Context>
             =
-            v { () } |> map ignore
+            x { () } |> map ignore
         member inline _.Yield
             (x: string)
-            : Vide<unit, NodeBuilderState<unit,_> ,Context>
+            : Vide<unit, NodeBuilderState<Text,unit> ,Context>
             =
             Html.text x { () } |> map ignore

@@ -77,7 +77,7 @@ type AttributeSyncAction<'a> =
 type EventHandler = Event -> unit
 type AttributeList = list<string * AttributeSyncAction<string>>
 type EventList = list<string * EventHandler>
-type NodeBuilderState<'s, 'n when 'n :> Node> = option<'n> * option<'s>
+type NodeBuilderState<'n,'s when 'n :> Node> = option<'n> * option<'s>
 type NodeCheckResult = Keep | DiscardAndCreateNew
 
 // TODO: Hack? Is there a better way?
@@ -109,7 +109,7 @@ type NodeBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
     member val Events: EventList = [] with get, set
     member this.Run
         (Vide childVide: Vide<unit,'fs,Context>)
-        : Vide<'n, NodeBuilderState<'fs, 'n>, Context>
+        : Vide<'n, NodeBuilderState<'n,'fs>, Context>
         =
         let syncAttrs (node: Node) =
             for name,value in this.Attributes do
@@ -162,7 +162,15 @@ type NodeBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
 ////        =
 ////        this.SyncNode(childVide) |> map ignore
 
-let inline prepareStart (holder: #Node) (v: Vide<unit,'s,Context>) onEvaluated =
+type RootBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
+    inherit NodeBuilder<'n>(newNode, checkOrUpdateNode)
+    member inline _.Yield
+        (x: Vide<unit,'s,Context>)
+        : Vide<unit,'s,Context>
+        =
+        x
+
+let inline prepareStart (holder: #Node) (v: Vide<_,'s,Context>) onEvaluated =
     let ctx =
         {
             node = holder
@@ -173,7 +181,7 @@ let inline prepareStart (holder: #Node) (v: Vide<unit,'s,Context>) onEvaluated =
         VideMachine(
             None,
             ctx,
-            NodeBuilder((fun _ -> holder), fun _ -> Keep) { v },
+            RootBuilder((fun _ -> holder), fun _ -> Keep) { v },
             onEvaluated)
     do ctx.evaluateView <- videMachine.Eval
     videMachine
