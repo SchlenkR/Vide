@@ -14,10 +14,11 @@ let inline internal log name =
 type Vide<'v,'s,'c> = Vide of ('s option -> 'c -> 'v * 's option)
 
 type VideBuilder() =
-    member inline _.Bind(
-        Vide m: Vide<'v1,'s1,'c>,
-        f: 'v1 -> Vide<'v2,'s2,'c>)
-        : Vide<'v2,'s1 option * 's2 option,'c>
+    member inline _.Bind
+        (
+            Vide m: Vide<'v1,'s1,'c>,
+            f: 'v1 -> Vide<'v2,'s2,'c>
+        ) : Vide<'v2,'s1 option * 's2 option,'c>
         =
         Vide <| fun s c ->
             let ms,fs = separateStatePair s
@@ -28,34 +29,36 @@ type VideBuilder() =
     
     member inline _.Return(x) =
         Vide <| fun s c -> x,None
-    member inline _.Yield(
-        x: Vide<'v,'s,'c>)
-        : Vide<'v,'s,'c>
-        =
-        x
+    //member inline _.Yield
+    //    (x: Vide<'v,'s,'c>)
+    //    : Vide<'v,'s,'c>
+    //    =
+    //    x
     member inline _.Zero()
         : Vide<unit,'s,'c>
         =
         Vide <| fun s c ->  (), None
-    member inline _.Delay(
-        f: unit -> Vide<'v,'s,'c>)
+    member inline _.Delay
+        (f: unit -> Vide<'v,'s,'c>)
         : Vide<'v,'s,'c>
         =
         f()
-    member inline _.Combine(
-        Vide a: Vide<'elem,'s1,'c>,
-        Vide b: Vide<'elem,'s2,'c>)
-        : Vide<unit,'s1 option * 's2 option,'c>
+    member inline _.Combine
+        (
+            Vide a: Vide<'elem,'s1,'c>,
+            Vide b: Vide<'elem,'s2,'c>
+        ) : Vide<unit,'s1 option * 's2 option,'c>
         =
         Vide <| fun s c ->
             let sa,sb = separateStatePair s
             let va,sa = a sa c
             let vb,sb = b sb c
             (), Some (sa,sb)
-    member inline _.For(
-        sequence: seq<'a>,
-        body: 'a -> Vide<unit,'s,'c>)
-        : Vide<unit, Map<'a, 's option>,'c>
+    member inline _.For
+        (
+            sequence: seq<'a>,
+            body: 'a -> Vide<unit,'s,'c>
+        ) : Vide<unit, Map<'a, 's option>,'c>
         =
         Vide <| fun s c ->
             let mutable currMap = s |> Option.defaultValue Map.empty
@@ -75,11 +78,19 @@ let preserve x =
         let s = s |> Option.defaultValue x
         s, Some s
 
-type VideMachine<'v,'s,'c>(
-    initialState,
-    ctx,
-    vide: Vide<'v,'s,'c>,
-    onEvaluated: 'v -> 's option -> unit)
+// TODO: Think about which function is "global" and module-bound
+let map proj (Vide v) =
+    Vide <| fun s c ->
+        let v,s = v s c
+        proj v, s
+
+type VideMachine<'v,'s,'c>
+    (
+        initialState,
+        ctx,
+        vide: Vide<'v,'s,'c>,
+        onEvaluated: 'v -> 's option -> unit
+    )
     =
     let (Vide vide) = vide
     let mutable state = initialState

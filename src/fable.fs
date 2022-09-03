@@ -31,8 +31,8 @@ and ElementsContext(parent: Node) =
     let append x =
         do parent.appendChild(x) |> ignore
         x
-    member _.AddElement(tagName: string) =
-        document.createElement tagName |> memory |> append
+    member _.AddElement<'n when 'n :> HTMLElement>(tagName: string) =
+        document.createElement tagName |> memory |> append :?> 'n
     member _.AddTextNode(text: string) =
         document.createTextNode text |> memory |> append
     member _.KeepNode(node: Node) =
@@ -71,14 +71,14 @@ let inline ( *= ) mutVal x = Mutable.change (*) mutVal x
 let inline ( /= ) mutVal x = Mutable.change (/) mutVal x
 let inline ( := ) (mutVal: Mutable.MutableValue<_>) x = mutVal.Value <- x
 
-
 type AttributeSyncAction<'a> =
     | Set of 'a
     | Remove
 type EventHandler = Event -> unit
 type AttributeList = list<string * AttributeSyncAction<string>>
 type EventList = list<string * EventHandler>
-type NodeBuilderState<'s> = option<Node> * option<'s>
+type NodeBuilderState<'s, 'n when 'n :> Node> = option<'n> * option<'s>
+type NodeCheckResult = Keep | DiscardAndCreateNew
 
 // TODO: Hack? Is there a better way?
 type EventManager() =
@@ -101,19 +101,15 @@ type EventManager() =
                 registrations |> List.filter (fun (n,h) -> n <> evtName))
             |> ignore
 
-let events = EventManager()
+let eventManager = EventManager()
 
-type NodeCheckResult = Keep | DiscardAndCreateNew
-
-type NodeBuilder(newNode: Context -> Node, checkOrUpdateNode: Node -> NodeCheckResult) =
+type NodeBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
     inherit VideBuilder()
-    
     member val Attributes: AttributeList = [] with get, set
     member val Events: EventList = [] with get, set
-
-    member this.Run(
-        Vide childVide: Vide<unit,'fs,Context>)
-        : Vide<unit, NodeBuilderState<'fs>, Context>
+    member this.Run
+        (Vide childVide: Vide<unit,'fs,Context>)
+        : Vide<'n, NodeBuilderState<'fs, 'n>, Context>
         =
         let syncAttrs (node: Node) =
             for name,value in this.Attributes do
@@ -126,8 +122,8 @@ type NodeBuilder(newNode: Context -> Node, checkOrUpdateNode: Node -> NodeCheckR
                     node.attributes.removeNamedItem(name) |> ignore
         let syncEvents (node: Node) =
             for name,handler in this.Events do
-                 events.RemoveListener(node, name)
-                 events.AddListener(node, name, handler)
+                 eventManager.RemoveListener(node, name)
+                 eventManager.AddListener(node, name, handler)
         Vide <| fun s (ctx: Context) ->
             let s,cs = separateStatePair s
             let node,cs =
@@ -154,20 +150,31 @@ type NodeBuilder(newNode: Context -> Node, checkOrUpdateNode: Node -> NodeCheckR
                 node.removeChild(x) |> ignore
                 // we don'tneed this? Weak enough?
                 // events.RemoveListener(node)
-            (), Some (Some node, cs)
+            node, Some (Some node, cs)
 
-let prepareStart (holder: Node) (v: Vide<unit,'s,Context>) onEvaluated =
+// we always use EmitBuilder and "map ignore" the result in yield or use it in bind
+////type DiscardNodeBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
+////    inherit NodeBaseBuilder<'n>(newNode, checkOrUpdateNode)
+////    member this.Run
+////        (
+////            childVide: Vide<unit,'fs,Context>
+////        ) : Vide<unit, NodeBuilderState<'fs, 'n>, Context>
+////        =
+////        this.SyncNode(childVide) |> map ignore
+
+let inline prepareStart (holder: #Node) (v: Vide<unit,'s,Context>) onEvaluated =
     let ctx =
         {
             node = holder
             evaluateView = fun () -> ()
             elementsContext = ElementsContext(holder)
         }
-    let videMachine = VideMachine(
-        None,
-        ctx,
-        NodeBuilder((fun _ -> holder), fun _ -> Keep) { v },
-        onEvaluated)
+    let videMachine =
+        VideMachine(
+            None,
+            ctx,
+            NodeBuilder((fun _ -> holder), fun _ -> Keep) { v },
+            onEvaluated)
     do ctx.evaluateView <- videMachine.Eval
     videMachine
 
