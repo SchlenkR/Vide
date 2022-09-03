@@ -26,7 +26,6 @@ type VideBuilder() =
             let (Vide v) = f mv
             let vres,fs = v fs c
             vres, Some (ms,fs)
-    
     member inline _.Return(x) =
         Vide <| fun s c -> x,None
     //member inline _.Yield

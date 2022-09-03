@@ -1,6 +1,6 @@
 module Demos
 
-open Browser.Types
+open Browser
 open Vide
 open type Html
 
@@ -17,10 +17,17 @@ module SyntaxTests =
             do countDivHtmlElement.className <- "bam"
 
             // TODO: should also work with builder (without converting to Vide)?
-            let! emptyDivElement = div {()}
+            // TODO: div {()} gives ValueRestriction (generally {()} or () is problematic)
+            //let! emptyDivElement = div { nothing }
+            let! emptyDivElement = div
+            do emptyDivElement.className <- "bam2"
 
-            // We currently can't use () because of ValueRestriction, so this is a hack.
-            ""
+            // We currently can't use () because of ValueRestriction, so use "nothing" hack.
+            p {
+                div
+            }
+            span
+            nothing
         }
 
 

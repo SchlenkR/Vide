@@ -62,11 +62,13 @@ type HTMLAnchorElementBuilderExtensions() =
         NodeBuilderExtensions.attrCond(this, "href", ?value = value)
 
 module Element =
-    let inline create<'n,'b when 'n :> HTMLElement and 'b :> HTMLElementBuilder<'n>>
-        tagName
-        htmlElementBuilderCtor
-        : 'b
-        =
+    let inline create<'n,'b
+                when 'n :> HTMLElement 
+                and 'b :> HTMLElementBuilder<'n>>
+            tagName 
+            htmlElementBuilderCtor 
+            : 'b
+            =
         let create ctx = ctx.elementsContext.AddElement<'n>(tagName)
         let update (node: 'n) =
             match node.nodeName.Equals(tagName, StringComparison.OrdinalIgnoreCase) with
@@ -79,7 +81,12 @@ module Element =
 // open type (why? -> We need always a new builder on property access)
 type Html =
     // TODO: This is something special
-    static member text text =
+    static member inline nothing =
+        NodeBuilder(
+            (fun ctx -> ctx.elementsContext.DummyElement()),
+            (fun node -> Keep))
+    // TODO: This is something special
+    static member inline text text =
         NodeBuilder(
             (fun ctx -> ctx.elementsContext.AddTextNode(text)),
             (fun node ->
@@ -89,17 +96,25 @@ type Html =
                 else
                     DiscardAndCreateNew
             ))
-    static member span = Element.create "span" HTMLElementBuilder
-    static member div = Element.create "div" HTMLElementBuilder
-    static member p = Element.create "p" HTMLElementBuilder
-    static member button = Element.create "button" HTMLButtonElementBuilder
-    static member a = Element.create "a" HTMLAnchorElementBuilder
+    static member inline span = Element.create "span" HTMLElementBuilder
+    static member inline div = Element.create "div" HTMLElementBuilder
+    static member inline p = Element.create "p" HTMLElementBuilder
+    static member inline button = Element.create "button" HTMLButtonElementBuilder
+    static member inline a = Element.create "a" HTMLAnchorElementBuilder
 
     // TODO: Yield should work for strings
 
 [<AutoOpen>]
 module VideBuilderExtensions =
     type VideBuilder with
+        member inline this.Bind
+            (
+                x: NodeBuilder<'n>,
+                f: 'n -> Vide<'v,'s1,Context>
+            ) : Vide<'v,NodeBuilderState<'n,unit> option * 's1 option,Context>
+            =
+            let v = x { () }
+            this.Bind(v, f)
         //member inline _.Yield
         //    (v: NodeBuilder<'n>)
         //    : Vide<unit, NodeBuilderState<'n,_>, Context>

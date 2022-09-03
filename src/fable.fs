@@ -31,6 +31,8 @@ and ElementsContext(parent: Node) =
     let append x =
         do parent.appendChild(x) |> ignore
         x
+    member _.DummyElement() =
+        document.createElement "span"
     member _.AddElement<'n when 'n :> HTMLElement>(tagName: string) =
         document.createElement tagName |> memory |> append :?> 'n
     member _.AddTextNode(text: string) =
