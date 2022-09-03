@@ -28,3 +28,5 @@
 * start: resolve issue "eventRemovalWorkaround with mutableLists example"
 * Vide as no single case DU -> inlineIfLambda
 * Module / NS restructuring
+* Access HTMLElement from builder wirh let! or via map/iter
+* SVG API
