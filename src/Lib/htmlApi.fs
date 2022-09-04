@@ -25,6 +25,7 @@ type NodeBuilderExtensions() =
             | None -> Remove
         do this.Attributes <- (name, value) :: this.Attributes
         this
+    
     [<Extension>]
     static member inline attrBool(this: #NodeBuilder<_>, name, value: bool) =
         let value =
@@ -33,6 +34,7 @@ type NodeBuilderExtensions() =
             | false -> Remove
         do this.Attributes <- (name, value) :: this.Attributes
         this
+    
     [<Extension>]
     static member on(this: #NodeBuilder<_>, name, handler: EventHandler) =
         do this.Events <- (name, handler) :: this.Events
@@ -43,9 +45,11 @@ type HTMLElementBuilderExtensions() =
     [<Extension>]
     static member inline id(this: #HTMLElementBuilder<_>, ?value) =
         NodeBuilderExtensions.attrCond(this, "id", ?value = value)
+
     [<Extension>]
     static member inline class'(this: #HTMLElementBuilder<_>, ?value) =
         NodeBuilderExtensions.attrCond(this, "class", ?value = value)
+
     [<Extension>]
     static member inline hidden(this: #HTMLElementBuilder<_>, value) =
         NodeBuilderExtensions.attrBool(this, "hidden", value)
@@ -115,11 +119,6 @@ module VideBuilderExtensions =
             =
             let v = x { () }
             this.Bind(v, f)
-        //member inline _.Yield
-        //    (v: NodeBuilder<'n>)
-        //    : Vide<unit, NodeBuilderState<'n,_>, Context>
-        //    =
-        //    v { () } |> map ignore
         member inline _.Yield<'n,'s,'c when 'n :> Node>
             (v: Vide<'n,'s,'c>)
             : Vide<unit,'s,'c>

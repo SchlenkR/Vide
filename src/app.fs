@@ -12,7 +12,7 @@ let demos : list<string * string * (HTMLElement -> unit)> =
         let onEvaluated _ state =
             currentState <- state |> Option.map (fun s -> s :> obj)
             console.log("Evaluation done.")
-        let videMachine = prepareStart host demo onEvaluated
+        let videMachine = startApp host demo onEvaluated
         videMachine.Eval()
     let demos =
         [

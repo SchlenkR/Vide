@@ -172,7 +172,7 @@ type RootBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
         =
         x
 
-let inline prepareStart (holder: #Node) (v: Vide<_,'s,Context>) onEvaluated =
+let inline startApp (holder: #Node) (v: Vide<_,'s,Context>) onEvaluated =
     let ctx =
         {
             node = holder
