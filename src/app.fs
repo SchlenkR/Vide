@@ -64,11 +64,11 @@ let demos : list<string * string * (HTMLElement -> unit)> =
                 start Demos.statefulFor
             )
 
-            (
-                "Syntax_Test1",
-                "TODO",
-                start Demos.SyntaxTests.test1
-            )
+            // (
+            //     "Syntax_Test1",
+            //     "TODO",
+            //     start Demos.SyntaxTests.test1
+            // )
         ]
     demos
 

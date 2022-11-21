@@ -4,24 +4,24 @@ open Browser.Types
 open Vide
 open type Html
 
-module SyntaxTests =
-    let test1 =
-        vide {
-            let! count = Mutable.ofValue 0
+// module SyntaxTests =
+//     let test1 =
+//         vide {
+//             let! count = Mutable.ofValue 0
 
-            // TODO: Control what to emit
-            let! countDivHtmlElement = 
-                div {
-                    text $"Count = {count.Value}"
-                }
-            do countDivHtmlElement.className <- "bam"
+//             // TODO: Control what to emit
+//             let! countDivHtmlElement = 
+//                 div {
+//                     text $"Count = {count.Value}"
+//                 }
+//             do countDivHtmlElement.className <- "bam"
 
-            // TODO: should also work with builder (without converting to Vide)?
-            let! emptyDivElement = div {()}
+//             // TODO: should also work with builder (without converting to Vide)?
+//             let! emptyDivElement = div {()}
 
-            // We currently can't use () because of ValueRestriction, so this is a hack.
-            ""
-        }
+//             // We currently can't use () because of ValueRestriction, so this is a hack.
+//             ""
+//         }
 
 
 let helloWorld =
