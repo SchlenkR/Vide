@@ -3,114 +3,139 @@ module App
 open Browser.Dom
 open Browser.Types
 open Fable.Core.JS
+open Vide
 open Vide.Fable
+open type Html
 
-let mutable currentState = None
 
-let demos : list<string * string * (HTMLElement -> unit)> = 
-    let inline start demo = fun host ->
-        let onEvaluated _ state =
-            currentState <- state |> Option.map (fun s -> s :> obj)
-            console.log("Evaluation done.")
-        let videMachine = startApp host demo onEvaluated
-        videMachine.Eval()
-    let demos =
-        [
-            (
-                "Hello World",
-                "Just a message to the world...",
-                start Demos.helloWorld
-            )
+// counter sample
+let videApp =
+    vide {
+        let! count = Mutable.ofValue 0
 
-            (
-                "Counter",
-                "The famous, one-of-a kind counter.",
-                start Demos.counter
-            )
+        div {
+            $"Count = {count.Value}"
+        }
+
+        button .onclick(fun _ -> count -= 1) { "dec" }
+        button .onclick(fun _ -> count += 1) { "inc" }
+    }
+
+(*
+    Some more samples to uncomment ...
+*)
+
+(* hello world sample *)
+// let videApp =
+//     vide {
+//         "Hello World"
+//     }
+
+(* conditionalAttributes sample *)
+// let videApp =
+//     vide {
+//         let! count = Mutable.ofValue 0
+
+//         button .onclick(fun _ -> count += 1) {
+//             $"Hit me! Count = {count.Value}"
+//         }
+//         div .class'("the-message") {
+//             span .hidden(count.Value <> 5) {
+//                 "You have the right to defend yourself!"
+//             }
+//         }
+//     }
+
+(* conditionalIfs sample *)
+// let videApp =
+//     vide {
+//         let! count = Mutable.ofValue 0
+
+//         button .onclick(fun _ -> count += 1) {
+//             $"Hit me! Count = {count.Value}"
+//         }
+
+//         if count.Value = 5 || count.Value = 6 then
+//             let! valueString = preserve "Hello String"
+//             div .class'("the-message") { 
+//                 $"You have the right to defend yourself! (string value {valueString})" 
+//             }
+//         if count.Value <> 5 then
+//             let! valueInt = preserve 42
+//             p { $"not yet ... with int value {valueInt}" }
+//     }
+
+(* conditionalIfElse sample *)
+// let videApp =
+//     vide {
+//         let! count = Mutable.ofValue 0
+
+//         button .onclick(fun _ -> count += 1) {
+//             $"Hit me! Count = {count.Value}"
+//         }
+
+//         // TODO: That should not be used at all? And: That this seems to work
+//         // is only an edge case, because state has same type
+//         if count.Value = 5 then
+//             div .class'("the-message") { 
+//                 $"You have the right to defend yourself!" 
+//             }
+//         else
+//             p { $"not yet ..." }
+//     }
+
+(* simpleFor sample *)
+// let videApp =
+//     vide {
+//         for x in 0..5 do
+//             div .class'("card") { $"I'm element no. {x}" }
+//     }
+
+(* statelessFor sample *)
+// let videApp =
+//     let nextNum() = System.Random().Next(10000)
+//     vide {
+//         let! items = Mutable.ofValue []
+//         let add1 _ = items := items.Value @ [nextNum()]
+//         let add100 _ = items := items.Value @ [ for _ in 0..100 do nextNum() ]
+//         let removeAll _ = items :=  []
+
+//         button .onclick(add1) { "Add One" }
+//         button .onclick(add100) { "Add 100" }
+//         button .onclick(removeAll) { "Remove All" }
         
-            (
-                "Conditional attributes",
-                "Count to 5 and you'll get a surprise!",
-                start Demos.conditionalAttributes
-            )
+//         for x in items.Value do
+//             div .class'("card") {
+//                 let removeMe _ = items := items.Value |> List.except [x]
+//                 button .onclick(removeMe) { $"Remove {x}" }
+//         }
+//     }
 
-            (
-                "Conditional elements (multiple if)",
-                "Count to 5 and you'll get another surprise!",
-                start Demos.conditionalIfs
-            )
+(* statefulFor sample *)
+// let videApp =
+//     let nextNum() = System.Random().Next(10000)
+//     vide {
+//         let! items = Mutable.ofValue []
+//         let add1 _ = items := items.Value @ [nextNum()]
+//         let add100 _ = items := items.Value @ [ for _ in 0..100 do nextNum() ]
+//         let removeAll _ = items := []
 
-            (
-                "Conditional elements (if/else)",
-                "TODO: This must be documented!",
-                start Demos.conditionalIfElse
-            )
+//         button .onclick(add1) { "Add One" }
+//         button .onclick(add100) { "Add 100" }
+//         button .onclick(removeAll) { "Remove All" }
+        
+//         for x in items.Value do
+//             div .class'("card") {
+//                 let removeMe _ = items := items.Value |> List.except [x]
+//                 button .onclick(removeMe) { $"Remove {x}" }
 
-            (
-                "List of elements",
-                "Just an immutable list.",
-                start Demos.simpleFor
-            )
+//                 let! count = Mutable.ofValue 0
+//                 button .onclick(fun _ -> count -= 1) { "dec" }
+//                 $"{count.Value}  "
+//                 button .onclick(fun _ -> count += 1) { "inc" }
+//         }
+//     }
 
-            (
-                "Mutable element list",
-                "Add / Remove items",
-                start Demos.statelessFor
-            )
-
-            (
-                "List with element state",
-                "TODO",
-                start Demos.statefulFor
-            )
-
-            (
-                "Syntax_Test1",
-                "TODO",
-                start Demos.SyntaxTests.test1
-            )
-        ]
-    demos
-
-let menu = document.getElementById("menu")
-let demoHost = document.getElementById("demo")
-for title,desc,runDemo in demos do
-    let btn = document.createElement("button") :?> HTMLButtonElement
-    btn.innerText <- title
-    btn.addEventListener("click", fun _ ->
-        let innerDemoHostId = "innerDemoHost"
-        demoHost.innerHTML <-
-            $"""
-            <h2>{title}</h2> 
-            <blockquote>{desc}</blockquote>
-            <div id={innerDemoHostId}></div>
-            """
-        let innerDemoHost = demoHost.querySelector($"#{innerDemoHostId}") :?> HTMLElement
-        runDemo innerDemoHost
-    )
-    menu.appendChild(btn) |> ignore
-
-document.getElementById("logState").onclick <- fun _ ->
-    //let isNode elem = typeof<HTMLElement>.IsInstanceOfType(elem)
-    //let isArray elem = Array.isArray(elem)
-    //let flattenedState =
-    //    match currentState with
-    //    | None -> []
-    //    | Some state ->
-    //        let rec flattenState (state: obj) =
-    //            [
-    //                if isArray state then
-    //                    let arr = state :?> array<obj>
-    //                    let e0 = arr[0]
-    //                    let e1 = arr[1]
-    //                    if isNode e0 
-    //                        then yield (e0 :?> HTMLElement).tagName
-    //                        else yield JSON.stringify(e0)
-    //                    yield! flattenState e1
-    //                else
-    //                    yield JSON.stringify(state)
-    //            ]
-    //        flattenState state
-    ////console.log(flattenedState |> List.toArray)
-    ////console.log(JSON.stringify(currentState, space = 2))
-    console.log(currentState)
+let appHolder = document.getElementById("app")
+let videMachine = Vide.Fable.startApp appHolder videApp (fun sender state -> ())
+videMachine.Eval()

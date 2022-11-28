@@ -1,43 +1,10 @@
 @import "https://unpkg.com/marx-css/css/marx.min.css";
 
-.container {
-    display: grid;
-    grid-template-columns: 300px auto;
-    gap: 50px;
+#app {
+    margin: 50px 30px;
 }
 
-#menu {
-    display: grid;
-    align-items: stretch;
-    align-content: start;
-    padding: 10px;
-    padding-right: 20px;
-    border-right: 1px solid black;
-}
-
-#innerDemoHost div {
-    margin-bottom: 10px;
-}
-
-#demo button {
+button {
+    margin: 5px;
     padding: 3px 15px;
-}
-
-.the-message {
-    font-weight: bold;
-}
-
-.card {
-    background-color: darkorange;
-    padding: 10px
-}
-
-.bam {
-    background-color: lime;
-}
-
-.bam2 {
-    background-color: pink;
-    width: 200px;
-    height: 200px;
 }

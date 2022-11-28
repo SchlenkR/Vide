@@ -31,3 +31,7 @@
 * Module / NS restructuring
 * Access HTMLElement from builder wirh let! or via map/iter
 * SVG API
+* Issue: Yieling string as text doesn't work
+      vide {
+        "Hello World"
+    }
