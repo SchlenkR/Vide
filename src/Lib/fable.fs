@@ -1,11 +1,10 @@
-
 [<AutoOpen>]
 module Vide.Fable
 
-open Fable.Core.JS
 open Browser
 open Browser.Types
 open Vide
+open System
 
 type NodeList with 
     member this.ToSeq() = seq { for i in 0 .. this.length-1 do this.Item i }
@@ -16,7 +15,7 @@ module NodeExt =
         let idOrDefault = try node.attributes.getNamedItem("id").value with _ -> "--"
         $"<{node.nodeName} id='{idOrDefault}'>"
 
-type Context =
+type Controller =
     {
         node: Node
         mutable evaluateView: unit -> unit
@@ -24,24 +23,24 @@ type Context =
     }
 
 and ElementsContext(parent: Node) =
-    let mutable keptNodes = []
-    let memory x =
-        keptNodes <- (x :> Node) :: keptNodes
-        x
-    let append x =
-        do parent.appendChild(x) |> ignore
-        x
+    let mutable keptChildren = []
+    let memory child =
+        keptChildren <- (child :> Node) :: keptChildren
+        child
+    let append child =
+        do parent.appendChild(child) |> ignore
+        child
     member _.DummyElement() =
         document.createElement "span"
     member _.AddElement<'n when 'n :> HTMLElement>(tagName: string) =
         document.createElement tagName |> memory |> append :?> 'n
-    member _.AddTextNode(text: string) =
+    member _.AddText(text: string) =
         document.createTextNode text |> memory |> append
-    member _.KeepNode(node: Node) =
-        node |> memory |> ignore
-    member _.GetObsoleteNodes() =
+    member _.KeepChild(child: Node) =
+        child |> memory |> ignore
+    member _.GetObsoleteChildren() =
         let childNodes = parent.childNodes.ToList()
-        childNodes |> List.except keptNodes
+        childNodes |> List.except keptChildren
 
 module Mutable =
     type MutableValue<'a>(init: 'a) =
@@ -56,7 +55,7 @@ module Mutable =
         mutVal.Value <- op mutVal.Value x
     
     let ofValue x =
-        Vide <| fun s (c: Context) ->
+        Vide <| fun s (c: Controller) ->
             let s = s |> Option.defaultWith (fun () -> MutableValue(x))
             do s.EvaluateView <- c.evaluateView
             s, Some s
@@ -73,82 +72,51 @@ let inline ( *= ) mutVal x = Mutable.change (*) mutVal x
 let inline ( /= ) mutVal x = Mutable.change (/) mutVal x
 let inline ( := ) (mutVal: Mutable.MutableValue<_>) x = mutVal.Value <- x
 
-type AttributeSyncAction<'a> =
-    | Set of 'a
-    | Remove
-type EventHandler = Event -> unit
-type AttributeList = list<string * AttributeSyncAction<string>>
-type EventList = list<string * EventHandler>
+type Modifier<'n> = 'n -> unit
 type NodeBuilderState<'n,'s when 'n :> Node> = option<'n> * option<'s>
 type NodeCheckResult = Keep | DiscardAndCreateNew
 
-// TODO: Hack? Is there a better way?
-type EventManager() =
-    let listeners = Constructors.WeakMap.Create<Node, list<string * EventHandler>>()
-    member _.AddListener(node: Node, evtName, handler) =
-        node.addEventListener(evtName, handler)
-        let registrations =
-            if listeners.has(node)
-                then (evtName, handler) :: listeners.get(node)
-                else [ evtName, handler ]
-        listeners.set(node, registrations) |> ignore
-    member _.RemoveListener(node: Node, evtName) =
-        let registrations = if listeners.has(node) then listeners.get(node) else []
-        for regEvtName,handler in registrations do
-            if regEvtName = evtName then
-                node.removeEventListener(evtName, handler) |> ignore
-        listeners
-            .set(
-                node,
-                registrations |> List.filter (fun (n,h) -> n <> evtName))
-            |> ignore
-
-let eventManager = EventManager()
-
-type NodeBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
+type NodeBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
     inherit VideBuilder()
-    member val Attributes: AttributeList = [] with get, set
-    member val Events: EventList = [] with get, set
+    let mutable modifiers: Modifier<'n> list = []
+    let mutable initOnlyModifiers: Modifier<'n> list = []
+    member this.AddModifier(m: Modifier<'n>) =
+        do modifiers <- m :: modifiers
+        this
+    member this.AddInitOnlyModifier(m: Modifier<'n>) =
+        do initOnlyModifiers <- m :: initOnlyModifiers
+        this
     member this.Run
-        (Vide childVide: Vide<unit,'fs,Context>)
-        : Vide<'n, NodeBuilderState<'n,'fs>, Context>
+        (Vide childVide: Vide<unit,'fs,Controller>)
+        : Vide<'n, NodeBuilderState<'n,'fs>, Controller>
         =
-        let syncAttrs (node: Node) =
-            for name,value in this.Attributes do
-                match value with
-                | Set value ->
-                    let attr = document.createAttribute(name)
-                    attr.value <- value
-                    node.attributes.setNamedItem(attr) |> ignore
-                | Remove ->
-                    node.attributes.removeNamedItem(name) |> ignore
-        let syncEvents (node: Node) =
-            for name,handler in this.Events do
-                 eventManager.RemoveListener(node, name)
-                 eventManager.AddListener(node, name, handler)
-        Vide <| fun s (ctx: Context) ->
+        let runModifiers modifiers node =
+            for x in modifiers do
+                x node
+        Vide <| fun s (controller: Controller) ->
             let s,cs = separateStatePair s
             let node,cs =
                 match s with
                 | None ->
-                    newNode ctx,cs
+                    let newNode,s = createNode controller,cs
+                    do newNode |> runModifiers initOnlyModifiers
+                    newNode,s
                 | Some node ->
                     match checkOrUpdateNode node with
                     | Keep ->
-                        ctx.elementsContext.KeepNode(node)
+                        controller.elementsContext.KeepChild(node)
                         node,cs
                     | DiscardAndCreateNew ->
-                        newNode ctx,None
-            do syncAttrs node
-            do syncEvents node
-            let childCtx =
+                        createNode controller,None
+            do runModifiers modifiers node
+            let childController =
                 {
                     node = node
-                    evaluateView = ctx.evaluateView
+                    evaluateView = controller.evaluateView
                     elementsContext = ElementsContext(node)
                 }
-            let cv,cs = childVide cs childCtx
-            for x in childCtx.elementsContext.GetObsoleteNodes() do
+            let cv,cs = childVide cs childController
+            for x in childController.elementsContext.GetObsoleteChildren() do
                 node.removeChild(x) |> ignore
                 // we don'tneed this? Weak enough?
                 // events.RemoveListener(node)
@@ -167,13 +135,70 @@ type NodeBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
 type RootBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
     inherit NodeBuilder<'n>(newNode, checkOrUpdateNode)
     member inline _.Yield
-        (x: Vide<unit,'s,Context>)
-        : Vide<unit,'s,Context>
+        (x: Vide<unit,'s,Controller>)
+        : Vide<unit,'s,Controller>
         =
         x
 
-let inline startApp (holder: #Node) (v: Vide<_,'s,Context>) onEvaluated =
-    let ctx =
+type HTMLElementBuilder<'n when 'n :> HTMLElement>(elemName: string) =
+    inherit NodeBuilder<'n>(
+        (fun controller -> controller.elementsContext.AddElement<'n>(elemName)),
+        (fun node ->
+            match node.nodeName.Equals(elemName, StringComparison.OrdinalIgnoreCase) with
+            | true -> Keep
+            | false ->
+                // TODO:
+                console.log($"TODO: if/else detection? Expected node name: {elemName}, but was: {node.nodeName}")
+                DiscardAndCreateNew
+        )        
+    )
+
+// open type (why? -> We need always a new builder on property access)
+module internal HtmlBase =
+    // TODO: This is something special
+    let inline nothing () =
+        NodeBuilder(
+            (fun controller -> controller.elementsContext.DummyElement()),
+            (fun node -> Keep))
+    // TODO: This is something special
+    let inline text text =
+        NodeBuilder(
+            (fun controller -> controller.elementsContext.AddText(text)),
+            (fun node ->
+                if typeof<Text>.IsInstanceOfType(node) then
+                    if node.textContent <> text then node.textContent <- text
+                    Keep
+                else
+                    DiscardAndCreateNew
+            ))
+
+type VideBuilder with
+    member inline this.Bind
+        (
+            x: NodeBuilder<'n>,
+            f: 'n -> Vide<'v,'s1,Controller>
+        ) : Vide<'v,NodeBuilderState<'n,unit> option * 's1 option,Controller>
+        =
+        let v = x { () }
+        this.Bind(v, f)
+    member inline _.Yield<'n,'s,'c when 'n :> Node>
+        (v: Vide<'n,'s,'c>)
+        : Vide<unit,'s,'c>
+        =
+        v |> map ignore
+    member inline _.Yield
+        (x: NodeBuilder<'n>)
+        : Vide<unit, NodeBuilderState<'n,unit> ,Controller>
+        =
+        x { () } |> map ignore
+    member inline _.Yield
+        (x: string)
+        : Vide<unit, NodeBuilderState<Text,unit> ,Controller>
+        =
+        HtmlBase.text x { () } |> map ignore
+
+let inline startApp (holder: #Node) (v: Vide<_,'s,Controller>) onEvaluated =
+    let controller =
         {
             node = holder
             evaluateView = fun () -> ()
@@ -182,10 +207,10 @@ let inline startApp (holder: #Node) (v: Vide<_,'s,Context>) onEvaluated =
     let videMachine =
         VideMachine(
             None,
-            ctx,
+            controller,
             RootBuilder((fun _ -> holder), fun _ -> Keep) { v },
             onEvaluated)
-    do ctx.evaluateView <- videMachine.Eval
+    do controller.evaluateView <- videMachine.Eval
     videMachine
 
 let vide = VideBuilder()

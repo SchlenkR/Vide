@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="mdnScrape.fs" />
+    <Compile Include="htmlApiGen.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Feliz" Version="2.3.0" />
+    <PackageReference Include="FSharp.Data" Version="5.0.2" />
+    <PackageReference Include="FSharp.SystemTextJson" Version="1.0.7" />
+    <PackageReference Include="FSharp.Text.TypedTemplateProvider" Version="1.0.0" />
+    <PackageReference Include="FsHttp" Version="10.0.0" />
+  </ItemGroup>
+
+</Project>

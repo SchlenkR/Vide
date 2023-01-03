@@ -2,7 +2,8 @@ module Demos
 
 open Browser
 open Vide
-open type Html
+open type Vide.Html
+
 
 module SyntaxTests =
     let test1 =
@@ -56,7 +57,8 @@ let conditionalAttributes =
             $"Hit me! Count = {count.Value}"
         }
         div .class'("the-message") {
-            span .hidden(count.Value <> 5) {
+            // TODO: hidden not as string; and that won't work
+            span .hidden(if count.Value <> 5 then "true" else "false") {
                 "You have the right to defend yourself!"
             }
         }
@@ -80,6 +82,7 @@ let conditionalIfs =
             p { $"not yet ... with int value {valueInt}" }
     }
 
+// TODO: That is not compiling (anymore; which is ok - document this)
 let conditionalIfElse =
     vide {
         let! count = Mutable.ofValue 0
@@ -88,14 +91,15 @@ let conditionalIfElse =
             $"Hit me! Count = {count.Value}"
         }
 
-        // TODO: That should not be used at all? And: That this seems to work
-        // is only an edge case, because state has same type
-        if count.Value = 5 then
-            div .class'("the-message") { 
-                $"You have the right to defend yourself!" 
-            }
-        else
-            p { $"not yet ..." }
+        "if-else cannot work like that"
+        ////// TODO: That should not be used at all? And: That this seems to work
+        ////// is only an edge case, because state has same type
+        ////if count.Value = 5 then
+        ////    div .class'("the-message") { 
+        ////        $"You have the right to defend yourself!" 
+        ////    }
+        ////else
+        ////    p { $"not yet ..." }
     }
 
 let simpleFor =

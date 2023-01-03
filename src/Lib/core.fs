@@ -2,6 +2,9 @@
 [<AutoOpen>]
 module Vide.Core
 
+// why we return 's option(!!) -> Because of else branch / zero
+type Vide<'v,'s,'c> = Vide of ('s option -> 'c -> 'v * 's option)
+
 let inline internal separateStatePair s =
     match s with
     | None -> None,None
@@ -9,9 +12,6 @@ let inline internal separateStatePair s =
 
 let inline internal log name =
     printfn $"        Exex:   {name}"
-
-// why we return 's option(!!) -> Because of else branch / zero
-type Vide<'v,'s,'c> = Vide of ('s option -> 'c -> 'v * 's option)
 
 type VideBuilder() =
     member inline _.Bind
@@ -28,11 +28,6 @@ type VideBuilder() =
             vres, Some (ms,fs)
     member inline _.Return(x) =
         Vide <| fun s c -> x,None
-    //member inline _.Yield
-    //    (x: Vide<'v,'s,'c>)
-    //    : Vide<'v,'s,'c>
-    //    =
-    //    x
     member inline _.Zero()
         : Vide<unit,'s,'c>
         =
@@ -86,7 +81,7 @@ let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
 type VideMachine<'v,'s,'c>
     (
         initialState,
-        ctx,
+        controller,
         vide: Vide<'v,'s,'c>,
         onEvaluated: 'v -> 's option -> unit
     )
@@ -95,6 +90,6 @@ type VideMachine<'v,'s,'c>
     let mutable state = initialState
     member _.CurrentState with get() = state
     member _.Eval() =
-        let value,newState = vide state ctx
+        let value,newState = vide state controller
         state <- newState
         onEvaluated value state
