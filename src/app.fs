@@ -67,16 +67,22 @@ let demos : list<string * string * (HTMLElement -> unit)> =
             )
 
             (
-                "Direct access to HTMLElement (1)",
+                "Component emitting a value",
                 "TODO",
-                start Demos.directAccessToHtmlElement1
+                start (Demos.visualComponentReturningValues ())
             )
 
-            (
-                "Direct access to HTMLElement (2)",
-                "TODO",
-                start Demos.directAccessToHtmlElement2
-            )
+            //(
+            //    "Direct access to HTMLElement (1)",
+            //    "TODO",
+            //    start Demos.directAccessToHtmlElement1
+            //)
+
+            //(
+            //    "Direct access to HTMLElement (2)",
+            //    "TODO",
+            //    start Demos.directAccessToHtmlElement2
+            //)
         ]
     demos
 

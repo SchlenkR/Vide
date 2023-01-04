@@ -49,16 +49,16 @@ type VideBuilder() =
         f()
     member inline _.Combine
         (
-            Vide a: Vide<'v,'s1,'c>,
-            Vide b: Vide<'v,'s2,'c>
-        ) : Vide<unit,'s1 option * 's2 option,'c>
+            Vide a: Vide<'v1,'s1,'c>,
+            Vide b: Vide<'v2,'s2,'c>
+        ) : Vide<'v2,'s1 option * 's2 option,'c>
         =
         Vide <| fun s c ->
             Debug.print "COMBINE"
             let sa,sb = separateStatePair s
             let va,sa = a sa c
             let vb,sb = b sb c
-            (), Some (sa,sb)
+            vb, Some (sa,sb)
     member inline _.For
         (
             sequence: seq<'a>,
@@ -108,7 +108,7 @@ type VideMachine<'v,'s,'c>
 
 [<AbstractClass>]
 type ControllerBase(evaluateView: unit -> unit) =
-    member val EvaluateView = evaluateView with get, set
+    member val EvaluateView = evaluateView with get,set
 
 module Mutable =
     type MutableValue<'a>(init: 'a) =

@@ -1,23 +1,16 @@
 module Demos
 
-open Browser
 open Vide
 open type Vide.Html
 
-
 let helloWorld =
-    vide {
-        text "Hello World"
-    }
+    vide { "Hello World" }
 
 let counter =
     vide {
         let! count = Mutable.ofValue 0
 
-        div {
-            text $"Count = {count.Value}"
-        }
-
+        div { $"Count = {count.Value}" }
         button.onclick(fun _ -> count -= 1) { "dec" }
         button.onclick(fun _ -> count += 1) { "inc" }
     }
@@ -121,43 +114,56 @@ let statefulFor =
 
                 let! count = Mutable.ofValue 0
                 button.onclick(fun _ -> count -= 1) { "dec" }
-                text $"{count.Value}  "
+                $"{count.Value}  "
                 button.onclick(fun _ -> count += 1) { "inc" }
         }
     }
 
-let directAccessToHtmlElement1 =
-    vide {
-        let! countDivHtmlElement = 
-            div { "Hello" }
-        
-        // we need to yield at least nothing
-        nothing
-    }
-
-let directAccessToHtmlElement2 =
-    vide {
-        let! count = Mutable.ofValue 0
-
-        // TODO: Control what to emit
-        // TODO: this looks strange: yielding + binding. Provide a "onRender" mechanism o.ä.
-        let! countDivHtmlElement = 
-            div {
-                text $"Count = {count.Value}"
-            }
-        do countDivHtmlElement.className <- "bam"
-
-        // TODO: should also work with builder (without converting to Vide)?
-        // TODO: div {()} gives ValueRestriction (generally {()} or () is problematic)
-        //let! emptyDivElement = div { nothing }
-        let! emptyDivElement = div
-        do emptyDivElement.className <- "bam2"
-
-        p {
-            div
+// TODO: If that's not a function, we will have som val restr issues. Examine those!
+let visualComponentReturningValues () =
+    let visualCounter =
+        vide {
+            let! count = Mutable.ofValue 0
+            button.onclick(fun _ -> count -= 1) { "dec" }
+            button.onclick(fun _ -> count += 1) { "inc" }
+            return count.Value
         }
-        span
+
+    vide {
+        let! count = visualCounter
+        p { $"COUNT = {count}"}
     }
+
+//let directAccessToHtmlElement1 =
+//    vide {
+//        let! countDivHtmlElement = 
+//            div { "Hello" }
+        
+//        // we need to yield at least nothing
+//        nothing
+//    }
+
+//let directAccessToHtmlElement2 =
+//    vide {
+//        let! count = Mutable.ofValue 0
+
+//        // TODO: Control what to emit
+//        // TODO: this looks strange: yielding + binding. Provide a "onRender" mechanism o.ä.
+//        let! countDivHtmlElement = 
+//            div { $"Count = {count.Value}" }
+//        do countDivHtmlElement.className <- "bam"
+
+//        // TODO: should also work with builder (without converting to Vide)?
+//        // TODO: div {()} gives ValueRestriction (generally {()} or () is problematic)
+//        //let! emptyDivElement = div { nothing }
+//        let! emptyDivElement = div
+//        do emptyDivElement.className <- "bam2"
+
+//        p {
+//            div
+//        }
+//        span
+//    }
 
 //let asyncSample =
 //    vide {
@@ -179,7 +185,7 @@ let directAccessToHtmlElement2 =
 
 //                let! count = Mutable.ofValue 0
 //                button.onclick(fun _ -> count -= 1) { "dec" }
-//                text $"{count.Value}  "
+//                $"{count.Value}  "
 //                button.onclick(fun _ -> count += 1) { "inc" }
 //        }
 //    }
