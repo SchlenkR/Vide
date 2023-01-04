@@ -2,7 +2,7 @@
 
 .container {
     display: grid;
-    grid-template-columns: 300px auto;
+    grid-template-columns: 350px auto;
     gap: 50px;
 }
 
@@ -13,6 +13,11 @@
     padding: 10px;
     padding-right: 20px;
     border-right: 1px solid black;
+}
+
+#menu button {
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 #innerDemoHost div {

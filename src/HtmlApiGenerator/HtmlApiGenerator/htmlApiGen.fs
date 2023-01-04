@@ -18,9 +18,9 @@ module HtmlElementBuilders =
     {{for elem in elements}}
     type {{elem.typeName}}() =
         inherit HTMLElementBuilder<{{elem.domInterfaceName}}>("{{elem.tagName}}")
-        {{for attr in elem.attributes}}member this.{{attr.memberName}}(value: {{attr.typ}}) = this.AddModifier(fun x -> x.setAttribute("{{attr.name}}", value{{attr.toString}}))
+        {{for attr in elem.attributes}}member this.{{attr.memberName}}(value: {{attr.typ}}) = this.OnEval(fun x -> x.setAttribute("{{attr.name}}", value{{attr.toString}}))
         {{end}}
-        {{for evt in elem.events}}member this.{{evt.name}}(handler) = this.AddInitOnlyModifier(fun x -> x.{{evt.name}} <- handler)
+        {{for evt in elem.events}}member this.{{evt.name}}(handler) = this.OnInit(fun x -> x.{{evt.name}} <- handler)
         {{end}}
     {{end}}
 

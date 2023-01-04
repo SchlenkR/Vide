@@ -53,31 +53,30 @@ type NodeBuilder<'n when 'n :> Node>
         checkOrUpdateNode: 'n -> NodeCheckResult
     ) =
     inherit VideBuilder()
-    member val Modifiers: Modifier<'n> list = [] with get,set
-    member val InitOnlyModifiers: Modifier<'n> list = [] with get,set
+    let mutable modifiers: Modifier<'n> list = []
+    let mutable initOnlyModifiers: Modifier<'n> list = []
     //member _.CreateNode = createNode
     //member _.CheckOrUpdateNode = checkOrUpdateNode
-    member this.AddModifier(m: Modifier<'n>) =
-        do this.Modifiers <- m :: this.Modifiers
+    member inline this.OnEval([<InlineIfLambda>] m: Modifier<'n>) =
+        do modifiers <- m :: modifiers
         this
-    member this.AddInitOnlyModifier(m: Modifier<'n>) =
-        do this.InitOnlyModifiers <- m :: this.InitOnlyModifiers
+    member inline this.OnInit([<InlineIfLambda>] m: Modifier<'n>) =
+        do initOnlyModifiers <- m :: initOnlyModifiers
         this
-    member this.Run
+    member _.Run
         (Vide childVide: Vide<'v,'fs,FableController>)
-        : Vide<_, NodeBuilderState<'n,'fs>, FableController>
+        : Vide<'v, NodeBuilderState<'n,'fs>, FableController>
         =
-        let runModifiers modifiers node =
-            for x in modifiers do
-                x node
         Vide <| fun s (controller: FableController) ->
             Debug.print "RUN:NodeBuilder"
+            let inline runModifiers modifiers node =
+                for m in modifiers do m node
             let s,cs = separateStatePair s
             let node,cs =
                 match s with
                 | None ->
                     let newNode,s = createNode controller,cs
-                    do newNode |> runModifiers this.InitOnlyModifiers
+                    do runModifiers initOnlyModifiers newNode
                     newNode,s
                 | Some node ->
                     match checkOrUpdateNode node with
@@ -86,7 +85,7 @@ type NodeBuilder<'n when 'n :> Node>
                         node,cs
                     | DiscardAndCreateNew ->
                         createNode controller,None
-            do runModifiers this.Modifiers node
+            do runModifiers modifiers node
             let childController = FableController(node, controller.EvaluateView, ElementsContext(node))
             let cv,cs = childVide cs childController
             for x in childController.ElementsContext.GetObsoleteChildren() do
