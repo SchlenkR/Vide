@@ -150,7 +150,7 @@ let directAccessToHtmlElement2 =
         // TODO: should also work with builder (without converting to Vide)?
         // TODO: div {()} gives ValueRestriction (generally {()} or () is problematic)
         //let! emptyDivElement = div { nothing }
-        let! emptyDivElement = div { nothing }
+        let! emptyDivElement = div
         do emptyDivElement.className <- "bam2"
 
         p {

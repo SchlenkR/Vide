@@ -24,25 +24,22 @@ type VideBuilder() =
             f: 'v1 -> Vide<'v2,'s2,'c>
         ) : Vide<'v2,'s1 option * 's2 option,'c>
         =
-        Debug.print "BIND-1 (build)"
         Vide <| fun s c ->
-            Debug.print "BIND (run)"
+            Debug.print "BIND"
             let ms,fs = separateStatePair s
             let mv,ms = m ms c
             let (Vide v) = f mv
             let vres,fs = v fs c
             vres, Some (ms,fs)
     member inline _.Return(x) =
-        Debug.print "RETURN (build)"
         Vide <| fun s c ->
-            Debug.print "RETURN (run)"
+            Debug.print "RETURN"
             x,None
     member inline _.Zero()
         : Vide<unit,'s,'c>
         =
-        Debug.print "ZERO (build)"
         Vide <| fun s c ->
-            Debug.print "ZERO (run)"
+            Debug.print "ZERO"
             (), None
     member inline _.Delay
         (f: unit -> Vide<'v,'s,'c>)
@@ -56,9 +53,8 @@ type VideBuilder() =
             Vide b: Vide<'v,'s2,'c>
         ) : Vide<unit,'s1 option * 's2 option,'c>
         =
-        Debug.print "COMBINE (build)"
         Vide <| fun s c ->
-            Debug.print "COMBINE (run)"
+            Debug.print "COMBINE"
             let sa,sb = separateStatePair s
             let va,sa = a sa c
             let vb,sb = b sb c
@@ -69,9 +65,8 @@ type VideBuilder() =
             body: 'a -> Vide<unit,'s,'c>
         ) : Vide<unit, Map<'a, 's option>,'c>
         = 
-        Debug.print "FOR (build)"
         Vide <| fun s c ->
-            Debug.print "FOR (run)"
+            Debug.print "FOR"
             let mutable currMap = s |> Option.defaultValue Map.empty
             let res =
                 [ for x in sequence do

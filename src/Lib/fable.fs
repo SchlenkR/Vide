@@ -61,12 +61,11 @@ type NodeBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
         (Vide childVide: Vide<unit,'fs,FableController>)
         : Vide<'n, NodeBuilderState<'n,'fs>, FableController>
         =
-        Debug.print "RUN:NodeBuilder (build)"
         let runModifiers modifiers node =
             for x in modifiers do
                 x node
         Vide <| fun s (controller: FableController) ->
-            Debug.print "RUN:NodeBuilder (run)"
+            Debug.print "RUN:NodeBuilder"
             let s,cs = separateStatePair s
             let node,cs =
                 match s with
@@ -143,7 +142,6 @@ type VideBuilder with
             f: 'n -> Vide<'v,'s,FableController>
         ) : Vide<'v,NodeBuilderState<'n,unit> option * 's option, FableController>
         =
-        Debug.print "BIND-2 (build)"
         let v = x { () }
         this.Bind(v, f)
     member inline _.Yield<'n,'s,'c when 'n :> Node>
