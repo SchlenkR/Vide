@@ -5,7 +5,6 @@
   <ItemGroup>
     <Compile Include="Lib\core.fs" />
     <Compile Include="Lib\fable.fs" />
-    <Compile Include="Lib\htmlApi.fs" />
     <Compile Include="Lib\htmlApi2.fs" />
     <Compile Include="demos.fs" />
     <Compile Include="app.fs" />

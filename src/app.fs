@@ -3,7 +3,9 @@ module App
 open Browser.Dom
 open Browser.Types
 open Fable.Core.JS
-open Vide.Fable
+open Vide
+
+do Debug.printBuilderMethodInvocations <- true
 
 let mutable currentState = None
 
@@ -12,8 +14,8 @@ let demos : list<string * string * (HTMLElement -> unit)> =
         let onEvaluated _ state =
             currentState <- state |> Option.map (fun s -> s :> obj)
             console.log("Evaluation done.")
-        let videMachine = startApp host demo onEvaluated
-        videMachine.Eval()
+        let videMachine = App.start host demo onEvaluated
+        videMachine.EvaluateView()
     let demos =
         [
             (
@@ -65,9 +67,15 @@ let demos : list<string * string * (HTMLElement -> unit)> =
             )
 
             (
-                "Syntax_Test1",
+                "Direct access to HTMLElement (1)",
                 "TODO",
-                start Demos.SyntaxTests.test1
+                start Demos.directAccessToHtmlElement1
+            )
+
+            (
+                "Direct access to HTMLElement (2)",
+                "TODO",
+                start Demos.directAccessToHtmlElement2
             )
         ]
     demos
@@ -77,7 +85,8 @@ let demoHost = document.getElementById("demo")
 for title,desc,runDemo in demos do
     let btn = document.createElement("button") :?> HTMLButtonElement
     btn.innerText <- title
-    btn.addEventListener("click", fun _ ->
+    btn.onclick <- fun _ ->
+        do console.clear()
         let innerDemoHostId = "innerDemoHost"
         demoHost.innerHTML <-
             $"""
@@ -87,7 +96,6 @@ for title,desc,runDemo in demos do
             """
         let innerDemoHost = demoHost.querySelector($"#{innerDemoHostId}") :?> HTMLElement
         runDemo innerDemoHost
-    )
     menu.appendChild(btn) |> ignore
 
 document.getElementById("logState").onclick <- fun _ ->

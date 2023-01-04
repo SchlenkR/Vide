@@ -15,12 +15,15 @@ module NodeExt =
         let idOrDefault = try node.attributes.getNamedItem("id").value with _ -> "--"
         $"<{node.nodeName} id='{idOrDefault}'>"
 
-type Controller =
-    {
-        node: Node
-        mutable evaluateView: unit -> unit
-        mutable elementsContext: ElementsContext
-    }
+type FableController
+    (
+        node: Node, 
+        evaluateView: unit -> unit, 
+        elementsContext: ElementsContext
+    ) =
+    inherit ControllerBase(evaluateView)
+    member _.Node = node
+    member _.ElementsContext = elementsContext
 
 and ElementsContext(parent: Node) =
     let mutable keptChildren = []
@@ -30,8 +33,6 @@ and ElementsContext(parent: Node) =
     let append child =
         do parent.appendChild(child) |> ignore
         child
-    member _.DummyElement() =
-        document.createElement "span"
     member _.AddElement<'n when 'n :> HTMLElement>(tagName: string) =
         document.createElement tagName |> memory |> append :?> 'n
     member _.AddText(text: string) =
@@ -41,36 +42,6 @@ and ElementsContext(parent: Node) =
     member _.GetObsoleteChildren() =
         let childNodes = parent.childNodes.ToList()
         childNodes |> List.except keptChildren
-
-module Mutable =
-    type MutableValue<'a>(init: 'a) =
-        let mutable state = init
-        member val EvaluateView = (fun () -> ()) with get,set
-        member this.Set(value) = state <- value; this.EvaluateView()
-        member this.Value
-            with get() = state
-            and set(value) = this.Set(value)
-
-    let inline change op (mutVal: MutableValue<_>) x =
-        mutVal.Value <- op mutVal.Value x
-    
-    let ofValue x =
-        Vide <| fun s (c: Controller) ->
-            let s = s |> Option.defaultWith (fun () -> MutableValue(x))
-            do s.EvaluateView <- c.evaluateView
-            s, Some s
-    
-    //let list x =
-    //    Vide <| fun s (c: Context) ->
-    //        let s = s |> Option.defaultWith (fun () -> MutableValue(x))
-    //        do s.EvaluateView <- c.evaluateView
-    //        s, Some s
-
-let inline ( += ) mutVal x = Mutable.change (+) mutVal x
-let inline ( -= ) mutVal x = Mutable.change (-) mutVal x
-let inline ( *= ) mutVal x = Mutable.change (*) mutVal x
-let inline ( /= ) mutVal x = Mutable.change (/) mutVal x
-let inline ( := ) (mutVal: Mutable.MutableValue<_>) x = mutVal.Value <- x
 
 type Modifier<'n> = 'n -> unit
 type NodeBuilderState<'n,'s when 'n :> Node> = option<'n> * option<'s>
@@ -87,13 +58,15 @@ type NodeBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
         do initOnlyModifiers <- m :: initOnlyModifiers
         this
     member this.Run
-        (Vide childVide: Vide<unit,'fs,Controller>)
-        : Vide<'n, NodeBuilderState<'n,'fs>, Controller>
+        (Vide childVide: Vide<unit,'fs,FableController>)
+        : Vide<'n, NodeBuilderState<'n,'fs>, FableController>
         =
+        Debug.print "RUN:NodeBuilder (build)"
         let runModifiers modifiers node =
             for x in modifiers do
                 x node
-        Vide <| fun s (controller: Controller) ->
+        Vide <| fun s (controller: FableController) ->
+            Debug.print "RUN:NodeBuilder (run)"
             let s,cs = separateStatePair s
             let node,cs =
                 match s with
@@ -104,19 +77,14 @@ type NodeBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
                 | Some node ->
                     match checkOrUpdateNode node with
                     | Keep ->
-                        controller.elementsContext.KeepChild(node)
+                        controller.ElementsContext.KeepChild(node)
                         node,cs
                     | DiscardAndCreateNew ->
                         createNode controller,None
             do runModifiers modifiers node
-            let childController =
-                {
-                    node = node
-                    evaluateView = controller.evaluateView
-                    elementsContext = ElementsContext(node)
-                }
+            let childController = FableController(node, controller.EvaluateView, ElementsContext(node))
             let cv,cs = childVide cs childController
-            for x in childController.elementsContext.GetObsoleteChildren() do
+            for x in childController.ElementsContext.GetObsoleteChildren() do
                 node.removeChild(x) |> ignore
                 // we don'tneed this? Weak enough?
                 // events.RemoveListener(node)
@@ -132,17 +100,9 @@ type NodeBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
 ////        =
 ////        this.SyncNode(childVide) |> map ignore
 
-type RootBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
-    inherit NodeBuilder<'n>(newNode, checkOrUpdateNode)
-    member inline _.Yield
-        (x: Vide<unit,'s,Controller>)
-        : Vide<unit,'s,Controller>
-        =
-        x
-
 type HTMLElementBuilder<'n when 'n :> HTMLElement>(elemName: string) =
     inherit NodeBuilder<'n>(
-        (fun controller -> controller.elementsContext.AddElement<'n>(elemName)),
+        (fun controller -> controller.ElementsContext.AddElement<'n>(elemName)),
         (fun node ->
             match node.nodeName.Equals(elemName, StringComparison.OrdinalIgnoreCase) with
             | true -> Keep
@@ -153,64 +113,74 @@ type HTMLElementBuilder<'n when 'n :> HTMLElement>(elemName: string) =
         )        
     )
 
-// open type (why? -> We need always a new builder on property access)
 module internal HtmlBase =
     // TODO: This is something special
     let inline nothing () =
         NodeBuilder(
-            (fun controller -> controller.elementsContext.DummyElement()),
+            (fun controller -> controller.ElementsContext.AddElement "span"),
             (fun node -> Keep))
     // TODO: This is something special
     let inline text text =
         NodeBuilder(
-            (fun controller -> controller.elementsContext.AddText(text)),
+            (fun controller -> controller.ElementsContext.AddText(text)),
             (fun node ->
                 if typeof<Text>.IsInstanceOfType(node) then
-                    if node.textContent <> text then node.textContent <- text
+                    if node.textContent <> text then
+                        node.textContent <- text
                     Keep
                 else
                     DiscardAndCreateNew
             ))
 
 type VideBuilder with
+    /// This allows constructs like:
+    ///     let! emptyDivElement = div
+    /// What is already allowed is:
+    ///     let! emptyDivElement = div { nothing }
     member inline this.Bind
         (
             x: NodeBuilder<'n>,
-            f: 'n -> Vide<'v,'s1,Controller>
-        ) : Vide<'v,NodeBuilderState<'n,unit> option * 's1 option,Controller>
+            f: 'n -> Vide<'v,'s,FableController>
+        ) : Vide<'v,NodeBuilderState<'n,unit> option * 's option, FableController>
         =
+        Debug.print "BIND-2 (build)"
         let v = x { () }
         this.Bind(v, f)
     member inline _.Yield<'n,'s,'c when 'n :> Node>
         (v: Vide<'n,'s,'c>)
         : Vide<unit,'s,'c>
         =
+        Debug.print "YIELD Vide"
         v |> map ignore
     member inline _.Yield
         (x: NodeBuilder<'n>)
-        : Vide<unit, NodeBuilderState<'n,unit> ,Controller>
+        : Vide<unit, NodeBuilderState<'n,unit>, FableController>
         =
+        Debug.print "YIELD NodeBuilder"
         x { () } |> map ignore
     member inline _.Yield
         (x: string)
-        : Vide<unit, NodeBuilderState<Text,unit> ,Controller>
+        : Vide<unit, NodeBuilderState<Text,unit>, FableController>
         =
+        Debug.print "YIELD string"
         HtmlBase.text x { () } |> map ignore
 
-let inline startApp (holder: #Node) (v: Vide<_,'s,Controller>) onEvaluated =
-    let controller =
-        {
-            node = holder
-            evaluateView = fun () -> ()
-            elementsContext = ElementsContext(holder)
-        }
-    let videMachine =
-        VideMachine(
-            None,
-            controller,
-            RootBuilder((fun _ -> holder), fun _ -> Keep) { v },
-            onEvaluated)
-    do controller.evaluateView <- videMachine.Eval
-    videMachine
-
-let vide = VideBuilder()
+module App =
+    type RootBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
+        inherit NodeBuilder<'n>(newNode, checkOrUpdateNode)
+        member inline _.Yield
+            (x: Vide<unit,'s,FableController>)
+            : Vide<unit,'s,FableController>
+            =
+            x
+    
+    let inline start (holder: #Node) (v: Vide<_,'s,FableController>) onEvaluated =
+        let controller = FableController(holder, (fun () -> ()), ElementsContext(holder))
+        let videMachine =
+            VideMachine(
+                None,
+                controller,
+                RootBuilder((fun _ -> holder), fun _ -> Keep) { v },
+                onEvaluated)
+        do controller.EvaluateView <- videMachine.EvaluateView
+        videMachine

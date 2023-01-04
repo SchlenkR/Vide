@@ -33,3 +33,22 @@
 * Module / NS restructuring
 * Access HTMLElement from builder wirh let! or via map/iter
 * SVG API
+
+
+----------------------------
+
+* onRender (direct html element access), onMount, onUnmount
+* timer
+* async
+    * Retrigger-Verhalten
+
+* components
+!!!!! * returning values from components
+
+
+--------
+
+Docu: We need "nothing" (that's F#)
+    div.className("the-message") {
+        nothing
+    }

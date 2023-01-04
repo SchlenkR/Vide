@@ -36,7 +36,7 @@ type Api = Template<HtmlApiTemplate>
 
 let attrNameCorrections =
     [
-        "class", "class'"
+        "class", "className"
         "type", "type'"
         "as", "as'"
         "default", "default'"
@@ -72,6 +72,72 @@ let elemExcludes =
         "portal"
     ]
 
+let globalEvents =
+    [
+        "onabort"
+        //"onautocomplete"
+        //"onautocompleteerror"
+        "onblur"
+        //"oncancel"
+        "oncanplay"
+        "oncanplaythrough"
+        "onchange"
+        "onclick"
+        //"onclose"
+        "oncontextmenu"
+        "oncuechange"
+        "ondblclick"
+        "ondrag"
+        "ondragend"
+        "ondragenter"
+        "ondragleave"
+        "ondragover"
+        "ondragstart"
+        "ondrop"
+        "ondurationchange"
+        "onemptied"
+        "onended"
+        "onerror"
+        "onfocus"
+        "oninput"
+        //"oninvalid"
+        "onkeydown"
+        "onkeypress"
+        "onkeyup"
+        "onload"
+        "onloadeddata"
+        "onloadedmetadata"
+        "onloadstart"
+        "onmousedown"
+        "onmouseenter"
+        "onmouseleave"
+        "onmousemove"
+        "onmouseout"
+        "onmouseover"
+        "onmouseup"
+        "onmousewheel"
+        "onpause"
+        "onplay"
+        "onplaying"
+        "onprogress"
+        "onratechange"
+        "onreset"
+        //"onresize"
+        "onscroll"
+        "onseeked"
+        "onseeking"
+        "onselect"
+        //"onshow"
+        //"onsort"
+        "onstalled"
+        "onsubmit"
+        "onsuspend"
+        "ontimeupdate"
+        //"ontoggle"
+        "onvolumechange"
+        "onwaiting"
+    ]
+
 let generate (elements: MdnScrape.Element list) = 
     let correctWith altNames name =
         altNames 
@@ -83,9 +149,7 @@ let generate (elements: MdnScrape.Element list) =
         Api.Root(
             [
                 for elem in elements |> List.filter (fun e -> elemExcludes |> List.contains e.name |> not)  do
-                    let events = [
-                        Api.evt("onclick")
-                    ]
+                    let events = globalEvents |> List.map Api.evt
                     let attrs =
                         [ for attr in elem.attrs.attrs |> List.distinctBy (fun a -> a.name) do
                             let memberName = attr.name |> correctWith attrNameCorrections
