@@ -25,7 +25,7 @@ module HtmlElementBuilders =
     {{end}}
 
 type Html =
-    static member inline nothing = HtmlBase.nothing ()
+    static member inline nothing = HtmlBase.nothing
     static member inline text text = HtmlBase.text text
     // ---
     {{for elem in elements}}static member inline {{elem.typeName}} = HtmlElementBuilders.{{elem.tagName}}()

@@ -22,31 +22,34 @@ type FableContext
     ) =
     inherit VideContext(evaluateView)
     let mutable keptChildren = []
-    let memory child =
-        keptChildren <- (child :> Node) :: keptChildren
-        child
-    let append child =
-        do parent.appendChild(child) |> ignore
-        child
+    let keepChild child = keptChildren <- (child :> Node) :: keptChildren
+    let appendToParent child = parent.appendChild(child) |> ignore
     member _.Parent = parent
     member _.AddElement<'n when 'n :> HTMLElement>(tagName: string) =
-        document.createElement tagName |> memory |> append :?> 'n
+        let elem = document.createElement tagName 
+        do elem |> keepChild 
+        do elem |> appendToParent 
+        elem :?> 'n
     member _.AddText(text: string) =
-        document.createTextNode text |> memory |> append
+        let elem = document.createTextNode text 
+        do elem |> keepChild
+        do elem |> appendToParent
+        elem
     member _.KeepChild(child: Node) =
-        child |> memory |> ignore
+        child |> keepChild |> ignore
     member _.GetObsoleteChildren() =
         let childNodes = parent.childNodes.ToList()
         childNodes |> List.except keptChildren
 
 type Modifier<'n> = 'n -> unit
 type NodeBuilderState<'n,'s> = option<'n> * option<'s>
-type NodeCheckResult = Keep | DiscardAndCreateNew
+type ChildAction = Keep | DiscardAndCreateNew
 
+[<AbstractClass>]
 type NodeBuilder<'n when 'n :> Node>
     (
         createNode: FableContext -> 'n,
-        checkOrUpdateNode: 'n -> NodeCheckResult
+        checkOrUpdateNode: 'n -> ChildAction
     ) =
     inherit VideBuilder()
     let mutable modifiers: Modifier<'n> list = []
@@ -67,6 +70,8 @@ type NodeBuilder<'n when 'n :> Node>
                 for m in modifiers do m node
             let s,cs = separateStatePair s
             let node,cs =
+                // Can it happen that s is Some and cs is None? I don't think so.
+                // But: See comment in definition of: Vide.Core.Vide
                 match s with
                 | None ->
                     let newNode,s = createNode ctx,cs
@@ -98,27 +103,27 @@ type HTMLElementBuilder<'n when 'n :> HTMLElement>(elemName: string) =
                 // TODO:
                 console.log($"TODO: if/else detection? Expected node name: {elemName}, but was: {node.nodeName}")
                 DiscardAndCreateNew
-        )        
+        )
     )
 
 module internal HtmlBase =
-    // TODO: This is something special
-    let inline nothing () =
-        NodeBuilder(
-            (fun ctx -> ctx.AddElement "span"),
-            (fun node -> Keep))
-    // TODO: This is something special
+    let inline nothing<'s> = zero<'s,FableContext>
     let inline text text =
-        NodeBuilder(
-            (fun ctx -> ctx.AddText(text)),
-            (fun node ->
-                if typeof<Text>.IsInstanceOfType(node) then
-                    if node.textContent <> text then
-                        node.textContent <- text
-                    Keep
-                else
-                    DiscardAndCreateNew
-            ))
+        Vide <| fun s (ctx: FableContext) ->
+            let createNode () = ctx.AddText(text)
+            Debug.print "RUN:TextBuilder"
+            let node =
+                match s with
+                | None -> createNode ()
+                | Some (node: Text) ->
+                    if typeof<Text>.IsInstanceOfType(node) then
+                        if node.textContent <> text then
+                            node.textContent <- text
+                        ctx.KeepChild(node)
+                        node
+                    else
+                        createNode ()
+            (), Some node
 
 type VideBuilder with
     member inline _.Yield<'v,'s,'c>
@@ -132,17 +137,17 @@ type VideBuilder with
     /// What is already allowed is (because of Run):
     ///     div { nothing }
     member inline _.Yield
-        (nb: NodeBuilder<'n>)
+        (builder: NodeBuilder<'n>)
         : Vide<unit, NodeBuilderState<'n,unit>, FableContext>
         =
         Debug.print "YIELD NodeBuilder"
-        nb { () } |> map ignore
+        builder.Run(builder.Zero()) |> map ignore
     member inline _.Yield
         (s: string)
-        : Vide<unit, NodeBuilderState<Text,unit>, FableContext>
+        : Vide<unit,Text,FableContext>
         =
         Debug.print "YIELD string"
-        HtmlBase.text s { () } |> map ignore
+        HtmlBase.text s
 
 module App =
     type RootBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =

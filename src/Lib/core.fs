@@ -14,8 +14,23 @@ let inline internal separateStatePair s =
     | None -> None,None
     | Some (ms,fs) -> ms,fs
 
-let inline internal log name =
-    printfn $"        Exex:   {name}"
+let preserve x =
+    Vide <| fun s c ->
+        let s = s |> Option.defaultValue x
+        s, Some s
+
+let preserveWith x =
+    Vide <| fun s c ->
+        let s = s |> Option.defaultWith x
+        s, Some s
+
+// TODO: Think about which function is "global" and module-bound
+let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
+    Vide <| fun s c ->
+        let v,s = v s c
+        proj v, s
+
+let inline zero<'s,'c> : Vide<unit,'s,'c> = Vide <| fun s ctx -> (),None
 
 type VideBuilder() =
     member inline _.Bind
@@ -78,22 +93,6 @@ type VideBuilder() =
                 ]
                 |> Map.ofList
             (), Some res
-
-let preserve x =
-    Vide <| fun s c ->
-        let s = s |> Option.defaultValue x
-        s, Some s
-
-let preserveWith x =
-    Vide <| fun s c ->
-        let s = s |> Option.defaultWith x
-        s, Some s
-
-// TODO: Think about which function is "global" and module-bound
-let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
-    Vide <| fun s c ->
-        let v,s = v s c
-        proj v, s
 
 type VideMachine<'v,'s,'c>
     (

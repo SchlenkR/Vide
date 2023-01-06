@@ -7566,7 +7566,7 @@ module HtmlElementBuilders =
     
 
 type Html =
-    static member inline nothing = HtmlBase.nothing ()
+    static member inline nothing = HtmlBase.nothing
     static member inline text text = HtmlBase.text text
     // ---
     static member inline html = HtmlElementBuilders.html()

@@ -5,7 +5,7 @@ open Browser.Types
 open Fable.Core.JS
 open Vide
 
-do Debug.printBuilderMethodInvocations <- true
+do Debug.printBuilderMethodInvocations <- false
 
 let mutable currentState = None
 
