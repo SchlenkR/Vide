@@ -45,7 +45,6 @@ type Modifier<'n> = 'n -> unit
 type NodeBuilderState<'n,'s> = option<'n> * option<'s>
 type ChildAction = Keep | DiscardAndCreateNew
 
-[<AbstractClass>]
 type NodeBuilder<'n when 'n :> Node>
     (
         createNode: FableContext -> 'n,
@@ -150,21 +149,13 @@ type VideBuilder with
         HtmlBase.text s
 
 module App =
-    type RootBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
-        inherit NodeBuilder<'n>(newNode, checkOrUpdateNode)
-        member inline _.Yield
-            (x: Vide<unit,'s,FableContext>)
-            : Vide<unit,'s,FableContext>
-            =
-            x
-    
-    let inline start (holder: #Node) (v: Vide<_,'s,FableContext>) onEvaluated =
+    let inline start (holder: #Node) (v: Vide<'v,'s,FableContext>) onEvaluated =
         let ctx = FableContext(holder, (fun () -> ()))
         let videMachine =
             VideMachine(
                 None,
                 ctx,
-                RootBuilder((fun _ -> holder), fun _ -> Keep) { v },
+                NodeBuilder((fun _ -> holder), fun _ -> Keep) { v },
                 onEvaluated)
         do ctx.EvaluateView <- videMachine.EvaluateView
         videMachine
