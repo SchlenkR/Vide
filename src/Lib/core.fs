@@ -30,7 +30,10 @@ let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
         let v,s = v s c
         proj v, s
 
-let inline zero<'s,'c> : Vide<unit,'s,'c> = Vide <| fun s ctx -> (),None
+let inline ofValue<'v,'s,'c> x : Vide<'v,'s,'c> =
+    Vide <| fun s ctx -> x,None
+
+let inline zero<'s,'c> : Vide<unit,'s,'c> = ofValue ()
 
 type VideBuilder() =
     member inline _.Bind
@@ -46,16 +49,13 @@ type VideBuilder() =
             let (Vide v) = f mv
             let vres,fs = v fs c
             vres, Some (ms,fs)
-    member inline _.Return(x) =
-        Vide <| fun s c ->
-            Debug.print "RETURN"
-            x,None
-    member inline _.Zero()
-        : Vide<unit,'s,'c>
+    member inline _.Return(x: 'v)
+        : Vide<'v,'s,'c> 
         =
-        Vide <| fun s c ->
-            Debug.print "ZERO"
-            (), None
+        ofValue x
+    member inline _.Zero()
+        : Vide<unit,'s,'c> 
+        = zero<'s,'c>
     member inline _.Delay
         (f: unit -> Vide<'v,'s,'c>)
         : Vide<'v,'s,'c>
