@@ -84,6 +84,11 @@ let preserve x =
         let s = s |> Option.defaultValue x
         s, Some s
 
+let preserveWith x =
+    Vide <| fun s c ->
+        let s = s |> Option.defaultWith x
+        s, Some s
+
 // TODO: Think about which function is "global" and module-bound
 let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
     Vide <| fun s c ->
@@ -93,7 +98,7 @@ let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
 type VideMachine<'v,'s,'c>
     (
         initialState,
-        controller,
+        ctx,
         vide: Vide<'v,'s,'c>,
         onEvaluated: 'v -> 's option -> unit
     )
@@ -102,12 +107,12 @@ type VideMachine<'v,'s,'c>
     let mutable state = initialState
     member _.CurrentState with get() = state
     member _.EvaluateView() =
-        let value,newState = vide state controller
+        let value,newState = vide state ctx
         state <- newState
         onEvaluated value state
 
 [<AbstractClass>]
-type ControllerBase(evaluateView: unit -> unit) =
+type VideContext(evaluateView: unit -> unit) =
     member val EvaluateView = evaluateView with get,set
 
 module Mutable =
@@ -123,7 +128,7 @@ module Mutable =
         mutVal.Value <- op mutVal.Value x
     
     let ofValue x =
-        Vide <| fun s (c: #ControllerBase) ->
+        Vide <| fun s (c: #VideContext) ->
             let s = s |> Option.defaultWith (fun () -> MutableValue(x))
             do s.EvaluateView <- c.EvaluateView
             s, Some s

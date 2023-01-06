@@ -1,7 +1,44 @@
 module Demos
 
+open Browser
+open Browser.Types
 open Vide
 open type Vide.Html
+
+type VideBuilder with
+    member _.x = ()
+    //[<CustomOperation("clear")>]
+    //member this.Clear (Vide vide) =
+    //    Vide <| fun s (ctx: FableContext) ->
+    //        Debug.print "CLEAR"
+    //        vide None ctx
+
+//    member inline _.Bind
+//        (
+//            p: JS.Promise<'v1>,
+//            f: 'v1 -> Vide<'v2,'s2,'c>
+//        ) : Vide<'v2,'s1 option * 's2 option,'c>
+//        =
+//        Vide <| fun s c ->
+//            Debug.print "BIND"
+//            let ms,fs = separateStatePair s
+//            let mv,ms = m ms c
+//            let (Vide v) = f mv
+//            let vres,fs = v fs c
+//            vres, Some (ms,fs)
+
+let asyncSample =
+    vide {
+        "loading (please wait a moment) ..." 
+        
+        //clear
+        ////let! resProm = preserveWith (fun () -> promise {
+        ////    do! Promise.sleep 5000
+        ////    return! Promise.lift "Some awaited value"
+        ////})
+
+        //$"Done ;) ({res})" 
+    }
 
 let helloWorld =
     vide { "Hello World" }
@@ -146,28 +183,3 @@ let directAccessToHtmlElement =
             "I'm the OnInit div"
         }
     }
-
-//let asyncSample =
-//    vide {
-//        button.onclick(fun _ -> count += 1) { "wair 5 seconds, then " }
-
-//        let! items = Mutable.ofValue []
-//        let add1 _ = items := items.Value @ [nextNum()]
-//        let add100 _ = items := items.Value @ [ for _ in 0..100 do nextNum() ]
-//        let removeAll _ = items := []
-
-//        button.onclick(add1) { "Add One" }
-//        button.onclick(add100) { "Add 100" }
-//        button.onclick(removeAll) { "Remove All" }
-        
-//        for x in items.Value do
-//            div.className("card") {
-//                let removeMe _ = items := items.Value |> List.except [x]
-//                button.onclick(removeMe) { $"Remove {x}" }
-
-//                let! count = Mutable.ofValue 0
-//                button.onclick(fun _ -> count -= 1) { "dec" }
-//                $"{count.Value}  "
-//                button.onclick(fun _ -> count += 1) { "inc" }
-//        }
-//    }

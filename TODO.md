@@ -41,10 +41,10 @@
 * timer
 * async
     * Retrigger-Verhalten
-
+    * CancellationToken
 * components
 !!!!! * returning values from components
-
+* reset component / state from outside
 
 --------
 

@@ -13,5 +13,6 @@
     <PackageReference Include="Fable.Core" Version="3.7.1" />
     <PackageReference Include="Fable.Browser.Css" Version="2.2.0" />
     <PackageReference Include="Fable.Browser.Dom" Version="2.10.0" />
+    <PackageReference Include="Fable.Promise" Version="2.2.2" />
   </ItemGroup>
 </Project>

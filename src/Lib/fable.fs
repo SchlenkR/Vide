@@ -15,17 +15,12 @@ module NodeExt =
         let idOrDefault = try node.attributes.getNamedItem("id").value with _ -> "--"
         $"<{node.nodeName} id='{idOrDefault}'>"
 
-type FableController
+type FableContext
     (
-        node: Node, 
-        evaluateView: unit -> unit, 
-        elementsContext: ElementsContext
+        parent: Node, 
+        evaluateView: unit -> unit
     ) =
-    inherit ControllerBase(evaluateView)
-    member _.Node = node
-    member _.ElementsContext = elementsContext
-
-and ElementsContext(parent: Node) =
+    inherit VideContext(evaluateView)
     let mutable keptChildren = []
     let memory child =
         keptChildren <- (child :> Node) :: keptChildren
@@ -33,6 +28,7 @@ and ElementsContext(parent: Node) =
     let append child =
         do parent.appendChild(child) |> ignore
         child
+    member _.Parent = parent
     member _.AddElement<'n when 'n :> HTMLElement>(tagName: string) =
         document.createElement tagName |> memory |> append :?> 'n
     member _.AddText(text: string) =
@@ -44,30 +40,28 @@ and ElementsContext(parent: Node) =
         childNodes |> List.except keptChildren
 
 type Modifier<'n> = 'n -> unit
-type NodeBuilderState<'n,'s when 'n :> Node> = option<'n> * option<'s>
+type NodeBuilderState<'n,'s> = option<'n> * option<'s>
 type NodeCheckResult = Keep | DiscardAndCreateNew
 
 type NodeBuilder<'n when 'n :> Node>
     (
-        createNode: FableController -> 'n,
+        createNode: FableContext -> 'n,
         checkOrUpdateNode: 'n -> NodeCheckResult
     ) =
     inherit VideBuilder()
     let mutable modifiers: Modifier<'n> list = []
     let mutable initOnlyModifiers: Modifier<'n> list = []
-    //member _.CreateNode = createNode
-    //member _.CheckOrUpdateNode = checkOrUpdateNode
-    member inline this.OnEval([<InlineIfLambda>] m: Modifier<'n>) =
+    member this.OnEval(m: Modifier<'n>) =
         do modifiers <- m :: modifiers
         this
-    member inline this.OnInit([<InlineIfLambda>] m: Modifier<'n>) =
+    member this.OnInit(m: Modifier<'n>) =
         do initOnlyModifiers <- m :: initOnlyModifiers
         this
     member _.Run
-        (Vide childVide: Vide<'v,'fs,FableController>)
-        : Vide<'v, NodeBuilderState<'n,'fs>, FableController>
+        (Vide childVide: Vide<'v,'fs,FableContext>)
+        : Vide<'v, NodeBuilderState<'n,'fs>, FableContext>
         =
-        Vide <| fun s (controller: FableController) ->
+        Vide <| fun s (ctx: FableContext) ->
             Debug.print "RUN:NodeBuilder"
             let inline runModifiers modifiers node =
                 for m in modifiers do m node
@@ -75,38 +69,28 @@ type NodeBuilder<'n when 'n :> Node>
             let node,cs =
                 match s with
                 | None ->
-                    let newNode,s = createNode controller,cs
+                    let newNode,s = createNode ctx,cs
                     do runModifiers initOnlyModifiers newNode
                     newNode,s
                 | Some node ->
                     match checkOrUpdateNode node with
                     | Keep ->
-                        controller.ElementsContext.KeepChild(node)
+                        ctx.KeepChild(node)
                         node,cs
                     | DiscardAndCreateNew ->
-                        createNode controller,None
+                        createNode ctx,None
             do runModifiers modifiers node
-            let childController = FableController(node, controller.EvaluateView, ElementsContext(node))
-            let cv,cs = childVide cs childController
-            for x in childController.ElementsContext.GetObsoleteChildren() do
+            let childCtx = FableContext(node, ctx.EvaluateView)
+            let cv,cs = childVide cs childCtx
+            for x in childCtx.GetObsoleteChildren() do
                 node.removeChild(x) |> ignore
                 // we don'tneed this? Weak enough?
                 // events.RemoveListener(node)
             cv, Some (Some node, cs)
 
-// we always use EmitBuilder and "map ignore" the result in yield or use it in bind
-////type DiscardNodeBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
-////    inherit NodeBaseBuilder<'n>(newNode, checkOrUpdateNode)
-////    member this.Run
-////        (
-////            childVide: Vide<unit,'fs,Context>
-////        ) : Vide<unit, NodeBuilderState<'fs, 'n>, Context>
-////        =
-////        this.SyncNode(childVide) |> map ignore
-
 type HTMLElementBuilder<'n when 'n :> HTMLElement>(elemName: string) =
     inherit NodeBuilder<'n>(
-        (fun controller -> controller.ElementsContext.AddElement<'n>(elemName)),
+        (fun ctx -> ctx.AddElement<'n>(elemName)),
         (fun node ->
             match node.nodeName.Equals(elemName, StringComparison.OrdinalIgnoreCase) with
             | true -> Keep
@@ -121,12 +105,12 @@ module internal HtmlBase =
     // TODO: This is something special
     let inline nothing () =
         NodeBuilder(
-            (fun controller -> controller.ElementsContext.AddElement "span"),
+            (fun ctx -> ctx.AddElement "span"),
             (fun node -> Keep))
     // TODO: This is something special
     let inline text text =
         NodeBuilder(
-            (fun controller -> controller.ElementsContext.AddText(text)),
+            (fun ctx -> ctx.AddText(text)),
             (fun node ->
                 if typeof<Text>.IsInstanceOfType(node) then
                     if node.textContent <> text then
@@ -137,35 +121,25 @@ module internal HtmlBase =
             ))
 
 type VideBuilder with
-    /// This allows constructs like:
-    ///     let! emptyDivElement = div
-    /// What is already allowed is (because of Run):
-    ///     let! emptyDivElement = div { nothing }
-    //member inline this.Bind
-    //    (
-    //        x: NodeBuilder<'n>,
-    //        f: 'n -> Vide<'v,'s,FableController>
-    //    ) : Vide<'v,NodeBuilderState<'n,unit> option * 's option, FableController>
-    //    =
-    //    let v = x { () }
-    //    this.Bind(v, f)
-    //member inline _.Yield<'n,'s,'c when 'n :> Node>
     member inline _.Yield<'v,'s,'c>
         (v: Vide<'v,'s,'c>)
         : Vide<unit,'s,'c>
         =
         Debug.print "YIELD Vide"
         v |> map ignore
-    /// Same explanation as of Bind (see above)
+    /// This allows constructs like:
+    ///     div
+    /// What is already allowed is (because of Run):
+    ///     div { nothing }
     member inline _.Yield
         (nb: NodeBuilder<'n>)
-        : Vide<unit, NodeBuilderState<'n,unit>, FableController>
+        : Vide<unit, NodeBuilderState<'n,unit>, FableContext>
         =
         Debug.print "YIELD NodeBuilder"
         nb { () } |> map ignore
     member inline _.Yield
         (s: string)
-        : Vide<unit, NodeBuilderState<Text,unit>, FableController>
+        : Vide<unit, NodeBuilderState<Text,unit>, FableContext>
         =
         Debug.print "YIELD string"
         HtmlBase.text s { () } |> map ignore
@@ -174,18 +148,18 @@ module App =
     type RootBuilder<'n when 'n :> Node>(newNode, checkOrUpdateNode) =
         inherit NodeBuilder<'n>(newNode, checkOrUpdateNode)
         member inline _.Yield
-            (x: Vide<unit,'s,FableController>)
-            : Vide<unit,'s,FableController>
+            (x: Vide<unit,'s,FableContext>)
+            : Vide<unit,'s,FableContext>
             =
             x
     
-    let inline start (holder: #Node) (v: Vide<_,'s,FableController>) onEvaluated =
-        let controller = FableController(holder, (fun () -> ()), ElementsContext(holder))
+    let inline start (holder: #Node) (v: Vide<_,'s,FableContext>) onEvaluated =
+        let ctx = FableContext(holder, (fun () -> ()))
         let videMachine =
             VideMachine(
                 None,
-                controller,
+                ctx,
                 RootBuilder((fun _ -> holder), fun _ -> Keep) { v },
                 onEvaluated)
-        do controller.EvaluateView <- videMachine.EvaluateView
+        do ctx.EvaluateView <- videMachine.EvaluateView
         videMachine
