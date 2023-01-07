@@ -24,11 +24,11 @@ let demos : list<string * string * (HTMLElement -> unit)> =
                 start Demos.asyncHelloWorld
             )
 
-            (
-                "Async (trigger)",
-                "TODO",
-                start Demos.asyncTrigger
-            )
+            //(
+            //    "Async (trigger)",
+            //    "TODO",
+            //    start Demos.asyncTrigger
+            //)
 
             (
                 "Hello World",

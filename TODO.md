@@ -44,6 +44,7 @@
     * CancellationToken
     * Error handling
     * Timeouts
+    * async button ("wait for click")
 * components
 !!!!! * returning values from components
 * reset component / state from outside

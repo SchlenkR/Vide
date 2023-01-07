@@ -6,15 +6,6 @@ open Browser.Types
 open Vide
 open System
 
-type NodeList with 
-    member this.ToSeq() = seq { for i in 0 .. this.length-1 do this.Item i }
-    member this.ToList() = this.ToSeq() |> Seq.toList
-
-module NodeExt =
-    let displayString (node: Node) =
-        let idOrDefault = try node.attributes.getNamedItem("id").value with _ -> "--"
-        $"<{node.nodeName} id='{idOrDefault}'>"
-
 type FableContext
     (
         parent: Node, 
@@ -38,7 +29,9 @@ type FableContext
     member _.KeepChild(child: Node) =
         child |> keepChild |> ignore
     member _.GetObsoleteChildren() =
-        let childNodes = parent.childNodes.ToList()
+        let childNodes =
+            let nodes = parent.childNodes
+            [ for i in 0 .. nodes.length-1 do nodes.Item i ]
         childNodes |> List.except keptChildren
 
 type Modifier<'n> = 'n -> unit

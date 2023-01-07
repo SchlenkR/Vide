@@ -3,6 +3,8 @@ module Demos
 open Vide
 open type Vide.Html
 
+type BuilderOperations = | Clear
+
 type ComputationState<'v> =
     {
         prom: Fable.Core.JS.Promise<'v>
@@ -10,14 +12,26 @@ type ComputationState<'v> =
     }
 
 type VideBuilder with
+    member inline _.Yield
+        (op: BuilderOperations) 
+        : Vide<unit,unit,FableContext>
+        =
+        Vide <| fun s ctx ->
+            match op with
+            | Clear -> ctx.Parent.textContent <- ""
+            (),None
+
     // TODO: returning values
-    member inline _.Bind<'v1,'s2,'c when 'c :> VideContext>
+
+    // If Bind is marked inline, runtime errors can occur when using
+    // "do!" or "let! _ =" (seems to be a bug in fable compiler).
+    member _.Bind<'v1,'s2,'c when 'c :> VideContext>
         (
             m: unit -> Fable.Core.JS.Promise<'v1>,
             f: 'v1 -> Vide<unit,'s2,'c>
         ) : Vide<unit, ComputationState<'v1> * 's2 option, 'c>
         =
-        Vide <| fun s c ->
+        Vide <| fun s ctx ->
             let ms,fs =
                 match s with
                 | None ->
@@ -25,7 +39,7 @@ type VideBuilder with
                     let prom = m().``then``(fun res ->
                         do 
                             result.Value <- Some res
-                            c.EvaluateView()
+                            ctx.EvaluateView()
                         res
                     )
                     let comp =
@@ -38,7 +52,7 @@ type VideBuilder with
                     match comp.result.Value with
                     | Some mres ->
                         let (Vide f) = f mres
-                        let fv,fs = f fs c
+                        let fv,fs = f fs ctx
                         comp,fs
                     | None -> comp,fs
             (), Some (ms,fs)
@@ -50,52 +64,52 @@ let asyncHelloWorld =
         let finishedMessage phase res = $"Phase %d{phase}.finished with result = {res}"
 
         p { loadingMessage 1 }
-        
         let! res1 = fun () -> promise {
             do! Promise.sleep waitTimeInMs
             return 42
         }
-
-        //clear
         p { finishedMessage 1 res1 }
+
         p { loadingMessage 2 }
-        
         let! res2 = fun () -> promise {
             do! Promise.sleep waitTimeInMs
             return 187
         }
-
-        //clear
         p { finishedMessage 2 res2 }
+        
+        p { loadingMessage 3 }
+        do! fun () -> Promise.sleep waitTimeInMs
+
+        Clear
         p { "--- END ---" }
     }
 
-let asyncTrigger =
-    vide {
-        let waitTimeInMs = 2000
-        let loadingMessage phase = $"loading phase %d{phase}... please wait {float waitTimeInMs / 1000.0} seconds"
-        let finishedMessage phase res = $"Phase %d{phase}.finished with result = {res}"
+////let asyncTrigger =
+////    vide {
+////        let waitTimeInMs = 2000
+////        let loadingMessage phase = $"loading phase %d{phase}... please wait {float waitTimeInMs / 1000.0} seconds"
+////        let finishedMessage phase res = $"Phase %d{phase}.finished with result = {res}"
 
-        p { loadingMessage 1 }
+////        p { loadingMessage 1 }
         
-        let! res1 = fun () -> promise {
-            do! Promise.sleep waitTimeInMs
-            return 42
-        }
+////        let! res1 = fun () -> promise {
+////            do! Promise.sleep waitTimeInMs
+////            return 42
+////        }
 
-        //clear
-        p { finishedMessage 1 res1 }
-        p { loadingMessage 2 }
+////        //clear
+////        p { finishedMessage 1 res1 }
+////        p { loadingMessage 2 }
         
-        let! res2 = fun () -> promise {
-            do! Promise.sleep waitTimeInMs
-            return 187
-        }
+////        let! res2 = fun () -> promise {
+////            do! Promise.sleep waitTimeInMs
+////            return 187
+////        }
 
-        //clear
-        p { finishedMessage 2 res2 }
-        p { "--- END ---" }
-    }
+////        //clear
+////        p { finishedMessage 2 res2 }
+////        p { "--- END ---" }
+////    }
 
 let helloWorld =
     vide { "Hello World" }

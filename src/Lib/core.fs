@@ -15,20 +15,20 @@ let inline internal separateStatePair s =
 
 // Preserves the first value given and discards subsequent values.
 let preserve x =
-    Vide <| fun s c ->
+    Vide <| fun s ctx ->
         let s = s |> Option.defaultValue x
         s, Some s
 
 let preserveWith x =
-    Vide <| fun s c ->
+    Vide <| fun s ctx ->
         let s = s |> Option.defaultWith x
         s, Some s
 
 module Vide =
     // TODO: Think about which function is "global" and module-bound
     let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
-        Vide <| fun s c ->
-            let v,s = v s c
+        Vide <| fun s ctx ->
+            let v,s = v s ctx
             proj v, s
 
 /// Wraps a value in a Vide, but does not preserve the first value.
@@ -42,20 +42,22 @@ type VideBuilder() =
         (
             Vide m: Vide<'v1,'s1,'c>,
             f: 'v1 -> Vide<'v2,'s2,'c>
-        ) : Vide<'v2,'s1 option * 's2 option,'c>
+        ) 
+        : Vide<'v2,'s1 option * 's2 option,'c>
         =
-        Vide <| fun s c ->
+        Vide <| fun s ctx ->
             Debug.print "BIND"
             let ms,fs = separateStatePair s
-            let mv,ms = m ms c
+            let mv,ms = m ms ctx
             let (Vide f) = f mv
-            let fv,fs = f fs c
+            let fv,fs = f fs ctx
             fv, Some (ms,fs)
     member inline _.Return(x: 'v)
         : Vide<'v,'s,'c> 
         =
         ofValue x
-    member inline _.Zero()
+    member inline _.Zero
+        ()
         : Vide<unit,'s,'c> 
         = zero<'s,'c>
     member inline _.Delay
@@ -68,32 +70,36 @@ type VideBuilder() =
         (
             Vide a: Vide<'unit,'s1,'c>,
             Vide b: Vide<'v2,'s2,'c>
-        ) : Vide<'v2,'s1 option * 's2 option,'c>
+        ) 
+        : Vide<'v2,'s1 option * 's2 option,'c>
         =
-        Vide <| fun s c ->
+        Vide <| fun s ctx ->
             Debug.print "COMBINE"
             let sa,sb = separateStatePair s
-            let va,sa = a sa c
-            let vb,sb = b sb c
+            let va,sa = a sa ctx
+            let vb,sb = b sb ctx
             vb, Some (sa,sb)
     member inline _.For
         (
             input: seq<'a>,
             body: 'a -> Vide<'v,'s,'c>
-        ) : Vide<'v list, Map<'a, 's option>,'c>
+        ) 
+        : Vide<'v list, Map<'a, 's option>,'c>
         = 
-        Vide <| fun s c ->
+        Vide <| fun s ctx ->
             Debug.print "FOR"
             let mutable currMap = s |> Option.defaultValue Map.empty
             let resValues,resStates =
                 [ for x in input do
                     let matchingState = currMap |> Map.tryFind x |> Option.flatten
-                    let v,s = let (Vide v) = body x in v matchingState c
+                    let v,s = let (Vide v) = body x in v matchingState ctx
                     do currMap <- currMap |> Map.remove x
                     v, (x,s)
                 ]
                 |> List.unzip
             resValues, Some (resStates |> Map.ofList)
+
+let vide = VideBuilder()
 
 type VideMachine<'v,'s,'c>
     (
@@ -140,5 +146,3 @@ let inline ( -= ) mutVal x = Mutable.change (-) mutVal x
 let inline ( *= ) mutVal x = Mutable.change (*) mutVal x
 let inline ( /= ) mutVal x = Mutable.change (/) mutVal x
 let inline ( := ) (mutVal: Mutable.MutableValue<_>) x = mutVal.Value <- x
-
-let vide = VideBuilder()
