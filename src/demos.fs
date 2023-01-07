@@ -1,13 +1,57 @@
 module Demos
 
+open System
+open Fable.Core
 open Vide
 open type Vide.Html
+
+type Later<'a>(lazyPromise: unit -> JS.Promise<'a>) =
+    member _.Start(onfulfilled: 'a -> unit, onrejected) =
+        lazyPromise().``then``(onfulfilled, onrejected)
+        |> ignore
+
+// TODO: Docu
+/// Produces cold promises.
+/// Basically a forwarder to Fable's PromiseBuilder, except of Delay and Run.
+type LaterBuilder() =
+    let that = Promise.PromiseBuilder()
+
+    member _.Bind(m, f) = that.Bind(m, f)
+    member _.Combine(pa, pb) = that.Combine(pa, pb)
+    member _.For(seq: _ seq, body) = that.For(seq, body)
+    member _.For(p: JS.Promise<_>, f)= that.For(p, f)
+    member _.While(guard, p) = that.While(guard, p)
+    member _.Return(a) = that.Return(a)
+    member _.ReturnFrom(p) = that.ReturnFrom(p)
+    member _.Zero() = that.Zero()
+    member _.TryFinally(p, compensation) = that.TryFinally(p, compensation)
+    member _.TryWith(p, catchHandler) = that.TryWith(p, catchHandler)
+    member _.Using(resource, binder) = that.Using(resource, binder)
+
+    member _.MergeSources(a, b) = that.MergeSources(a, b)
+    member _.MergeSources3(a, b, c) = that.MergeSources3(a, b, c)
+    member _.MergeSources4(a, b, c, d) = that.MergeSources4(a, b, c, d)
+    member _.MergeSources5(a, b, c, d, e) = that.MergeSources5(a, b, c, d, e)
+    member _.MergeSources6(a, b, c, d, e, f) = that.MergeSources6(a, b, c, d, e, f)
+
+    [<CustomOperation("andFor", IsLikeZip=true)>]
+    member _.Merge(a, b, [<ProjectionParameter>] resultSelector) = that.Merge(a, b, resultSelector)
+
+    // Needed for making promises lazy: ``` later { Promise.sleep 1000 } ```
+    member _.Yield(p: JS.Promise<_>) = that.ReturnFrom(p)
+
+    // Just leave the delayed func.
+    member _.Delay(f: unit -> JS.Promise<'a>) = f
+
+    member _.Run(p) = Later(p)
+
+let later = LaterBuilder()
 
 type BuilderOperations = | Clear
 
 type ComputationState<'v> =
     {
-        prom: Fable.Core.JS.Promise<'v>
+        prom: Later<'v>
         result: Ref<'v option>
     }
 
@@ -27,7 +71,7 @@ type VideBuilder with
     // "do!" or "let! _ =" (seems to be a bug in fable compiler).
     member _.Bind<'v1,'s2,'c when 'c :> VideContext>
         (
-            m: unit -> Fable.Core.JS.Promise<'v1>,
+            m: Later<'v1>,
             f: 'v1 -> Vide<unit,'s2,'c>
         ) : Vide<unit, ComputationState<'v1> * 's2 option, 'c>
         =
@@ -36,15 +80,14 @@ type VideBuilder with
                 match s with
                 | None ->
                     let result = ref None
-                    let prom = m().``then``(fun res ->
-                        do 
+                    do m.Start(
+                        (fun res ->
                             result.Value <- Some res
-                            ctx.EvaluateView()
-                        res
-                    )
+                            ctx.EvaluateView()),
+                        ignore)
                     let comp =
                         { 
-                            prom = prom
+                            prom = m
                             result = result
                         }
                     comp,None
@@ -64,21 +107,21 @@ let asyncHelloWorld =
         let finishedMessage phase res = $"Phase %d{phase}.finished with result = {res}"
 
         p { loadingMessage 1 }
-        let! res1 = fun () -> promise {
+        let! res1 = later {
             do! Promise.sleep waitTimeInMs
             return 42
         }
         p { finishedMessage 1 res1 }
 
         p { loadingMessage 2 }
-        let! res2 = fun () -> promise {
+        let! res2 = later {
             do! Promise.sleep waitTimeInMs
             return 187
         }
         p { finishedMessage 2 res2 }
         
         p { loadingMessage 3 }
-        do! fun () -> Promise.sleep waitTimeInMs
+        do! later { Promise.sleep waitTimeInMs }
 
         Clear
         p { "--- END ---" }
@@ -130,7 +173,7 @@ let conditionalAttributes =
         button.onclick(fun _ -> count += 1) {
             $"Hit me! Count = {count.Value}"
         }
-        "TODO: That doesn't work right now"
+        "TODO: That doesn'a work right now"
         div.className("the-message") {
             nothing
             //span.hidden(count.Value <> 5) {
