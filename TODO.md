@@ -45,6 +45,7 @@
     * Error handling
     * Timeouts
     * async button ("wait for click")
+    * Maybe don't use later/promise, but async because of cancellation
 * components
 !!!!! * returning values from components
 * reset component / state from outside

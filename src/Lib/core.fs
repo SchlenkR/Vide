@@ -24,18 +24,27 @@ let preserveWith x =
         let s = s |> Option.defaultWith x
         s, Some s
 
-module Vide =
-    // TODO: Think about which function is "global" and module-bound
-    let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
-        Vide <| fun s ctx ->
-            let v,s = v s ctx
-            proj v, s
+// TODO: Think about which function is "global" and module-bound
+let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
+    Vide <| fun s ctx ->
+        let v,s = v s ctx
+        proj v, s
 
 /// Wraps a value in a Vide, but does not preserve the first value.
 let inline ofValue<'v,'s,'c> x : Vide<'v,'s,'c> =
     Vide <| fun s ctx -> x,None
 
 let inline zero<'s,'c> : Vide<unit,'s,'c> = ofValue ()
+
+[<AbstractClass>]
+type VideContext(evaluateView: unit -> unit) =
+    member val EvaluateView = evaluateView with get,set
+
+type ComputationState<'v> =
+    {
+        prom: Async<'v>
+        result: Ref<'v option>
+    }
 
 type VideBuilder() =
     member inline _.Bind
@@ -52,6 +61,37 @@ type VideBuilder() =
             let (Vide f) = f mv
             let fv,fs = f fs ctx
             fv, Some (ms,fs)
+    
+    member _.Bind<'v1,'s2,'c when 'c :> VideContext>
+        (
+            m: Async<'v1>,
+            f: 'v1 -> Vide<unit,'s2,'c>
+        ) : Vide<unit, ComputationState<'v1> * 's2 option, 'c>
+        =
+        // If Bind is marked inline, runtime errors can occur when using
+        // "do!" or "let! _ =" (seems to be a bug in fable compiler).
+        Vide <| fun s ctx ->
+            let ms,fs =
+                match s with
+                | None ->
+                    let result = ref None
+                    let onsuccess res =
+                        do result.Value <- Some res
+                        do ctx.EvaluateView()
+                    // TODO: global cancellation handler / ex / cancellation, etc.
+                    let onexception ex = ()
+                    let oncancel ex = ()
+                    Async.StartWithContinuations(m, onsuccess, onexception, oncancel)
+                    { prom = m; result = result }, None
+                | Some (comp,fs) ->
+                    match comp.result.Value with
+                    | Some mres ->
+                        let (Vide f) = f mres
+                        let fv,fs = f fs ctx
+                        comp,fs
+                    | None -> comp,fs
+            (), Some (ms,fs)
+
     member inline _.Return(x: 'v)
         : Vide<'v,'s,'c> 
         =
@@ -116,10 +156,6 @@ type VideMachine<'v,'s,'c>
         let value,newState = vide state ctx
         state <- newState
         onEvaluated value state
-
-[<AbstractClass>]
-type VideContext(evaluateView: unit -> unit) =
-    member val EvaluateView = evaluateView with get,set
 
 module Mutable =
     type MutableValue<'a>(init: 'a) =
