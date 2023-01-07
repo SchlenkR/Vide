@@ -31,12 +31,12 @@ let asyncSample =
     vide {
         "loading (please wait a moment) ..." 
         
-        //clear
-        ////let! resProm = preserveWith (fun () -> promise {
-        ////    do! Promise.sleep 5000
-        ////    return! Promise.lift "Some awaited value"
-        ////})
+        //let! p = async {
+        //    do! Async.Sleep 5000
+        //    return 42
+        //}
 
+        //clear
         //$"Done ;) ({res})" 
     }
 

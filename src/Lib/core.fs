@@ -1,4 +1,3 @@
-
 [<AutoOpen>]
 module Vide.Core
 
@@ -14,6 +13,7 @@ let inline internal separateStatePair s =
     | None -> None,None
     | Some (ms,fs) -> ms,fs
 
+// Preserves the first value given and discards subsequent values.
 let preserve x =
     Vide <| fun s c ->
         let s = s |> Option.defaultValue x
@@ -24,12 +24,14 @@ let preserveWith x =
         let s = s |> Option.defaultWith x
         s, Some s
 
-// TODO: Think about which function is "global" and module-bound
-let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
-    Vide <| fun s c ->
-        let v,s = v s c
-        proj v, s
+module Vide =
+    // TODO: Think about which function is "global" and module-bound
+    let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
+        Vide <| fun s c ->
+            let v,s = v s c
+            proj v, s
 
+/// Wraps a value in a Vide, but does not preserve the first value.
 let inline ofValue<'v,'s,'c> x : Vide<'v,'s,'c> =
     Vide <| fun s ctx -> x,None
 
@@ -64,7 +66,7 @@ type VideBuilder() =
         f()
     member inline _.Combine
         (
-            Vide a: Vide<'v1,'s1,'c>,
+            Vide a: Vide<'unit,'s1,'c>,
             Vide b: Vide<'v2,'s2,'c>
         ) : Vide<'v2,'s1 option * 's2 option,'c>
         =
@@ -76,23 +78,22 @@ type VideBuilder() =
             vb, Some (sa,sb)
     member inline _.For
         (
-            sequence: seq<'a>,
-            body: 'a -> Vide<unit,'s,'c>
-        ) : Vide<unit, Map<'a, 's option>,'c>
+            input: seq<'a>,
+            body: 'a -> Vide<'v,'s,'c>
+        ) : Vide<'v list, Map<'a, 's option>,'c>
         = 
         Vide <| fun s c ->
             Debug.print "FOR"
             let mutable currMap = s |> Option.defaultValue Map.empty
-            let res =
-                [ for x in sequence do
-                    let (Vide v) = body x
+            let resValues,resStates =
+                [ for x in input do
                     let matchingState = currMap |> Map.tryFind x |> Option.flatten
-                    let _,vs = v matchingState c
+                    let v,s = let (Vide v) = body x in v matchingState c
                     do currMap <- currMap |> Map.remove x
-                    x,vs
+                    v, (x,s)
                 ]
-                |> Map.ofList
-            (), Some res
+                |> List.unzip
+            resValues, Some (resStates |> Map.ofList)
 
 type VideMachine<'v,'s,'c>
     (
@@ -122,6 +123,7 @@ module Mutable =
         member this.Value
             with get() = state
             and set(value) = this.Set(value)
+        // TODO: override arithmetic ops
 
     let inline change op (mutVal: MutableValue<_>) x =
         mutVal.Value <- op mutVal.Value x
@@ -138,6 +140,7 @@ module Mutable =
     //        do s.EvaluateView <- c.evaluateView
     //        s, Some s
 
+// TODO: Do I really want this?
 let inline ( += ) mutVal x = Mutable.change (+) mutVal x
 let inline ( -= ) mutVal x = Mutable.change (-) mutVal x
 let inline ( *= ) mutVal x = Mutable.change (*) mutVal x
