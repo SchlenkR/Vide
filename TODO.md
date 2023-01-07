@@ -40,8 +40,10 @@
 * onRender (direct html element access), onMount, onUnmount
 * timer
 * async
-    * Retrigger-Verhalten
+    * Restart- und Retrigger-Verhalten
     * CancellationToken
+    * Error handling
+    * Timeouts
 * components
 !!!!! * returning values from components
 * reset component / state from outside

@@ -19,9 +19,15 @@ let demos : list<string * string * (HTMLElement -> unit)> =
     let demos =
         [
             (
-                "Async",
+                "Async (simple)",
                 "TODO",
-                start Demos.asyncSample
+                start Demos.asyncHelloWorld
+            )
+
+            (
+                "Async (trigger)",
+                "TODO",
+                start Demos.asyncTrigger
             )
 
             (

@@ -1,43 +1,100 @@
 module Demos
 
-open Browser
-open Browser.Types
 open Vide
 open type Vide.Html
 
+type ComputationState<'v> =
+    {
+        prom: Fable.Core.JS.Promise<'v>
+        result: Ref<'v option>
+    }
+
 type VideBuilder with
-    member _.x = ()
-    //[<CustomOperation("clear")>]
-    //member this.Clear (Vide vide) =
-    //    Vide <| fun s (ctx: FableContext) ->
-    //        Debug.print "CLEAR"
-    //        vide None ctx
+    // TODO: returning values
+    member inline _.Bind<'v1,'s2,'c when 'c :> VideContext>
+        (
+            m: unit -> Fable.Core.JS.Promise<'v1>,
+            f: 'v1 -> Vide<unit,'s2,'c>
+        ) : Vide<unit, ComputationState<'v1> * 's2 option, 'c>
+        =
+        Vide <| fun s c ->
+            let ms,fs =
+                match s with
+                | None ->
+                    let result = ref None
+                    let prom = m().``then``(fun res ->
+                        do 
+                            result.Value <- Some res
+                            c.EvaluateView()
+                        res
+                    )
+                    let comp =
+                        { 
+                            prom = prom
+                            result = result
+                        }
+                    comp,None
+                | Some (comp,fs) ->
+                    match comp.result.Value with
+                    | Some mres ->
+                        let (Vide f) = f mres
+                        let fv,fs = f fs c
+                        comp,fs
+                    | None -> comp,fs
+            (), Some (ms,fs)
 
-//    member inline _.Bind
-//        (
-//            p: JS.Promise<'v1>,
-//            f: 'v1 -> Vide<'v2,'s2,'c>
-//        ) : Vide<'v2,'s1 option * 's2 option,'c>
-//        =
-//        Vide <| fun s c ->
-//            Debug.print "BIND"
-//            let ms,fs = separateStatePair s
-//            let mv,ms = m ms c
-//            let (Vide v) = f mv
-//            let vres,fs = v fs c
-//            vres, Some (ms,fs)
-
-let asyncSample =
+let asyncHelloWorld =
     vide {
-        "loading (please wait a moment) ..." 
+        let waitTimeInMs = 2000
+        let loadingMessage phase = $"loading phase %d{phase}... please wait {float waitTimeInMs / 1000.0} seconds"
+        let finishedMessage phase res = $"Phase %d{phase}.finished with result = {res}"
+
+        p { loadingMessage 1 }
         
-        //let! p = async {
-        //    do! Async.Sleep 5000
-        //    return 42
-        //}
+        let! res1 = fun () -> promise {
+            do! Promise.sleep waitTimeInMs
+            return 42
+        }
 
         //clear
-        //$"Done ;) ({res})" 
+        p { finishedMessage 1 res1 }
+        p { loadingMessage 2 }
+        
+        let! res2 = fun () -> promise {
+            do! Promise.sleep waitTimeInMs
+            return 187
+        }
+
+        //clear
+        p { finishedMessage 2 res2 }
+        p { "--- END ---" }
+    }
+
+let asyncTrigger =
+    vide {
+        let waitTimeInMs = 2000
+        let loadingMessage phase = $"loading phase %d{phase}... please wait {float waitTimeInMs / 1000.0} seconds"
+        let finishedMessage phase res = $"Phase %d{phase}.finished with result = {res}"
+
+        p { loadingMessage 1 }
+        
+        let! res1 = fun () -> promise {
+            do! Promise.sleep waitTimeInMs
+            return 42
+        }
+
+        //clear
+        p { finishedMessage 1 res1 }
+        p { loadingMessage 2 }
+        
+        let! res2 = fun () -> promise {
+            do! Promise.sleep waitTimeInMs
+            return 187
+        }
+
+        //clear
+        p { finishedMessage 2 res2 }
+        p { "--- END ---" }
     }
 
 let helloWorld =

@@ -48,9 +48,9 @@ type VideBuilder() =
             Debug.print "BIND"
             let ms,fs = separateStatePair s
             let mv,ms = m ms c
-            let (Vide v) = f mv
-            let vres,fs = v fs c
-            vres, Some (ms,fs)
+            let (Vide f) = f mv
+            let fv,fs = f fs c
+            fv, Some (ms,fs)
     member inline _.Return(x: 'v)
         : Vide<'v,'s,'c> 
         =
@@ -133,12 +133,6 @@ module Mutable =
             let s = s |> Option.defaultWith (fun () -> MutableValue(x))
             do s.EvaluateView <- c.EvaluateView
             s, Some s
-    
-    //let list x =
-    //    Vide <| fun s (c: Context) ->
-    //        let s = s |> Option.defaultWith (fun () -> MutableValue(x))
-    //        do s.EvaluateView <- c.evaluateView
-    //        s, Some s
 
 // TODO: Do I really want this?
 let inline ( += ) mutVal x = Mutable.change (+) mutVal x
