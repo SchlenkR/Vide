@@ -143,13 +143,11 @@ type VideBuilder with
         text s
 
 module App =
-    let inline private build (host: #Node) (content: Vide<'v,'s,FableContext>) =
+    let inline doCreate appCtor (host: #Node) (content: Vide<'v,'s,FableContext>) onEvaluated =
         let content = NodeBuilder((fun _ -> host), fun _ -> Keep) { content }
         let ctxCtor = fun eval -> FableContext(host, eval)
-        content,ctxCtor
+        appCtor content ctxCtor onEvaluated
     let createFable host content onEvaluated =
-        let content,ctxCtor = build host content
-        App.create content ctxCtor onEvaluated
+        doCreate App.create host content onEvaluated
     let createFableWithObjState host content onEvaluated =
-        let content,ctxCtor = build host content
-        App.createWithObjState content ctxCtor onEvaluated
+        doCreate App.createWithObjState host content onEvaluated
