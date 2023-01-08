@@ -18,6 +18,7 @@
 #menu button {
     white-space: normal;
     word-wrap: break-word;
+    padding: 3px 10px;
 }
 
 #innerDemoHost div {
@@ -28,20 +29,27 @@
     padding: 3px 15px;
 }
 
-.the-message {
+
+
+/* -----------------------------------
+   Styles for specific demo cases
+----------------------------------- */
+
+
+#demo .the-message {
     font-weight: bold;
 }
 
-.card {
+#demo .card {
     background-color: darkorange;
     padding: 10px
 }
 
-.bam {
+#demo .bam {
     background-color: lime;
 }
 
-.bam2 {
+#demo .bam2 {
     background-color: pink;
     width: 200px;
     height: 200px;

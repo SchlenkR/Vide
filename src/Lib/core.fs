@@ -147,11 +147,13 @@ type VideBuilder() =
 let vide = VideBuilder()
 
 module Mutable =
-    type MutableValue<'a>(init: 'a, requestEvaluation: unit -> unit) =
+    type MutableValue<'a when 'a: equality>(init: 'a, requestEvaluation: unit -> unit) =
         let mutable state = init
         member _.Set(value) =
-            state <- value
-            requestEvaluation()
+            // Not just a perf opt: prevent stack overflows (see demo case asyncHelloWorld)!
+            if value <> state then
+                do state <- value
+                do requestEvaluation()
         member this.Value
             with get() = state
             and set(value) = this.Set(value)
