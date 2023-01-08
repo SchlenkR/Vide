@@ -7564,11 +7564,7 @@ module HtmlElementBuilders =
         member this.onwaiting(handler) = this.OnInit(fun x -> x.onwaiting <- handler)
         
     
-
 type Html =
-    static member inline nothing = HtmlBase.nothing
-    static member inline text text = HtmlBase.text text
-    // ---
     static member inline html = HtmlElementBuilders.html()
     static member inline head = HtmlElementBuilders.head()
     static member inline link = HtmlElementBuilders.link()

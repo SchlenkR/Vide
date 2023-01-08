@@ -5,17 +5,26 @@ open Browser.Types
 open Fable.Core.JS
 open Vide
 
-do Debug.printBuilderMethodInvocations <- false
+do Debug.enabledDebugChannels <- 
+    [
+        //0
+        1
+        10
+    ]
 
 let mutable currentState = None
+let mutable requestEvaluation = fun () -> ()
 
 let demos : list<string * string * (HTMLElement -> unit)> = 
     let inline start demo = fun host ->
-        let onEvaluated _ state =
-            currentState <- state |> Option.map (fun s -> s :> obj)
-            console.log("Evaluation done.")
-        let videMachine = App.start host demo onEvaluated
-        videMachine.EvaluateView()
+        let mutable evaluationCount = 0
+        let inline onEvaluated value state =
+            do currentState <- state |> Option.map (fun s -> s :> obj)
+            Debug.print 10 $"Evaluation done ({evaluationCount})"
+            do evaluationCount <- evaluationCount + 1
+        let ctx = App.start host demo onEvaluated
+        do requestEvaluation <- ctx.RequestEvaluation
+        do ctx.RequestEvaluation()
     let demos =
         [
             (
@@ -109,6 +118,9 @@ for title,desc,runDemo in demos do
         let innerDemoHost = demoHost.querySelector($"#{innerDemoHostId}") :?> HTMLElement
         runDemo innerDemoHost
     menu.appendChild(btn) |> ignore
+
+document.getElementById("evaluate").onclick <- fun _ ->
+    do requestEvaluation()
 
 document.getElementById("logState").onclick <- fun _ ->
     //let isNode elem = typeof<HTMLElement>.IsInstanceOfType(elem)

@@ -5,8 +5,8 @@ module Vide.Core
 type Vide<'v,'s,'c> = Vide of ('s option -> 'c -> 'v * 's option)
 
 module Debug =
-    let mutable printBuilderMethodInvocations = false
-    let print s = if printBuilderMethodInvocations then printfn "%s" s
+    let mutable enabledDebugChannels : int list = []
+    let print channel s = if enabledDebugChannels |> List.contains channel then printfn "%s" s
 
 let inline internal separateStatePair s =
     match s with
@@ -30,15 +30,16 @@ let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
         let v,s = v s ctx
         proj v, s
 
-/// Wraps a value in a Vide, but does not preserve the first value.
-let inline ofValue<'v,'s,'c> x : Vide<'v,'s,'c> =
-    Vide <| fun s ctx -> x,None
 
-let inline zero<'s,'c> : Vide<unit,'s,'c> = ofValue ()
+// why 's and not unit? -> see comment in "VideBuilder.Zero"
+let inline zero<'s,'c> : Vide<unit,'s,'c> =
+    Vide <| fun s ctx -> (),None
+
+let inline nothing<'c> = zero<unit,'c>
 
 [<AbstractClass>]
-type VideContext(evaluateView: unit -> unit) =
-    member val EvaluateView = evaluateView with get,set
+type VideContext() =
+    abstract member RequestEvaluation: unit -> unit
 
 type ComputationState<'v> =
     {
@@ -55,56 +56,61 @@ type VideBuilder() =
         : Vide<'v2,'s1 option * 's2 option,'c>
         =
         Vide <| fun s ctx ->
-            Debug.print "BIND"
+            Debug.print 0 "BIND"
             let ms,fs = separateStatePair s
             let mv,ms = m ms ctx
             let (Vide f) = f mv
             let fv,fs = f fs ctx
             fv, Some (ms,fs)
-    
-    member _.Bind<'v1,'s2,'c when 'c :> VideContext>
+    member _.Bind<'v1,'v2,'s2,'c when 'c :> VideContext>
         (
             m: Async<'v1>,
-            f: 'v1 -> Vide<unit,'s2,'c>
-        ) : Vide<unit, ComputationState<'v1> * 's2 option, 'c>
+            f: 'v1 -> Vide<'v2,'s2,'c>
+        ) : Vide<'v2, ComputationState<'v1> * 's2 option, 'c>
         =
         // If Bind is marked inline, runtime errors can occur when using
         // "do!" or "let! _ =" (seems to be a bug in fable compiler).
         Vide <| fun s ctx ->
-            let ms,fs =
+            let fv,ms,fs =
                 match s with
                 | None ->
                     let result = ref None
                     let onsuccess res =
+                        Debug.print 1 $"awaited result: {res}"
                         do result.Value <- Some res
-                        do ctx.EvaluateView()
+                        do ctx.RequestEvaluation()
                     // TODO: global cancellation handler / ex / cancellation, etc.
                     let onexception ex = ()
                     let oncancel ex = ()
                     Async.StartWithContinuations(m, onsuccess, onexception, oncancel)
-                    { prom = m; result = result }, None
+                    Unchecked.defaultof<'v2>, { prom = m; result = result }, None
                 | Some (comp,fs) ->
                     match comp.result.Value with
                     | Some mres ->
                         let (Vide f) = f mres
                         let fv,fs = f fs ctx
-                        comp,fs
-                    | None -> comp,fs
-            (), Some (ms,fs)
-
-    member inline _.Return(x: 'v)
-        : Vide<'v,'s,'c> 
+                        fv,comp,fs
+                    | None -> Unchecked.defaultof<'v2>,comp,fs
+            fv, Some (ms,fs)
+    member inline _.Return
+        (x: 'v)
+        : Vide<'v,unit,'c> 
         =
-        ofValue x
+        Vide <| fun s ctx -> x,None
+    
+    // This zero (with "unit" as state) is required for multiple returns.
+    // Another zero (with 's as state) is required for "if"s without an "else".
+    // Unfortunately, we cannot have both. For that reason, "if"s without "else"
+    // must use "else elseZero".
     member inline _.Zero
         ()
-        : Vide<unit,'s,'c> 
-        = zero<'s,'c>
+        : Vide<unit,unit,'c>
+        = zero<unit,'c>
     member inline _.Delay
         (f: unit -> Vide<'v,'s,'c>)
         : Vide<'v,'s,'c>
         =
-        Debug.print "DELAY"
+        Debug.print 0 "DELAY"
         f()
     member inline _.Combine
         (
@@ -114,7 +120,7 @@ type VideBuilder() =
         : Vide<'v2,'s1 option * 's2 option,'c>
         =
         Vide <| fun s ctx ->
-            Debug.print "COMBINE"
+            Debug.print 0 "COMBINE"
             let sa,sb = separateStatePair s
             let va,sa = a sa ctx
             let vb,sb = b sb ctx
@@ -127,7 +133,7 @@ type VideBuilder() =
         : Vide<'v list, Map<'a, 's option>,'c>
         = 
         Vide <| fun s ctx ->
-            Debug.print "FOR"
+            Debug.print 0 "FOR"
             let mutable currMap = s |> Option.defaultValue Map.empty
             let resValues,resStates =
                 [ for x in input do
@@ -141,27 +147,17 @@ type VideBuilder() =
 
 let vide = VideBuilder()
 
-type VideMachine<'v,'s,'c>
-    (
-        initialState,
-        ctx,
-        vide: Vide<'v,'s,'c>,
-        onEvaluated: 'v -> 's option -> unit
-    )
-    =
-    let (Vide vide) = vide
-    let mutable state = initialState
-    member _.CurrentState with get() = state
-    member _.EvaluateView() =
-        let value,newState = vide state ctx
-        state <- newState
-        onEvaluated value state
-
 module Mutable =
-    type MutableValue<'a>(init: 'a) =
+    type MutableValue<'a when 'a: equality>(init: 'a, requestEvaluation: unit -> unit) =
         let mutable state = init
-        member val EvaluateView = (fun () -> ()) with get,set
-        member this.Set(value) = state <- value; this.EvaluateView()
+        member _.Set(value) =
+            // Not just a perf opt: prevent stack overflows (see demo case asyncHelloWorld)!
+            // No -> not true anymore since triggered evaluations are modeled as subsequent
+            // (non-accumulating) requests; so it's "only" a perf-op.
+            // TODO: Without that opt, we could get rid of equality constraint. Think about it...
+            if value <> state then
+                do state <- value
+                do requestEvaluation()
         member this.Value
             with get() = state
             and set(value) = this.Set(value)
@@ -172,8 +168,7 @@ module Mutable =
     
     let ofValue x =
         Vide <| fun s (c: #VideContext) ->
-            let s = s |> Option.defaultWith (fun () -> MutableValue(x))
-            do s.EvaluateView <- c.EvaluateView
+            let s = s |> Option.defaultWith (fun () -> MutableValue(x, c.RequestEvaluation))
             s, Some s
 
 // TODO: Do I really want this?

@@ -9,12 +9,14 @@ open System
 type FableContext
     (
         parent: Node, 
-        evaluateView: unit -> unit
+        evaluateView: FableContext -> unit
     ) =
-    inherit VideContext(evaluateView)
+    inherit VideContext()
     let mutable keptChildren = []
     let keepChild child = keptChildren <- (child :> Node) :: keptChildren
     let appendToParent child = parent.appendChild(child) |> ignore
+    override this.RequestEvaluation() = evaluateView this
+    member internal _.EvaluateView = evaluateView
     member _.Parent = parent
     member _.AddElement<'n when 'n :> HTMLElement>(tagName: string) =
         let elem = document.createElement tagName 
@@ -57,7 +59,7 @@ type NodeBuilder<'n when 'n :> Node>
         : Vide<'v, NodeBuilderState<'n,'fs>, FableContext>
         =
         Vide <| fun s (ctx: FableContext) ->
-            Debug.print "RUN:NodeBuilder"
+            Debug.print 0 "RUN:NodeBuilder"
             let inline runModifiers modifiers node =
                 for m in modifiers do m node
             let s,cs = separateStatePair s
@@ -98,57 +100,71 @@ type HTMLElementBuilder<'n when 'n :> HTMLElement>(elemName: string) =
         )
     )
 
-module internal HtmlBase =
-    let inline nothing<'s> = zero<'s,FableContext>
-    let inline text text =
-        Vide <| fun s (ctx: FableContext) ->
-            let createNode () = ctx.AddText(text)
-            Debug.print "RUN:TextBuilder"
-            let node =
-                match s with
-                | None -> createNode ()
-                | Some (node: Text) ->
-                    if typeof<Text>.IsInstanceOfType(node) then
-                        if node.textContent <> text then
-                            node.textContent <- text
-                        ctx.KeepChild(node)
-                        node
-                    else
-                        createNode ()
-            (), Some node
+let inline text text =
+    Vide <| fun s (ctx: FableContext) ->
+        let createNode () = ctx.AddText(text)
+        Debug.print 0 "RUN:TextBuilder"
+        let node =
+            match s with
+            | None -> createNode ()
+            | Some (node: Text) ->
+                if typeof<Text>.IsInstanceOfType(node) then
+                    if node.textContent <> text then
+                        node.textContent <- text
+                    ctx.KeepChild(node)
+                    node
+                else
+                    createNode ()
+        (), Some node
 
 type VideBuilder with
     member inline _.Yield<'v,'s,'c>
         (v: Vide<'v,'s,'c>)
         : Vide<unit,'s,'c>
         =
-        Debug.print "YIELD Vide"
+        Debug.print 0 "YIELD Vide"
         v |> map ignore
     /// This allows constructs like:
     ///     div
     /// What is already allowed is (because of Run):
     ///     div { nothing }
     member inline _.Yield
-        (builder: NodeBuilder<'n>)
+        (nb: NodeBuilder<'n>)
         : Vide<unit, NodeBuilderState<'n,unit>, FableContext>
         =
-        Debug.print "YIELD NodeBuilder"
-        builder.Run(builder.Zero()) |> map ignore
+        Debug.print 0 "YIELD NodeBuilder"
+        //nb { HtmlBase.nothing }
+        nb.Run(nb.Zero())
     member inline _.Yield
         (s: string)
         : Vide<unit,Text,FableContext>
         =
-        Debug.print "YIELD string"
-        HtmlBase.text s
+        Debug.print 0 "YIELD string"
+        text s
 
 module App =
+    // TODO: Somehow (a part) of the logic belongs to Core
     let inline start (holder: #Node) (v: Vide<'v,'s,FableContext>) onEvaluated =
-        let ctx = FableContext(holder, (fun () -> ()))
-        let videMachine =
-            VideMachine(
-                None,
-                ctx,
-                NodeBuilder((fun _ -> holder), fun _ -> Keep) { v },
-                onEvaluated)
-        do ctx.EvaluateView <- videMachine.EvaluateView
-        videMachine
+        let (Vide rootVide) = NodeBuilder((fun _ -> holder), fun _ -> Keep) { v }
+        let evaluate =
+            // During an evaluation, requests for another evaluation can
+            // occur, which have to be handled as _subsequent_ evaluations!
+            let mutable currState = None
+            let mutable isEvaluating = false
+            let mutable hasPendingRequests = false
+            fun ctx ->
+                let rec eval () =
+                    do isEvaluating <- true
+                    let value,newState = rootVide currState ctx
+                    do currState <- newState
+                    do onEvaluated value currState
+                    do isEvaluating <- false
+                    if hasPendingRequests then
+                        do hasPendingRequests <- false
+                        do eval ()
+                do 
+                    match isEvaluating with
+                    | true -> hasPendingRequests <- true
+                    | false -> eval ()
+
+        FableContext(holder, evaluate)

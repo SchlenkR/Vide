@@ -3,8 +3,8 @@ module Demos
 open Vide
 open type Vide.Html
 
+// TODO: Move those 2
 type BuilderOperations = | Clear
-
 type VideBuilder with
     member inline _.Yield
         (op: BuilderOperations) 
@@ -18,10 +18,12 @@ type VideBuilder with
     // TODO: returning values
 
 let asyncHelloWorld =
-    vide {
-        let waitTimeInMs = 2000
-        let loadingMessage phase = $"loading phase %d{phase}... please wait {float waitTimeInMs / 1000.0} seconds"
-        let finishedMessage phase res = $"Phase %d{phase}.finished with result = {res}"
+    let waitTimeInMs = 1000
+    let loadingMessage phase = $"loading phase %d{phase}... please wait {float waitTimeInMs / 1000.0} seconds"
+    let finishedMessage phase res = $"Phase %d{phase} finished with result = {res}"
+
+    let myAsyncComponent = vide {
+        return 0
 
         p { loadingMessage 1 }
         let! res1 = async {
@@ -29,6 +31,7 @@ let asyncHelloWorld =
             return 42
         }
         p { finishedMessage 1 res1 }
+        return 1
 
         p { loadingMessage 2 }
         let! res2 = async {
@@ -36,40 +39,30 @@ let asyncHelloWorld =
             return 187
         }
         p { finishedMessage 2 res2 }
+        return 2
         
         p { loadingMessage 3 }
         do! Async.Sleep waitTimeInMs
 
-        Clear
+        // TODO: demo for async + clear
+        //Clear
         p { "--- END ---" }
+        return 3
     }
 
-////let asyncTrigger =
-////    vide {
-////        let waitTimeInMs = 2000
-////        let loadingMessage phase = $"loading phase %d{phase}... please wait {float waitTimeInMs / 1000.0} seconds"
-////        let finishedMessage phase res = $"Phase %d{phase}.finished with result = {res}"
+    vide {
+        // TODO: Interesting use case for component result
+        // handling and ordering / evaluation
 
-////        p { loadingMessage 1 }
+        let! currRes = Mutable.ofValue 0
+        div {
+            p { $"Current component result: {currRes.Value}" }
+            p { "------------" }
+        }
         
-////        let! res1 = fun () -> promise {
-////            do! Promise.sleep waitTimeInMs
-////            return 42
-////        }
-
-////        //clear
-////        p { finishedMessage 1 res1 }
-////        p { loadingMessage 2 }
-        
-////        let! res2 = fun () -> promise {
-////            do! Promise.sleep waitTimeInMs
-////            return 187
-////        }
-
-////        //clear
-////        p { finishedMessage 2 res2 }
-////        p { "--- END ---" }
-////    }
+        let! componentResult = myAsyncComponent
+        currRes := componentResult
+    }
 
 let helloWorld =
     vide { "Hello World" }
@@ -107,14 +100,25 @@ let conditionalIfs =
             $"Hit me! Count = {count.Value}"
         }
 
+        // TODO. Docu: The state can get lost because they are not compatible
+
         if count.Value = 5 || count.Value = 6 then
             let! valueString = preserve "Hello String"
             div.className("the-message") { 
                 $"You have the right to defend yourself! (string value {valueString})" 
             }
+        // TODO:
+        // else zero: instead of "zero", it could be controlled if component state
+        // in the corresponding "if" will be preserved or cleared!
+        else zero
+
+        // this must compile
+        nothing
+
         if count.Value <> 5 then
             let! valueInt = preserve 42
             p { $"not yet... with int value {valueInt}" }
+        else zero
     }
 
 // TODO: That is not compiling (anymore; which is ok - document this)
