@@ -143,28 +143,13 @@ type VideBuilder with
         text s
 
 module App =
-    // TODO: Somehow (a part) of the logic belongs to Core
-    let inline start (holder: #Node) (v: Vide<'v,'s,FableContext>) onEvaluated =
-        let (Vide rootVide) = NodeBuilder((fun _ -> holder), fun _ -> Keep) { v }
-        let evaluate =
-            // During an evaluation, requests for another evaluation can
-            // occur, which have to be handled as _subsequent_ evaluations!
-            let mutable currState = None
-            let mutable isEvaluating = false
-            let mutable hasPendingRequests = false
-            fun ctx ->
-                let rec eval () =
-                    do isEvaluating <- true
-                    let value,newState = rootVide currState ctx
-                    do currState <- newState
-                    do onEvaluated value currState
-                    do isEvaluating <- false
-                    if hasPendingRequests then
-                        do hasPendingRequests <- false
-                        do eval ()
-                do 
-                    match isEvaluating with
-                    | true -> hasPendingRequests <- true
-                    | false -> eval ()
-
-        FableContext(holder, evaluate)
+    let inline private build (host: #Node) (content: Vide<'v,'s,FableContext>) =
+        let content = NodeBuilder((fun _ -> host), fun _ -> Keep) { content }
+        let ctxCtor = fun eval -> FableContext(host, eval)
+        content,ctxCtor
+    let createFable host content onEvaluated =
+        let content,ctxCtor = build host content
+        App.create content ctxCtor onEvaluated
+    let createFableWithObjState host content onEvaluated =
+        let content,ctxCtor = build host content
+        App.createWithObjState content ctxCtor onEvaluated

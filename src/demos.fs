@@ -44,6 +44,8 @@ let asyncHelloWorld =
         p { loadingMessage 3 }
         do! Async.Sleep waitTimeInMs
 
+        // TODO: the returns don't work (look for Unckecked.default...)
+
         // TODO: demo for async + clear
         //Clear
         p { "--- END ---" }

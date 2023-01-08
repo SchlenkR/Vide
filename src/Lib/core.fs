@@ -30,7 +30,6 @@ let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
         let v,s = v s ctx
         proj v, s
 
-
 // why 's and not unit? -> see comment in "VideBuilder.Zero"
 let inline zero<'s,'c> : Vide<unit,'s,'c> =
     Vide <| fun s ctx -> (),None
@@ -148,16 +147,11 @@ type VideBuilder() =
 let vide = VideBuilder()
 
 module Mutable =
-    type MutableValue<'a when 'a: equality>(init: 'a, requestEvaluation: unit -> unit) =
+    type MutableValue<'a>(init: 'a, requestEvaluation: unit -> unit) =
         let mutable state = init
         member _.Set(value) =
-            // Not just a perf opt: prevent stack overflows (see demo case asyncHelloWorld)!
-            // No -> not true anymore since triggered evaluations are modeled as subsequent
-            // (non-accumulating) requests; so it's "only" a perf-op.
-            // TODO: Without that opt, we could get rid of equality constraint. Think about it...
-            if value <> state then
-                do state <- value
-                do requestEvaluation()
+            state <- value
+            requestEvaluation()
         member this.Value
             with get() = state
             and set(value) = this.Set(value)
@@ -177,3 +171,57 @@ let inline ( -= ) mutVal x = Mutable.change (-) mutVal x
 let inline ( *= ) mutVal x = Mutable.change (*) mutVal x
 let inline ( /= ) mutVal x = Mutable.change (/) mutVal x
 let inline ( := ) (mutVal: Mutable.MutableValue<_>) x = mutVal.Value <- x
+
+type VideApp<'v,'s,'c when 'c :> VideContext>
+    internal (
+        content: Vide<'v,'s,'c>,
+        ctxCtor: ('c -> unit) -> 'c,
+        onEvaluated: 'v -> 's option -> unit
+    ) =
+    let mutable currValue = None
+    let mutable currentState = None
+    let mutable isEvaluating = false
+    let mutable hasPendingEvaluationRequests = false
+    let mutable evaluationCount = 0
+        
+    let (Vide content) = content
+    let evaluate ctx =
+        // During an evaluation, requests for another evaluation can
+        // occur, which have to be handled as _subsequent_ evaluations!
+        let rec eval () =
+            do isEvaluating <- true
+            let value,newState = content currentState ctx
+            do
+                currValue <- Some value
+                currentState <- newState
+            do onEvaluated value currentState
+            do isEvaluating <- false
+            Debug.print 10 $"Evaluation done ({evaluationCount})"
+            if hasPendingEvaluationRequests then
+                do hasPendingEvaluationRequests <- false
+                do eval ()
+        do 
+            match isEvaluating with
+            | true -> hasPendingEvaluationRequests <- true
+            | false -> eval ()
+    let ctx = ctxCtor evaluate
+
+    member _.CurrentState = currentState
+    member _.IsEvaluating = isEvaluating
+    member _.HasPendingEvaluationRequests = hasPendingEvaluationRequests
+    member _.EvaluationCount = evaluationCount
+    member _.RootContext = ctx
+    member _.RequestEvaluation() = ctx.RequestEvaluation()
+
+module App =
+    let create content ctxCtor onEvaluated =
+        VideApp(content, ctxCtor, onEvaluated)
+    let createWithObjState content ctxCtor onEvaluated =
+        let content =
+            Vide <| fun (s: obj option) ctx ->
+                let (Vide content) = content
+                let typedS = s |> Option.map (fun s -> s :?> 's)
+                let v,s = content typedS ctx
+                let untypedS = s |> Option.map (fun s -> s :> obj)
+                v,untypedS
+        create content ctxCtor onEvaluated

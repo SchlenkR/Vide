@@ -12,19 +12,13 @@ do Debug.enabledDebugChannels <-
         10
     ]
 
-let mutable currentState = None
-let mutable requestEvaluation = fun () -> ()
+let mutable currentApp = None
 
 let demos : list<string * string * (HTMLElement -> unit)> = 
-    let inline start demo = fun host ->
-        let mutable evaluationCount = 0
-        let inline onEvaluated value state =
-            do currentState <- state |> Option.map (fun s -> s :> obj)
-            Debug.print 10 $"Evaluation done ({evaluationCount})"
-            do evaluationCount <- evaluationCount + 1
-        let ctx = App.start host demo onEvaluated
-        do requestEvaluation <- ctx.RequestEvaluation
-        do ctx.RequestEvaluation()
+    let inline start content host =
+        let app = App.createFableWithObjState host content (fun _ _ -> ())
+        do currentApp <- Some app
+        do app.RequestEvaluation()
     let demos =
         [
             (
@@ -120,29 +114,7 @@ for title,desc,runDemo in demos do
     menu.appendChild(btn) |> ignore
 
 document.getElementById("evaluate").onclick <- fun _ ->
-    do requestEvaluation()
+    currentApp |> Option.iter (fun app -> app.RequestEvaluation())
 
 document.getElementById("logState").onclick <- fun _ ->
-    //let isNode elem = typeof<HTMLElement>.IsInstanceOfType(elem)
-    //let isArray elem = Array.isArray(elem)
-    //let flattenedState =
-    //    match currentState with
-    //    | None -> []
-    //    | Some state ->
-    //        let rec flattenState (state: obj) =
-    //            [
-    //                if isArray state then
-    //                    let arr = state :?> array<obj>
-    //                    let e0 = arr[0]
-    //                    let e1 = arr[1]
-    //                    if isNode e0 
-    //                        then yield (e0 :?> HTMLElement).tagName
-    //                        else yield JSON.stringify(e0)
-    //                    yield! flattenState e1
-    //                else
-    //                    yield JSON.stringify(state)
-    //            ]
-    //        flattenState state
-    ////console.log(flattenedState |> List.toArray)
-    ////console.log(JSON.stringify(currentState, space = 2))
-    console.log(currentState)
+    currentApp |> Option.iter (fun app -> console.log(app))
