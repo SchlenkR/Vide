@@ -16,17 +16,12 @@ let mutable currentApp = None
 
 let demos : list<string * string * (HTMLElement -> unit)> = 
     let inline start content host =
+        let content = content |> map ignore
         let app = App.createFableWithObjState host content (fun _ _ -> ())
         do currentApp <- Some app
         do app.RequestEvaluation()
     let demos =
         [
-            (
-                "Async (simple)",
-                "TODO",
-                start Demos.asyncHelloWorld
-            )
-
             //(
             //    "Async (trigger)",
             //    "TODO",
@@ -91,6 +86,12 @@ let demos : list<string * string * (HTMLElement -> unit)> =
                 "Direct access to HTMLElement (on init and eval)",
                 "TODO",
                 start Demos.directAccessToHtmlElement
+            )
+
+            (
+                "Async (with return values)",
+                "TODO",
+                start Demos.asyncHelloWorld
             )
         ]
     demos

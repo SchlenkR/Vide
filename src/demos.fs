@@ -3,19 +3,8 @@ module Demos
 open Vide
 open type Vide.Html
 
-// TODO: Move those 2
-type BuilderOperations = | Clear
-type VideBuilder with
-    member inline _.Yield
-        (op: BuilderOperations) 
-        : Vide<unit,unit,FableContext>
-        =
-        Vide <| fun s ctx ->
-            match op with
-            | Clear -> ctx.Parent.textContent <- ""
-            (),None
-
-    // TODO: returning values
+// TODO: demo for async + clear
+//Clear
 
 let asyncHelloWorld =
     let waitTimeInMs = 1000
@@ -23,33 +12,29 @@ let asyncHelloWorld =
     let finishedMessage phase res = $"Phase %d{phase} finished with result = {res}"
 
     let myAsyncComponent = vide {
-        return 0
-
         p { loadingMessage 1 }
+        return -1
+
         let! res1 = async {
             do! Async.Sleep waitTimeInMs
             return 42
         }
         p { finishedMessage 1 res1 }
-        return 1
-
         p { loadingMessage 2 }
+        return res1
+
         let! res2 = async {
             do! Async.Sleep waitTimeInMs
             return 187
         }
         p { finishedMessage 2 res2 }
-        return 2
-        
         p { loadingMessage 3 }
+        return res2
+        
         do! Async.Sleep waitTimeInMs
 
-        // TODO: the returns don't work (look for Unckecked.default...)
-
-        // TODO: demo for async + clear
-        //Clear
         p { "--- END ---" }
-        return 3
+        return 0
     }
 
     vide {

@@ -117,30 +117,42 @@ let inline text text =
                     createNode ()
         (), Some node
 
+type BuilderOperations = | Clear
+
 type VideBuilder with
-    member inline _.Yield<'v,'s,'c>
+    member _.Yield<'v,'s,'c>
         (v: Vide<'v,'s,'c>)
-        : Vide<unit,'s,'c>
+        : Vide<'v,'s,'c>
         =
         Debug.print 0 "YIELD Vide"
-        v |> map ignore
+        v
     /// This allows constructs like:
     ///     div
     /// What is already allowed is (because of Run):
     ///     div { nothing }
-    member inline _.Yield
+    member _.Yield
         (nb: NodeBuilder<'n>)
         : Vide<unit, NodeBuilderState<'n,unit>, FableContext>
         =
         Debug.print 0 "YIELD NodeBuilder"
         //nb { HtmlBase.nothing }
         nb.Run(nb.Zero())
-    member inline _.Yield
+    member _.Yield
         (s: string)
         : Vide<unit,Text,FableContext>
         =
         Debug.print 0 "YIELD string"
         text s
+    
+    member _.Yield
+        (op: BuilderOperations) 
+        : Vide<unit,unit,FableContext>
+        =
+        Vide <| fun s ctx ->
+            match op with
+            | Clear -> ctx.Parent.textContent <- ""
+            (),None
+
 
 module App =
     let inline doCreate appCtor (host: #Node) (content: Vide<'v,'s,FableContext>) onEvaluated =
