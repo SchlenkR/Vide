@@ -15,7 +15,9 @@ let asyncHelloWorld =
         }
         p { $"result 1: {res1}" }
 
-        p { "loading ..." }
+        p { 
+            "loading ..." 
+        }
         let! res2 = async {
             do! Async.Sleep 1500
             return 187
@@ -25,6 +27,34 @@ let asyncHelloWorld =
         p { "waiting ..." }
         do! Async.Sleep 1500
         p { "--- END ---" }
+    }
+
+let asyncInsideHtmlElements =
+    // You can also put asyncs inside of HTML elements :)
+    vide {
+        p { 
+            "loading ..." 
+            let! res1 = async {
+                do! Async.Sleep 1500
+                return 42
+            }
+            $"result 1: {res1}"
+        }
+
+        p { 
+            "loading ..." 
+            let! res2 = async {
+                do! Async.Sleep 1500
+                return 187
+            }
+            $"result 2: {res2}"
+        }
+        
+        p { 
+            "waiting ..." 
+            do! Async.Sleep 1500
+            "--- END ---"
+        }
     }
 
 // TODO: Order of return / yield HTMLElement shouldn't matter
