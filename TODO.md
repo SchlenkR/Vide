@@ -51,6 +51,8 @@
 * reset component / state from outside
 * HTML Api
     * globals as base class
+* Way of emitting HTML (not only text)
+* "Placeholder": A box that can be used later to place elements into
 
 --------
 

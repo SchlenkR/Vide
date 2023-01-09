@@ -89,9 +89,15 @@ let demos : list<string * string * (HTMLElement -> unit)> =
             )
 
             (
-                "Async (with return values)",
+                "Async (simple)",
                 "TODO",
                 start Demos.asyncHelloWorld
+            )
+
+            (
+                "Async (with return values)",
+                "TODO",
+                start Demos.asyncWithSubsequentResults
             )
         ]
     demos

@@ -7,35 +7,53 @@ open type Vide.Html
 //Clear
 
 let asyncHelloWorld =
-    let waitTimeInMs = 1000
-    let loadingMessage phase = $"loading phase %d{phase}... please wait {float waitTimeInMs / 1000.0} seconds"
-    let finishedMessage phase res = $"Phase %d{phase} finished with result = {res}"
-
-    let myAsyncComponent = vide {
-        p { loadingMessage 1 }
-        return -1
-
+    vide {
+        p { "loading ..." }
         let! res1 = async {
-            do! Async.Sleep waitTimeInMs
+            do! Async.Sleep 1500
             return 42
         }
-        p { finishedMessage 1 res1 }
-        p { loadingMessage 2 }
-        return res1
+        p { $"result 1: {res1}" }
 
+        p { "loading ..." }
         let! res2 = async {
-            do! Async.Sleep waitTimeInMs
+            do! Async.Sleep 1500
             return 187
         }
-        p { finishedMessage 2 res2 }
-        p { loadingMessage 3 }
-        return res2
+        p { $"result 2: {res2}" }
         
-        do! Async.Sleep waitTimeInMs
-
+        p { "waiting ..." }
+        do! Async.Sleep 1500
         p { "--- END ---" }
-        return 0
     }
+
+// TODO: Order of return / yield HTMLElement shouldn't matter
+let asyncWithSubsequentResults =
+    let myAsyncComponent =
+        vide {
+            p { "loading ..." }
+            return 0
+            let! res1 = async {
+                do! Async.Sleep 1500
+                return 42
+            }
+            p { $"result 1: {res1}" }
+
+            p { "loading ..." }
+            return res1
+            let! res2 = async {
+                do! Async.Sleep 1500
+                return 187
+            }
+            p { $"result 2: {res2}" }
+            
+            p { "waiting ..." }
+            return res2
+            do! Async.Sleep 1500
+            p { "--- END ---" }
+
+            return 0
+        }
 
     vide {
         // TODO: Interesting use case for component result
