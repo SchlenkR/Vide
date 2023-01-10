@@ -46,6 +46,11 @@
     * Timeouts
     * async button ("wait for click")
     * Maybe don't use later/promise, but async because of cancellation
+    * UseCase: "Until" (geht schon jetzt)
+    * UseCase: See AsyncWithSubsequentCalls
+        // TODO: Interesting use case for component result
+        // handling and ordering / evaluation
+
 * components
 !!!!! * returning values from components
 * reset component / state from outside

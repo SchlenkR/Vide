@@ -7,92 +7,99 @@ open type Vide.Html
 //Clear
 
 let asyncHelloWorld =
+
     vide {
-        p { "loading ..." }
+        p { "loading 1st number ..." }
         let! res1 = async {
-            do! Async.Sleep 1500
+            do! Async.Sleep 2000
             return 42
         }
-        p { $"result 1: {res1}" }
+        p { $"1st number is: {res1}" }
+        hr
 
-        p { 
-            "loading ..." 
-        }
+        p { "loading 2nd number..." }
         let! res2 = async {
-            do! Async.Sleep 1500
+            do! Async.Sleep 2000
             return 187
         }
-        p { $"result 2: {res2}" }
+        p { $"2nd number is: {res2}" }
+        hr
         
-        p { "waiting ..." }
-        do! Async.Sleep 1500
-        p { "--- END ---" }
+        p { "waiting again for a whie..." }
+        do! Async.Sleep 2000
+        p { "Done :)" }
     }
 
+
+
 let asyncInsideHtmlElements =
+
     // You can also put asyncs inside of HTML elements :)
+
     vide {
         p { 
-            "loading ..." 
+            "loading 1st number ..."
             let! res1 = async {
-                do! Async.Sleep 1500
+                do! Async.Sleep 2000
                 return 42
             }
-            $"result 1: {res1}"
+            $"{res1}"
         }
+        hr
 
         p { 
-            "loading ..." 
+            "loading 2nd number ..." 
             let! res2 = async {
-                do! Async.Sleep 1500
+                do! Async.Sleep 2000
                 return 187
             }
-            $"result 2: {res2}"
+            $"{res2}"
         }
+        hr
         
-        p { 
-            "waiting ..." 
-            do! Async.Sleep 1500
-            "--- END ---"
+        p {
+            "waiting (in parallel) for a whie..."
+            do! Async.Sleep 2000
+            "Done :)"
         }
     }
 
 // TODO: Order of return / yield HTMLElement shouldn't matter
+
 let asyncWithSubsequentResults =
+
     let myAsyncComponent =
         vide {
-            p { "loading ..." }
+            p { "loading 1st number ..." }
             return 0
             let! res1 = async {
-                do! Async.Sleep 1500
+                do! Async.Sleep 2000
                 return 42
             }
-            p { $"result 1: {res1}" }
+            p { $"1st number is: {res1}" }
+            hr
 
-            p { "loading ..." }
+            p { "loading 2nd number ..." }
             return res1
             let! res2 = async {
-                do! Async.Sleep 1500
+                do! Async.Sleep 2000
                 return 187
             }
-            p { $"result 2: {res2}" }
+            p { $"2nd number is: {res2}" }
+            hr
             
-            p { "waiting ..." }
+            p { "waiting again for a whie..." }
             return res2
-            do! Async.Sleep 1500
-            p { "--- END ---" }
+            do! Async.Sleep 2000
+            p { "Done :)" }
 
-            return 0
+            return 999
         }
 
     vide {
-        // TODO: Interesting use case for component result
-        // handling and ordering / evaluation
-
         let! currRes = Mutable.ofValue 0
-        div {
-            p { $"Current component result: {currRes.Value}" }
-            p { "------------" }
+        div.className("async-box") {
+            $"Current component result: {currRes.Value}"
         }
         
         let! componentResult = myAsyncComponent

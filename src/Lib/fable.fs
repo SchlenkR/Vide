@@ -120,12 +120,7 @@ let inline text text =
 type BuilderOperations = | Clear
 
 type VideBuilder with
-    member _.Yield<'v,'s,'c>
-        (v: Vide<'v,'s,'c>)
-        : Vide<'v,'s,'c>
-        =
-        Debug.print 0 "YIELD Vide"
-        v
+
     /// This allows constructs like:
     ///     div
     /// What is already allowed is (because of Run):

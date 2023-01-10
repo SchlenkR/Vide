@@ -29,6 +29,12 @@ let demos : list<string * string * (HTMLElement -> unit)> =
             //)
 
             (
+                "Clear screen (recording)",
+                "Used for recording GIFs",
+                start (vide { nothing })
+            )
+
+            (
                 "Hello World",
                 "Just a message to the world...",
                 start Demos.helloWorld
@@ -89,7 +95,7 @@ let demos : list<string * string * (HTMLElement -> unit)> =
             )
 
             (
-                "Async ('Hello World')",
+                "Async (hello world)",
                 "TODO",
                 start Demos.asyncHelloWorld
             )

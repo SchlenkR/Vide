@@ -58,3 +58,7 @@
 .hide {
     display: none;
 }
+
+.async-box {
+    border: 2px solid black;
+}

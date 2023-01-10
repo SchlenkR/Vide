@@ -71,6 +71,13 @@ type VideBuilder() =
         =
         Vide <| fun s ctx -> x,None
 
+    member _.Yield<'v,'s,'c>
+        (v: Vide<'v,'s,'c>)
+        : Vide<'v,'s,'c>
+        =
+        Debug.print 0 "YIELD Vide"
+        v
+
     // This zero (with "unit" as state) is required for multiple returns.
     // Another zero (with 's as state) is required for "if"s without an "else".
     // Unfortunately, we cannot have both. For that reason, "if"s without "else"
