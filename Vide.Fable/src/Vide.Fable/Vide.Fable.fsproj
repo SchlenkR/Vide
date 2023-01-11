@@ -6,7 +6,7 @@
   <PropertyGroup>
     <Description>A Reactive front-end framework for F# without dependencies.</Description>
     <PackageId>Vide.Fable</PackageId>
-    <Version>0.0.1-alpha-07</Version>
+    <Version>0.0.1-alpha-09</Version>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -29,14 +29,16 @@
     <PackageReference Include="Fable.Browser.Dom" Version="2.11.0" />
   </ItemGroup>
   
+  <ItemGroup />
+  
   <ItemGroup>
     <Compile Include="lib\core.fs" />
     <Compile Include="lib\fable.fs" />
     <Compile Include="lib\htmlApi.fs" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Content Include="Vide.Fable.Package.fsproj; lib\**\*.fs; lib\**\*.fsi" PackagePath="fable\" />
-    <None Include="..\README.md" Pack="true" PackagePath="\" />
+    <Content Include="lib\core.fs" />
+    <Content Include="lib\fable.fs" />
+    <Content Include="lib\htmlApi.fs" />
+    <Content Include="*.fsproj; lib\**\*.fs; lib\**\*.fsi" PackagePath="fable\" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>

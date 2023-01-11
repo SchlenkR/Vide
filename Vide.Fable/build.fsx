@@ -17,7 +17,7 @@ module Properties =
     let nugetPushEnvVarName = "nuget_push"
 
 module Paths =
-    let slnPath = "./Vide.Fable.Package.sln"
+    let slnPath = "./Vide.Fable.sln"
     let packFolderName = ".pack"
     let packPath = Path.combine __SOURCE_DIRECTORY__ packFolderName
     
@@ -75,7 +75,7 @@ let test = "test", fun () ->
     Shell.ExecSuccess ("dotnet", $"test {Paths.slnPath}")
 
 let pack = "pack", fun () ->
-    !! "src/Vide.Fable.Package.fsproj"
+    !! "src/Vide.Fable/Vide.Fable.fsproj"
     |> Seq.iter (fun p ->
         Trace.trace $"SourceDir is: {__SOURCE_DIRECTORY__}"
         Shell.ExecSuccess ("dotnet", sprintf "pack %s -o %s -c Release" p Paths.packPath)

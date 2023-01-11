@@ -4,9 +4,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="lib\core.fs" />
-    <Compile Include="lib\fable.fs" />
-    <Compile Include="lib\htmlApi.fs" />
     <Compile Include="demos.fs" />
     <Compile Include="app.fs" />
   </ItemGroup>
@@ -15,5 +12,9 @@
     <PackageReference Include="Fable.Core" Version="3.7.1" />
     <PackageReference Include="Fable.Browser.Css" Version="2.3.0" />
     <PackageReference Include="Fable.Browser.Dom" Version="2.11.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Vide.Fable\Vide.Fable.fsproj" />
   </ItemGroup>
 </Project>
