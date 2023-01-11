@@ -54,7 +54,7 @@ type NodeBuilder<'n when 'n :> Node>
     member this.OnInit(m: Modifier<'n>) =
         do initOnlyModifiers <- m :: initOnlyModifiers
         this
-    member _.Run
+    member inline _.Run
         (Vide childVide: Vide<'v,'fs,FableContext>)
         : Vide<'v, NodeBuilderState<'n,'fs>, FableContext>
         =
@@ -125,21 +125,21 @@ type VideBuilder with
     ///     div
     /// What is already allowed is (because of Run):
     ///     div { nothing }
-    member _.Yield
+    member inline _.Yield
         (nb: NodeBuilder<'n>)
         : Vide<unit, NodeBuilderState<'n,unit>, FableContext>
         =
         Debug.print 0 "YIELD NodeBuilder"
         //nb { HtmlBase.nothing }
         nb.Run(nb.Zero())
-    member _.Yield
+    member inline _.Yield
         (s: string)
         : Vide<unit,Text,FableContext>
         =
         Debug.print 0 "YIELD string"
         text s
     
-    member _.Yield
+    member inline _.Yield
         (op: BuilderOperations) 
         : Vide<unit,unit,FableContext>
         =

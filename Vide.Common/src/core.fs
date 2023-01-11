@@ -56,10 +56,10 @@ type AsyncBindResult<'v1,'v2> =
     AsyncBindResult of comp: Async<'v1> * cont: ('v1 -> 'v2)
    
 type VideBuilder() =
-    member _.Bind
+    member inline _.Bind
         (
             Vide m: Vide<'v1,'s1,'c>,
-            f: 'v1 -> Vide<'v2,'s2,'c>
+            [<InlineIfLambda>] f: 'v1 -> Vide<'v2,'s2,'c>
         ) 
         : Vide<'v2,'s1 option * 's2 option,'c>
         =
@@ -71,13 +71,13 @@ type VideBuilder() =
             let fv,fs = f fs ctx
             fv, Some (ms,fs)
 
-    member _.Return
+    member inline _.Return
         (x: 'v)
         : Vide<'v,unit,'c> 
         =
         Vide <| fun s ctx -> x,None
 
-    member _.Yield<'v,'s,'c>
+    member inline _.Yield<'v,'s,'c>
         (v: Vide<'v,'s,'c>)
         : Vide<'v,'s,'c>
         =
@@ -88,12 +88,12 @@ type VideBuilder() =
     // Another zero (with 's as state) is required for "if"s without an "else".
     // Unfortunately, we cannot have both. For that reason, "if"s without "else"
     // must use "else elseZero".
-    member _.Zero
+    member inline _.Zero
         ()
         : Vide<unit,unit,'c>
         = zero<unit,'c>
 
-    member _.Delay
+    member inline _.Delay
         (f: unit -> Vide<'v,'s,'c>)
         : Vide<'v,'s,'c>
         =
@@ -118,7 +118,7 @@ type VideBuilder() =
     //    : Vide<'v,'s1 option * 's2 option,'c>
     //    =
     //    combine a b fst
-    member _.Combine
+    member inline _.Combine
         (
             Vide a: Vide<'v1,'s1,'c>,
             Vide b: Vide<'v2,'s2,'c>
@@ -132,7 +132,7 @@ type VideBuilder() =
             let vb,sb = b sb ctx
             vb, Some (sa,sb)
 
-    member _.For
+    member inline _.For
         (
             input: seq<'a>,
             body: 'a -> Vide<'v,'s,'c>
@@ -156,7 +156,7 @@ type VideBuilder() =
     // ASYNC
     // ---------------------
     
-    member _.Bind<'v1,'v2,'s,'c>
+    member inline _.Bind<'v1,'v2,'s,'c>
         (
             m: Async<'v1>,
             f: 'v1 -> Vide<'v2,'s,'c>
@@ -165,14 +165,14 @@ type VideBuilder() =
         Debug.print 0 "BIND async"
         AsyncBindResult(m, f)
     
-    member _.Delay
+    member inline _.Delay
         (f: unit -> AsyncBindResult<'v1,'v2>)
         : AsyncBindResult<'v1,'v2>
         =
         Debug.print 0 "DELAY async"
         f()
     
-    member _.Combine<'v,'x,'s1,'s2,'c when 'c :> VideContext>
+    member inline _.Combine<'v,'x,'s1,'s2,'c when 'c :> VideContext>
         (
             Vide a: Vide<'v,'s1,'c>,
             b: AsyncBindResult<'x, Vide<'v,'s2,'c>>
