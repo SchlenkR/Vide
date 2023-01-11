@@ -2,6 +2,28 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>A Reactive front-end framework for F# without dependencies.</Description>
+    <PackageId>Vide</PackageId>
+    <Version>0.0.1-alpha-01</Version>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!--<FsDocsLicenseLink>https://github.com/fsprojects/FsHttp/blob/master/LICENSE</FsDocsLicenseLink>-->
+    <!--<FsDocsReleaseNotesLink>https://www.nuget.org/packages/FsHttp</FsDocsReleaseNotesLink>-->
+    <Authors>Ronald Schlenker</Authors>
+    <Copyright>Copyright 2023 Ronald Schlenker</Copyright>
+    <PackageTags>f# fable web</PackageTags>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <!--<PackageIcon>logo_small.png</PackageIcon>-->
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/RonaldSchlenker/vide</RepositoryUrl>
+    <PackageReleaseNotes>
+    </PackageReleaseNotes>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\..\Vide.Common\src\core.fs" Link="Lib\core.fs" />
     <Compile Include="Lib\fable.fs" />
@@ -9,9 +31,15 @@
     <Compile Include="demos.fs" />
     <Compile Include="app.fs" />
   </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="Fable.Core" Version="4.0.0-theta-007" />
     <PackageReference Include="Fable.Browser.Css" Version="2.3.0" />
     <PackageReference Include="Fable.Browser.Dom" Version="2.11.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="*.fsproj; lib\**\*.fs; lib\**\*.fsi; ..\..\Vide.Common\src\core.fs" PackagePath="fable\" />
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>

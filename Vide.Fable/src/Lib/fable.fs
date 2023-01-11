@@ -54,7 +54,7 @@ type NodeBuilder<'n when 'n :> Node>
     member this.OnInit(m: Modifier<'n>) =
         do initOnlyModifiers <- m :: initOnlyModifiers
         this
-    member inline _.Run
+    member _.Run
         (Vide childVide: Vide<'v,'fs,FableContext>)
         : Vide<'v, NodeBuilderState<'n,'fs>, FableContext>
         =
@@ -147,7 +147,6 @@ type VideBuilder with
             match op with
             | Clear -> ctx.Parent.textContent <- ""
             (),None
-
 
 module App =
     let inline doCreate appCtor (host: #Node) (content: Vide<'v,'s,FableContext>) onEvaluated =

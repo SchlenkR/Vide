@@ -8,7 +8,7 @@ module Debug =
     let mutable enabledDebugChannels : int list = []
     let print channel s = if enabledDebugChannels |> List.contains channel then printfn "%s" s
 
-let inline internal separateStatePair s =
+let inline separateStatePair s =
     match s with
     | None -> None,None
     | Some (ms,fs) -> ms,fs
@@ -245,7 +245,7 @@ let inline ( /= ) mutVal x = Mutable.change (/) mutVal x
 let inline ( := ) (mutVal: Mutable.MutableValue<_>) x = mutVal.Value <- x
 
 type VideApp<'v,'s,'c when 'c :> VideContext>
-    internal (
+    (
         content: Vide<'v,'s,'c>,
         ctxCtor: ('c -> unit) -> 'c,
         onEvaluated: 'v -> 's option -> unit
