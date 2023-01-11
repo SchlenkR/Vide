@@ -43,8 +43,6 @@
         // TODO: Interesting use case for component result
         // handling and ordering / evaluation
 
-* components
-!!!!! * returning values from components
 * reset component / state from outside
 * HTML Api
     * globals as base class
