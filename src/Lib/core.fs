@@ -31,9 +31,15 @@ let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
         proj v, s
 
 // why 's and not unit? -> see comment in "VideBuilder.Zero"
+[<GeneralizableValue>]
 let inline zero<'s,'c> : Vide<unit,'s,'c> =
     Vide <| fun s ctx -> (),None
 
+[<GeneralizableValue>]
+let context<'c> : Vide<'c,unit,'c> =
+    Vide <| fun s ctx -> ctx,None
+
+[<GeneralizableValue>]
 let inline nothing<'c> = zero<unit,'c>
      
 [<AbstractClass>]
