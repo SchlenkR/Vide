@@ -5,8 +5,8 @@
 
   <PropertyGroup>
     <Description>A Reactive front-end framework for F# without dependencies.</Description>
-    <PackageId>Vide</PackageId>
-    <Version>0.0.1-alpha-01</Version>
+    <PackageId>Vide.Fable</PackageId>
+    <Version>0.0.1-alpha-07</Version>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -23,23 +23,20 @@
     <PackageReleaseNotes>
     </PackageReleaseNotes>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="..\..\Vide.Common\src\core.fs" Link="Lib\core.fs" />
-    <Compile Include="Lib\fable.fs" />
-    <Compile Include="Lib\htmlApi.fs" />
-    <Compile Include="demos.fs" />
-    <Compile Include="app.fs" />
-  </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Fable.Core" Version="4.0.0-theta-007" />
-    <PackageReference Include="Fable.Browser.Css" Version="2.3.0" />
+    <PackageReference Include="Fable.Core" Version="3.7.1" />
     <PackageReference Include="Fable.Browser.Dom" Version="2.11.0" />
   </ItemGroup>
   
   <ItemGroup>
-    <Content Include="*.fsproj; lib\**\*.fs; lib\**\*.fsi; ..\..\Vide.Common\src\core.fs" PackagePath="fable\" />
+    <Compile Include="lib\core.fs" />
+    <Compile Include="lib\fable.fs" />
+    <Compile Include="lib\htmlApi.fs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="Vide.Fable.Package.fsproj; lib\**\*.fs; lib\**\*.fsi" PackagePath="fable\" />
     <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>

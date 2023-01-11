@@ -1,0 +1,17 @@
+@import "https://unpkg.com/marx-css/css/marx.min.css";
+
+.container {
+    display: grid;
+    grid-template-columns: 350px auto;
+    gap: 50px;
+}
+
+#demo button {
+    padding: 3px 15px;
+}
+
+
+/* -----------------------------------
+   Styles for specific demo cases
+----------------------------------- */
+

@@ -125,21 +125,21 @@ type VideBuilder with
     ///     div
     /// What is already allowed is (because of Run):
     ///     div { nothing }
-    member inline _.Yield
+    member _.Yield
         (nb: NodeBuilder<'n>)
         : Vide<unit, NodeBuilderState<'n,unit>, FableContext>
         =
         Debug.print 0 "YIELD NodeBuilder"
         //nb { HtmlBase.nothing }
         nb.Run(nb.Zero())
-    member inline _.Yield
+    member _.Yield
         (s: string)
         : Vide<unit,Text,FableContext>
         =
         Debug.print 0 "YIELD string"
         text s
     
-    member inline _.Yield
+    member _.Yield
         (op: BuilderOperations) 
         : Vide<unit,unit,FableContext>
         =
