@@ -7,6 +7,8 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Fable", "src\Vide.Fabl
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Fable.DevApp", "src\Vide.Fable.DevApp\Vide.Fable.DevApp.fsproj", "{00D95994-1559-4070-9FCD-6B9EA64A85D3}"
 EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "HtmlApiGenerator", "src\HtmlApiGenerator\HtmlApiGenerator.fsproj", "{B5D57BCF-5FFD-479B-901E-0DCDC17F30DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{00D95994-1559-4070-9FCD-6B9EA64A85D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00D95994-1559-4070-9FCD-6B9EA64A85D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00D95994-1559-4070-9FCD-6B9EA64A85D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5D57BCF-5FFD-479B-901E-0DCDC17F30DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5D57BCF-5FFD-479B-901E-0DCDC17F30DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5D57BCF-5FFD-479B-901E-0DCDC17F30DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5D57BCF-5FFD-479B-901E-0DCDC17F30DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
