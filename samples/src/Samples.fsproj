@@ -4,6 +4,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Views\TodoList.fs" />
     <Compile Include="app.fs" />
   </ItemGroup>
   

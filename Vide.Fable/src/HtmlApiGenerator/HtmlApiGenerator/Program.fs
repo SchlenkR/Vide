@@ -13,8 +13,8 @@ then
 
 let output = 
     let res = MdnScrape.generate ()
-    HtmlApiGenerator.generate res.elements
-let outDir = __SOURCE_DIRECTORY__ </> "../../lib/htmlApi2.fs"
+    HtmlApiGenerator.generate res.elements res.globalAttrs
+let outDir = __SOURCE_DIRECTORY__ </> "../../Vide.Fable/lib/htmlApi.fs"
 do 
     File.WriteAllText(outDir, output)
     printfn $"Output written to: {outDir}"

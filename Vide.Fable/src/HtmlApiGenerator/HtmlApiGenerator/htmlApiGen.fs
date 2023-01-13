@@ -1,6 +1,7 @@
 module HtmlApiGenerator
 
 open FSharp.Text.TypedTemplateProvider
+open MdnScrape
 
 let [<Literal>] HtmlApiTemplate = """
 //------------------------------------------------------------------------------
@@ -16,8 +17,8 @@ open Vide
 
 module HtmlElementBuilders =
     {{for elem in elements}}
-    type {{elem.typeName}}() =
-        inherit HTMLElementBuilder<{{elem.domInterfaceName}}>("{{elem.tagName}}")
+    type {{elem.fsharpTageName}}{{elem.typeParams}}({{elem.ctorParams}}) =
+        inherit {{elem.builderName}}<{{elem.domInterfaceName}}>({{elem.ctorBaseArgs}})
         {{for attr in elem.attributes}}member this.{{attr.memberName}}(value: {{attr.typ}}) = this.OnEval(fun x -> x.setAttribute("{{attr.name}}", value{{attr.toString}}))
         {{end}}
         {{for evt in elem.events}}member this.{{evt.name}}(handler) = this.OnInit(fun x -> x.{{evt.name}} <- handler)
@@ -25,146 +26,211 @@ module HtmlElementBuilders =
     {{end}}
 
 type Html =
-    {{for elem in elements}}static member inline {{elem.typeName}} = HtmlElementBuilders.{{elem.tagName}}()
+    {{for elem in elements}}static member inline {{elem.fsharpTageName}} = HtmlElementBuilders.{{elem.tagName}}()
     {{end}}
 """
 
 type Api = Template<HtmlApiTemplate>
 
-let attrNameCorrections =
-    [
-        "class", "className"
-        "type", "type'"
-        "as", "as'"
-        "default", "default'"
-        "for", "for'"
-        "open", "open'"
-        "http-equiv", "httpEquiv"
-        "moz-opaque", "mozOpaque"
-        "accept-charset", "acceptCharset"
-    ]
+module Corrections =
+    let attrNameCorrections =
+        [
+            "class", "className"
+            "type", "type'"
+            "as", "as'"
+            "default", "default'"
+            "for", "for'"
+            "open", "open'"
+            "http-equiv", "httpEquiv"
+            "moz-opaque", "mozOpaque"
+            "accept-charset", "acceptCharset"
+        ]
 
-let attrExcludes =
-    [
-        "data-*"
-    ]
+    let attrExcludes =
+        [
+            "data-*"
+        ]
         
-let elemNameCorrections =
-    [
-        "base", "base'"
-    ]
+    let elemNameCorrections =
+        [
+            "base", "base'"
+        ]
 
-let elemExcludes =
-    [
-        "base"
-        "data"
-        "time"
-        "picture"
-        "meter"
-        "output"
-        "details"
-        "dialog"
-        "slot"
-        "template"
-        "portal"
-    ]
+    let additionalElemAttrs =
+        let makeAttr (elemName: string) name typ =
+            elemName,
+            {
+                name = name
+                isDeprecated = false
+                isNonStandard = false
+                desc = ""
+                typ = typ
+                felizAttr = None
+            }
+        [
+            makeAttr "input" "type" (AttrTyp.Dotnet typeof<string>)
+        ]
+        |> List.groupBy fst
+        |> List.map (fun (k,v) -> k, v |> List.map snd)
+        |> Map.ofList
 
-let globalEvents =
-    [
-        "onabort"
-        //"onautocomplete"
-        //"onautocompleteerror"
-        "onblur"
-        //"oncancel"
-        "oncanplay"
-        "oncanplaythrough"
-        "onchange"
-        "onclick"
-        //"onclose"
-        "oncontextmenu"
-        "oncuechange"
-        "ondblclick"
-        "ondrag"
-        "ondragend"
-        "ondragenter"
-        "ondragleave"
-        "ondragover"
-        "ondragstart"
-        "ondrop"
-        "ondurationchange"
-        "onemptied"
-        "onended"
-        "onerror"
-        "onfocus"
-        "oninput"
-        //"oninvalid"
-        "onkeydown"
-        "onkeypress"
-        "onkeyup"
-        "onload"
-        "onloadeddata"
-        "onloadedmetadata"
-        "onloadstart"
-        "onmousedown"
-        "onmouseenter"
-        "onmouseleave"
-        "onmousemove"
-        "onmouseout"
-        "onmouseover"
-        "onmouseup"
-        "onmousewheel"
-        "onpause"
-        "onplay"
-        "onplaying"
-        "onprogress"
-        "onratechange"
-        "onreset"
-        //"onresize"
-        "onscroll"
-        "onseeked"
-        "onseeking"
-        "onselect"
-        //"onshow"
-        //"onsort"
-        "onstalled"
-        "onsubmit"
-        "onsuspend"
-        "ontimeupdate"
-        //"ontoggle"
-        "onvolumechange"
-        "onwaiting"
-    ]
+    let elemExcludes =
+        [
+            "base"
+            "data"
+            "time"
+            "picture"
+            "meter"
+            "output"
+            "details"
+            "dialog"
+            "slot"
+            "template"
+            "portal"
+        ]
 
-let generate (elements: MdnScrape.Element list) = 
+    let globalEvents =
+        [
+            "onabort"
+            //"onautocomplete"
+            //"onautocompleteerror"
+            "onblur"
+            //"oncancel"
+            "oncanplay"
+            "oncanplaythrough"
+            "onchange"
+            "onclick"
+            //"onclose"
+            "oncontextmenu"
+            "oncuechange"
+            "ondblclick"
+            "ondrag"
+            "ondragend"
+            "ondragenter"
+            "ondragleave"
+            "ondragover"
+            "ondragstart"
+            "ondrop"
+            "ondurationchange"
+            "onemptied"
+            "onended"
+            "onerror"
+            "onfocus"
+            "oninput"
+            //"oninvalid"
+            "onkeydown"
+            "onkeypress"
+            "onkeyup"
+            "onload"
+            "onloadeddata"
+            "onloadedmetadata"
+            "onloadstart"
+            "onmousedown"
+            "onmouseenter"
+            "onmouseleave"
+            "onmousemove"
+            "onmouseout"
+            "onmouseover"
+            "onmouseup"
+            "onmousewheel"
+            "onpause"
+            "onplay"
+            "onplaying"
+            "onprogress"
+            "onratechange"
+            "onreset"
+            //"onresize"
+            "onscroll"
+            "onseeked"
+            "onseeking"
+            "onselect"
+            //"onshow"
+            //"onsort"
+            "onstalled"
+            "onsubmit"
+            "onsuspend"
+            "ontimeupdate"
+            //"ontoggle"
+            "onvolumechange"
+            "onwaiting"
+        ]
+
+let htmlGlobalAttrsElementBuilderName = "HTMLGlobalAttrsElementBuilder"
+
+let generate (elements: Element list) (globalAttrs: Attr list) = 
     let correctWith altNames name =
         altNames 
         |> List.tryFind (fun x -> fst x = name)
         |> Option.map snd
         |> Option.defaultValue name
 
-    let root =
-        Api.Root(
-            [
-                for elem in elements |> List.filter (fun e -> elemExcludes |> List.contains e.name |> not)  do
-                    let events = globalEvents |> List.map Api.evt
-                    let attrs =
-                        [ for attr in elem.attrs.attrs |> List.distinctBy (fun a -> a.name) do
-                            let memberName = attr.name |> correctWith attrNameCorrections
-                            let typ,toString =
-                                match attr.typ with
-                                | MdnScrape.AttrTyp.Dotnet typ ->
-                                    let toString =
-                                        match typ with
-                                        | t when t = typeof<string> -> ""
-                                        | _ -> ".ToString()"
-                                    typ.FullName, toString
-                                | MdnScrape.AttrTyp.Enum labels -> "string", ""
-                                | MdnScrape.AttrTyp.Choice labels -> "string", ""
-                            Api.attr(toString, attr.name, typ, memberName)
-                        ]
-                        |> List.filter (fun attr -> attrExcludes |> List.contains attr.name |> not)
-                    let typeName = elem.name |> correctWith elemNameCorrections
-                    Api.elem(elem.name, typeName, events, attrs, elem.domInterfaceName)
-            ]
+    let makeAttr (attr: Attr) =
+        let memberName = attr.name |> correctWith Corrections.attrNameCorrections
+        let typ,toString =
+            match attr.typ with
+            | AttrTyp.Dotnet typ ->
+                let toString =
+                    match typ with
+                    | t when t = typeof<string> -> ""
+                    | _ -> ".ToString()"
+                typ.FullName, toString
+            | AttrTyp.Enum labels -> "string", ""
+            | AttrTyp.Choice labels -> "string", ""
+        Api.attr(toString, attr.name, typ, memberName)
+
+    let makeAttrs (attrs: Attr list)=
+        attrs
+        |> List.distinctBy (fun a -> a.name)
+        |> List.map makeAttr
+        |> List.filter (fun attr -> Corrections.attrExcludes |> List.contains attr.name |> not)
+
+    let globalElem =
+        Api.elem(
+            htmlGlobalAttrsElementBuilderName,
+            htmlGlobalAttrsElementBuilderName,
+            Corrections.globalEvents |> List.map Api.evt,
+            globalAttrs |> makeAttrs,
+            "tagName",
+            "'n",
+            "HTMLElementBuilder",
+            "tagName",
+            "<'n when 'n :> HTMLElement>"
         )
+
+    let makeElem (elem: Element) =
+        let events = [] //Corrections.globalEvents |> List.map Api.evt
+        let attrs =
+            (
+                elem.attrs.attrs
+                @ (Corrections.additionalElemAttrs |> Map.tryFind elem.name |> Option.defaultValue [])
+            )
+            |> makeAttrs
+        let fsharpTageName = elem.name |> correctWith Corrections.elemNameCorrections
+        let builderName = 
+            if elem.attrs.includeGlobalAttrs 
+            then htmlGlobalAttrsElementBuilderName
+            else "HTMLElementBuilder"
+        let tagName = $""" "elem.name" """
+        Api.elem(
+            tagName,
+            fsharpTageName, 
+            events, 
+            attrs,
+            $""" "{tagName}" """,
+            elem.domInterfaceName,
+            builderName,
+            "",
+            ""
+        )
+
+    let elems =
+        globalElem
+        :: (
+            elements
+            |> List.filter (fun e -> Corrections.elemExcludes |> List.contains e.name |> not)
+            |> List.map makeElem
+        )
+
+    let root = Api.Root(elems)
+
     Api.Render(root)

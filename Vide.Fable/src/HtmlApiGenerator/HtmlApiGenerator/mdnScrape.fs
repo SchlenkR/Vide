@@ -317,11 +317,11 @@ let generate () =
                                 tds[1].Elements()
                                 |> Html.extractDescription
                             link = link
-                            attrs =
-                                let attrs = fst attrs
-                                if attrs.includeGlobalAttrs
-                                    then { attrs with attrs = globalAttrs @ attrs.attrs }
-                                    else attrs
+                            attrs = fst attrs
+                                //let attrs = fst attrs
+                                //if attrs.includeGlobalAttrs
+                                //    then { attrs with attrs = globalAttrs @ attrs.attrs }
+                                //    else attrs
                         }
                     )
                 elements
@@ -331,21 +331,6 @@ let generate () =
         |> List.collect id
 
     {| felizAttrs = felizAttrs; globalAttrs = globalAttrs; elements = elements |}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -400,7 +385,7 @@ module MdTest =
             table
                 [
                     "name"
-                    "desc"
+                    //"desc"
                     "isDeprecated"
                     "isNonStandard"
                     "typ"
@@ -411,7 +396,7 @@ module MdTest =
                     |> List.filter (fun a -> not a.isDeprecated)
                     |> List.map (fun a -> [
                         a.name
-                        htmlToMd a.desc
+                        //htmlToMd a.desc
                         a.isDeprecated.ToString()
                         a.isNonStandard.ToString()
                         AttrTyp.show a.typ

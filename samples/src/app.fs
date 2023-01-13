@@ -1,4 +1,4 @@
-module App
+module Vide.Fable.Samples.App
 
 open Browser
 open Vide
