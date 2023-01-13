@@ -26,7 +26,8 @@ module HtmlElementBuilders =
     {{end}}
 
 type Html =
-    {{for elem in elements}}static member inline {{elem.fsharpTageName}} = HtmlElementBuilders.{{elem.tagName}}()
+    {{for elem in elements}}
+    {{if elem.isHtmlElement}}static member inline {{elem.fsharpTageName}} = HtmlElementBuilders.{{elem.fsharpTageName}}(){{end}}
     {{end}}
 """
 
@@ -182,12 +183,13 @@ let generate (elements: Element list) (globalAttrs: Attr list) =
         attrs
         |> List.distinctBy (fun a -> a.name)
         |> List.map makeAttr
+        |> List.sortBy (fun x -> x.name)
         |> List.filter (fun attr -> Corrections.attrExcludes |> List.contains attr.name |> not)
 
     let globalElem =
         Api.elem(
             htmlGlobalAttrsElementBuilderName,
-            htmlGlobalAttrsElementBuilderName,
+            false,
             Corrections.globalEvents |> List.map Api.evt,
             globalAttrs |> makeAttrs,
             "tagName",
@@ -210,13 +212,13 @@ let generate (elements: Element list) (globalAttrs: Attr list) =
             if elem.attrs.includeGlobalAttrs 
             then htmlGlobalAttrsElementBuilderName
             else "HTMLElementBuilder"
-        let tagName = $""" "elem.name" """
+        let tagName = $""" "{elem.name}" """
         Api.elem(
-            tagName,
             fsharpTageName, 
+            true,
             events, 
             attrs,
-            $""" "{tagName}" """,
+            tagName,
             elem.domInterfaceName,
             builderName,
             "",
@@ -230,6 +232,7 @@ let generate (elements: Element list) (globalAttrs: Attr list) =
             |> List.filter (fun e -> Corrections.elemExcludes |> List.contains e.name |> not)
             |> List.map makeElem
         )
+        |> List.sortBy (fun x -> x.fsharpTageName)
 
     let root = Api.Root(elems)
 

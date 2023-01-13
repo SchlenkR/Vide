@@ -15,6 +15,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\Vide.Fable\Vide.Fable.fsproj" />
+    <ProjectReference Include="..\..\src\Vide.Fable\Vide.Fable.fsproj" />
   </ItemGroup>
 </Project>

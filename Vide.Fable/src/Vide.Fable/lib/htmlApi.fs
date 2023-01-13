@@ -85,67 +85,92 @@ module HtmlElementBuilders =
         member this.onwaiting(handler) = this.OnInit(fun x -> x.onwaiting <- handler)
         
     
-    type html() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLHtmlElement>( " "elem.name" " )
-        member this.manifest(value: System.String) = this.OnEval(fun x -> x.setAttribute("manifest", value))
-        member this.version(value: System.String) = this.OnEval(fun x -> x.setAttribute("version", value))
-        member this.xmlns(value: System.String) = this.OnEval(fun x -> x.setAttribute("xmlns", value))
-        
-        
-    
-    type head() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadElement>( " "elem.name" " )
-        member this.profile(value: System.String) = this.OnEval(fun x -> x.setAttribute("profile", value))
-        
-        
-    
-    type link() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLLinkElement>( " "elem.name" " )
-        member this.as'(value: System.String) = this.OnEval(fun x -> x.setAttribute("as", value))
-        member this.crossorigin(value: string) = this.OnEval(fun x -> x.setAttribute("crossorigin", value))
-        member this.disabled(value: System.String) = this.OnEval(fun x -> x.setAttribute("disabled", value))
-        member this.fetchpriority(value: string) = this.OnEval(fun x -> x.setAttribute("fetchpriority", value))
-        member this.href(value: System.String) = this.OnEval(fun x -> x.setAttribute("href", value))
+    type a() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLAnchorElement>( "a" )
+        member this.download(value: string) = this.OnEval(fun x -> x.setAttribute("download", value))
+        member this.href(value: string) = this.OnEval(fun x -> x.setAttribute("href", value))
         member this.hreflang(value: System.String) = this.OnEval(fun x -> x.setAttribute("hreflang", value))
-        member this.imagesizes(value: System.String) = this.OnEval(fun x -> x.setAttribute("imagesizes", value))
-        member this.imagesrcset(value: System.String) = this.OnEval(fun x -> x.setAttribute("imagesrcset", value))
-        member this.integrity(value: System.String) = this.OnEval(fun x -> x.setAttribute("integrity", value))
-        member this.media(value: System.String) = this.OnEval(fun x -> x.setAttribute("media", value))
-        member this.prefetch(value: System.String) = this.OnEval(fun x -> x.setAttribute("prefetch", value))
+        member this.ping(value: System.String) = this.OnEval(fun x -> x.setAttribute("ping", value))
         member this.referrerpolicy(value: string) = this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
         member this.rel(value: System.String) = this.OnEval(fun x -> x.setAttribute("rel", value))
-        member this.sizes(value: string) = this.OnEval(fun x -> x.setAttribute("sizes", value))
-        member this.title(value: System.String) = this.OnEval(fun x -> x.setAttribute("title", value))
+        member this.target(value: string) = this.OnEval(fun x -> x.setAttribute("target", value))
         member this.type'(value: System.String) = this.OnEval(fun x -> x.setAttribute("type", value))
-        member this.blocking(value: string) = this.OnEval(fun x -> x.setAttribute("blocking", value))
         
         
     
-    type meta() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLMetaElement>( " "elem.name" " )
-        member this.charset(value: System.String) = this.OnEval(fun x -> x.setAttribute("charset", value))
-        member this.content(value: System.String) = this.OnEval(fun x -> x.setAttribute("content", value))
-        member this.httpEquiv(value: string) = this.OnEval(fun x -> x.setAttribute("http-equiv", value))
-        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
+    type abbr() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "abbr" )
         
         
     
-    type style() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLStyleElement>( " "elem.name" " )
-        member this.media(value: System.String) = this.OnEval(fun x -> x.setAttribute("media", value))
-        member this.nonce(value: System.String) = this.OnEval(fun x -> x.setAttribute("nonce", value))
-        member this.title(value: System.String) = this.OnEval(fun x -> x.setAttribute("title", value))
-        member this.blocking(value: string) = this.OnEval(fun x -> x.setAttribute("blocking", value))
+    type address() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "address" )
         
         
     
-    type title() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTitleElement>( " "elem.name" " )
+    type area() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLAreaElement>( "area" )
+        member this.alt(value: System.String) = this.OnEval(fun x -> x.setAttribute("alt", value))
+        member this.coords(value: string) = this.OnEval(fun x -> x.setAttribute("coords", value))
+        member this.download(value: System.String) = this.OnEval(fun x -> x.setAttribute("download", value))
+        member this.href(value: System.String) = this.OnEval(fun x -> x.setAttribute("href", value))
+        member this.hreflang(value: System.String) = this.OnEval(fun x -> x.setAttribute("hreflang", value))
+        member this.ping(value: System.String) = this.OnEval(fun x -> x.setAttribute("ping", value))
+        member this.referrerpolicy(value: string) = this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
+        member this.rel(value: System.String) = this.OnEval(fun x -> x.setAttribute("rel", value))
+        member this.shape(value: System.String) = this.OnEval(fun x -> x.setAttribute("shape", value))
+        member this.target(value: string) = this.OnEval(fun x -> x.setAttribute("target", value))
+        
+        
+    
+    type article() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "article" )
+        
+        
+    
+    type aside() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "aside" )
+        
+        
+    
+    type audio() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLAudioElement>( "audio" )
+        member this.autoplay(value: System.String) = this.OnEval(fun x -> x.setAttribute("autoplay", value))
+        member this.controls(value: System.String) = this.OnEval(fun x -> x.setAttribute("controls", value))
+        member this.controlslist(value: System.String) = this.OnEval(fun x -> x.setAttribute("controlslist", value))
+        member this.crossorigin(value: string) = this.OnEval(fun x -> x.setAttribute("crossorigin", value))
+        member this.disableremoteplayback(value: System.String) = this.OnEval(fun x -> x.setAttribute("disableremoteplayback", value))
+        member this.loop(value: System.String) = this.OnEval(fun x -> x.setAttribute("loop", value))
+        member this.muted(value: System.String) = this.OnEval(fun x -> x.setAttribute("muted", value))
+        member this.preload(value: string) = this.OnEval(fun x -> x.setAttribute("preload", value))
+        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
+        
+        
+    
+    type b() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "b" )
+        
+        
+    
+    type bdi() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "bdi" )
+        
+        
+    
+    type bdo() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "bdo" )
+        member this.dir(value: string) = this.OnEval(fun x -> x.setAttribute("dir", value))
+        
+        
+    
+    type blockquote() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLQuoteElement>( "blockquote" )
+        member this.cite(value: System.String) = this.OnEval(fun x -> x.setAttribute("cite", value))
         
         
     
     type body() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLBodyElement>( " "elem.name" " )
+        inherit HTMLGlobalAttrsElementBuilder<HTMLBodyElement>( "body" )
         member this.alink(value: System.String) = this.OnEval(fun x -> x.setAttribute("alink", value))
         member this.background(value: System.String) = this.OnEval(fun x -> x.setAttribute("background", value))
         member this.bgcolor(value: System.String) = this.OnEval(fun x -> x.setAttribute("bgcolor", value))
@@ -177,115 +202,192 @@ module HtmlElementBuilders =
         
         
     
-    type address() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
+    type br() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLBRElement>( "br" )
         
         
     
-    type article() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
+    type button() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLButtonElement>( "button" )
+        member this.autocomplete(value: System.String) = this.OnEval(fun x -> x.setAttribute("autocomplete", value))
+        member this.autofocus(value: System.String) = this.OnEval(fun x -> x.setAttribute("autofocus", value))
+        member this.disabled(value: System.String) = this.OnEval(fun x -> x.setAttribute("disabled", value))
+        member this.form(value: System.String) = this.OnEval(fun x -> x.setAttribute("form", value))
+        member this.formaction(value: System.String) = this.OnEval(fun x -> x.setAttribute("formaction", value))
+        member this.formenctype(value: string) = this.OnEval(fun x -> x.setAttribute("formenctype", value))
+        member this.formmethod(value: string) = this.OnEval(fun x -> x.setAttribute("formmethod", value))
+        member this.formnovalidate(value: System.String) = this.OnEval(fun x -> x.setAttribute("formnovalidate", value))
+        member this.formtarget(value: string) = this.OnEval(fun x -> x.setAttribute("formtarget", value))
+        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
+        member this.type'(value: string) = this.OnEval(fun x -> x.setAttribute("type", value))
+        member this.value(value: System.String) = this.OnEval(fun x -> x.setAttribute("value", value))
         
         
     
-    type aside() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
+    type canvas() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLCanvasElement>( "canvas" )
+        member this.height(value: System.String) = this.OnEval(fun x -> x.setAttribute("height", value))
+        member this.mozOpaque(value: System.String) = this.OnEval(fun x -> x.setAttribute("moz-opaque", value))
+        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
         
         
     
-    type footer() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
+    type caption() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLTableCaptionElement>( "caption" )
         
         
     
-    type header() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
+    type cite() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "cite" )
         
         
     
-    type h1() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( " "elem.name" " )
+    type code() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "code" )
         
         
     
-    type h2() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( " "elem.name" " )
+    type col() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLTableColElement>( "col" )
+        member this.span(value: System.String) = this.OnEval(fun x -> x.setAttribute("span", value))
         
         
     
-    type h3() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( " "elem.name" " )
+    type colgroup() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLTableColElement>( "colgroup" )
+        member this.span(value: System.String) = this.OnEval(fun x -> x.setAttribute("span", value))
         
         
     
-    type h4() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( " "elem.name" " )
-        
-        
-    
-    type h5() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( " "elem.name" " )
-        
-        
-    
-    type h6() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( " "elem.name" " )
-        
-        
-    
-    type main() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type nav() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type section() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type blockquote() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLQuoteElement>( " "elem.name" " )
-        member this.cite(value: System.String) = this.OnEval(fun x -> x.setAttribute("cite", value))
+    type datalist() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLDataListElement>( "datalist" )
         
         
     
     type dd() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "dd" )
         member this.nowrap(value: System.String) = this.OnEval(fun x -> x.setAttribute("nowrap", value))
         
         
     
+    type del() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLModElement>( "del" )
+        member this.cite(value: System.String) = this.OnEval(fun x -> x.setAttribute("cite", value))
+        member this.datetime(value: System.String) = this.OnEval(fun x -> x.setAttribute("datetime", value))
+        
+        
+    
+    type dfn() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "dfn" )
+        
+        
+    
     type div() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLDivElement>( " "elem.name" " )
+        inherit HTMLGlobalAttrsElementBuilder<HTMLDivElement>( "div" )
         
         
     
     type dl() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLDListElement>( " "elem.name" " )
+        inherit HTMLGlobalAttrsElementBuilder<HTMLDListElement>( "dl" )
         
         
     
     type dt() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "dt" )
+        
+        
+    
+    type em() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "em" )
+        
+        
+    
+    type embed() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLEmbedElement>( "embed" )
+        member this.height(value: System.String) = this.OnEval(fun x -> x.setAttribute("height", value))
+        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
+        member this.type'(value: System.String) = this.OnEval(fun x -> x.setAttribute("type", value))
+        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
+        
+        
+    
+    type fieldset() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLFieldSetElement>( "fieldset" )
+        member this.disabled(value: System.String) = this.OnEval(fun x -> x.setAttribute("disabled", value))
+        member this.form(value: System.String) = this.OnEval(fun x -> x.setAttribute("form", value))
+        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
         
         
     
     type figcaption() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "figcaption" )
         
         
     
     type figure() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "figure" )
+        
+        
+    
+    type footer() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "footer" )
+        
+        
+    
+    type form() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLFormElement>( "form" )
+        member this.accept(value: System.String) = this.OnEval(fun x -> x.setAttribute("accept", value))
+        member this.acceptCharset(value: System.String) = this.OnEval(fun x -> x.setAttribute("accept-charset", value))
+        member this.autocapitalize(value: string) = this.OnEval(fun x -> x.setAttribute("autocapitalize", value))
+        member this.autocomplete(value: string) = this.OnEval(fun x -> x.setAttribute("autocomplete", value))
+        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
+        member this.rel(value: System.String) = this.OnEval(fun x -> x.setAttribute("rel", value))
+        
+        
+    
+    type h1() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( "h1" )
+        
+        
+    
+    type h2() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( "h2" )
+        
+        
+    
+    type h3() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( "h3" )
+        
+        
+    
+    type h4() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( "h4" )
+        
+        
+    
+    type h5() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( "h5" )
+        
+        
+    
+    type h6() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( "h6" )
+        
+        
+    
+    type head() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadElement>( "head" )
+        member this.profile(value: System.String) = this.OnEval(fun x -> x.setAttribute("profile", value))
+        
+        
+    
+    type header() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "header" )
         
         
     
     type hr() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLHRElement>( " "elem.name" " )
+        inherit HTMLGlobalAttrsElementBuilder<HTMLHRElement>( "hr" )
         member this.align(value: System.String) = this.OnEval(fun x -> x.setAttribute("align", value))
         member this.color(value: System.String) = this.OnEval(fun x -> x.setAttribute("color", value))
         member this.noshade(value: System.String) = this.OnEval(fun x -> x.setAttribute("noshade", value))
@@ -294,285 +396,21 @@ module HtmlElementBuilders =
         
         
     
-    type li() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLLIElement>( " "elem.name" " )
-        member this.value(value: System.String) = this.OnEval(fun x -> x.setAttribute("value", value))
-        member this.type'(value: string) = this.OnEval(fun x -> x.setAttribute("type", value))
-        
-        
-    
-    type menu() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLMenuElement>( " "elem.name" " )
-        
-        
-    
-    type ol() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLOListElement>( " "elem.name" " )
-        member this.reversed(value: System.String) = this.OnEval(fun x -> x.setAttribute("reversed", value))
-        member this.start(value: System.String) = this.OnEval(fun x -> x.setAttribute("start", value))
-        member this.type'(value: string) = this.OnEval(fun x -> x.setAttribute("type", value))
-        
-        
-    
-    type p() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLParagraphElement>( " "elem.name" " )
-        
-        
-    
-    type pre() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLPreElement>( " "elem.name" " )
-        member this.cols(value: System.String) = this.OnEval(fun x -> x.setAttribute("cols", value))
-        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
-        member this.wrap(value: System.String) = this.OnEval(fun x -> x.setAttribute("wrap", value))
-        
-        
-    
-    type ul() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLUListElement>( " "elem.name" " )
-        member this.compact(value: System.String) = this.OnEval(fun x -> x.setAttribute("compact", value))
-        member this.type'(value: string) = this.OnEval(fun x -> x.setAttribute("type", value))
-        
-        
-    
-    type a() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLAnchorElement>( " "elem.name" " )
-        member this.download(value: string) = this.OnEval(fun x -> x.setAttribute("download", value))
-        member this.href(value: string) = this.OnEval(fun x -> x.setAttribute("href", value))
-        member this.hreflang(value: System.String) = this.OnEval(fun x -> x.setAttribute("hreflang", value))
-        member this.ping(value: System.String) = this.OnEval(fun x -> x.setAttribute("ping", value))
-        member this.referrerpolicy(value: string) = this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
-        member this.rel(value: System.String) = this.OnEval(fun x -> x.setAttribute("rel", value))
-        member this.target(value: string) = this.OnEval(fun x -> x.setAttribute("target", value))
-        member this.type'(value: System.String) = this.OnEval(fun x -> x.setAttribute("type", value))
-        
-        
-    
-    type abbr() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type b() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type bdi() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type bdo() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        member this.dir(value: string) = this.OnEval(fun x -> x.setAttribute("dir", value))
-        
-        
-    
-    type br() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLBRElement>( " "elem.name" " )
-        
-        
-    
-    type cite() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type code() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type dfn() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type em() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
+    type html() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLHtmlElement>( "html" )
+        member this.manifest(value: System.String) = this.OnEval(fun x -> x.setAttribute("manifest", value))
+        member this.version(value: System.String) = this.OnEval(fun x -> x.setAttribute("version", value))
+        member this.xmlns(value: System.String) = this.OnEval(fun x -> x.setAttribute("xmlns", value))
         
         
     
     type i() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type kbd() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type mark() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type q() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLQuoteElement>( " "elem.name" " )
-        member this.cite(value: System.String) = this.OnEval(fun x -> x.setAttribute("cite", value))
-        
-        
-    
-    type rp() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type rt() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type ruby() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type s() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type samp() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type small() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type span() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLSpanElement>( " "elem.name" " )
-        
-        
-    
-    type strong() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type sub() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type sup() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type u() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type var() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type wbr() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
-        
-        
-    
-    type area() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLAreaElement>( " "elem.name" " )
-        member this.alt(value: System.String) = this.OnEval(fun x -> x.setAttribute("alt", value))
-        member this.coords(value: string) = this.OnEval(fun x -> x.setAttribute("coords", value))
-        member this.download(value: System.String) = this.OnEval(fun x -> x.setAttribute("download", value))
-        member this.href(value: System.String) = this.OnEval(fun x -> x.setAttribute("href", value))
-        member this.hreflang(value: System.String) = this.OnEval(fun x -> x.setAttribute("hreflang", value))
-        member this.ping(value: System.String) = this.OnEval(fun x -> x.setAttribute("ping", value))
-        member this.referrerpolicy(value: string) = this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
-        member this.rel(value: System.String) = this.OnEval(fun x -> x.setAttribute("rel", value))
-        member this.shape(value: System.String) = this.OnEval(fun x -> x.setAttribute("shape", value))
-        member this.target(value: string) = this.OnEval(fun x -> x.setAttribute("target", value))
-        
-        
-    
-    type audio() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLAudioElement>( " "elem.name" " )
-        member this.autoplay(value: System.String) = this.OnEval(fun x -> x.setAttribute("autoplay", value))
-        member this.controls(value: System.String) = this.OnEval(fun x -> x.setAttribute("controls", value))
-        member this.controlslist(value: System.String) = this.OnEval(fun x -> x.setAttribute("controlslist", value))
-        member this.crossorigin(value: string) = this.OnEval(fun x -> x.setAttribute("crossorigin", value))
-        member this.disableremoteplayback(value: System.String) = this.OnEval(fun x -> x.setAttribute("disableremoteplayback", value))
-        member this.loop(value: System.String) = this.OnEval(fun x -> x.setAttribute("loop", value))
-        member this.muted(value: System.String) = this.OnEval(fun x -> x.setAttribute("muted", value))
-        member this.preload(value: string) = this.OnEval(fun x -> x.setAttribute("preload", value))
-        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
-        
-        
-    
-    type img() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLImageElement>( " "elem.name" " )
-        member this.alt(value: System.String) = this.OnEval(fun x -> x.setAttribute("alt", value))
-        member this.crossorigin(value: string) = this.OnEval(fun x -> x.setAttribute("crossorigin", value))
-        member this.decoding(value: string) = this.OnEval(fun x -> x.setAttribute("decoding", value))
-        member this.fetchpriority(value: string) = this.OnEval(fun x -> x.setAttribute("fetchpriority", value))
-        member this.height(value: System.String) = this.OnEval(fun x -> x.setAttribute("height", value))
-        member this.ismap(value: System.String) = this.OnEval(fun x -> x.setAttribute("ismap", value))
-        member this.loading(value: string) = this.OnEval(fun x -> x.setAttribute("loading", value))
-        member this.referrerpolicy(value: string) = this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
-        member this.sizes(value: System.String) = this.OnEval(fun x -> x.setAttribute("sizes", value))
-        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
-        member this.srcset(value: System.String) = this.OnEval(fun x -> x.setAttribute("srcset", value))
-        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
-        member this.usemap(value: System.String) = this.OnEval(fun x -> x.setAttribute("usemap", value))
-        
-        
-    
-    type map() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLMapElement>( " "elem.name" " )
-        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
-        
-        
-    
-    type track() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTrackElement>( " "elem.name" " )
-        member this.default'(value: System.String) = this.OnEval(fun x -> x.setAttribute("default", value))
-        member this.kind(value: string) = this.OnEval(fun x -> x.setAttribute("kind", value))
-        member this.label(value: System.String) = this.OnEval(fun x -> x.setAttribute("label", value))
-        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
-        member this.srclang(value: System.String) = this.OnEval(fun x -> x.setAttribute("srclang", value))
-        
-        
-    
-    type video() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLVideoElement>( " "elem.name" " )
-        member this.autoplay(value: System.String) = this.OnEval(fun x -> x.setAttribute("autoplay", value))
-        member this.autopictureinpicture(value: System.String) = this.OnEval(fun x -> x.setAttribute("autopictureinpicture", value))
-        member this.controls(value: System.String) = this.OnEval(fun x -> x.setAttribute("controls", value))
-        member this.controlslist(value: System.String) = this.OnEval(fun x -> x.setAttribute("controlslist", value))
-        member this.crossorigin(value: string) = this.OnEval(fun x -> x.setAttribute("crossorigin", value))
-        member this.disablepictureinpicture(value: System.String) = this.OnEval(fun x -> x.setAttribute("disablepictureinpicture", value))
-        member this.disableremoteplayback(value: System.String) = this.OnEval(fun x -> x.setAttribute("disableremoteplayback", value))
-        member this.height(value: System.String) = this.OnEval(fun x -> x.setAttribute("height", value))
-        member this.loop(value: System.String) = this.OnEval(fun x -> x.setAttribute("loop", value))
-        member this.muted(value: System.String) = this.OnEval(fun x -> x.setAttribute("muted", value))
-        member this.playsinline(value: System.String) = this.OnEval(fun x -> x.setAttribute("playsinline", value))
-        member this.poster(value: System.String) = this.OnEval(fun x -> x.setAttribute("poster", value))
-        member this.preload(value: string) = this.OnEval(fun x -> x.setAttribute("preload", value))
-        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
-        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
-        
-        
-    
-    type embed() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLEmbedElement>( " "elem.name" " )
-        member this.height(value: System.String) = this.OnEval(fun x -> x.setAttribute("height", value))
-        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
-        member this.type'(value: System.String) = this.OnEval(fun x -> x.setAttribute("type", value))
-        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "i" )
         
         
     
     type iframe() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLIFrameElement>( " "elem.name" " )
+        inherit HTMLGlobalAttrsElementBuilder<HTMLIFrameElement>( "iframe" )
         member this.allow(value: System.String) = this.OnEval(fun x -> x.setAttribute("allow", value))
         member this.allowfullscreen(value: System.String) = this.OnEval(fun x -> x.setAttribute("allowfullscreen", value))
         member this.allowpaymentrequest(value: System.String) = this.OnEval(fun x -> x.setAttribute("allowpaymentrequest", value))
@@ -590,8 +428,124 @@ module HtmlElementBuilders =
         
         
     
+    type img() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLImageElement>( "img" )
+        member this.alt(value: System.String) = this.OnEval(fun x -> x.setAttribute("alt", value))
+        member this.crossorigin(value: string) = this.OnEval(fun x -> x.setAttribute("crossorigin", value))
+        member this.decoding(value: string) = this.OnEval(fun x -> x.setAttribute("decoding", value))
+        member this.fetchpriority(value: string) = this.OnEval(fun x -> x.setAttribute("fetchpriority", value))
+        member this.height(value: System.String) = this.OnEval(fun x -> x.setAttribute("height", value))
+        member this.ismap(value: System.String) = this.OnEval(fun x -> x.setAttribute("ismap", value))
+        member this.loading(value: string) = this.OnEval(fun x -> x.setAttribute("loading", value))
+        member this.referrerpolicy(value: string) = this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
+        member this.sizes(value: System.String) = this.OnEval(fun x -> x.setAttribute("sizes", value))
+        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
+        member this.srcset(value: System.String) = this.OnEval(fun x -> x.setAttribute("srcset", value))
+        member this.usemap(value: System.String) = this.OnEval(fun x -> x.setAttribute("usemap", value))
+        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
+        
+        
+    
+    type input() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLInputElement>( "input" )
+        member this.type'(value: System.String) = this.OnEval(fun x -> x.setAttribute("type", value))
+        
+        
+    
+    type ins() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLModElement>( "ins" )
+        member this.cite(value: System.String) = this.OnEval(fun x -> x.setAttribute("cite", value))
+        member this.datetime(value: System.String) = this.OnEval(fun x -> x.setAttribute("datetime", value))
+        
+        
+    
+    type kbd() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "kbd" )
+        
+        
+    
+    type label() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLLabelElement>( "label" )
+        member this.for'(value: System.String) = this.OnEval(fun x -> x.setAttribute("for", value))
+        
+        
+    
+    type legend() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLLegendElement>( "legend" )
+        
+        
+    
+    type li() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLLIElement>( "li" )
+        member this.type'(value: string) = this.OnEval(fun x -> x.setAttribute("type", value))
+        member this.value(value: System.String) = this.OnEval(fun x -> x.setAttribute("value", value))
+        
+        
+    
+    type link() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLLinkElement>( "link" )
+        member this.as'(value: System.String) = this.OnEval(fun x -> x.setAttribute("as", value))
+        member this.blocking(value: string) = this.OnEval(fun x -> x.setAttribute("blocking", value))
+        member this.crossorigin(value: string) = this.OnEval(fun x -> x.setAttribute("crossorigin", value))
+        member this.disabled(value: System.String) = this.OnEval(fun x -> x.setAttribute("disabled", value))
+        member this.fetchpriority(value: string) = this.OnEval(fun x -> x.setAttribute("fetchpriority", value))
+        member this.href(value: System.String) = this.OnEval(fun x -> x.setAttribute("href", value))
+        member this.hreflang(value: System.String) = this.OnEval(fun x -> x.setAttribute("hreflang", value))
+        member this.imagesizes(value: System.String) = this.OnEval(fun x -> x.setAttribute("imagesizes", value))
+        member this.imagesrcset(value: System.String) = this.OnEval(fun x -> x.setAttribute("imagesrcset", value))
+        member this.integrity(value: System.String) = this.OnEval(fun x -> x.setAttribute("integrity", value))
+        member this.media(value: System.String) = this.OnEval(fun x -> x.setAttribute("media", value))
+        member this.prefetch(value: System.String) = this.OnEval(fun x -> x.setAttribute("prefetch", value))
+        member this.referrerpolicy(value: string) = this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
+        member this.rel(value: System.String) = this.OnEval(fun x -> x.setAttribute("rel", value))
+        member this.sizes(value: string) = this.OnEval(fun x -> x.setAttribute("sizes", value))
+        member this.title(value: System.String) = this.OnEval(fun x -> x.setAttribute("title", value))
+        member this.type'(value: System.String) = this.OnEval(fun x -> x.setAttribute("type", value))
+        
+        
+    
+    type main() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "main" )
+        
+        
+    
+    type map() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLMapElement>( "map" )
+        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
+        
+        
+    
+    type mark() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "mark" )
+        
+        
+    
+    type menu() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLMenuElement>( "menu" )
+        
+        
+    
+    type meta() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLMetaElement>( "meta" )
+        member this.charset(value: System.String) = this.OnEval(fun x -> x.setAttribute("charset", value))
+        member this.content(value: System.String) = this.OnEval(fun x -> x.setAttribute("content", value))
+        member this.httpEquiv(value: string) = this.OnEval(fun x -> x.setAttribute("http-equiv", value))
+        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
+        
+        
+    
+    type nav() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "nav" )
+        
+        
+    
+    type noscript() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "noscript" )
+        
+        
+    
     type object() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLObjectElement>( " "elem.name" " )
+        inherit HTMLGlobalAttrsElementBuilder<HTMLObjectElement>( "object" )
         member this.archive(value: System.String) = this.OnEval(fun x -> x.setAttribute("archive", value))
         member this.border(value: System.String) = this.OnEval(fun x -> x.setAttribute("border", value))
         member this.classid(value: System.String) = this.OnEval(fun x -> x.setAttribute("classid", value))
@@ -609,34 +563,85 @@ module HtmlElementBuilders =
         
         
     
-    type source() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLSourceElement>( " "elem.name" " )
-        member this.type'(value: System.String) = this.OnEval(fun x -> x.setAttribute("type", value))
-        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
-        member this.srcset(value: System.String) = this.OnEval(fun x -> x.setAttribute("srcset", value))
-        member this.sizes(value: System.String) = this.OnEval(fun x -> x.setAttribute("sizes", value))
-        member this.media(value: System.String) = this.OnEval(fun x -> x.setAttribute("media", value))
-        member this.height(value: System.String) = this.OnEval(fun x -> x.setAttribute("height", value))
-        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
+    type ol() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLOListElement>( "ol" )
+        member this.reversed(value: System.String) = this.OnEval(fun x -> x.setAttribute("reversed", value))
+        member this.start(value: System.String) = this.OnEval(fun x -> x.setAttribute("start", value))
+        member this.type'(value: string) = this.OnEval(fun x -> x.setAttribute("type", value))
         
         
     
-    type canvas() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLCanvasElement>( " "elem.name" " )
-        member this.height(value: System.String) = this.OnEval(fun x -> x.setAttribute("height", value))
-        member this.mozOpaque(value: System.String) = this.OnEval(fun x -> x.setAttribute("moz-opaque", value))
-        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
+    type optgroup() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLOptGroupElement>( "optgroup" )
+        member this.disabled(value: System.String) = this.OnEval(fun x -> x.setAttribute("disabled", value))
+        member this.label(value: System.String) = this.OnEval(fun x -> x.setAttribute("label", value))
         
         
     
-    type noscript() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
+    type option() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLOptionElement>( "option" )
+        member this.disabled(value: System.String) = this.OnEval(fun x -> x.setAttribute("disabled", value))
+        member this.label(value: System.String) = this.OnEval(fun x -> x.setAttribute("label", value))
+        member this.selected(value: System.String) = this.OnEval(fun x -> x.setAttribute("selected", value))
+        member this.value(value: System.String) = this.OnEval(fun x -> x.setAttribute("value", value))
+        
+        
+    
+    type p() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLParagraphElement>( "p" )
+        
+        
+    
+    type pre() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLPreElement>( "pre" )
+        member this.cols(value: System.String) = this.OnEval(fun x -> x.setAttribute("cols", value))
+        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
+        member this.wrap(value: System.String) = this.OnEval(fun x -> x.setAttribute("wrap", value))
+        
+        
+    
+    type progress() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLProgressElement>( "progress" )
+        member this.max(value: System.String) = this.OnEval(fun x -> x.setAttribute("max", value))
+        member this.value(value: System.String) = this.OnEval(fun x -> x.setAttribute("value", value))
+        
+        
+    
+    type q() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLQuoteElement>( "q" )
+        member this.cite(value: System.String) = this.OnEval(fun x -> x.setAttribute("cite", value))
+        
+        
+    
+    type rp() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "rp" )
+        
+        
+    
+    type rt() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "rt" )
+        
+        
+    
+    type ruby() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "ruby" )
+        
+        
+    
+    type s() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "s" )
+        
+        
+    
+    type samp() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "samp" )
         
         
     
     type script() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLScriptElement>( " "elem.name" " )
+        inherit HTMLGlobalAttrsElementBuilder<HTMLScriptElement>( "script" )
         member this.async(value: System.String) = this.OnEval(fun x -> x.setAttribute("async", value))
+        member this.blocking(value: string) = this.OnEval(fun x -> x.setAttribute("blocking", value))
         member this.crossorigin(value: System.String) = this.OnEval(fun x -> x.setAttribute("crossorigin", value))
         member this.defer(value: System.String) = this.OnEval(fun x -> x.setAttribute("defer", value))
         member this.fetchpriority(value: string) = this.OnEval(fun x -> x.setAttribute("fetchpriority", value))
@@ -646,167 +651,16 @@ module HtmlElementBuilders =
         member this.referrerpolicy(value: string) = this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
         member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
         member this.type'(value: string) = this.OnEval(fun x -> x.setAttribute("type", value))
-        member this.blocking(value: string) = this.OnEval(fun x -> x.setAttribute("blocking", value))
         
         
     
-    type del() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLModElement>( " "elem.name" " )
-        member this.cite(value: System.String) = this.OnEval(fun x -> x.setAttribute("cite", value))
-        member this.datetime(value: System.String) = this.OnEval(fun x -> x.setAttribute("datetime", value))
-        
-        
-    
-    type ins() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLModElement>( " "elem.name" " )
-        member this.cite(value: System.String) = this.OnEval(fun x -> x.setAttribute("cite", value))
-        member this.datetime(value: System.String) = this.OnEval(fun x -> x.setAttribute("datetime", value))
-        
-        
-    
-    type caption() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableCaptionElement>( " "elem.name" " )
-        
-        
-    
-    type col() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableColElement>( " "elem.name" " )
-        member this.span(value: System.String) = this.OnEval(fun x -> x.setAttribute("span", value))
-        
-        
-    
-    type colgroup() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableColElement>( " "elem.name" " )
-        member this.span(value: System.String) = this.OnEval(fun x -> x.setAttribute("span", value))
-        
-        
-    
-    type table() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableElement>( " "elem.name" " )
-        
-        
-    
-    type tbody() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableSectionElement>( " "elem.name" " )
-        
-        
-    
-    type td() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableCellElement>( " "elem.name" " )
-        member this.colspan(value: System.String) = this.OnEval(fun x -> x.setAttribute("colspan", value))
-        member this.headers(value: System.String) = this.OnEval(fun x -> x.setAttribute("headers", value))
-        member this.rowspan(value: System.String) = this.OnEval(fun x -> x.setAttribute("rowspan", value))
-        
-        
-    
-    type tfoot() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableSectionElement>( " "elem.name" " )
-        
-        
-    
-    type th() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableCellElement>( " "elem.name" " )
-        member this.abbr(value: System.String) = this.OnEval(fun x -> x.setAttribute("abbr", value))
-        member this.colspan(value: System.String) = this.OnEval(fun x -> x.setAttribute("colspan", value))
-        member this.headers(value: System.String) = this.OnEval(fun x -> x.setAttribute("headers", value))
-        member this.rowspan(value: System.String) = this.OnEval(fun x -> x.setAttribute("rowspan", value))
-        member this.scope(value: string) = this.OnEval(fun x -> x.setAttribute("scope", value))
-        
-        
-    
-    type thead() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableSectionElement>( " "elem.name" " )
-        
-        
-    
-    type tr() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableRowElement>( " "elem.name" " )
-        
-        
-    
-    type button() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLButtonElement>( " "elem.name" " )
-        member this.autofocus(value: System.String) = this.OnEval(fun x -> x.setAttribute("autofocus", value))
-        member this.autocomplete(value: System.String) = this.OnEval(fun x -> x.setAttribute("autocomplete", value))
-        member this.disabled(value: System.String) = this.OnEval(fun x -> x.setAttribute("disabled", value))
-        member this.form(value: System.String) = this.OnEval(fun x -> x.setAttribute("form", value))
-        member this.formaction(value: System.String) = this.OnEval(fun x -> x.setAttribute("formaction", value))
-        member this.formenctype(value: string) = this.OnEval(fun x -> x.setAttribute("formenctype", value))
-        member this.formmethod(value: string) = this.OnEval(fun x -> x.setAttribute("formmethod", value))
-        member this.formnovalidate(value: System.String) = this.OnEval(fun x -> x.setAttribute("formnovalidate", value))
-        member this.formtarget(value: string) = this.OnEval(fun x -> x.setAttribute("formtarget", value))
-        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
-        member this.type'(value: string) = this.OnEval(fun x -> x.setAttribute("type", value))
-        member this.value(value: System.String) = this.OnEval(fun x -> x.setAttribute("value", value))
-        
-        
-    
-    type datalist() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLDataListElement>( " "elem.name" " )
-        
-        
-    
-    type fieldset() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLFieldSetElement>( " "elem.name" " )
-        member this.disabled(value: System.String) = this.OnEval(fun x -> x.setAttribute("disabled", value))
-        member this.form(value: System.String) = this.OnEval(fun x -> x.setAttribute("form", value))
-        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
-        
-        
-    
-    type form() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLFormElement>( " "elem.name" " )
-        member this.accept(value: System.String) = this.OnEval(fun x -> x.setAttribute("accept", value))
-        member this.acceptCharset(value: System.String) = this.OnEval(fun x -> x.setAttribute("accept-charset", value))
-        member this.autocapitalize(value: string) = this.OnEval(fun x -> x.setAttribute("autocapitalize", value))
-        member this.autocomplete(value: string) = this.OnEval(fun x -> x.setAttribute("autocomplete", value))
-        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
-        member this.rel(value: System.String) = this.OnEval(fun x -> x.setAttribute("rel", value))
-        
-        
-    
-    type input() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLInputElement>( " "elem.name" " )
-        member this.type'(value: System.String) = this.OnEval(fun x -> x.setAttribute("type", value))
-        
-        
-    
-    type label() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLLabelElement>( " "elem.name" " )
-        member this.for'(value: System.String) = this.OnEval(fun x -> x.setAttribute("for", value))
-        
-        
-    
-    type legend() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLLegendElement>( " "elem.name" " )
-        
-        
-    
-    type optgroup() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLOptGroupElement>( " "elem.name" " )
-        member this.disabled(value: System.String) = this.OnEval(fun x -> x.setAttribute("disabled", value))
-        member this.label(value: System.String) = this.OnEval(fun x -> x.setAttribute("label", value))
-        
-        
-    
-    type option() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLOptionElement>( " "elem.name" " )
-        member this.disabled(value: System.String) = this.OnEval(fun x -> x.setAttribute("disabled", value))
-        member this.label(value: System.String) = this.OnEval(fun x -> x.setAttribute("label", value))
-        member this.selected(value: System.String) = this.OnEval(fun x -> x.setAttribute("selected", value))
-        member this.value(value: System.String) = this.OnEval(fun x -> x.setAttribute("value", value))
-        
-        
-    
-    type progress() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLProgressElement>( " "elem.name" " )
-        member this.max(value: System.String) = this.OnEval(fun x -> x.setAttribute("max", value))
-        member this.value(value: System.String) = this.OnEval(fun x -> x.setAttribute("value", value))
+    type section() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "section" )
         
         
     
     type select() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLSelectElement>( " "elem.name" " )
+        inherit HTMLGlobalAttrsElementBuilder<HTMLSelectElement>( "select" )
         member this.autocomplete(value: System.String) = this.OnEval(fun x -> x.setAttribute("autocomplete", value))
         member this.autofocus(value: System.String) = this.OnEval(fun x -> x.setAttribute("autofocus", value))
         member this.disabled(value: System.String) = this.OnEval(fun x -> x.setAttribute("disabled", value))
@@ -818,8 +672,77 @@ module HtmlElementBuilders =
         
         
     
+    type small() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "small" )
+        
+        
+    
+    type source() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLSourceElement>( "source" )
+        member this.height(value: System.String) = this.OnEval(fun x -> x.setAttribute("height", value))
+        member this.media(value: System.String) = this.OnEval(fun x -> x.setAttribute("media", value))
+        member this.sizes(value: System.String) = this.OnEval(fun x -> x.setAttribute("sizes", value))
+        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
+        member this.srcset(value: System.String) = this.OnEval(fun x -> x.setAttribute("srcset", value))
+        member this.type'(value: System.String) = this.OnEval(fun x -> x.setAttribute("type", value))
+        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
+        
+        
+    
+    type span() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLSpanElement>( "span" )
+        
+        
+    
+    type strong() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "strong" )
+        
+        
+    
+    type style() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLStyleElement>( "style" )
+        member this.blocking(value: string) = this.OnEval(fun x -> x.setAttribute("blocking", value))
+        member this.media(value: System.String) = this.OnEval(fun x -> x.setAttribute("media", value))
+        member this.nonce(value: System.String) = this.OnEval(fun x -> x.setAttribute("nonce", value))
+        member this.title(value: System.String) = this.OnEval(fun x -> x.setAttribute("title", value))
+        
+        
+    
+    type sub() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "sub" )
+        
+        
+    
+    type summary() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "summary" )
+        
+        
+    
+    type sup() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "sup" )
+        
+        
+    
+    type table() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLTableElement>( "table" )
+        
+        
+    
+    type tbody() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLTableSectionElement>( "tbody" )
+        
+        
+    
+    type td() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLTableCellElement>( "td" )
+        member this.colspan(value: System.String) = this.OnEval(fun x -> x.setAttribute("colspan", value))
+        member this.headers(value: System.String) = this.OnEval(fun x -> x.setAttribute("headers", value))
+        member this.rowspan(value: System.String) = this.OnEval(fun x -> x.setAttribute("rowspan", value))
+        
+        
+    
     type textarea() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTextAreaElement>( " "elem.name" " )
+        inherit HTMLGlobalAttrsElementBuilder<HTMLTextAreaElement>( "textarea" )
         member this.autocomplete(value: string) = this.OnEval(fun x -> x.setAttribute("autocomplete", value))
         member this.autocorrect(value: string) = this.OnEval(fun x -> x.setAttribute("autocorrect", value))
         member this.autofocus(value: System.String) = this.OnEval(fun x -> x.setAttribute("autofocus", value))
@@ -838,112 +761,290 @@ module HtmlElementBuilders =
         
         
     
-    type summary() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( " "elem.name" " )
+    type tfoot() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLTableSectionElement>( "tfoot" )
+        
+        
+    
+    type th() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLTableCellElement>( "th" )
+        member this.abbr(value: System.String) = this.OnEval(fun x -> x.setAttribute("abbr", value))
+        member this.colspan(value: System.String) = this.OnEval(fun x -> x.setAttribute("colspan", value))
+        member this.headers(value: System.String) = this.OnEval(fun x -> x.setAttribute("headers", value))
+        member this.rowspan(value: System.String) = this.OnEval(fun x -> x.setAttribute("rowspan", value))
+        member this.scope(value: string) = this.OnEval(fun x -> x.setAttribute("scope", value))
+        
+        
+    
+    type thead() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLTableSectionElement>( "thead" )
+        
+        
+    
+    type title() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLTitleElement>( "title" )
+        
+        
+    
+    type tr() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLTableRowElement>( "tr" )
+        
+        
+    
+    type track() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLTrackElement>( "track" )
+        member this.default'(value: System.String) = this.OnEval(fun x -> x.setAttribute("default", value))
+        member this.kind(value: string) = this.OnEval(fun x -> x.setAttribute("kind", value))
+        member this.label(value: System.String) = this.OnEval(fun x -> x.setAttribute("label", value))
+        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
+        member this.srclang(value: System.String) = this.OnEval(fun x -> x.setAttribute("srclang", value))
+        
+        
+    
+    type u() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "u" )
+        
+        
+    
+    type ul() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLUListElement>( "ul" )
+        member this.compact(value: System.String) = this.OnEval(fun x -> x.setAttribute("compact", value))
+        member this.type'(value: string) = this.OnEval(fun x -> x.setAttribute("type", value))
+        
+        
+    
+    type var() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "var" )
+        
+        
+    
+    type video() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLVideoElement>( "video" )
+        member this.autopictureinpicture(value: System.String) = this.OnEval(fun x -> x.setAttribute("autopictureinpicture", value))
+        member this.autoplay(value: System.String) = this.OnEval(fun x -> x.setAttribute("autoplay", value))
+        member this.controls(value: System.String) = this.OnEval(fun x -> x.setAttribute("controls", value))
+        member this.controlslist(value: System.String) = this.OnEval(fun x -> x.setAttribute("controlslist", value))
+        member this.crossorigin(value: string) = this.OnEval(fun x -> x.setAttribute("crossorigin", value))
+        member this.disablepictureinpicture(value: System.String) = this.OnEval(fun x -> x.setAttribute("disablepictureinpicture", value))
+        member this.disableremoteplayback(value: System.String) = this.OnEval(fun x -> x.setAttribute("disableremoteplayback", value))
+        member this.height(value: System.String) = this.OnEval(fun x -> x.setAttribute("height", value))
+        member this.loop(value: System.String) = this.OnEval(fun x -> x.setAttribute("loop", value))
+        member this.muted(value: System.String) = this.OnEval(fun x -> x.setAttribute("muted", value))
+        member this.playsinline(value: System.String) = this.OnEval(fun x -> x.setAttribute("playsinline", value))
+        member this.poster(value: System.String) = this.OnEval(fun x -> x.setAttribute("poster", value))
+        member this.preload(value: string) = this.OnEval(fun x -> x.setAttribute("preload", value))
+        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
+        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
+        
+        
+    
+    type wbr() =
+        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "wbr" )
         
         
     
 
 type Html =
-    static member inline HTMLGlobalAttrsElementBuilder = HtmlElementBuilders.HTMLGlobalAttrsElementBuilder()
-    static member inline html = HtmlElementBuilders. "elem.name" ()
-    static member inline head = HtmlElementBuilders. "elem.name" ()
-    static member inline link = HtmlElementBuilders. "elem.name" ()
-    static member inline meta = HtmlElementBuilders. "elem.name" ()
-    static member inline style = HtmlElementBuilders. "elem.name" ()
-    static member inline title = HtmlElementBuilders. "elem.name" ()
-    static member inline body = HtmlElementBuilders. "elem.name" ()
-    static member inline address = HtmlElementBuilders. "elem.name" ()
-    static member inline article = HtmlElementBuilders. "elem.name" ()
-    static member inline aside = HtmlElementBuilders. "elem.name" ()
-    static member inline footer = HtmlElementBuilders. "elem.name" ()
-    static member inline header = HtmlElementBuilders. "elem.name" ()
-    static member inline h1 = HtmlElementBuilders. "elem.name" ()
-    static member inline h2 = HtmlElementBuilders. "elem.name" ()
-    static member inline h3 = HtmlElementBuilders. "elem.name" ()
-    static member inline h4 = HtmlElementBuilders. "elem.name" ()
-    static member inline h5 = HtmlElementBuilders. "elem.name" ()
-    static member inline h6 = HtmlElementBuilders. "elem.name" ()
-    static member inline main = HtmlElementBuilders. "elem.name" ()
-    static member inline nav = HtmlElementBuilders. "elem.name" ()
-    static member inline section = HtmlElementBuilders. "elem.name" ()
-    static member inline blockquote = HtmlElementBuilders. "elem.name" ()
-    static member inline dd = HtmlElementBuilders. "elem.name" ()
-    static member inline div = HtmlElementBuilders. "elem.name" ()
-    static member inline dl = HtmlElementBuilders. "elem.name" ()
-    static member inline dt = HtmlElementBuilders. "elem.name" ()
-    static member inline figcaption = HtmlElementBuilders. "elem.name" ()
-    static member inline figure = HtmlElementBuilders. "elem.name" ()
-    static member inline hr = HtmlElementBuilders. "elem.name" ()
-    static member inline li = HtmlElementBuilders. "elem.name" ()
-    static member inline menu = HtmlElementBuilders. "elem.name" ()
-    static member inline ol = HtmlElementBuilders. "elem.name" ()
-    static member inline p = HtmlElementBuilders. "elem.name" ()
-    static member inline pre = HtmlElementBuilders. "elem.name" ()
-    static member inline ul = HtmlElementBuilders. "elem.name" ()
-    static member inline a = HtmlElementBuilders. "elem.name" ()
-    static member inline abbr = HtmlElementBuilders. "elem.name" ()
-    static member inline b = HtmlElementBuilders. "elem.name" ()
-    static member inline bdi = HtmlElementBuilders. "elem.name" ()
-    static member inline bdo = HtmlElementBuilders. "elem.name" ()
-    static member inline br = HtmlElementBuilders. "elem.name" ()
-    static member inline cite = HtmlElementBuilders. "elem.name" ()
-    static member inline code = HtmlElementBuilders. "elem.name" ()
-    static member inline dfn = HtmlElementBuilders. "elem.name" ()
-    static member inline em = HtmlElementBuilders. "elem.name" ()
-    static member inline i = HtmlElementBuilders. "elem.name" ()
-    static member inline kbd = HtmlElementBuilders. "elem.name" ()
-    static member inline mark = HtmlElementBuilders. "elem.name" ()
-    static member inline q = HtmlElementBuilders. "elem.name" ()
-    static member inline rp = HtmlElementBuilders. "elem.name" ()
-    static member inline rt = HtmlElementBuilders. "elem.name" ()
-    static member inline ruby = HtmlElementBuilders. "elem.name" ()
-    static member inline s = HtmlElementBuilders. "elem.name" ()
-    static member inline samp = HtmlElementBuilders. "elem.name" ()
-    static member inline small = HtmlElementBuilders. "elem.name" ()
-    static member inline span = HtmlElementBuilders. "elem.name" ()
-    static member inline strong = HtmlElementBuilders. "elem.name" ()
-    static member inline sub = HtmlElementBuilders. "elem.name" ()
-    static member inline sup = HtmlElementBuilders. "elem.name" ()
-    static member inline u = HtmlElementBuilders. "elem.name" ()
-    static member inline var = HtmlElementBuilders. "elem.name" ()
-    static member inline wbr = HtmlElementBuilders. "elem.name" ()
-    static member inline area = HtmlElementBuilders. "elem.name" ()
-    static member inline audio = HtmlElementBuilders. "elem.name" ()
-    static member inline img = HtmlElementBuilders. "elem.name" ()
-    static member inline map = HtmlElementBuilders. "elem.name" ()
-    static member inline track = HtmlElementBuilders. "elem.name" ()
-    static member inline video = HtmlElementBuilders. "elem.name" ()
-    static member inline embed = HtmlElementBuilders. "elem.name" ()
-    static member inline iframe = HtmlElementBuilders. "elem.name" ()
-    static member inline object = HtmlElementBuilders. "elem.name" ()
-    static member inline source = HtmlElementBuilders. "elem.name" ()
-    static member inline canvas = HtmlElementBuilders. "elem.name" ()
-    static member inline noscript = HtmlElementBuilders. "elem.name" ()
-    static member inline script = HtmlElementBuilders. "elem.name" ()
-    static member inline del = HtmlElementBuilders. "elem.name" ()
-    static member inline ins = HtmlElementBuilders. "elem.name" ()
-    static member inline caption = HtmlElementBuilders. "elem.name" ()
-    static member inline col = HtmlElementBuilders. "elem.name" ()
-    static member inline colgroup = HtmlElementBuilders. "elem.name" ()
-    static member inline table = HtmlElementBuilders. "elem.name" ()
-    static member inline tbody = HtmlElementBuilders. "elem.name" ()
-    static member inline td = HtmlElementBuilders. "elem.name" ()
-    static member inline tfoot = HtmlElementBuilders. "elem.name" ()
-    static member inline th = HtmlElementBuilders. "elem.name" ()
-    static member inline thead = HtmlElementBuilders. "elem.name" ()
-    static member inline tr = HtmlElementBuilders. "elem.name" ()
-    static member inline button = HtmlElementBuilders. "elem.name" ()
-    static member inline datalist = HtmlElementBuilders. "elem.name" ()
-    static member inline fieldset = HtmlElementBuilders. "elem.name" ()
-    static member inline form = HtmlElementBuilders. "elem.name" ()
-    static member inline input = HtmlElementBuilders. "elem.name" ()
-    static member inline label = HtmlElementBuilders. "elem.name" ()
-    static member inline legend = HtmlElementBuilders. "elem.name" ()
-    static member inline optgroup = HtmlElementBuilders. "elem.name" ()
-    static member inline option = HtmlElementBuilders. "elem.name" ()
-    static member inline progress = HtmlElementBuilders. "elem.name" ()
-    static member inline select = HtmlElementBuilders. "elem.name" ()
-    static member inline textarea = HtmlElementBuilders. "elem.name" ()
-    static member inline summary = HtmlElementBuilders. "elem.name" ()
+    
+    
+    
+    static member inline a = HtmlElementBuilders.a()
+    
+    static member inline abbr = HtmlElementBuilders.abbr()
+    
+    static member inline address = HtmlElementBuilders.address()
+    
+    static member inline area = HtmlElementBuilders.area()
+    
+    static member inline article = HtmlElementBuilders.article()
+    
+    static member inline aside = HtmlElementBuilders.aside()
+    
+    static member inline audio = HtmlElementBuilders.audio()
+    
+    static member inline b = HtmlElementBuilders.b()
+    
+    static member inline bdi = HtmlElementBuilders.bdi()
+    
+    static member inline bdo = HtmlElementBuilders.bdo()
+    
+    static member inline blockquote = HtmlElementBuilders.blockquote()
+    
+    static member inline body = HtmlElementBuilders.body()
+    
+    static member inline br = HtmlElementBuilders.br()
+    
+    static member inline button = HtmlElementBuilders.button()
+    
+    static member inline canvas = HtmlElementBuilders.canvas()
+    
+    static member inline caption = HtmlElementBuilders.caption()
+    
+    static member inline cite = HtmlElementBuilders.cite()
+    
+    static member inline code = HtmlElementBuilders.code()
+    
+    static member inline col = HtmlElementBuilders.col()
+    
+    static member inline colgroup = HtmlElementBuilders.colgroup()
+    
+    static member inline datalist = HtmlElementBuilders.datalist()
+    
+    static member inline dd = HtmlElementBuilders.dd()
+    
+    static member inline del = HtmlElementBuilders.del()
+    
+    static member inline dfn = HtmlElementBuilders.dfn()
+    
+    static member inline div = HtmlElementBuilders.div()
+    
+    static member inline dl = HtmlElementBuilders.dl()
+    
+    static member inline dt = HtmlElementBuilders.dt()
+    
+    static member inline em = HtmlElementBuilders.em()
+    
+    static member inline embed = HtmlElementBuilders.embed()
+    
+    static member inline fieldset = HtmlElementBuilders.fieldset()
+    
+    static member inline figcaption = HtmlElementBuilders.figcaption()
+    
+    static member inline figure = HtmlElementBuilders.figure()
+    
+    static member inline footer = HtmlElementBuilders.footer()
+    
+    static member inline form = HtmlElementBuilders.form()
+    
+    static member inline h1 = HtmlElementBuilders.h1()
+    
+    static member inline h2 = HtmlElementBuilders.h2()
+    
+    static member inline h3 = HtmlElementBuilders.h3()
+    
+    static member inline h4 = HtmlElementBuilders.h4()
+    
+    static member inline h5 = HtmlElementBuilders.h5()
+    
+    static member inline h6 = HtmlElementBuilders.h6()
+    
+    static member inline head = HtmlElementBuilders.head()
+    
+    static member inline header = HtmlElementBuilders.header()
+    
+    static member inline hr = HtmlElementBuilders.hr()
+    
+    static member inline html = HtmlElementBuilders.html()
+    
+    static member inline i = HtmlElementBuilders.i()
+    
+    static member inline iframe = HtmlElementBuilders.iframe()
+    
+    static member inline img = HtmlElementBuilders.img()
+    
+    static member inline input = HtmlElementBuilders.input()
+    
+    static member inline ins = HtmlElementBuilders.ins()
+    
+    static member inline kbd = HtmlElementBuilders.kbd()
+    
+    static member inline label = HtmlElementBuilders.label()
+    
+    static member inline legend = HtmlElementBuilders.legend()
+    
+    static member inline li = HtmlElementBuilders.li()
+    
+    static member inline link = HtmlElementBuilders.link()
+    
+    static member inline main = HtmlElementBuilders.main()
+    
+    static member inline map = HtmlElementBuilders.map()
+    
+    static member inline mark = HtmlElementBuilders.mark()
+    
+    static member inline menu = HtmlElementBuilders.menu()
+    
+    static member inline meta = HtmlElementBuilders.meta()
+    
+    static member inline nav = HtmlElementBuilders.nav()
+    
+    static member inline noscript = HtmlElementBuilders.noscript()
+    
+    static member inline object = HtmlElementBuilders.object()
+    
+    static member inline ol = HtmlElementBuilders.ol()
+    
+    static member inline optgroup = HtmlElementBuilders.optgroup()
+    
+    static member inline option = HtmlElementBuilders.option()
+    
+    static member inline p = HtmlElementBuilders.p()
+    
+    static member inline pre = HtmlElementBuilders.pre()
+    
+    static member inline progress = HtmlElementBuilders.progress()
+    
+    static member inline q = HtmlElementBuilders.q()
+    
+    static member inline rp = HtmlElementBuilders.rp()
+    
+    static member inline rt = HtmlElementBuilders.rt()
+    
+    static member inline ruby = HtmlElementBuilders.ruby()
+    
+    static member inline s = HtmlElementBuilders.s()
+    
+    static member inline samp = HtmlElementBuilders.samp()
+    
+    static member inline script = HtmlElementBuilders.script()
+    
+    static member inline section = HtmlElementBuilders.section()
+    
+    static member inline select = HtmlElementBuilders.select()
+    
+    static member inline small = HtmlElementBuilders.small()
+    
+    static member inline source = HtmlElementBuilders.source()
+    
+    static member inline span = HtmlElementBuilders.span()
+    
+    static member inline strong = HtmlElementBuilders.strong()
+    
+    static member inline style = HtmlElementBuilders.style()
+    
+    static member inline sub = HtmlElementBuilders.sub()
+    
+    static member inline summary = HtmlElementBuilders.summary()
+    
+    static member inline sup = HtmlElementBuilders.sup()
+    
+    static member inline table = HtmlElementBuilders.table()
+    
+    static member inline tbody = HtmlElementBuilders.tbody()
+    
+    static member inline td = HtmlElementBuilders.td()
+    
+    static member inline textarea = HtmlElementBuilders.textarea()
+    
+    static member inline tfoot = HtmlElementBuilders.tfoot()
+    
+    static member inline th = HtmlElementBuilders.th()
+    
+    static member inline thead = HtmlElementBuilders.thead()
+    
+    static member inline title = HtmlElementBuilders.title()
+    
+    static member inline tr = HtmlElementBuilders.tr()
+    
+    static member inline track = HtmlElementBuilders.track()
+    
+    static member inline u = HtmlElementBuilders.u()
+    
+    static member inline ul = HtmlElementBuilders.ul()
+    
+    static member inline var = HtmlElementBuilders.var()
+    
+    static member inline video = HtmlElementBuilders.video()
+    
+    static member inline wbr = HtmlElementBuilders.wbr()
     
