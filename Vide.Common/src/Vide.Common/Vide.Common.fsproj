@@ -8,8 +8,8 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <Compile Include="lib\core.fs" />
-    <Content Include="*.fsproj; lib\**\*.fs; lib\**\*.fsi" PackagePath="fable\" />
+    <Compile Include="core.fs" />
+    <Content Include="*.fsproj; *.fs; *.js;" Exclude="**\*.fs.js" PackagePath="fable\" />
     <None Include="..\..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>

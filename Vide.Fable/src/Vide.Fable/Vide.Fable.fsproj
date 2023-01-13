@@ -13,9 +13,9 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Include="lib\fable.fs" />
-    <Compile Include="lib\htmlApi.fs" />
-    <Content Include="*.fsproj; lib\**\*.fs; lib\**\*.fsi" PackagePath="fable\" />
+    <Compile Include="fable.fs" />
+    <Compile Include="htmlApi.fs" />
+    <Content Include="*.fsproj; *.fs; *.js;" Exclude="**\*.fs.js" PackagePath="fable\" />
     <None Include="..\..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
   
