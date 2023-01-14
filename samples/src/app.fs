@@ -1,18 +1,17 @@
-module Vide.Fable.Samples.App
+module App
 
 open Browser
 open Vide
-open type Html
 
-let sampleContent = vide {
-    let! count = Mutable.ofValue 0
+// ---------------------------------------------
+// Uncomment the sample you would like to see!
+// ---------------------------------------------
+let sample = 
+    //Counter.view
+    TodoList.view
 
-    div { $"Count = {count.Value}" }
-    button.onclick(fun _ -> count -= 1) { "dec" }
-    button.onclick(fun _ -> count += 1) { "inc" }
-}
-
-let host = document.getElementById("sample")
-let app = App.createFableWithObjState host sampleContent (fun _ _ -> ())
-console.log("Hurz")
-do app.RequestEvaluation()
+// Bootstrap the app :)
+do
+    let host = document.getElementById("sample")
+    let app = App.createFableWithObjState host sample (fun _ _ -> ())
+    app.RequestEvaluation()

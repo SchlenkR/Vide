@@ -7,6 +7,7 @@
 
 namespace Vide
 
+open System.Runtime.CompilerServices
 open Browser.Types
 open Vide
 
@@ -14,835 +15,1996 @@ module HtmlElementBuilders =
     
     type HTMLGlobalAttrsElementBuilder<'n when 'n :> HTMLElement>(tagName) =
         inherit HTMLElementBuilder<'n>(tagName)
-        member this.accesskey(value: System.String) = this.OnEval(fun x -> x.setAttribute("accesskey", value))
-        member this.autocapitalize(value: string) = this.OnEval(fun x -> x.setAttribute("autocapitalize", value))
-        member this.autofocus(value: System.String) = this.OnEval(fun x -> x.setAttribute("autofocus", value))
-        member this.className(value: System.String) = this.OnEval(fun x -> x.setAttribute("class", value))
-        member this.contenteditable(value: System.Boolean) = this.OnEval(fun x -> x.setAttribute("contenteditable", value.ToString()))
-        member this.contextmenu(value: System.String) = this.OnEval(fun x -> x.setAttribute("contextmenu", value))
-        member this.dir(value: string) = this.OnEval(fun x -> x.setAttribute("dir", value))
-        member this.draggable(value: System.Boolean) = this.OnEval(fun x -> x.setAttribute("draggable", value.ToString()))
-        member this.enterkeyhint(value: System.String) = this.OnEval(fun x -> x.setAttribute("enterkeyhint", value))
-        member this.exportparts(value: System.String) = this.OnEval(fun x -> x.setAttribute("exportparts", value))
-        member this.hidden(value: System.String) = this.OnEval(fun x -> x.setAttribute("hidden", value))
-        member this.id(value: System.String) = this.OnEval(fun x -> x.setAttribute("id", value))
-        member this.inert(value: System.String) = this.OnEval(fun x -> x.setAttribute("inert", value))
-        member this.inputmode(value: System.String) = this.OnEval(fun x -> x.setAttribute("inputmode", value))
-        member this.is(value: System.String) = this.OnEval(fun x -> x.setAttribute("is", value))
-        
-        member this.onabort(handler) = this.OnInit(fun x -> x.onabort <- handler)
-        member this.onblur(handler) = this.OnInit(fun x -> x.onblur <- handler)
-        member this.oncanplay(handler) = this.OnInit(fun x -> x.oncanplay <- handler)
-        member this.oncanplaythrough(handler) = this.OnInit(fun x -> x.oncanplaythrough <- handler)
-        member this.onchange(handler) = this.OnInit(fun x -> x.onchange <- handler)
-        member this.onclick(handler) = this.OnInit(fun x -> x.onclick <- handler)
-        member this.oncontextmenu(handler) = this.OnInit(fun x -> x.oncontextmenu <- handler)
-        member this.oncuechange(handler) = this.OnInit(fun x -> x.oncuechange <- handler)
-        member this.ondblclick(handler) = this.OnInit(fun x -> x.ondblclick <- handler)
-        member this.ondrag(handler) = this.OnInit(fun x -> x.ondrag <- handler)
-        member this.ondragend(handler) = this.OnInit(fun x -> x.ondragend <- handler)
-        member this.ondragenter(handler) = this.OnInit(fun x -> x.ondragenter <- handler)
-        member this.ondragleave(handler) = this.OnInit(fun x -> x.ondragleave <- handler)
-        member this.ondragover(handler) = this.OnInit(fun x -> x.ondragover <- handler)
-        member this.ondragstart(handler) = this.OnInit(fun x -> x.ondragstart <- handler)
-        member this.ondrop(handler) = this.OnInit(fun x -> x.ondrop <- handler)
-        member this.ondurationchange(handler) = this.OnInit(fun x -> x.ondurationchange <- handler)
-        member this.onemptied(handler) = this.OnInit(fun x -> x.onemptied <- handler)
-        member this.onended(handler) = this.OnInit(fun x -> x.onended <- handler)
-        member this.onerror(handler) = this.OnInit(fun x -> x.onerror <- handler)
-        member this.onfocus(handler) = this.OnInit(fun x -> x.onfocus <- handler)
-        member this.oninput(handler) = this.OnInit(fun x -> x.oninput <- handler)
-        member this.onkeydown(handler) = this.OnInit(fun x -> x.onkeydown <- handler)
-        member this.onkeypress(handler) = this.OnInit(fun x -> x.onkeypress <- handler)
-        member this.onkeyup(handler) = this.OnInit(fun x -> x.onkeyup <- handler)
-        member this.onload(handler) = this.OnInit(fun x -> x.onload <- handler)
-        member this.onloadeddata(handler) = this.OnInit(fun x -> x.onloadeddata <- handler)
-        member this.onloadedmetadata(handler) = this.OnInit(fun x -> x.onloadedmetadata <- handler)
-        member this.onloadstart(handler) = this.OnInit(fun x -> x.onloadstart <- handler)
-        member this.onmousedown(handler) = this.OnInit(fun x -> x.onmousedown <- handler)
-        member this.onmouseenter(handler) = this.OnInit(fun x -> x.onmouseenter <- handler)
-        member this.onmouseleave(handler) = this.OnInit(fun x -> x.onmouseleave <- handler)
-        member this.onmousemove(handler) = this.OnInit(fun x -> x.onmousemove <- handler)
-        member this.onmouseout(handler) = this.OnInit(fun x -> x.onmouseout <- handler)
-        member this.onmouseover(handler) = this.OnInit(fun x -> x.onmouseover <- handler)
-        member this.onmouseup(handler) = this.OnInit(fun x -> x.onmouseup <- handler)
-        member this.onmousewheel(handler) = this.OnInit(fun x -> x.onmousewheel <- handler)
-        member this.onpause(handler) = this.OnInit(fun x -> x.onpause <- handler)
-        member this.onplay(handler) = this.OnInit(fun x -> x.onplay <- handler)
-        member this.onplaying(handler) = this.OnInit(fun x -> x.onplaying <- handler)
-        member this.onprogress(handler) = this.OnInit(fun x -> x.onprogress <- handler)
-        member this.onratechange(handler) = this.OnInit(fun x -> x.onratechange <- handler)
-        member this.onreset(handler) = this.OnInit(fun x -> x.onreset <- handler)
-        member this.onscroll(handler) = this.OnInit(fun x -> x.onscroll <- handler)
-        member this.onseeked(handler) = this.OnInit(fun x -> x.onseeked <- handler)
-        member this.onseeking(handler) = this.OnInit(fun x -> x.onseeking <- handler)
-        member this.onselect(handler) = this.OnInit(fun x -> x.onselect <- handler)
-        member this.onstalled(handler) = this.OnInit(fun x -> x.onstalled <- handler)
-        member this.onsubmit(handler) = this.OnInit(fun x -> x.onsubmit <- handler)
-        member this.onsuspend(handler) = this.OnInit(fun x -> x.onsuspend <- handler)
-        member this.ontimeupdate(handler) = this.OnInit(fun x -> x.ontimeupdate <- handler)
-        member this.onvolumechange(handler) = this.OnInit(fun x -> x.onvolumechange <- handler)
-        member this.onwaiting(handler) = this.OnInit(fun x -> x.onwaiting <- handler)
-        
     
     type a() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLAnchorElement>( "a" )
-        member this.download(value: string) = this.OnEval(fun x -> x.setAttribute("download", value))
-        member this.href(value: string) = this.OnEval(fun x -> x.setAttribute("href", value))
-        member this.hreflang(value: System.String) = this.OnEval(fun x -> x.setAttribute("hreflang", value))
-        member this.ping(value: System.String) = this.OnEval(fun x -> x.setAttribute("ping", value))
-        member this.referrerpolicy(value: string) = this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
-        member this.rel(value: System.String) = this.OnEval(fun x -> x.setAttribute("rel", value))
-        member this.target(value: string) = this.OnEval(fun x -> x.setAttribute("target", value))
-        member this.type'(value: System.String) = this.OnEval(fun x -> x.setAttribute("type", value))
-        
-        
     
     type abbr() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "abbr" )
-        
-        
     
     type address() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "address" )
-        
-        
     
     type area() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLAreaElement>( "area" )
-        member this.alt(value: System.String) = this.OnEval(fun x -> x.setAttribute("alt", value))
-        member this.coords(value: string) = this.OnEval(fun x -> x.setAttribute("coords", value))
-        member this.download(value: System.String) = this.OnEval(fun x -> x.setAttribute("download", value))
-        member this.href(value: System.String) = this.OnEval(fun x -> x.setAttribute("href", value))
-        member this.hreflang(value: System.String) = this.OnEval(fun x -> x.setAttribute("hreflang", value))
-        member this.ping(value: System.String) = this.OnEval(fun x -> x.setAttribute("ping", value))
-        member this.referrerpolicy(value: string) = this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
-        member this.rel(value: System.String) = this.OnEval(fun x -> x.setAttribute("rel", value))
-        member this.shape(value: System.String) = this.OnEval(fun x -> x.setAttribute("shape", value))
-        member this.target(value: string) = this.OnEval(fun x -> x.setAttribute("target", value))
-        
-        
     
     type article() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "article" )
-        
-        
     
     type aside() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "aside" )
-        
-        
     
     type audio() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLAudioElement>( "audio" )
-        member this.autoplay(value: System.String) = this.OnEval(fun x -> x.setAttribute("autoplay", value))
-        member this.controls(value: System.String) = this.OnEval(fun x -> x.setAttribute("controls", value))
-        member this.controlslist(value: System.String) = this.OnEval(fun x -> x.setAttribute("controlslist", value))
-        member this.crossorigin(value: string) = this.OnEval(fun x -> x.setAttribute("crossorigin", value))
-        member this.disableremoteplayback(value: System.String) = this.OnEval(fun x -> x.setAttribute("disableremoteplayback", value))
-        member this.loop(value: System.String) = this.OnEval(fun x -> x.setAttribute("loop", value))
-        member this.muted(value: System.String) = this.OnEval(fun x -> x.setAttribute("muted", value))
-        member this.preload(value: string) = this.OnEval(fun x -> x.setAttribute("preload", value))
-        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
-        
-        
     
     type b() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "b" )
-        
-        
     
     type bdi() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "bdi" )
-        
-        
     
     type bdo() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "bdo" )
-        member this.dir(value: string) = this.OnEval(fun x -> x.setAttribute("dir", value))
-        
-        
     
     type blockquote() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLQuoteElement>( "blockquote" )
-        member this.cite(value: System.String) = this.OnEval(fun x -> x.setAttribute("cite", value))
-        
-        
     
     type body() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLBodyElement>( "body" )
-        member this.alink(value: System.String) = this.OnEval(fun x -> x.setAttribute("alink", value))
-        member this.background(value: System.String) = this.OnEval(fun x -> x.setAttribute("background", value))
-        member this.bgcolor(value: System.String) = this.OnEval(fun x -> x.setAttribute("bgcolor", value))
-        member this.bottommargin(value: System.String) = this.OnEval(fun x -> x.setAttribute("bottommargin", value))
-        member this.leftmargin(value: System.String) = this.OnEval(fun x -> x.setAttribute("leftmargin", value))
-        member this.link(value: System.String) = this.OnEval(fun x -> x.setAttribute("link", value))
-        member this.onafterprint(value: System.String) = this.OnEval(fun x -> x.setAttribute("onafterprint", value))
-        member this.onbeforeprint(value: System.String) = this.OnEval(fun x -> x.setAttribute("onbeforeprint", value))
-        member this.onbeforeunload(value: System.String) = this.OnEval(fun x -> x.setAttribute("onbeforeunload", value))
-        member this.onblur(value: System.String) = this.OnEval(fun x -> x.setAttribute("onblur", value))
-        member this.onerror(value: System.String) = this.OnEval(fun x -> x.setAttribute("onerror", value))
-        member this.onfocus(value: System.String) = this.OnEval(fun x -> x.setAttribute("onfocus", value))
-        member this.onhashchange(value: System.String) = this.OnEval(fun x -> x.setAttribute("onhashchange", value))
-        member this.onlanguagechange(value: System.String) = this.OnEval(fun x -> x.setAttribute("onlanguagechange", value))
-        member this.onload(value: System.String) = this.OnEval(fun x -> x.setAttribute("onload", value))
-        member this.onmessage(value: System.String) = this.OnEval(fun x -> x.setAttribute("onmessage", value))
-        member this.onoffline(value: System.String) = this.OnEval(fun x -> x.setAttribute("onoffline", value))
-        member this.ononline(value: System.String) = this.OnEval(fun x -> x.setAttribute("ononline", value))
-        member this.onpopstate(value: System.String) = this.OnEval(fun x -> x.setAttribute("onpopstate", value))
-        member this.onredo(value: System.String) = this.OnEval(fun x -> x.setAttribute("onredo", value))
-        member this.onresize(value: System.String) = this.OnEval(fun x -> x.setAttribute("onresize", value))
-        member this.onstorage(value: System.String) = this.OnEval(fun x -> x.setAttribute("onstorage", value))
-        member this.onundo(value: System.String) = this.OnEval(fun x -> x.setAttribute("onundo", value))
-        member this.onunload(value: System.String) = this.OnEval(fun x -> x.setAttribute("onunload", value))
-        member this.rightmargin(value: System.String) = this.OnEval(fun x -> x.setAttribute("rightmargin", value))
-        member this.text(value: System.String) = this.OnEval(fun x -> x.setAttribute("text", value))
-        member this.topmargin(value: System.String) = this.OnEval(fun x -> x.setAttribute("topmargin", value))
-        member this.vlink(value: System.String) = this.OnEval(fun x -> x.setAttribute("vlink", value))
-        
-        
     
     type br() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLBRElement>( "br" )
-        
-        
     
     type button() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLButtonElement>( "button" )
-        member this.autocomplete(value: System.String) = this.OnEval(fun x -> x.setAttribute("autocomplete", value))
-        member this.autofocus(value: System.String) = this.OnEval(fun x -> x.setAttribute("autofocus", value))
-        member this.disabled(value: System.String) = this.OnEval(fun x -> x.setAttribute("disabled", value))
-        member this.form(value: System.String) = this.OnEval(fun x -> x.setAttribute("form", value))
-        member this.formaction(value: System.String) = this.OnEval(fun x -> x.setAttribute("formaction", value))
-        member this.formenctype(value: string) = this.OnEval(fun x -> x.setAttribute("formenctype", value))
-        member this.formmethod(value: string) = this.OnEval(fun x -> x.setAttribute("formmethod", value))
-        member this.formnovalidate(value: System.String) = this.OnEval(fun x -> x.setAttribute("formnovalidate", value))
-        member this.formtarget(value: string) = this.OnEval(fun x -> x.setAttribute("formtarget", value))
-        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
-        member this.type'(value: string) = this.OnEval(fun x -> x.setAttribute("type", value))
-        member this.value(value: System.String) = this.OnEval(fun x -> x.setAttribute("value", value))
-        
-        
     
     type canvas() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLCanvasElement>( "canvas" )
-        member this.height(value: System.String) = this.OnEval(fun x -> x.setAttribute("height", value))
-        member this.mozOpaque(value: System.String) = this.OnEval(fun x -> x.setAttribute("moz-opaque", value))
-        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
-        
-        
     
     type caption() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLTableCaptionElement>( "caption" )
-        
-        
     
     type cite() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "cite" )
-        
-        
     
     type code() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "code" )
-        
-        
     
     type col() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLTableColElement>( "col" )
-        member this.span(value: System.String) = this.OnEval(fun x -> x.setAttribute("span", value))
-        
-        
     
     type colgroup() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLTableColElement>( "colgroup" )
-        member this.span(value: System.String) = this.OnEval(fun x -> x.setAttribute("span", value))
-        
-        
     
     type datalist() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLDataListElement>( "datalist" )
-        
-        
     
     type dd() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "dd" )
-        member this.nowrap(value: System.String) = this.OnEval(fun x -> x.setAttribute("nowrap", value))
-        
-        
     
     type del() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLModElement>( "del" )
-        member this.cite(value: System.String) = this.OnEval(fun x -> x.setAttribute("cite", value))
-        member this.datetime(value: System.String) = this.OnEval(fun x -> x.setAttribute("datetime", value))
-        
-        
     
     type dfn() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "dfn" )
-        
-        
     
     type div() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLDivElement>( "div" )
-        
-        
     
     type dl() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLDListElement>( "dl" )
-        
-        
     
     type dt() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "dt" )
-        
-        
     
     type em() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "em" )
-        
-        
     
     type embed() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLEmbedElement>( "embed" )
-        member this.height(value: System.String) = this.OnEval(fun x -> x.setAttribute("height", value))
-        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
-        member this.type'(value: System.String) = this.OnEval(fun x -> x.setAttribute("type", value))
-        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
-        
-        
     
     type fieldset() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLFieldSetElement>( "fieldset" )
-        member this.disabled(value: System.String) = this.OnEval(fun x -> x.setAttribute("disabled", value))
-        member this.form(value: System.String) = this.OnEval(fun x -> x.setAttribute("form", value))
-        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
-        
-        
     
     type figcaption() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "figcaption" )
-        
-        
     
     type figure() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "figure" )
-        
-        
     
     type footer() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "footer" )
-        
-        
     
     type form() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLFormElement>( "form" )
-        member this.accept(value: System.String) = this.OnEval(fun x -> x.setAttribute("accept", value))
-        member this.acceptCharset(value: System.String) = this.OnEval(fun x -> x.setAttribute("accept-charset", value))
-        member this.autocapitalize(value: string) = this.OnEval(fun x -> x.setAttribute("autocapitalize", value))
-        member this.autocomplete(value: string) = this.OnEval(fun x -> x.setAttribute("autocomplete", value))
-        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
-        member this.rel(value: System.String) = this.OnEval(fun x -> x.setAttribute("rel", value))
-        
-        
     
     type h1() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( "h1" )
-        
-        
     
     type h2() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( "h2" )
-        
-        
     
     type h3() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( "h3" )
-        
-        
     
     type h4() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( "h4" )
-        
-        
     
     type h5() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( "h5" )
-        
-        
     
     type h6() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( "h6" )
-        
-        
     
     type head() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLHeadElement>( "head" )
-        member this.profile(value: System.String) = this.OnEval(fun x -> x.setAttribute("profile", value))
-        
-        
     
     type header() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "header" )
-        
-        
     
     type hr() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLHRElement>( "hr" )
-        member this.align(value: System.String) = this.OnEval(fun x -> x.setAttribute("align", value))
-        member this.color(value: System.String) = this.OnEval(fun x -> x.setAttribute("color", value))
-        member this.noshade(value: System.String) = this.OnEval(fun x -> x.setAttribute("noshade", value))
-        member this.size(value: System.String) = this.OnEval(fun x -> x.setAttribute("size", value))
-        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
-        
-        
     
     type html() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLHtmlElement>( "html" )
-        member this.manifest(value: System.String) = this.OnEval(fun x -> x.setAttribute("manifest", value))
-        member this.version(value: System.String) = this.OnEval(fun x -> x.setAttribute("version", value))
-        member this.xmlns(value: System.String) = this.OnEval(fun x -> x.setAttribute("xmlns", value))
-        
-        
     
     type i() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "i" )
-        
-        
     
     type iframe() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLIFrameElement>( "iframe" )
-        member this.allow(value: System.String) = this.OnEval(fun x -> x.setAttribute("allow", value))
-        member this.allowfullscreen(value: System.String) = this.OnEval(fun x -> x.setAttribute("allowfullscreen", value))
-        member this.allowpaymentrequest(value: System.String) = this.OnEval(fun x -> x.setAttribute("allowpaymentrequest", value))
-        member this.credentialless(value: System.String) = this.OnEval(fun x -> x.setAttribute("credentialless", value))
-        member this.csp(value: System.String) = this.OnEval(fun x -> x.setAttribute("csp", value))
-        member this.fetchpriority(value: string) = this.OnEval(fun x -> x.setAttribute("fetchpriority", value))
-        member this.height(value: System.String) = this.OnEval(fun x -> x.setAttribute("height", value))
-        member this.loading(value: string) = this.OnEval(fun x -> x.setAttribute("loading", value))
-        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
-        member this.referrerpolicy(value: string) = this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
-        member this.sandbox(value: string) = this.OnEval(fun x -> x.setAttribute("sandbox", value))
-        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
-        member this.srcdoc(value: System.String) = this.OnEval(fun x -> x.setAttribute("srcdoc", value))
-        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
-        
-        
     
     type img() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLImageElement>( "img" )
-        member this.alt(value: System.String) = this.OnEval(fun x -> x.setAttribute("alt", value))
-        member this.crossorigin(value: string) = this.OnEval(fun x -> x.setAttribute("crossorigin", value))
-        member this.decoding(value: string) = this.OnEval(fun x -> x.setAttribute("decoding", value))
-        member this.fetchpriority(value: string) = this.OnEval(fun x -> x.setAttribute("fetchpriority", value))
-        member this.height(value: System.String) = this.OnEval(fun x -> x.setAttribute("height", value))
-        member this.ismap(value: System.String) = this.OnEval(fun x -> x.setAttribute("ismap", value))
-        member this.loading(value: string) = this.OnEval(fun x -> x.setAttribute("loading", value))
-        member this.referrerpolicy(value: string) = this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
-        member this.sizes(value: System.String) = this.OnEval(fun x -> x.setAttribute("sizes", value))
-        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
-        member this.srcset(value: System.String) = this.OnEval(fun x -> x.setAttribute("srcset", value))
-        member this.usemap(value: System.String) = this.OnEval(fun x -> x.setAttribute("usemap", value))
-        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
-        
-        
     
     type input() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLInputElement>( "input" )
-        member this.type'(value: System.String) = this.OnEval(fun x -> x.setAttribute("type", value))
-        
-        
     
     type ins() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLModElement>( "ins" )
-        member this.cite(value: System.String) = this.OnEval(fun x -> x.setAttribute("cite", value))
-        member this.datetime(value: System.String) = this.OnEval(fun x -> x.setAttribute("datetime", value))
-        
-        
     
     type kbd() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "kbd" )
-        
-        
     
     type label() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLLabelElement>( "label" )
-        member this.for'(value: System.String) = this.OnEval(fun x -> x.setAttribute("for", value))
-        
-        
     
     type legend() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLLegendElement>( "legend" )
-        
-        
     
     type li() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLLIElement>( "li" )
-        member this.type'(value: string) = this.OnEval(fun x -> x.setAttribute("type", value))
-        member this.value(value: System.String) = this.OnEval(fun x -> x.setAttribute("value", value))
-        
-        
     
     type link() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLLinkElement>( "link" )
-        member this.as'(value: System.String) = this.OnEval(fun x -> x.setAttribute("as", value))
-        member this.blocking(value: string) = this.OnEval(fun x -> x.setAttribute("blocking", value))
-        member this.crossorigin(value: string) = this.OnEval(fun x -> x.setAttribute("crossorigin", value))
-        member this.disabled(value: System.String) = this.OnEval(fun x -> x.setAttribute("disabled", value))
-        member this.fetchpriority(value: string) = this.OnEval(fun x -> x.setAttribute("fetchpriority", value))
-        member this.href(value: System.String) = this.OnEval(fun x -> x.setAttribute("href", value))
-        member this.hreflang(value: System.String) = this.OnEval(fun x -> x.setAttribute("hreflang", value))
-        member this.imagesizes(value: System.String) = this.OnEval(fun x -> x.setAttribute("imagesizes", value))
-        member this.imagesrcset(value: System.String) = this.OnEval(fun x -> x.setAttribute("imagesrcset", value))
-        member this.integrity(value: System.String) = this.OnEval(fun x -> x.setAttribute("integrity", value))
-        member this.media(value: System.String) = this.OnEval(fun x -> x.setAttribute("media", value))
-        member this.prefetch(value: System.String) = this.OnEval(fun x -> x.setAttribute("prefetch", value))
-        member this.referrerpolicy(value: string) = this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
-        member this.rel(value: System.String) = this.OnEval(fun x -> x.setAttribute("rel", value))
-        member this.sizes(value: string) = this.OnEval(fun x -> x.setAttribute("sizes", value))
-        member this.title(value: System.String) = this.OnEval(fun x -> x.setAttribute("title", value))
-        member this.type'(value: System.String) = this.OnEval(fun x -> x.setAttribute("type", value))
-        
-        
     
     type main() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "main" )
-        
-        
     
     type map() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLMapElement>( "map" )
-        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
-        
-        
     
     type mark() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "mark" )
-        
-        
     
     type menu() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLMenuElement>( "menu" )
-        
-        
     
     type meta() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLMetaElement>( "meta" )
-        member this.charset(value: System.String) = this.OnEval(fun x -> x.setAttribute("charset", value))
-        member this.content(value: System.String) = this.OnEval(fun x -> x.setAttribute("content", value))
-        member this.httpEquiv(value: string) = this.OnEval(fun x -> x.setAttribute("http-equiv", value))
-        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
-        
-        
     
     type nav() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "nav" )
-        
-        
     
     type noscript() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "noscript" )
-        
-        
     
     type object() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLObjectElement>( "object" )
-        member this.archive(value: System.String) = this.OnEval(fun x -> x.setAttribute("archive", value))
-        member this.border(value: System.String) = this.OnEval(fun x -> x.setAttribute("border", value))
-        member this.classid(value: System.String) = this.OnEval(fun x -> x.setAttribute("classid", value))
-        member this.codebase(value: System.String) = this.OnEval(fun x -> x.setAttribute("codebase", value))
-        member this.codetype(value: System.String) = this.OnEval(fun x -> x.setAttribute("codetype", value))
-        member this.data(value: System.String) = this.OnEval(fun x -> x.setAttribute("data", value))
-        member this.declare(value: System.String) = this.OnEval(fun x -> x.setAttribute("declare", value))
-        member this.form(value: System.String) = this.OnEval(fun x -> x.setAttribute("form", value))
-        member this.height(value: System.String) = this.OnEval(fun x -> x.setAttribute("height", value))
-        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
-        member this.standby(value: System.String) = this.OnEval(fun x -> x.setAttribute("standby", value))
-        member this.type'(value: System.String) = this.OnEval(fun x -> x.setAttribute("type", value))
-        member this.usemap(value: System.String) = this.OnEval(fun x -> x.setAttribute("usemap", value))
-        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
-        
-        
     
     type ol() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLOListElement>( "ol" )
-        member this.reversed(value: System.String) = this.OnEval(fun x -> x.setAttribute("reversed", value))
-        member this.start(value: System.String) = this.OnEval(fun x -> x.setAttribute("start", value))
-        member this.type'(value: string) = this.OnEval(fun x -> x.setAttribute("type", value))
-        
-        
     
     type optgroup() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLOptGroupElement>( "optgroup" )
-        member this.disabled(value: System.String) = this.OnEval(fun x -> x.setAttribute("disabled", value))
-        member this.label(value: System.String) = this.OnEval(fun x -> x.setAttribute("label", value))
-        
-        
     
     type option() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLOptionElement>( "option" )
-        member this.disabled(value: System.String) = this.OnEval(fun x -> x.setAttribute("disabled", value))
-        member this.label(value: System.String) = this.OnEval(fun x -> x.setAttribute("label", value))
-        member this.selected(value: System.String) = this.OnEval(fun x -> x.setAttribute("selected", value))
-        member this.value(value: System.String) = this.OnEval(fun x -> x.setAttribute("value", value))
-        
-        
     
     type p() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLParagraphElement>( "p" )
-        
-        
     
     type pre() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLPreElement>( "pre" )
-        member this.cols(value: System.String) = this.OnEval(fun x -> x.setAttribute("cols", value))
-        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
-        member this.wrap(value: System.String) = this.OnEval(fun x -> x.setAttribute("wrap", value))
-        
-        
     
     type progress() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLProgressElement>( "progress" )
-        member this.max(value: System.String) = this.OnEval(fun x -> x.setAttribute("max", value))
-        member this.value(value: System.String) = this.OnEval(fun x -> x.setAttribute("value", value))
-        
-        
     
     type q() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLQuoteElement>( "q" )
-        member this.cite(value: System.String) = this.OnEval(fun x -> x.setAttribute("cite", value))
-        
-        
     
     type rp() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "rp" )
-        
-        
     
     type rt() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "rt" )
-        
-        
     
     type ruby() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "ruby" )
-        
-        
     
     type s() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "s" )
-        
-        
     
     type samp() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "samp" )
-        
-        
     
     type script() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLScriptElement>( "script" )
-        member this.async(value: System.String) = this.OnEval(fun x -> x.setAttribute("async", value))
-        member this.blocking(value: string) = this.OnEval(fun x -> x.setAttribute("blocking", value))
-        member this.crossorigin(value: System.String) = this.OnEval(fun x -> x.setAttribute("crossorigin", value))
-        member this.defer(value: System.String) = this.OnEval(fun x -> x.setAttribute("defer", value))
-        member this.fetchpriority(value: string) = this.OnEval(fun x -> x.setAttribute("fetchpriority", value))
-        member this.integrity(value: System.String) = this.OnEval(fun x -> x.setAttribute("integrity", value))
-        member this.nomodule(value: System.String) = this.OnEval(fun x -> x.setAttribute("nomodule", value))
-        member this.nonce(value: System.String) = this.OnEval(fun x -> x.setAttribute("nonce", value))
-        member this.referrerpolicy(value: string) = this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
-        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
-        member this.type'(value: string) = this.OnEval(fun x -> x.setAttribute("type", value))
-        
-        
     
     type section() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "section" )
-        
-        
     
     type select() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLSelectElement>( "select" )
-        member this.autocomplete(value: System.String) = this.OnEval(fun x -> x.setAttribute("autocomplete", value))
-        member this.autofocus(value: System.String) = this.OnEval(fun x -> x.setAttribute("autofocus", value))
-        member this.disabled(value: System.String) = this.OnEval(fun x -> x.setAttribute("disabled", value))
-        member this.form(value: System.String) = this.OnEval(fun x -> x.setAttribute("form", value))
-        member this.multiple(value: System.String) = this.OnEval(fun x -> x.setAttribute("multiple", value))
-        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
-        member this.required(value: System.String) = this.OnEval(fun x -> x.setAttribute("required", value))
-        member this.size(value: System.String) = this.OnEval(fun x -> x.setAttribute("size", value))
-        
-        
     
     type small() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "small" )
-        
-        
     
     type source() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLSourceElement>( "source" )
-        member this.height(value: System.String) = this.OnEval(fun x -> x.setAttribute("height", value))
-        member this.media(value: System.String) = this.OnEval(fun x -> x.setAttribute("media", value))
-        member this.sizes(value: System.String) = this.OnEval(fun x -> x.setAttribute("sizes", value))
-        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
-        member this.srcset(value: System.String) = this.OnEval(fun x -> x.setAttribute("srcset", value))
-        member this.type'(value: System.String) = this.OnEval(fun x -> x.setAttribute("type", value))
-        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
-        
-        
     
     type span() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLSpanElement>( "span" )
-        
-        
     
     type strong() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "strong" )
-        
-        
     
     type style() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLStyleElement>( "style" )
-        member this.blocking(value: string) = this.OnEval(fun x -> x.setAttribute("blocking", value))
-        member this.media(value: System.String) = this.OnEval(fun x -> x.setAttribute("media", value))
-        member this.nonce(value: System.String) = this.OnEval(fun x -> x.setAttribute("nonce", value))
-        member this.title(value: System.String) = this.OnEval(fun x -> x.setAttribute("title", value))
-        
-        
     
     type sub() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "sub" )
-        
-        
     
     type summary() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "summary" )
-        
-        
     
     type sup() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "sup" )
-        
-        
     
     type table() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLTableElement>( "table" )
-        
-        
     
     type tbody() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLTableSectionElement>( "tbody" )
-        
-        
     
     type td() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLTableCellElement>( "td" )
-        member this.colspan(value: System.String) = this.OnEval(fun x -> x.setAttribute("colspan", value))
-        member this.headers(value: System.String) = this.OnEval(fun x -> x.setAttribute("headers", value))
-        member this.rowspan(value: System.String) = this.OnEval(fun x -> x.setAttribute("rowspan", value))
-        
-        
     
     type textarea() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLTextAreaElement>( "textarea" )
-        member this.autocomplete(value: string) = this.OnEval(fun x -> x.setAttribute("autocomplete", value))
-        member this.autocorrect(value: string) = this.OnEval(fun x -> x.setAttribute("autocorrect", value))
-        member this.autofocus(value: System.String) = this.OnEval(fun x -> x.setAttribute("autofocus", value))
-        member this.cols(value: System.String) = this.OnEval(fun x -> x.setAttribute("cols", value))
-        member this.disabled(value: System.String) = this.OnEval(fun x -> x.setAttribute("disabled", value))
-        member this.form(value: System.String) = this.OnEval(fun x -> x.setAttribute("form", value))
-        member this.maxlength(value: System.String) = this.OnEval(fun x -> x.setAttribute("maxlength", value))
-        member this.minlength(value: System.String) = this.OnEval(fun x -> x.setAttribute("minlength", value))
-        member this.name(value: System.String) = this.OnEval(fun x -> x.setAttribute("name", value))
-        member this.placeholder(value: System.String) = this.OnEval(fun x -> x.setAttribute("placeholder", value))
-        member this.readonly(value: System.String) = this.OnEval(fun x -> x.setAttribute("readonly", value))
-        member this.required(value: System.String) = this.OnEval(fun x -> x.setAttribute("required", value))
-        member this.rows(value: System.String) = this.OnEval(fun x -> x.setAttribute("rows", value))
-        member this.spellcheck(value: string) = this.OnEval(fun x -> x.setAttribute("spellcheck", value))
-        member this.wrap(value: string) = this.OnEval(fun x -> x.setAttribute("wrap", value))
-        
-        
     
     type tfoot() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLTableSectionElement>( "tfoot" )
-        
-        
     
     type th() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLTableCellElement>( "th" )
-        member this.abbr(value: System.String) = this.OnEval(fun x -> x.setAttribute("abbr", value))
-        member this.colspan(value: System.String) = this.OnEval(fun x -> x.setAttribute("colspan", value))
-        member this.headers(value: System.String) = this.OnEval(fun x -> x.setAttribute("headers", value))
-        member this.rowspan(value: System.String) = this.OnEval(fun x -> x.setAttribute("rowspan", value))
-        member this.scope(value: string) = this.OnEval(fun x -> x.setAttribute("scope", value))
-        
-        
     
     type thead() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLTableSectionElement>( "thead" )
-        
-        
     
     type title() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLTitleElement>( "title" )
-        
-        
     
     type tr() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLTableRowElement>( "tr" )
-        
-        
     
     type track() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLTrackElement>( "track" )
-        member this.default'(value: System.String) = this.OnEval(fun x -> x.setAttribute("default", value))
-        member this.kind(value: string) = this.OnEval(fun x -> x.setAttribute("kind", value))
-        member this.label(value: System.String) = this.OnEval(fun x -> x.setAttribute("label", value))
-        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
-        member this.srclang(value: System.String) = this.OnEval(fun x -> x.setAttribute("srclang", value))
-        
-        
     
     type u() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "u" )
-        
-        
     
     type ul() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLUListElement>( "ul" )
-        member this.compact(value: System.String) = this.OnEval(fun x -> x.setAttribute("compact", value))
-        member this.type'(value: string) = this.OnEval(fun x -> x.setAttribute("type", value))
-        
-        
     
     type var() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "var" )
-        
-        
     
     type video() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLVideoElement>( "video" )
-        member this.autopictureinpicture(value: System.String) = this.OnEval(fun x -> x.setAttribute("autopictureinpicture", value))
-        member this.autoplay(value: System.String) = this.OnEval(fun x -> x.setAttribute("autoplay", value))
-        member this.controls(value: System.String) = this.OnEval(fun x -> x.setAttribute("controls", value))
-        member this.controlslist(value: System.String) = this.OnEval(fun x -> x.setAttribute("controlslist", value))
-        member this.crossorigin(value: string) = this.OnEval(fun x -> x.setAttribute("crossorigin", value))
-        member this.disablepictureinpicture(value: System.String) = this.OnEval(fun x -> x.setAttribute("disablepictureinpicture", value))
-        member this.disableremoteplayback(value: System.String) = this.OnEval(fun x -> x.setAttribute("disableremoteplayback", value))
-        member this.height(value: System.String) = this.OnEval(fun x -> x.setAttribute("height", value))
-        member this.loop(value: System.String) = this.OnEval(fun x -> x.setAttribute("loop", value))
-        member this.muted(value: System.String) = this.OnEval(fun x -> x.setAttribute("muted", value))
-        member this.playsinline(value: System.String) = this.OnEval(fun x -> x.setAttribute("playsinline", value))
-        member this.poster(value: System.String) = this.OnEval(fun x -> x.setAttribute("poster", value))
-        member this.preload(value: string) = this.OnEval(fun x -> x.setAttribute("preload", value))
-        member this.src(value: System.String) = this.OnEval(fun x -> x.setAttribute("src", value))
-        member this.width(value: System.String) = this.OnEval(fun x -> x.setAttribute("width", value))
-        
-        
     
     type wbr() =
         inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "wbr" )
-        
-        
     
+
+open HtmlElementBuilders
+
+
+[<Extension>]
+type HTMLGlobalAttrsElementBuilderExtensions =
+    class
+        
+        [<Extension>]
+        static member accesskey(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("accesskey", value))       
+        [<Extension>]
+        static member autocapitalize(this: #HTMLGlobalAttrsElementBuilder<_>, value: string) =
+            this.OnEval(fun x -> x.setAttribute("autocapitalize", value))       
+        [<Extension>]
+        static member autofocus(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("autofocus", value))       
+        [<Extension>]
+        static member className(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("class", value))       
+        [<Extension>]
+        static member contenteditable(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.Boolean) =
+            this.OnEval(fun x -> x.setAttribute("contenteditable", value.ToString()))       
+        [<Extension>]
+        static member contextmenu(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("contextmenu", value))       
+        [<Extension>]
+        static member dir(this: #HTMLGlobalAttrsElementBuilder<_>, value: string) =
+            this.OnEval(fun x -> x.setAttribute("dir", value))       
+        [<Extension>]
+        static member draggable(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.Boolean) =
+            this.OnEval(fun x -> x.setAttribute("draggable", value.ToString()))       
+        [<Extension>]
+        static member enterkeyhint(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("enterkeyhint", value))       
+        [<Extension>]
+        static member exportparts(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("exportparts", value))       
+        [<Extension>]
+        static member hidden(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("hidden", value))       
+        [<Extension>]
+        static member id(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("id", value))       
+        [<Extension>]
+        static member inert(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("inert", value))       
+        [<Extension>]
+        static member inputmode(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("inputmode", value))       
+        [<Extension>]
+        static member is(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("is", value))       
+        
+        [<Extension>]
+        static member onabort(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onabort <- handler)       
+        [<Extension>]
+        static member onblur(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onblur <- handler)       
+        [<Extension>]
+        static member oncanplay(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.oncanplay <- handler)       
+        [<Extension>]
+        static member oncanplaythrough(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.oncanplaythrough <- handler)       
+        [<Extension>]
+        static member onchange(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onchange <- handler)       
+        [<Extension>]
+        static member onclick(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onclick <- handler)       
+        [<Extension>]
+        static member oncontextmenu(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.oncontextmenu <- handler)       
+        [<Extension>]
+        static member oncuechange(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.oncuechange <- handler)       
+        [<Extension>]
+        static member ondblclick(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.ondblclick <- handler)       
+        [<Extension>]
+        static member ondrag(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.ondrag <- handler)       
+        [<Extension>]
+        static member ondragend(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.ondragend <- handler)       
+        [<Extension>]
+        static member ondragenter(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.ondragenter <- handler)       
+        [<Extension>]
+        static member ondragleave(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.ondragleave <- handler)       
+        [<Extension>]
+        static member ondragover(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.ondragover <- handler)       
+        [<Extension>]
+        static member ondragstart(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.ondragstart <- handler)       
+        [<Extension>]
+        static member ondrop(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.ondrop <- handler)       
+        [<Extension>]
+        static member ondurationchange(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.ondurationchange <- handler)       
+        [<Extension>]
+        static member onemptied(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onemptied <- handler)       
+        [<Extension>]
+        static member onended(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onended <- handler)       
+        [<Extension>]
+        static member onerror(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onerror <- handler)       
+        [<Extension>]
+        static member onfocus(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onfocus <- handler)       
+        [<Extension>]
+        static member oninput(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.oninput <- handler)       
+        [<Extension>]
+        static member onkeydown(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onkeydown <- handler)       
+        [<Extension>]
+        static member onkeypress(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onkeypress <- handler)       
+        [<Extension>]
+        static member onkeyup(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onkeyup <- handler)       
+        [<Extension>]
+        static member onload(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onload <- handler)       
+        [<Extension>]
+        static member onloadeddata(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onloadeddata <- handler)       
+        [<Extension>]
+        static member onloadedmetadata(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onloadedmetadata <- handler)       
+        [<Extension>]
+        static member onloadstart(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onloadstart <- handler)       
+        [<Extension>]
+        static member onmousedown(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onmousedown <- handler)       
+        [<Extension>]
+        static member onmouseenter(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onmouseenter <- handler)       
+        [<Extension>]
+        static member onmouseleave(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onmouseleave <- handler)       
+        [<Extension>]
+        static member onmousemove(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onmousemove <- handler)       
+        [<Extension>]
+        static member onmouseout(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onmouseout <- handler)       
+        [<Extension>]
+        static member onmouseover(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onmouseover <- handler)       
+        [<Extension>]
+        static member onmouseup(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onmouseup <- handler)       
+        [<Extension>]
+        static member onmousewheel(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onmousewheel <- handler)       
+        [<Extension>]
+        static member onpause(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onpause <- handler)       
+        [<Extension>]
+        static member onplay(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onplay <- handler)       
+        [<Extension>]
+        static member onplaying(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onplaying <- handler)       
+        [<Extension>]
+        static member onprogress(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onprogress <- handler)       
+        [<Extension>]
+        static member onratechange(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onratechange <- handler)       
+        [<Extension>]
+        static member onreset(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onreset <- handler)       
+        [<Extension>]
+        static member onscroll(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onscroll <- handler)       
+        [<Extension>]
+        static member onseeked(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onseeked <- handler)       
+        [<Extension>]
+        static member onseeking(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onseeking <- handler)       
+        [<Extension>]
+        static member onselect(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onselect <- handler)       
+        [<Extension>]
+        static member onstalled(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onstalled <- handler)       
+        [<Extension>]
+        static member onsubmit(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onsubmit <- handler)       
+        [<Extension>]
+        static member onsuspend(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onsuspend <- handler)       
+        [<Extension>]
+        static member ontimeupdate(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.ontimeupdate <- handler)       
+        [<Extension>]
+        static member onvolumechange(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onvolumechange <- handler)       
+        [<Extension>]
+        static member onwaiting(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onwaiting <- handler)       
+    end
+
+[<Extension>]
+type aExtensions =
+    class
+        
+        [<Extension>]
+        static member download(this: #a, value: string) =
+            this.OnEval(fun x -> x.setAttribute("download", value))       
+        [<Extension>]
+        static member href(this: #a, value: string) =
+            this.OnEval(fun x -> x.setAttribute("href", value))       
+        [<Extension>]
+        static member hreflang(this: #a, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("hreflang", value))       
+        [<Extension>]
+        static member ping(this: #a, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("ping", value))       
+        [<Extension>]
+        static member referrerpolicy(this: #a, value: string) =
+            this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))       
+        [<Extension>]
+        static member rel(this: #a, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("rel", value))       
+        [<Extension>]
+        static member target(this: #a, value: string) =
+            this.OnEval(fun x -> x.setAttribute("target", value))       
+        [<Extension>]
+        static member type'(this: #a, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("type", value))       
+        
+    end
+
+[<Extension>]
+type abbrExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type addressExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type areaExtensions =
+    class
+        
+        [<Extension>]
+        static member alt(this: #area, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("alt", value))       
+        [<Extension>]
+        static member coords(this: #area, value: string) =
+            this.OnEval(fun x -> x.setAttribute("coords", value))       
+        [<Extension>]
+        static member download(this: #area, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("download", value))       
+        [<Extension>]
+        static member href(this: #area, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("href", value))       
+        [<Extension>]
+        static member hreflang(this: #area, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("hreflang", value))       
+        [<Extension>]
+        static member ping(this: #area, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("ping", value))       
+        [<Extension>]
+        static member referrerpolicy(this: #area, value: string) =
+            this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))       
+        [<Extension>]
+        static member rel(this: #area, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("rel", value))       
+        [<Extension>]
+        static member shape(this: #area, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("shape", value))       
+        [<Extension>]
+        static member target(this: #area, value: string) =
+            this.OnEval(fun x -> x.setAttribute("target", value))       
+        
+    end
+
+[<Extension>]
+type articleExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type asideExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type audioExtensions =
+    class
+        
+        [<Extension>]
+        static member autoplay(this: #audio, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("autoplay", value))       
+        [<Extension>]
+        static member controls(this: #audio, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("controls", value))       
+        [<Extension>]
+        static member controlslist(this: #audio, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("controlslist", value))       
+        [<Extension>]
+        static member crossorigin(this: #audio, value: string) =
+            this.OnEval(fun x -> x.setAttribute("crossorigin", value))       
+        [<Extension>]
+        static member disableremoteplayback(this: #audio, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("disableremoteplayback", value))       
+        [<Extension>]
+        static member loop(this: #audio, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("loop", value))       
+        [<Extension>]
+        static member muted(this: #audio, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("muted", value))       
+        [<Extension>]
+        static member preload(this: #audio, value: string) =
+            this.OnEval(fun x -> x.setAttribute("preload", value))       
+        [<Extension>]
+        static member src(this: #audio, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("src", value))       
+        
+    end
+
+[<Extension>]
+type bExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type bdiExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type bdoExtensions =
+    class
+        
+        [<Extension>]
+        static member dir(this: #bdo, value: string) =
+            this.OnEval(fun x -> x.setAttribute("dir", value))       
+        
+    end
+
+[<Extension>]
+type blockquoteExtensions =
+    class
+        
+        [<Extension>]
+        static member cite(this: #blockquote, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("cite", value))       
+        
+    end
+
+[<Extension>]
+type bodyExtensions =
+    class
+        
+        [<Extension>]
+        static member alink(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("alink", value))       
+        [<Extension>]
+        static member background(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("background", value))       
+        [<Extension>]
+        static member bgcolor(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("bgcolor", value))       
+        [<Extension>]
+        static member bottommargin(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("bottommargin", value))       
+        [<Extension>]
+        static member leftmargin(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("leftmargin", value))       
+        [<Extension>]
+        static member link(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("link", value))       
+        [<Extension>]
+        static member onafterprint(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("onafterprint", value))       
+        [<Extension>]
+        static member onbeforeprint(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("onbeforeprint", value))       
+        [<Extension>]
+        static member onbeforeunload(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("onbeforeunload", value))       
+        [<Extension>]
+        static member onblur(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("onblur", value))       
+        [<Extension>]
+        static member onerror(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("onerror", value))       
+        [<Extension>]
+        static member onfocus(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("onfocus", value))       
+        [<Extension>]
+        static member onhashchange(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("onhashchange", value))       
+        [<Extension>]
+        static member onlanguagechange(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("onlanguagechange", value))       
+        [<Extension>]
+        static member onload(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("onload", value))       
+        [<Extension>]
+        static member onmessage(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("onmessage", value))       
+        [<Extension>]
+        static member onoffline(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("onoffline", value))       
+        [<Extension>]
+        static member ononline(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("ononline", value))       
+        [<Extension>]
+        static member onpopstate(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("onpopstate", value))       
+        [<Extension>]
+        static member onredo(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("onredo", value))       
+        [<Extension>]
+        static member onresize(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("onresize", value))       
+        [<Extension>]
+        static member onstorage(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("onstorage", value))       
+        [<Extension>]
+        static member onundo(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("onundo", value))       
+        [<Extension>]
+        static member onunload(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("onunload", value))       
+        [<Extension>]
+        static member rightmargin(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("rightmargin", value))       
+        [<Extension>]
+        static member text(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("text", value))       
+        [<Extension>]
+        static member topmargin(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("topmargin", value))       
+        [<Extension>]
+        static member vlink(this: #body, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("vlink", value))       
+        
+    end
+
+[<Extension>]
+type brExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type buttonExtensions =
+    class
+        
+        [<Extension>]
+        static member autocomplete(this: #button, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("autocomplete", value))       
+        [<Extension>]
+        static member autofocus(this: #button, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("autofocus", value))       
+        [<Extension>]
+        static member disabled(this: #button, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("disabled", value))       
+        [<Extension>]
+        static member form(this: #button, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("form", value))       
+        [<Extension>]
+        static member formaction(this: #button, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("formaction", value))       
+        [<Extension>]
+        static member formenctype(this: #button, value: string) =
+            this.OnEval(fun x -> x.setAttribute("formenctype", value))       
+        [<Extension>]
+        static member formmethod(this: #button, value: string) =
+            this.OnEval(fun x -> x.setAttribute("formmethod", value))       
+        [<Extension>]
+        static member formnovalidate(this: #button, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("formnovalidate", value))       
+        [<Extension>]
+        static member formtarget(this: #button, value: string) =
+            this.OnEval(fun x -> x.setAttribute("formtarget", value))       
+        [<Extension>]
+        static member name(this: #button, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("name", value))       
+        [<Extension>]
+        static member type'(this: #button, value: string) =
+            this.OnEval(fun x -> x.setAttribute("type", value))       
+        [<Extension>]
+        static member value(this: #button, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("value", value))       
+        
+    end
+
+[<Extension>]
+type canvasExtensions =
+    class
+        
+        [<Extension>]
+        static member height(this: #canvas, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("height", value))       
+        [<Extension>]
+        static member mozOpaque(this: #canvas, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("moz-opaque", value))       
+        [<Extension>]
+        static member width(this: #canvas, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("width", value))       
+        
+    end
+
+[<Extension>]
+type captionExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type citeExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type codeExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type colExtensions =
+    class
+        
+        [<Extension>]
+        static member span(this: #col, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("span", value))       
+        
+    end
+
+[<Extension>]
+type colgroupExtensions =
+    class
+        
+        [<Extension>]
+        static member span(this: #colgroup, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("span", value))       
+        
+    end
+
+[<Extension>]
+type datalistExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type ddExtensions =
+    class
+        
+        [<Extension>]
+        static member nowrap(this: #dd, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("nowrap", value))       
+        
+    end
+
+[<Extension>]
+type delExtensions =
+    class
+        
+        [<Extension>]
+        static member cite(this: #del, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("cite", value))       
+        [<Extension>]
+        static member datetime(this: #del, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("datetime", value))       
+        
+    end
+
+[<Extension>]
+type dfnExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type divExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type dlExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type dtExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type emExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type embedExtensions =
+    class
+        
+        [<Extension>]
+        static member height(this: #embed, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("height", value))       
+        [<Extension>]
+        static member src(this: #embed, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("src", value))       
+        [<Extension>]
+        static member type'(this: #embed, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("type", value))       
+        [<Extension>]
+        static member width(this: #embed, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("width", value))       
+        
+    end
+
+[<Extension>]
+type fieldsetExtensions =
+    class
+        
+        [<Extension>]
+        static member disabled(this: #fieldset, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("disabled", value))       
+        [<Extension>]
+        static member form(this: #fieldset, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("form", value))       
+        [<Extension>]
+        static member name(this: #fieldset, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("name", value))       
+        
+    end
+
+[<Extension>]
+type figcaptionExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type figureExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type footerExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type formExtensions =
+    class
+        
+        [<Extension>]
+        static member accept(this: #form, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("accept", value))       
+        [<Extension>]
+        static member acceptCharset(this: #form, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("accept-charset", value))       
+        [<Extension>]
+        static member autocapitalize(this: #form, value: string) =
+            this.OnEval(fun x -> x.setAttribute("autocapitalize", value))       
+        [<Extension>]
+        static member autocomplete(this: #form, value: string) =
+            this.OnEval(fun x -> x.setAttribute("autocomplete", value))       
+        [<Extension>]
+        static member name(this: #form, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("name", value))       
+        [<Extension>]
+        static member rel(this: #form, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("rel", value))       
+        
+    end
+
+[<Extension>]
+type h1Extensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type h2Extensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type h3Extensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type h4Extensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type h5Extensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type h6Extensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type headExtensions =
+    class
+        
+        [<Extension>]
+        static member profile(this: #head, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("profile", value))       
+        
+    end
+
+[<Extension>]
+type headerExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type hrExtensions =
+    class
+        
+        [<Extension>]
+        static member align(this: #hr, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("align", value))       
+        [<Extension>]
+        static member color(this: #hr, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("color", value))       
+        [<Extension>]
+        static member noshade(this: #hr, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("noshade", value))       
+        [<Extension>]
+        static member size(this: #hr, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("size", value))       
+        [<Extension>]
+        static member width(this: #hr, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("width", value))       
+        
+    end
+
+[<Extension>]
+type htmlExtensions =
+    class
+        
+        [<Extension>]
+        static member manifest(this: #html, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("manifest", value))       
+        [<Extension>]
+        static member version(this: #html, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("version", value))       
+        [<Extension>]
+        static member xmlns(this: #html, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("xmlns", value))       
+        
+    end
+
+[<Extension>]
+type iExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type iframeExtensions =
+    class
+        
+        [<Extension>]
+        static member allow(this: #iframe, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("allow", value))       
+        [<Extension>]
+        static member allowfullscreen(this: #iframe, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("allowfullscreen", value))       
+        [<Extension>]
+        static member allowpaymentrequest(this: #iframe, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("allowpaymentrequest", value))       
+        [<Extension>]
+        static member credentialless(this: #iframe, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("credentialless", value))       
+        [<Extension>]
+        static member csp(this: #iframe, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("csp", value))       
+        [<Extension>]
+        static member fetchpriority(this: #iframe, value: string) =
+            this.OnEval(fun x -> x.setAttribute("fetchpriority", value))       
+        [<Extension>]
+        static member height(this: #iframe, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("height", value))       
+        [<Extension>]
+        static member loading(this: #iframe, value: string) =
+            this.OnEval(fun x -> x.setAttribute("loading", value))       
+        [<Extension>]
+        static member name(this: #iframe, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("name", value))       
+        [<Extension>]
+        static member referrerpolicy(this: #iframe, value: string) =
+            this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))       
+        [<Extension>]
+        static member sandbox(this: #iframe, value: string) =
+            this.OnEval(fun x -> x.setAttribute("sandbox", value))       
+        [<Extension>]
+        static member src(this: #iframe, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("src", value))       
+        [<Extension>]
+        static member srcdoc(this: #iframe, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("srcdoc", value))       
+        [<Extension>]
+        static member width(this: #iframe, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("width", value))       
+        
+    end
+
+[<Extension>]
+type imgExtensions =
+    class
+        
+        [<Extension>]
+        static member alt(this: #img, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("alt", value))       
+        [<Extension>]
+        static member crossorigin(this: #img, value: string) =
+            this.OnEval(fun x -> x.setAttribute("crossorigin", value))       
+        [<Extension>]
+        static member decoding(this: #img, value: string) =
+            this.OnEval(fun x -> x.setAttribute("decoding", value))       
+        [<Extension>]
+        static member fetchpriority(this: #img, value: string) =
+            this.OnEval(fun x -> x.setAttribute("fetchpriority", value))       
+        [<Extension>]
+        static member height(this: #img, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("height", value))       
+        [<Extension>]
+        static member ismap(this: #img, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("ismap", value))       
+        [<Extension>]
+        static member loading(this: #img, value: string) =
+            this.OnEval(fun x -> x.setAttribute("loading", value))       
+        [<Extension>]
+        static member referrerpolicy(this: #img, value: string) =
+            this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))       
+        [<Extension>]
+        static member sizes(this: #img, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("sizes", value))       
+        [<Extension>]
+        static member src(this: #img, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("src", value))       
+        [<Extension>]
+        static member srcset(this: #img, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("srcset", value))       
+        [<Extension>]
+        static member usemap(this: #img, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("usemap", value))       
+        [<Extension>]
+        static member width(this: #img, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("width", value))       
+        
+    end
+
+[<Extension>]
+type inputExtensions =
+    class
+        
+        [<Extension>]
+        static member type'(this: #input, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("type", value))       
+        
+    end
+
+[<Extension>]
+type insExtensions =
+    class
+        
+        [<Extension>]
+        static member cite(this: #ins, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("cite", value))       
+        [<Extension>]
+        static member datetime(this: #ins, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("datetime", value))       
+        
+    end
+
+[<Extension>]
+type kbdExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type labelExtensions =
+    class
+        
+        [<Extension>]
+        static member for'(this: #label, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("for", value))       
+        
+    end
+
+[<Extension>]
+type legendExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type liExtensions =
+    class
+        
+        [<Extension>]
+        static member type'(this: #li, value: string) =
+            this.OnEval(fun x -> x.setAttribute("type", value))       
+        [<Extension>]
+        static member value(this: #li, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("value", value))       
+        
+    end
+
+[<Extension>]
+type linkExtensions =
+    class
+        
+        [<Extension>]
+        static member as'(this: #link, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("as", value))       
+        [<Extension>]
+        static member blocking(this: #link, value: string) =
+            this.OnEval(fun x -> x.setAttribute("blocking", value))       
+        [<Extension>]
+        static member crossorigin(this: #link, value: string) =
+            this.OnEval(fun x -> x.setAttribute("crossorigin", value))       
+        [<Extension>]
+        static member disabled(this: #link, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("disabled", value))       
+        [<Extension>]
+        static member fetchpriority(this: #link, value: string) =
+            this.OnEval(fun x -> x.setAttribute("fetchpriority", value))       
+        [<Extension>]
+        static member href(this: #link, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("href", value))       
+        [<Extension>]
+        static member hreflang(this: #link, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("hreflang", value))       
+        [<Extension>]
+        static member imagesizes(this: #link, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("imagesizes", value))       
+        [<Extension>]
+        static member imagesrcset(this: #link, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("imagesrcset", value))       
+        [<Extension>]
+        static member integrity(this: #link, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("integrity", value))       
+        [<Extension>]
+        static member media(this: #link, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("media", value))       
+        [<Extension>]
+        static member prefetch(this: #link, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("prefetch", value))       
+        [<Extension>]
+        static member referrerpolicy(this: #link, value: string) =
+            this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))       
+        [<Extension>]
+        static member rel(this: #link, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("rel", value))       
+        [<Extension>]
+        static member sizes(this: #link, value: string) =
+            this.OnEval(fun x -> x.setAttribute("sizes", value))       
+        [<Extension>]
+        static member title(this: #link, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("title", value))       
+        [<Extension>]
+        static member type'(this: #link, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("type", value))       
+        
+    end
+
+[<Extension>]
+type mainExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type mapExtensions =
+    class
+        
+        [<Extension>]
+        static member name(this: #map, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("name", value))       
+        
+    end
+
+[<Extension>]
+type markExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type menuExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type metaExtensions =
+    class
+        
+        [<Extension>]
+        static member charset(this: #meta, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("charset", value))       
+        [<Extension>]
+        static member content(this: #meta, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("content", value))       
+        [<Extension>]
+        static member httpEquiv(this: #meta, value: string) =
+            this.OnEval(fun x -> x.setAttribute("http-equiv", value))       
+        [<Extension>]
+        static member name(this: #meta, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("name", value))       
+        
+    end
+
+[<Extension>]
+type navExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type noscriptExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type objectExtensions =
+    class
+        
+        [<Extension>]
+        static member archive(this: #object, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("archive", value))       
+        [<Extension>]
+        static member border(this: #object, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("border", value))       
+        [<Extension>]
+        static member classid(this: #object, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("classid", value))       
+        [<Extension>]
+        static member codebase(this: #object, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("codebase", value))       
+        [<Extension>]
+        static member codetype(this: #object, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("codetype", value))       
+        [<Extension>]
+        static member data(this: #object, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("data", value))       
+        [<Extension>]
+        static member declare(this: #object, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("declare", value))       
+        [<Extension>]
+        static member form(this: #object, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("form", value))       
+        [<Extension>]
+        static member height(this: #object, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("height", value))       
+        [<Extension>]
+        static member name(this: #object, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("name", value))       
+        [<Extension>]
+        static member standby(this: #object, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("standby", value))       
+        [<Extension>]
+        static member type'(this: #object, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("type", value))       
+        [<Extension>]
+        static member usemap(this: #object, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("usemap", value))       
+        [<Extension>]
+        static member width(this: #object, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("width", value))       
+        
+    end
+
+[<Extension>]
+type olExtensions =
+    class
+        
+        [<Extension>]
+        static member reversed(this: #ol, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("reversed", value))       
+        [<Extension>]
+        static member start(this: #ol, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("start", value))       
+        [<Extension>]
+        static member type'(this: #ol, value: string) =
+            this.OnEval(fun x -> x.setAttribute("type", value))       
+        
+    end
+
+[<Extension>]
+type optgroupExtensions =
+    class
+        
+        [<Extension>]
+        static member disabled(this: #optgroup, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("disabled", value))       
+        [<Extension>]
+        static member label(this: #optgroup, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("label", value))       
+        
+    end
+
+[<Extension>]
+type optionExtensions =
+    class
+        
+        [<Extension>]
+        static member disabled(this: #option, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("disabled", value))       
+        [<Extension>]
+        static member label(this: #option, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("label", value))       
+        [<Extension>]
+        static member selected(this: #option, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("selected", value))       
+        [<Extension>]
+        static member value(this: #option, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("value", value))       
+        
+    end
+
+[<Extension>]
+type pExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type preExtensions =
+    class
+        
+        [<Extension>]
+        static member cols(this: #pre, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("cols", value))       
+        [<Extension>]
+        static member width(this: #pre, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("width", value))       
+        [<Extension>]
+        static member wrap(this: #pre, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("wrap", value))       
+        
+    end
+
+[<Extension>]
+type progressExtensions =
+    class
+        
+        [<Extension>]
+        static member max(this: #progress, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("max", value))       
+        [<Extension>]
+        static member value(this: #progress, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("value", value))       
+        
+    end
+
+[<Extension>]
+type qExtensions =
+    class
+        
+        [<Extension>]
+        static member cite(this: #q, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("cite", value))       
+        
+    end
+
+[<Extension>]
+type rpExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type rtExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type rubyExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type sExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type sampExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type scriptExtensions =
+    class
+        
+        [<Extension>]
+        static member async(this: #script, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("async", value))       
+        [<Extension>]
+        static member blocking(this: #script, value: string) =
+            this.OnEval(fun x -> x.setAttribute("blocking", value))       
+        [<Extension>]
+        static member crossorigin(this: #script, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("crossorigin", value))       
+        [<Extension>]
+        static member defer(this: #script, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("defer", value))       
+        [<Extension>]
+        static member fetchpriority(this: #script, value: string) =
+            this.OnEval(fun x -> x.setAttribute("fetchpriority", value))       
+        [<Extension>]
+        static member integrity(this: #script, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("integrity", value))       
+        [<Extension>]
+        static member nomodule(this: #script, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("nomodule", value))       
+        [<Extension>]
+        static member nonce(this: #script, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("nonce", value))       
+        [<Extension>]
+        static member referrerpolicy(this: #script, value: string) =
+            this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))       
+        [<Extension>]
+        static member src(this: #script, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("src", value))       
+        [<Extension>]
+        static member type'(this: #script, value: string) =
+            this.OnEval(fun x -> x.setAttribute("type", value))       
+        
+    end
+
+[<Extension>]
+type sectionExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type selectExtensions =
+    class
+        
+        [<Extension>]
+        static member autocomplete(this: #select, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("autocomplete", value))       
+        [<Extension>]
+        static member autofocus(this: #select, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("autofocus", value))       
+        [<Extension>]
+        static member disabled(this: #select, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("disabled", value))       
+        [<Extension>]
+        static member form(this: #select, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("form", value))       
+        [<Extension>]
+        static member multiple(this: #select, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("multiple", value))       
+        [<Extension>]
+        static member name(this: #select, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("name", value))       
+        [<Extension>]
+        static member required(this: #select, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("required", value))       
+        [<Extension>]
+        static member size(this: #select, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("size", value))       
+        
+    end
+
+[<Extension>]
+type smallExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type sourceExtensions =
+    class
+        
+        [<Extension>]
+        static member height(this: #source, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("height", value))       
+        [<Extension>]
+        static member media(this: #source, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("media", value))       
+        [<Extension>]
+        static member sizes(this: #source, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("sizes", value))       
+        [<Extension>]
+        static member src(this: #source, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("src", value))       
+        [<Extension>]
+        static member srcset(this: #source, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("srcset", value))       
+        [<Extension>]
+        static member type'(this: #source, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("type", value))       
+        [<Extension>]
+        static member width(this: #source, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("width", value))       
+        
+    end
+
+[<Extension>]
+type spanExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type strongExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type styleExtensions =
+    class
+        
+        [<Extension>]
+        static member blocking(this: #style, value: string) =
+            this.OnEval(fun x -> x.setAttribute("blocking", value))       
+        [<Extension>]
+        static member media(this: #style, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("media", value))       
+        [<Extension>]
+        static member nonce(this: #style, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("nonce", value))       
+        [<Extension>]
+        static member title(this: #style, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("title", value))       
+        
+    end
+
+[<Extension>]
+type subExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type summaryExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type supExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type tableExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type tbodyExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type tdExtensions =
+    class
+        
+        [<Extension>]
+        static member colspan(this: #td, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("colspan", value))       
+        [<Extension>]
+        static member headers(this: #td, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("headers", value))       
+        [<Extension>]
+        static member rowspan(this: #td, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("rowspan", value))       
+        
+    end
+
+[<Extension>]
+type textareaExtensions =
+    class
+        
+        [<Extension>]
+        static member autocomplete(this: #textarea, value: string) =
+            this.OnEval(fun x -> x.setAttribute("autocomplete", value))       
+        [<Extension>]
+        static member autocorrect(this: #textarea, value: string) =
+            this.OnEval(fun x -> x.setAttribute("autocorrect", value))       
+        [<Extension>]
+        static member autofocus(this: #textarea, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("autofocus", value))       
+        [<Extension>]
+        static member cols(this: #textarea, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("cols", value))       
+        [<Extension>]
+        static member disabled(this: #textarea, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("disabled", value))       
+        [<Extension>]
+        static member form(this: #textarea, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("form", value))       
+        [<Extension>]
+        static member maxlength(this: #textarea, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("maxlength", value))       
+        [<Extension>]
+        static member minlength(this: #textarea, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("minlength", value))       
+        [<Extension>]
+        static member name(this: #textarea, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("name", value))       
+        [<Extension>]
+        static member placeholder(this: #textarea, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("placeholder", value))       
+        [<Extension>]
+        static member readonly(this: #textarea, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("readonly", value))       
+        [<Extension>]
+        static member required(this: #textarea, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("required", value))       
+        [<Extension>]
+        static member rows(this: #textarea, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("rows", value))       
+        [<Extension>]
+        static member spellcheck(this: #textarea, value: string) =
+            this.OnEval(fun x -> x.setAttribute("spellcheck", value))       
+        [<Extension>]
+        static member wrap(this: #textarea, value: string) =
+            this.OnEval(fun x -> x.setAttribute("wrap", value))       
+        
+    end
+
+[<Extension>]
+type tfootExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type thExtensions =
+    class
+        
+        [<Extension>]
+        static member abbr(this: #th, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("abbr", value))       
+        [<Extension>]
+        static member colspan(this: #th, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("colspan", value))       
+        [<Extension>]
+        static member headers(this: #th, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("headers", value))       
+        [<Extension>]
+        static member rowspan(this: #th, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("rowspan", value))       
+        [<Extension>]
+        static member scope(this: #th, value: string) =
+            this.OnEval(fun x -> x.setAttribute("scope", value))       
+        
+    end
+
+[<Extension>]
+type theadExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type titleExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type trExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type trackExtensions =
+    class
+        
+        [<Extension>]
+        static member default'(this: #track, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("default", value))       
+        [<Extension>]
+        static member kind(this: #track, value: string) =
+            this.OnEval(fun x -> x.setAttribute("kind", value))       
+        [<Extension>]
+        static member label(this: #track, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("label", value))       
+        [<Extension>]
+        static member src(this: #track, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("src", value))       
+        [<Extension>]
+        static member srclang(this: #track, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("srclang", value))       
+        
+    end
+
+[<Extension>]
+type uExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type ulExtensions =
+    class
+        
+        [<Extension>]
+        static member compact(this: #ul, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("compact", value))       
+        [<Extension>]
+        static member type'(this: #ul, value: string) =
+            this.OnEval(fun x -> x.setAttribute("type", value))       
+        
+    end
+
+[<Extension>]
+type varExtensions =
+    class
+        
+        
+    end
+
+[<Extension>]
+type videoExtensions =
+    class
+        
+        [<Extension>]
+        static member autopictureinpicture(this: #video, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("autopictureinpicture", value))       
+        [<Extension>]
+        static member autoplay(this: #video, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("autoplay", value))       
+        [<Extension>]
+        static member controls(this: #video, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("controls", value))       
+        [<Extension>]
+        static member controlslist(this: #video, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("controlslist", value))       
+        [<Extension>]
+        static member crossorigin(this: #video, value: string) =
+            this.OnEval(fun x -> x.setAttribute("crossorigin", value))       
+        [<Extension>]
+        static member disablepictureinpicture(this: #video, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("disablepictureinpicture", value))       
+        [<Extension>]
+        static member disableremoteplayback(this: #video, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("disableremoteplayback", value))       
+        [<Extension>]
+        static member height(this: #video, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("height", value))       
+        [<Extension>]
+        static member loop(this: #video, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("loop", value))       
+        [<Extension>]
+        static member muted(this: #video, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("muted", value))       
+        [<Extension>]
+        static member playsinline(this: #video, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("playsinline", value))       
+        [<Extension>]
+        static member poster(this: #video, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("poster", value))       
+        [<Extension>]
+        static member preload(this: #video, value: string) =
+            this.OnEval(fun x -> x.setAttribute("preload", value))       
+        [<Extension>]
+        static member src(this: #video, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("src", value))       
+        [<Extension>]
+        static member width(this: #video, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("width", value))       
+        
+    end
+
+[<Extension>]
+type wbrExtensions =
+    class
+        
+        
+    end
+
 
 type Html =
     

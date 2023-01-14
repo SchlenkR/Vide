@@ -1,6 +1,7 @@
 [<AutoOpen>]
 module Vide.Fable
 
+open System.Runtime.CompilerServices
 open Browser
 open Browser.Types
 open Vide
@@ -46,15 +47,10 @@ type NodeBuilder<'n when 'n :> Node>
         checkOrUpdateNode: 'n -> ChildAction
     ) =
     inherit VideBuilder()
-    let mutable modifiers: Modifier<'n> list = []
-    let mutable initOnlyModifiers: Modifier<'n> list = []
-    member this.OnEval(m: Modifier<'n>) =
-        do modifiers <- m :: modifiers
-        this
-    member this.OnInit(m: Modifier<'n>) =
-        do initOnlyModifiers <- m :: initOnlyModifiers
-        this
-    member _.Run
+    // TODO: Think about storing those in context (because context is per-instance)
+    member val Modifiers: Modifier<'n> list = [] with get,set
+    member val InitOnlyModifiers: Modifier<'n> list = [] with get,set
+    member this.Run
         (Vide childVide: Vide<'v,'fs,FableContext>)
         : Vide<'v, NodeBuilderState<'n,'fs>, FableContext>
         =
@@ -69,7 +65,7 @@ type NodeBuilder<'n when 'n :> Node>
                 match s with
                 | None ->
                     let newNode,s = createNode ctx,cs
-                    do runModifiers initOnlyModifiers newNode
+                    do runModifiers this.InitOnlyModifiers newNode
                     newNode,s
                 | Some node ->
                     match checkOrUpdateNode node with
@@ -78,7 +74,7 @@ type NodeBuilder<'n when 'n :> Node>
                         node,cs
                     | DiscardAndCreateNew ->
                         createNode ctx,None
-            do runModifiers modifiers node
+            do runModifiers this.Modifiers node
             let childCtx = FableContext(node, ctx.EvaluateView)
             let cv,cs = childVide cs childCtx
             for x in childCtx.GetObsoleteChildren() do
@@ -86,6 +82,20 @@ type NodeBuilder<'n when 'n :> Node>
                 // we don'tneed this? Weak enough?
                 // events.RemoveListener(node)
             cv, Some (Some node, cs)
+
+[<Extension>]
+type NodeBuilderExtensions =
+    /// Called on every Vide evaluatiopn cycle.
+    [<Extension>]
+    static member OnEval(this: #NodeBuilder<_>, m: Modifier<_>) =
+        do this.Modifiers <- m :: this.Modifiers
+        this
+
+    /// Called once on initialization.
+    [<Extension>]
+    static member OnInit(this: #NodeBuilder<_>, m: Modifier<_>) =
+        do this.InitOnlyModifiers <- m :: this.InitOnlyModifiers
+        this
 
 type HTMLElementBuilder<'n when 'n :> HTMLElement>(elemName: string) =
     inherit NodeBuilder<'n>(

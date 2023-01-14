@@ -12,22 +12,36 @@ let [<Literal>] HtmlApiTemplate = """
 
 namespace Vide
 
+open System.Runtime.CompilerServices
 open Browser.Types
 open Vide
 
 module HtmlElementBuilders =
     {{for elem in elements}}
-    type {{elem.fsharpTageName}}{{elem.typeParams}}({{elem.ctorParams}}) =
-        inherit {{elem.builderName}}<{{elem.domInterfaceName}}>({{elem.ctorBaseArgs}})
-        {{for attr in elem.attributes}}member this.{{attr.memberName}}(value: {{attr.typ}}) = this.OnEval(fun x -> x.setAttribute("{{attr.name}}", value{{attr.toString}}))
-        {{end}}
-        {{for evt in elem.events}}member this.{{evt.name}}(handler) = this.OnInit(fun x -> x.{{evt.name}} <- handler)
-        {{end}}
+    type {{elem.builderName}}{{elem.typeParams}}({{elem.ctorParams}}) =
+        inherit {{elem.inheritorName}}<{{elem.inheritorGenTypParam}}>({{elem.ctorBaseArgs}})
     {{end}}
+
+open HtmlElementBuilders
+
+{{for elem in elements}}
+[<Extension>]
+type {{elem.builderName}}Extensions =
+    class
+        {{for attr in elem.attributes}}
+        [<Extension>]
+        static member {{attr.memberName}}(this: #{{elem.builderName}}{{if elem.hasGenArgs}}<_>{{end}}, value: {{attr.typ}}) =
+            this.OnEval(fun x -> x.setAttribute("{{attr.name}}", value{{attr.toString}}))       {{end}}
+        {{for evt in elem.events}}
+        [<Extension>]
+        static member {{evt.name}}(this: #{{elem.builderName}}{{if elem.hasGenArgs}}<_>{{end}}, handler) =
+            this.OnInit(fun x -> x.{{evt.name}} <- handler)       {{end}}
+    end
+{{end}}
 
 type Html =
     {{for elem in elements}}
-    {{if elem.isHtmlElement}}static member inline {{elem.fsharpTageName}} = HtmlElementBuilders.{{elem.fsharpTageName}}(){{end}}
+    {{if elem.isHtmlElement}}static member inline {{elem.fsharpTageName}} = HtmlElementBuilders.{{elem.builderName}}(){{end}}
     {{end}}
 """
 
@@ -177,7 +191,7 @@ let generate (elements: Element list) (globalAttrs: Attr list) =
                 typ.FullName, toString
             | AttrTyp.Enum labels -> "string", ""
             | AttrTyp.Choice labels -> "string", ""
-        Api.attr(toString, attr.name, typ, memberName)
+        Api.attr(memberName,attr.name, toString, typ)
 
     let makeAttrs (attrs: Attr list)=
         attrs
@@ -187,15 +201,18 @@ let generate (elements: Element list) (globalAttrs: Attr list) =
         |> List.filter (fun attr -> Corrections.attrExcludes |> List.contains attr.name |> not)
 
     let globalElem =
+        let ctorParams = "tagName"
         Api.elem(
-            htmlGlobalAttrsElementBuilderName,
-            false,
-            Corrections.globalEvents |> List.map Api.evt,
             globalAttrs |> makeAttrs,
-            "tagName",
+            htmlGlobalAttrsElementBuilderName,
+            ctorParams,
+            ctorParams,
+            Corrections.globalEvents |> List.map Api.evt,
+            htmlGlobalAttrsElementBuilderName,
+            true,
             "'n",
             "HTMLElementBuilder",
-            "tagName",
+            false,
             "<'n when 'n :> HTMLElement>"
         )
 
@@ -208,20 +225,22 @@ let generate (elements: Element list) (globalAttrs: Attr list) =
             )
             |> makeAttrs
         let fsharpTageName = elem.name |> correctWith Corrections.elemNameCorrections
-        let builderName = 
+        let inheritorName = 
             if elem.attrs.includeGlobalAttrs 
             then htmlGlobalAttrsElementBuilderName
             else "HTMLElementBuilder"
         let tagName = $""" "{elem.name}" """
         Api.elem(
-            fsharpTageName, 
-            true,
-            events, 
             attrs,
+            fsharpTageName,
             tagName,
-            elem.domInterfaceName,
-            builderName,
             "",
+            events, 
+            fsharpTageName,
+            false,
+            elem.domInterfaceName,
+            inheritorName,
+            true,
             ""
         )
 

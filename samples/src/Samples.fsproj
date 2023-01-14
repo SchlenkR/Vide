@@ -1,9 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Views\Counter.fs" />
     <Compile Include="Views\TodoList.fs" />
     <Compile Include="app.fs" />
   </ItemGroup>

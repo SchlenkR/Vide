@@ -1,13 +1,16 @@
-@import "https://unpkg.com/marx-css/css/marx.min.css";
+@import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
 
 .container {
+    margin: 50px;
     display: grid;
     grid-template-columns: 350px auto;
-    gap: 50px;
+    justify-content: center;
 }
 
-#demo button {
-    padding: 3px 15px;
+#sample {
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    padding: 50px;
 }
 
 

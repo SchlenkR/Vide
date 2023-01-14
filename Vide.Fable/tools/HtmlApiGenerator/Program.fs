@@ -14,7 +14,7 @@ then
 let output = 
     let res = MdnScrape.generate ()
     HtmlApiGenerator.generate res.elements res.globalAttrs
-let outDir = __SOURCE_DIRECTORY__ </> "../../src/Vide.Fable/lib/htmlApi.fs"
+let outDir = __SOURCE_DIRECTORY__ </> "../../src/Vide.Fable/htmlApi.fs"
 do 
     File.WriteAllText(outDir, output)
     printfn $"Output written to: {outDir}"
