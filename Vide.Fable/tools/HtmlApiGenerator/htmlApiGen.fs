@@ -35,7 +35,7 @@ type {{elem.builderName}}Extensions =
         {{for evt in elem.events}}
         [<Extension>]
         static member {{evt.name}}(this: #{{elem.builderName}}{{if elem.hasGenArgs}}<_>{{end}}, handler) =
-            this.OnInit(fun x -> x.{{evt.name}} <- handler)       {{end}}
+            this.OnInit(fun x -> x.{{evt.name}} <- (fun evt -> handler x evt))       {{end}}
     end
 {{end}}
 

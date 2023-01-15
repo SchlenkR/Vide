@@ -39,9 +39,6 @@ let zero<'s,'c> : Vide<unit,'s,'c> =
 let context<'c> : Vide<'c,unit,'c> =
     Vide <| fun s ctx -> ctx,None
 
-[<GeneralizableValue>]
-let nothing<'c> = zero<unit,'c>
-     
 [<AbstractClass>]
 type VideContext() =
     abstract member RequestEvaluation: unit -> unit

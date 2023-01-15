@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>A Reactive front-end framework for F# without dependencies.</Description>
-    <Version>0.0.1-alpha-15</Version>
+    <Version>0.0.1-alpha-17</Version>
   </PropertyGroup>
 
   <PropertyGroup>

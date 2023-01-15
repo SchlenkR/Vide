@@ -372,163 +372,163 @@ type HTMLGlobalAttrsElementBuilderExtensions =
         
         [<Extension>]
         static member onabort(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onabort <- handler)       
+            this.OnInit(fun x -> x.onabort <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onblur(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onblur <- handler)       
+            this.OnInit(fun x -> x.onblur <- (fun evt -> handler x evt))       
         [<Extension>]
         static member oncanplay(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.oncanplay <- handler)       
+            this.OnInit(fun x -> x.oncanplay <- (fun evt -> handler x evt))       
         [<Extension>]
         static member oncanplaythrough(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.oncanplaythrough <- handler)       
+            this.OnInit(fun x -> x.oncanplaythrough <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onchange(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onchange <- handler)       
+            this.OnInit(fun x -> x.onchange <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onclick(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onclick <- handler)       
+            this.OnInit(fun x -> x.onclick <- (fun evt -> handler x evt))       
         [<Extension>]
         static member oncontextmenu(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.oncontextmenu <- handler)       
+            this.OnInit(fun x -> x.oncontextmenu <- (fun evt -> handler x evt))       
         [<Extension>]
         static member oncuechange(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.oncuechange <- handler)       
+            this.OnInit(fun x -> x.oncuechange <- (fun evt -> handler x evt))       
         [<Extension>]
         static member ondblclick(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ondblclick <- handler)       
+            this.OnInit(fun x -> x.ondblclick <- (fun evt -> handler x evt))       
         [<Extension>]
         static member ondrag(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ondrag <- handler)       
+            this.OnInit(fun x -> x.ondrag <- (fun evt -> handler x evt))       
         [<Extension>]
         static member ondragend(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ondragend <- handler)       
+            this.OnInit(fun x -> x.ondragend <- (fun evt -> handler x evt))       
         [<Extension>]
         static member ondragenter(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ondragenter <- handler)       
+            this.OnInit(fun x -> x.ondragenter <- (fun evt -> handler x evt))       
         [<Extension>]
         static member ondragleave(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ondragleave <- handler)       
+            this.OnInit(fun x -> x.ondragleave <- (fun evt -> handler x evt))       
         [<Extension>]
         static member ondragover(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ondragover <- handler)       
+            this.OnInit(fun x -> x.ondragover <- (fun evt -> handler x evt))       
         [<Extension>]
         static member ondragstart(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ondragstart <- handler)       
+            this.OnInit(fun x -> x.ondragstart <- (fun evt -> handler x evt))       
         [<Extension>]
         static member ondrop(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ondrop <- handler)       
+            this.OnInit(fun x -> x.ondrop <- (fun evt -> handler x evt))       
         [<Extension>]
         static member ondurationchange(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ondurationchange <- handler)       
+            this.OnInit(fun x -> x.ondurationchange <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onemptied(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onemptied <- handler)       
+            this.OnInit(fun x -> x.onemptied <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onended(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onended <- handler)       
+            this.OnInit(fun x -> x.onended <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onerror(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onerror <- handler)       
+            this.OnInit(fun x -> x.onerror <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onfocus(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onfocus <- handler)       
+            this.OnInit(fun x -> x.onfocus <- (fun evt -> handler x evt))       
         [<Extension>]
         static member oninput(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.oninput <- handler)       
+            this.OnInit(fun x -> x.oninput <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onkeydown(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onkeydown <- handler)       
+            this.OnInit(fun x -> x.onkeydown <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onkeypress(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onkeypress <- handler)       
+            this.OnInit(fun x -> x.onkeypress <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onkeyup(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onkeyup <- handler)       
+            this.OnInit(fun x -> x.onkeyup <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onload(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onload <- handler)       
+            this.OnInit(fun x -> x.onload <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onloadeddata(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onloadeddata <- handler)       
+            this.OnInit(fun x -> x.onloadeddata <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onloadedmetadata(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onloadedmetadata <- handler)       
+            this.OnInit(fun x -> x.onloadedmetadata <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onloadstart(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onloadstart <- handler)       
+            this.OnInit(fun x -> x.onloadstart <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onmousedown(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onmousedown <- handler)       
+            this.OnInit(fun x -> x.onmousedown <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onmouseenter(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onmouseenter <- handler)       
+            this.OnInit(fun x -> x.onmouseenter <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onmouseleave(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onmouseleave <- handler)       
+            this.OnInit(fun x -> x.onmouseleave <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onmousemove(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onmousemove <- handler)       
+            this.OnInit(fun x -> x.onmousemove <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onmouseout(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onmouseout <- handler)       
+            this.OnInit(fun x -> x.onmouseout <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onmouseover(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onmouseover <- handler)       
+            this.OnInit(fun x -> x.onmouseover <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onmouseup(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onmouseup <- handler)       
+            this.OnInit(fun x -> x.onmouseup <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onmousewheel(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onmousewheel <- handler)       
+            this.OnInit(fun x -> x.onmousewheel <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onpause(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onpause <- handler)       
+            this.OnInit(fun x -> x.onpause <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onplay(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onplay <- handler)       
+            this.OnInit(fun x -> x.onplay <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onplaying(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onplaying <- handler)       
+            this.OnInit(fun x -> x.onplaying <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onprogress(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onprogress <- handler)       
+            this.OnInit(fun x -> x.onprogress <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onratechange(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onratechange <- handler)       
+            this.OnInit(fun x -> x.onratechange <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onreset(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onreset <- handler)       
+            this.OnInit(fun x -> x.onreset <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onscroll(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onscroll <- handler)       
+            this.OnInit(fun x -> x.onscroll <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onseeked(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onseeked <- handler)       
+            this.OnInit(fun x -> x.onseeked <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onseeking(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onseeking <- handler)       
+            this.OnInit(fun x -> x.onseeking <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onselect(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onselect <- handler)       
+            this.OnInit(fun x -> x.onselect <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onstalled(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onstalled <- handler)       
+            this.OnInit(fun x -> x.onstalled <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onsubmit(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onsubmit <- handler)       
+            this.OnInit(fun x -> x.onsubmit <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onsuspend(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onsuspend <- handler)       
+            this.OnInit(fun x -> x.onsuspend <- (fun evt -> handler x evt))       
         [<Extension>]
         static member ontimeupdate(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ontimeupdate <- handler)       
+            this.OnInit(fun x -> x.ontimeupdate <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onvolumechange(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onvolumechange <- handler)       
+            this.OnInit(fun x -> x.onvolumechange <- (fun evt -> handler x evt))       
         [<Extension>]
         static member onwaiting(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onwaiting <- handler)       
+            this.OnInit(fun x -> x.onwaiting <- (fun evt -> handler x evt))       
     end
 
 [<Extension>]

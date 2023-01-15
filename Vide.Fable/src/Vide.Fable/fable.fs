@@ -134,14 +134,16 @@ type VideBuilder with
     /// This allows constructs like:
     ///     div
     /// What is already allowed is (because of Run):
-    ///     div { nothing }
+    ///     div { () }
+    /// F# doesn't support this (currently)
+    ///     div { }
     member _.Yield
         (nb: NodeBuilder<'n>)
         : Vide<unit, NodeBuilderState<'n,unit>, FableContext>
         =
         Debug.print 0 "YIELD NodeBuilder"
-        //nb { HtmlBase.nothing }
-        nb.Run(nb.Zero())
+        //nb.Run(nb.Zero())
+        nb { () }
     member _.Yield
         (s: string)
         : Vide<unit,Text,FableContext>

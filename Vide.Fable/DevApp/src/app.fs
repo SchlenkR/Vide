@@ -31,7 +31,7 @@ let demos : list<string * string * (HTMLElement -> unit)> =
             (
                 "Clear screen (recording)",
                 "Used for recording GIFs",
-                start (vide { nothing })
+                start <| vide { () }
             )
 
             (

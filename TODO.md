@@ -43,9 +43,29 @@
         // TODO: Interesting use case for component result
         // handling and ordering / evaluation
 
-* reset component / state from outside
+Components
+    * reset component / state from outside
+    * Templates / slots
+    * Provide an "element" function
+    * yield support for fragments
+        <>
+            <....
+        <>
+
 * HTML Api
     * globals as base class
+    * "add className"
+    * className + class'
+    * Properties / Ctor initialization
+        type X(?myProp: int) =
+            let mutable _myProp = defaultArg myProp 0
+            member this.myProp(xxx) = _myProp <- xxx
+            member this.myProp() = _myProp
+    * Other events like checked change
+
+let x1 = X().myProp()
+let x2 = X(myProp = 12).myProp()
+
 * Way of emitting HTML (not only text)
 * "Placeholder": A box that can be used later to place elements into
 
