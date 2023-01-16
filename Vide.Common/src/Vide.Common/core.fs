@@ -1,5 +1,4 @@
-[<AutoOpen>]
-module Vide.Core
+namespace Vide
 
 // why we return 's option(!!) -> Because of else branch / zero
 type Vide<'v,'s,'c> = Vide of ('s option -> 'c -> 'v * 's option)
@@ -7,37 +6,6 @@ type Vide<'v,'s,'c> = Vide of ('s option -> 'c -> 'v * 's option)
 module Debug =
     let mutable enabledDebugChannels : int list = []
     let print channel s = if enabledDebugChannels |> List.contains channel then printfn "%s" s
-
-let inline separateStatePair s =
-    match s with
-    | None -> None,None
-    | Some (ms,fs) -> ms,fs
-
-// Preserves the first value given and discards subsequent values.
-let preserve x =
-    Vide <| fun s ctx ->
-        let s = s |> Option.defaultValue x
-        s, Some s
-
-let preserveWith x =
-    Vide <| fun s ctx ->
-        let s = s |> Option.defaultWith x
-        s, Some s
-
-// TODO: Think about which function is "global" and module-bound
-let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
-    Vide <| fun s ctx ->
-        let v,s = v s ctx
-        proj v, s
-
-// why 's and not unit? -> see comment in "VideBuilder.Zero"
-[<GeneralizableValue>]
-let zero<'s,'c> : Vide<unit,'s,'c> =
-    Vide <| fun s ctx -> (),None
-
-[<GeneralizableValue>]
-let context<'c> : Vide<'c,unit,'c> =
-    Vide <| fun s ctx -> ctx,None
 
 [<AbstractClass>]
 type VideContext() =
@@ -51,7 +19,69 @@ type ComputationState<'v> =
 
 type AsyncBindResult<'v1,'v2> = 
     AsyncBindResult of comp: Async<'v1> * cont: ('v1 -> 'v2)
-   
+
+module BuilderHelper =
+    let inline separateStatePair s =
+        match s with
+        | None -> None,None
+        | Some (ms,fs) -> ms,fs
+
+[<AutoOpen>]
+module MutableValue =
+    type MutableValue<'a when 'a: equality>(init: 'a, requestEvaluation: unit -> unit) =
+        let mutable state = init
+        member _.Set(value) =
+            // Not just a perf opt: prevent stack overflows (see demo case asyncHelloWorld)!
+            if value <> state then
+                do state <- value
+                do requestEvaluation()
+        member this.Value
+            with get() = state
+            and set(value) = this.Set(value)
+    
+    // TODO: Do I really want this / AutoOpen and the ops at all?
+    let inline change op (mutVal: MutableValue<_>) x =
+        mutVal.Value <- op mutVal.Value x
+    let inline ( += ) mutVal x = change (+) mutVal x
+    let inline ( -= ) mutVal x = change (-) mutVal x
+    let inline ( *= ) mutVal x = change (*) mutVal x
+    let inline ( /= ) mutVal x = change (/) mutVal x
+    let inline ( := ) (mutVal: MutableValue<_>) x = mutVal.Value <- x
+    
+    // TODO: override arithmetic ops
+
+module Vide =
+    // Preserves the first value given and discards subsequent values.
+    let preserveValue x =
+        Vide <| fun s ctx ->
+            let s = s |> Option.defaultValue x
+            s, Some s
+    
+    let preserveWith x =
+        Vide <| fun s ctx ->
+            let s = s |> Option.defaultWith x
+            s, Some s
+    
+    // TODO: Think about which function is "global" and module-bound
+    let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
+        Vide <| fun s ctx ->
+            let v,s = v s ctx
+            proj v, s
+    
+    // why 's and not unit? -> see comment in "VideBuilder.Zero"
+    [<GeneralizableValue>]
+    let zero<'s,'c> : Vide<unit,'s,'c> =
+        Vide <| fun s ctx -> (),None
+    
+    [<GeneralizableValue>]
+    let context<'c> : Vide<'c,unit,'c> =
+        Vide <| fun s ctx -> ctx,None
+
+    let ofMutable x =
+        Vide <| fun s (c: #VideContext) ->
+            let s = s |> Option.defaultWith (fun () -> MutableValue(x, c.RequestEvaluation))
+            s, Some s
+        
 type VideBuilder() =
     member _.Bind
         (
@@ -62,7 +92,7 @@ type VideBuilder() =
         =
         Vide <| fun s ctx ->
             Debug.print 0 "BIND"
-            let ms,fs = separateStatePair s
+            let ms,fs = BuilderHelper.separateStatePair s
             let mv,ms = m ms ctx
             let (Vide f) = f mv
             let fv,fs = f fs ctx
@@ -88,7 +118,7 @@ type VideBuilder() =
     member _.Zero
         ()
         : Vide<unit,unit,'c>
-        = zero<unit,'c>
+        = Vide.zero<unit,'c>
 
     member _.Delay
         (f: unit -> Vide<'v,'s,'c>)
@@ -124,7 +154,7 @@ type VideBuilder() =
         =
         Vide <| fun s ctx ->
             Debug.print 0 "COMBINE"
-            let sa,sb = separateStatePair s
+            let sa,sb = BuilderHelper.separateStatePair s
             let va,sa = a sa ctx
             let vb,sb = b sb ctx
             vb, Some (sa,sb)
@@ -209,37 +239,6 @@ type VideBuilder() =
                     | None ->
                         va,comp,sb
             v, Some (sa, Some comp, sb)
-    
-
-let vide = VideBuilder()
-
-module Mutable =
-    type MutableValue<'a when 'a: equality>(init: 'a, requestEvaluation: unit -> unit) =
-        let mutable state = init
-        member _.Set(value) =
-            // Not just a perf opt: prevent stack overflows (see demo case asyncHelloWorld)!
-            if value <> state then
-                do state <- value
-                do requestEvaluation()
-        member this.Value
-            with get() = state
-            and set(value) = this.Set(value)
-        // TODO: override arithmetic ops
-
-    let inline change op (mutVal: MutableValue<_>) x =
-        mutVal.Value <- op mutVal.Value x
-    
-    let ofValue x =
-        Vide <| fun s (c: #VideContext) ->
-            let s = s |> Option.defaultWith (fun () -> MutableValue(x, c.RequestEvaluation))
-            s, Some s
-
-// TODO: Do I really want this?
-let inline ( += ) mutVal x = Mutable.change (+) mutVal x
-let inline ( -= ) mutVal x = Mutable.change (-) mutVal x
-let inline ( *= ) mutVal x = Mutable.change (*) mutVal x
-let inline ( /= ) mutVal x = Mutable.change (/) mutVal x
-let inline ( := ) (mutVal: Mutable.MutableValue<_>) x = mutVal.Value <- x
 
 type VideApp<'v,'s,'c when 'c :> VideContext>
     (

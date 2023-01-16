@@ -12,7 +12,7 @@ module GettingStarted =
 
     let counter =
         vide {
-            let! count = Mutable.ofValue 0
+            let! count = Vide.ofMutable 0
 
             div { $"Count = {count.Value}" }
             button.onclick(fun _ _ -> count -= 1) { "dec" }
@@ -21,7 +21,7 @@ module GettingStarted =
 
     let conditionalAttributes =
         vide {
-            let! count = Mutable.ofValue 0
+            let! count = Vide.ofMutable 0
 
             button.onclick(fun _ _ -> count += 1) {
                 $"Hit me! Count = {count.Value}"
@@ -37,7 +37,7 @@ module GettingStarted =
 
     let conditionalIfs =
         vide {
-            let! count = Mutable.ofValue 0
+            let! count = Vide.ofMutable 0
 
             button.onclick(fun _ _ -> count += 1) {
                 $"Hit me! Count = {count.Value}"
@@ -46,28 +46,28 @@ module GettingStarted =
             // TODO. Docu: The state can get lost because they are not compatible
 
             if count.Value = 5 || count.Value = 6 then
-                let! valueString = preserve "Hello String"
+                let! valueString = Vide.preserveValue "Hello String"
                 div.className("the-message") { 
                     $"You have the right to defend yourself! (string value {valueString})" 
                 }
             // TODO:
             // else zero: instead of "zero", it could be controlled if component state
             // in the corresponding "if" will be preserved or cleared!
-            else zero
+            else Vide.zero
 
             // this must compile
             ()
 
             if count.Value <> 5 then
-                let! valueInt = preserve 42
+                let! valueInt = Vide.preserveValue 42
                 p { $"not yet... with int value {valueInt}" }
-            else zero
+            else Vide.zero
         }
 
     // TODO: That is not compiling (anymore; which is ok - document this)
     let conditionalIfElse =
         vide {
-            let! count = Mutable.ofValue 0
+            let! count = Vide.ofMutable 0
 
             button.onclick(fun _ _ -> count += 1) {
                 $"Hit me! Count = {count.Value}"
@@ -94,7 +94,7 @@ module GettingStarted =
     let statelessFor =
         let nextNum() = System.Random().Next(10000)
         vide {
-            let! items = Mutable.ofValue []
+            let! items = Vide.ofMutable []
             let add1 _ _ = items := items.Value @ [nextNum()]
             let add100 _ _ = items := items.Value @ [ for _ in 0..100 do nextNum() ]
             let removeAll _ _ = items :=  []
@@ -113,7 +113,7 @@ module GettingStarted =
     let statefulFor =
         let nextNum() = System.Random().Next(10000)
         vide {
-            let! items = Mutable.ofValue []
+            let! items = Vide.ofMutable []
             let add1 _ _ = items := items.Value @ [nextNum()]
             let add100 _ _ = items := items.Value @ [ for _ in 0..100 do nextNum() ]
             let removeAll _ _ = items := []
@@ -127,7 +127,7 @@ module GettingStarted =
                     let removeMe _ _ = items := items.Value |> List.except [x]
                     button.onclick(removeMe) { $"Remove {x}" }
 
-                    let! count = Mutable.ofValue 0
+                    let! count = Vide.ofMutable 0
                     button.onclick(fun _ _ -> count -= 1) { "dec" }
                     $"{count.Value}  "
                     button.onclick(fun _ _ -> count += 1) { "inc" }
@@ -149,7 +149,7 @@ module Components =
     let visualComponentReturningValues =
         let visualCounter =
             vide {
-                let! count = Mutable.ofValue 0
+                let! count = Vide.ofMutable 0
 
                 button.onclick(fun _ _ -> count -= 1) { "dec" }
                 button.onclick(fun _ _ -> count += 1) { "inc" }
@@ -265,7 +265,7 @@ module Async =
             }
 
         vide {
-            let! currRes = Mutable.ofValue 0
+            let! currRes = Vide.ofMutable 0
             div.className("async-box") {
                 $"Current component result: {currRes.Value}"
             }

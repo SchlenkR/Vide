@@ -84,7 +84,7 @@ module BuilderHelper =
             Debug.print 0 "RUN:NodeBuilder"
             let inline runModifiers modifiers node =
                 for m in modifiers do m node
-            let s,cs = separateStatePair s
+            let s,cs = BuilderHelper.separateStatePair s
             let node,cs =
                 // Can it happen that s is Some and cs is None? I don't think so.
                 // But: See comment in definition of: Vide.Core.Vide
