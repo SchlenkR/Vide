@@ -13,521 +13,744 @@ open Vide
 
 module HtmlElementBuilders =
     
-    type HTMLGlobalAttrsElementBuilder<'n when 'n :> HTMLElement>(tagName) =
-        inherit HTMLElementBuilder<'n>(tagName)
+    type HTMLGlobalAttrsVoidElementBuilder<'v,'n when 'n :> HTMLElement>(tagName, resultSelector) =
+        inherit HTMLVoidElementBuilder<'v,'n>(tagName, resultSelector)
+    
+    type HTMLGlobalAttrsContentElementBuilder<'n when 'n :> HTMLElement>(tagName) =
+        inherit HTMLContentElementBuilder<'n>(tagName)
     
     type a() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLAnchorElement>( "a" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLAnchorElement>( "a" )
     
     type abbr() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "abbr" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "abbr" )
     
     type address() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "address" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "address" )
     
     type area() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLAreaElement>( "area" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLAreaElement>( "area" )
     
     type article() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "article" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "article" )
     
     type aside() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "aside" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "aside" )
     
     type audio() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLAudioElement>( "audio" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLAudioElement>( "audio" )
     
     type b() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "b" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "b" )
     
     type bdi() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "bdi" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "bdi" )
     
     type bdo() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "bdo" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "bdo" )
     
     type blockquote() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLQuoteElement>( "blockquote" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLQuoteElement>( "blockquote" )
     
     type body() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLBodyElement>( "body" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLBodyElement>( "body" )
     
     type br() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLBRElement>( "br" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLBRElement>( "br" )
     
     type button() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLButtonElement>( "button" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLButtonElement>( "button" )
     
     type canvas() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLCanvasElement>( "canvas" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLCanvasElement>( "canvas" )
     
     type caption() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableCaptionElement>( "caption" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLTableCaptionElement>( "caption" )
     
     type cite() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "cite" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "cite" )
     
     type code() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "code" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "code" )
     
     type col() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableColElement>( "col" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLTableColElement>( "col" )
     
     type colgroup() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableColElement>( "colgroup" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLTableColElement>( "colgroup" )
     
     type datalist() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLDataListElement>( "datalist" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLDataListElement>( "datalist" )
     
     type dd() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "dd" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "dd" )
     
     type del() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLModElement>( "del" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLModElement>( "del" )
     
     type dfn() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "dfn" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "dfn" )
     
     type div() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLDivElement>( "div" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLDivElement>( "div" )
     
     type dl() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLDListElement>( "dl" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLDListElement>( "dl" )
     
     type dt() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "dt" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "dt" )
     
     type em() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "em" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "em" )
     
     type embed() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLEmbedElement>( "embed" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLEmbedElement>( "embed" )
     
     type fieldset() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLFieldSetElement>( "fieldset" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLFieldSetElement>( "fieldset" )
     
     type figcaption() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "figcaption" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "figcaption" )
     
     type figure() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "figure" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "figure" )
     
     type footer() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "footer" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "footer" )
     
     type form() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLFormElement>( "form" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLFormElement>( "form" )
     
     type h1() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( "h1" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLHeadingElement>( "h1" )
     
     type h2() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( "h2" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLHeadingElement>( "h2" )
     
     type h3() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( "h3" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLHeadingElement>( "h3" )
     
     type h4() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( "h4" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLHeadingElement>( "h4" )
     
     type h5() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( "h5" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLHeadingElement>( "h5" )
     
     type h6() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadingElement>( "h6" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLHeadingElement>( "h6" )
     
     type head() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLHeadElement>( "head" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLHeadElement>( "head" )
     
     type header() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "header" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "header" )
     
     type hr() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLHRElement>( "hr" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLHRElement>( "hr" )
     
     type html() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLHtmlElement>( "html" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLHtmlElement>( "html" )
     
     type i() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "i" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "i" )
     
     type iframe() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLIFrameElement>( "iframe" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLIFrameElement>( "iframe" )
     
     type img() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLImageElement>( "img" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLImageElement>( "img" )
     
+    type InputElementResult = 
+        { 
+            textValue: string 
+        }
     type input() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLInputElement>( "input" )
+        inherit HTMLGlobalAttrsVoidElementBuilder<InputElementResult, HTMLInputElement>
+            (
+                "input",
+                fun node -> { textValue = node.value }
+            )
     
     type ins() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLModElement>( "ins" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLModElement>( "ins" )
     
     type kbd() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "kbd" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "kbd" )
     
     type label() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLLabelElement>( "label" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLLabelElement>( "label" )
     
     type legend() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLLegendElement>( "legend" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLLegendElement>( "legend" )
     
     type li() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLLIElement>( "li" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLLIElement>( "li" )
     
     type link() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLLinkElement>( "link" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLLinkElement>( "link" )
     
     type main() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "main" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "main" )
     
     type map() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLMapElement>( "map" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLMapElement>( "map" )
     
     type mark() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "mark" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "mark" )
     
     type menu() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLMenuElement>( "menu" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLMenuElement>( "menu" )
     
     type meta() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLMetaElement>( "meta" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLMetaElement>( "meta" )
     
     type nav() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "nav" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "nav" )
     
     type noscript() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "noscript" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "noscript" )
     
     type object() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLObjectElement>( "object" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLObjectElement>( "object" )
     
     type ol() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLOListElement>( "ol" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLOListElement>( "ol" )
     
     type optgroup() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLOptGroupElement>( "optgroup" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLOptGroupElement>( "optgroup" )
     
     type option() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLOptionElement>( "option" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLOptionElement>( "option" )
     
     type p() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLParagraphElement>( "p" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLParagraphElement>( "p" )
     
     type pre() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLPreElement>( "pre" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLPreElement>( "pre" )
     
     type progress() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLProgressElement>( "progress" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLProgressElement>( "progress" )
     
     type q() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLQuoteElement>( "q" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLQuoteElement>( "q" )
     
     type rp() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "rp" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "rp" )
     
     type rt() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "rt" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "rt" )
     
     type ruby() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "ruby" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "ruby" )
     
     type s() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "s" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "s" )
     
     type samp() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "samp" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "samp" )
     
     type script() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLScriptElement>( "script" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLScriptElement>( "script" )
     
     type section() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "section" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "section" )
     
     type select() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLSelectElement>( "select" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLSelectElement>( "select" )
     
     type small() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "small" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "small" )
     
     type source() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLSourceElement>( "source" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLSourceElement>( "source" )
     
     type span() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLSpanElement>( "span" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLSpanElement>( "span" )
     
     type strong() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "strong" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "strong" )
     
     type style() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLStyleElement>( "style" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLStyleElement>( "style" )
     
     type sub() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "sub" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "sub" )
     
     type summary() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "summary" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "summary" )
     
     type sup() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "sup" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "sup" )
     
     type table() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableElement>( "table" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLTableElement>( "table" )
     
     type tbody() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableSectionElement>( "tbody" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLTableSectionElement>( "tbody" )
     
     type td() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableCellElement>( "td" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLTableCellElement>( "td" )
     
     type textarea() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTextAreaElement>( "textarea" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLTextAreaElement>( "textarea" )
     
     type tfoot() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableSectionElement>( "tfoot" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLTableSectionElement>( "tfoot" )
     
     type th() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableCellElement>( "th" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLTableCellElement>( "th" )
     
     type thead() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableSectionElement>( "thead" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLTableSectionElement>( "thead" )
     
     type title() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTitleElement>( "title" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLTitleElement>( "title" )
     
     type tr() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTableRowElement>( "tr" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLTableRowElement>( "tr" )
     
     type track() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLTrackElement>( "track" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLTrackElement>( "track" )
     
     type u() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "u" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "u" )
     
     type ul() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLUListElement>( "ul" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLUListElement>( "ul" )
     
     type var() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "var" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "var" )
     
     type video() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLVideoElement>( "video" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLVideoElement>( "video" )
     
     type wbr() =
-        inherit HTMLGlobalAttrsElementBuilder<HTMLElement>( "wbr" )
+        inherit HTMLGlobalAttrsContentElementBuilder<HTMLElement>( "wbr" )
     
 
 open HtmlElementBuilders
 
 
 [<Extension>]
-type HTMLGlobalAttrsElementBuilderExtensions =
+type HTMLGlobalAttrsContentElementBuilderExtensions =
     class
         
         [<Extension>]
-        static member accesskey(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+        static member accesskey(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: System.String) =
             this.OnEval(fun x -> x.setAttribute("accesskey", value))       
         [<Extension>]
-        static member autocapitalize(this: #HTMLGlobalAttrsElementBuilder<_>, value: string) =
+        static member autocapitalize(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: string) =
             this.OnEval(fun x -> x.setAttribute("autocapitalize", value))       
         [<Extension>]
-        static member autofocus(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+        static member autofocus(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: System.String) =
             this.OnEval(fun x -> x.setAttribute("autofocus", value))       
         [<Extension>]
-        static member className(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+        static member className(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: System.String) =
             this.OnEval(fun x -> x.setAttribute("class", value))       
         [<Extension>]
-        static member contenteditable(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.Boolean) =
+        static member contenteditable(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: System.Boolean) =
             this.OnEval(fun x -> x.setAttribute("contenteditable", value.ToString()))       
         [<Extension>]
-        static member contextmenu(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+        static member contextmenu(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: System.String) =
             this.OnEval(fun x -> x.setAttribute("contextmenu", value))       
         [<Extension>]
-        static member dir(this: #HTMLGlobalAttrsElementBuilder<_>, value: string) =
+        static member dir(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: string) =
             this.OnEval(fun x -> x.setAttribute("dir", value))       
         [<Extension>]
-        static member draggable(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.Boolean) =
+        static member draggable(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: System.Boolean) =
             this.OnEval(fun x -> x.setAttribute("draggable", value.ToString()))       
         [<Extension>]
-        static member enterkeyhint(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+        static member enterkeyhint(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: System.String) =
             this.OnEval(fun x -> x.setAttribute("enterkeyhint", value))       
         [<Extension>]
-        static member exportparts(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+        static member exportparts(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: System.String) =
             this.OnEval(fun x -> x.setAttribute("exportparts", value))       
         [<Extension>]
-        static member hidden(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+        static member hidden(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: System.String) =
             this.OnEval(fun x -> x.setAttribute("hidden", value))       
         [<Extension>]
-        static member id(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+        static member id(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: System.String) =
             this.OnEval(fun x -> x.setAttribute("id", value))       
         [<Extension>]
-        static member inert(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+        static member inert(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: System.String) =
             this.OnEval(fun x -> x.setAttribute("inert", value))       
         [<Extension>]
-        static member inputmode(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+        static member inputmode(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: System.String) =
             this.OnEval(fun x -> x.setAttribute("inputmode", value))       
         [<Extension>]
-        static member is(this: #HTMLGlobalAttrsElementBuilder<_>, value: System.String) =
+        static member is(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: System.String) =
             this.OnEval(fun x -> x.setAttribute("is", value))       
         
         [<Extension>]
-        static member onabort(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onabort(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onabort <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onblur(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onblur(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onblur <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member oncanplay(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member oncanplay(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.oncanplay <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member oncanplaythrough(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member oncanplaythrough(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.oncanplaythrough <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onchange(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onchange(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onchange <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onclick(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onclick(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onclick <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member oncontextmenu(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member oncontextmenu(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.oncontextmenu <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member oncuechange(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member oncuechange(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.oncuechange <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member ondblclick(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member ondblclick(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.ondblclick <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member ondrag(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member ondrag(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.ondrag <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member ondragend(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member ondragend(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.ondragend <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member ondragenter(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member ondragenter(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.ondragenter <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member ondragleave(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member ondragleave(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.ondragleave <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member ondragover(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member ondragover(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.ondragover <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member ondragstart(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member ondragstart(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.ondragstart <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member ondrop(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member ondrop(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.ondrop <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member ondurationchange(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member ondurationchange(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.ondurationchange <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onemptied(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onemptied(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onemptied <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onended(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onended(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onended <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onerror(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onerror(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onerror <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onfocus(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onfocus(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onfocus <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member oninput(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member oninput(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.oninput <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onkeydown(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onkeydown(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onkeydown <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onkeypress(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onkeypress(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onkeypress <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onkeyup(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onkeyup(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onkeyup <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onload(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onload(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onload <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onloadeddata(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onloadeddata(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onloadeddata <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onloadedmetadata(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onloadedmetadata(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onloadedmetadata <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onloadstart(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onloadstart(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onloadstart <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onmousedown(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onmousedown(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onmousedown <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onmouseenter(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onmouseenter(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onmouseenter <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onmouseleave(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onmouseleave(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onmouseleave <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onmousemove(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onmousemove(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onmousemove <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onmouseout(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onmouseout(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onmouseout <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onmouseover(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onmouseover(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onmouseover <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onmouseup(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onmouseup(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onmouseup <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onmousewheel(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onmousewheel(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onmousewheel <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onpause(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onpause(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onpause <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onplay(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onplay(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onplay <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onplaying(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onplaying(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onplaying <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onprogress(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onprogress(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onprogress <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onratechange(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onratechange(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onratechange <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onreset(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onreset(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onreset <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onscroll(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onscroll(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onscroll <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onseeked(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onseeked(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onseeked <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onseeking(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onseeking(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onseeking <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onselect(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onselect(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onselect <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onstalled(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onstalled(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onstalled <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onsubmit(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onsubmit(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onsubmit <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onsuspend(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onsuspend(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onsuspend <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member ontimeupdate(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member ontimeupdate(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.ontimeupdate <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onvolumechange(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onvolumechange(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
             this.OnInit(fun x -> x.onvolumechange <- (fun evt -> handler x evt))       
         [<Extension>]
-        static member onwaiting(this: #HTMLGlobalAttrsElementBuilder<_>, handler) =
+        static member onwaiting(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
+            this.OnInit(fun x -> x.onwaiting <- (fun evt -> handler x evt))       
+    end
+
+
+[<Extension>]
+type HTMLGlobalAttrsVoidElementBuilderExtensions =
+    class
+        
+        [<Extension>]
+        static member accesskey(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("accesskey", value))       
+        [<Extension>]
+        static member autocapitalize(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: string) =
+            this.OnEval(fun x -> x.setAttribute("autocapitalize", value))       
+        [<Extension>]
+        static member autofocus(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("autofocus", value))       
+        [<Extension>]
+        static member className(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("class", value))       
+        [<Extension>]
+        static member contenteditable(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: System.Boolean) =
+            this.OnEval(fun x -> x.setAttribute("contenteditable", value.ToString()))       
+        [<Extension>]
+        static member contextmenu(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("contextmenu", value))       
+        [<Extension>]
+        static member dir(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: string) =
+            this.OnEval(fun x -> x.setAttribute("dir", value))       
+        [<Extension>]
+        static member draggable(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: System.Boolean) =
+            this.OnEval(fun x -> x.setAttribute("draggable", value.ToString()))       
+        [<Extension>]
+        static member enterkeyhint(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("enterkeyhint", value))       
+        [<Extension>]
+        static member exportparts(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("exportparts", value))       
+        [<Extension>]
+        static member hidden(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("hidden", value))       
+        [<Extension>]
+        static member id(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("id", value))       
+        [<Extension>]
+        static member inert(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("inert", value))       
+        [<Extension>]
+        static member inputmode(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("inputmode", value))       
+        [<Extension>]
+        static member is(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: System.String) =
+            this.OnEval(fun x -> x.setAttribute("is", value))       
+        
+        [<Extension>]
+        static member onabort(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onabort <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onblur(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onblur <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member oncanplay(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.oncanplay <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member oncanplaythrough(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.oncanplaythrough <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onchange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onchange <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onclick(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onclick <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member oncontextmenu(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.oncontextmenu <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member oncuechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.oncuechange <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member ondblclick(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.ondblclick <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member ondrag(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.ondrag <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member ondragend(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.ondragend <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member ondragenter(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.ondragenter <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member ondragleave(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.ondragleave <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member ondragover(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.ondragover <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member ondragstart(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.ondragstart <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member ondrop(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.ondrop <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member ondurationchange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.ondurationchange <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onemptied(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onemptied <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onended(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onended <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onerror(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onerror <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onfocus(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onfocus <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member oninput(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.oninput <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onkeydown(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onkeydown <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onkeypress(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onkeypress <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onkeyup(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onkeyup <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onload(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onload <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onloadeddata(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onloadeddata <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onloadedmetadata(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onloadedmetadata <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onloadstart(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onloadstart <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onmousedown(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onmousedown <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onmouseenter(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onmouseenter <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onmouseleave(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onmouseleave <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onmousemove(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onmousemove <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onmouseout(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onmouseout <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onmouseover(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onmouseover <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onmouseup(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onmouseup <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onmousewheel(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onmousewheel <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onpause(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onpause <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onplay(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onplay <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onplaying(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onplaying <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onprogress(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onprogress <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onratechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onratechange <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onreset(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onreset <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onscroll(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onscroll <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onseeked(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onseeked <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onseeking(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onseeking <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onselect(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onselect <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onstalled(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onstalled <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onsubmit(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onsubmit <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onsuspend(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onsuspend <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member ontimeupdate(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.ontimeupdate <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onvolumechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
+            this.OnInit(fun x -> x.onvolumechange <- (fun evt -> handler x evt))       
+        [<Extension>]
+        static member onwaiting(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
             this.OnInit(fun x -> x.onwaiting <- (fun evt -> handler x evt))       
     end
 

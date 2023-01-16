@@ -62,6 +62,15 @@ Components
             member this.myProp(xxx) = _myProp <- xxx
             member this.myProp() = _myProp
     * Other events like checked change
+    * hr, br etc. sollen Void sein
+    * Events:
+        * Overload ohne Argumente (Evaluiert nur)
+        * Event soll ein Arg bekommen mit
+            - Event (Fable)
+            - Node
+            - Eventkontext mit "TriggerEval: bool"
+    * Input soll automatisch "OnChange" auslösen
+    * Kontext weiter abstrahieren, damit man ohne Browser testen kann
 
 let x1 = X().myProp()
 let x2 = X(myProp = 12).myProp()

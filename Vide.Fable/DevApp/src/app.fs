@@ -14,7 +14,7 @@ do Debug.enabledDebugChannels <-
 
 let mutable currentApp = None
 
-let demos : list<string * string * (HTMLElement -> unit)> = 
+let demos = 
     let inline start content host =
         let content = content |> map ignore
         let app = App.createFableWithObjState host content (fun _ _ -> ())
@@ -22,115 +22,149 @@ let demos : list<string * string * (HTMLElement -> unit)> =
         do app.RequestEvaluation()
     let demos =
         [
-            //(
-            //    "Async (trigger)",
-            //    "TODO",
-            //    start Demos.asyncTrigger
-            //)
+            {|
+                category = "Screen Recorsding"
+                elements = [
+                    (
+                        "Clear screen (recording)",
+                        "Used for recording GIFs",
+                        start <| vide { () }
+                    )
+                ]
+            |}
 
-            (
-                "Clear screen (recording)",
-                "Used for recording GIFs",
-                start <| vide { () }
-            )
+            {|
+                category = "Getting Started"
+                elements = [
+                    (
+                        "Hello World",
+                        "Just a message to the world...",
+                        start Demos.GettingStarted.helloWorld
+                    )
 
-            (
-                "Hello World",
-                "Just a message to the world...",
-                start Demos.helloWorld
-            )
-
-            (
-                "Counter",
-                "The famous, one-of-a kind counter.",
-                start Demos.counter
-            )
+                    (
+                        "Counter",
+                        "The famous, one-of-a kind counter.",
+                        start Demos.GettingStarted.counter
+                    )
         
-            (
-                "Conditional attributes",
-                "Count to 5 and you'll get a surprise!",
-                start Demos.conditionalAttributes
-            )
+                    (
+                        "Conditional attributes",
+                        "Count to 5 and you'll get a surprise!",
+                        start Demos.GettingStarted.conditionalAttributes
+                    )
 
-            (
-                "Conditional elements (multiple if)",
-                "Count to 5 and you'll get another surprise!",
-                start Demos.conditionalIfs
-            )
+                    (
+                        "Conditional elements (multiple if)",
+                        "Count to 5 and you'll get another surprise!",
+                        start Demos.GettingStarted.conditionalIfs
+                    )
 
-            (
-                "Conditional elements (if/else)",
-                "TODO: This must be documented!",
-                start Demos.conditionalIfElse
-            )
+                    (
+                        "Conditional elements (if/else)",
+                        "TODO: This must be documented!",
+                        start Demos.GettingStarted.conditionalIfElse
+                    )
 
-            (
-                "List of elements",
-                "Just an immutable list.",
-                start Demos.simpleFor
-            )
+                    (
+                        "List of elements",
+                        "Just an immutable list.",
+                        start Demos.GettingStarted.simpleFor
+                    )
 
-            (
-                "Mutable element list",
-                "Add / Remove items",
-                start Demos.statelessFor
-            )
+                    (
+                        "Mutable element list",
+                        "Add / Remove items",
+                        start Demos.GettingStarted.statelessFor
+                    )
 
-            (
-                "List with element state",
-                "TODO",
-                start Demos.statefulFor
-            )
+                    (
+                        "List with element state",
+                        "TODO",
+                        start Demos.GettingStarted.statefulFor
+                    )
+                ]
+            |}
 
-            (
-                "Component emitting a value",
-                "TODO",
-                start (Demos.visualComponentReturningValues ())
-            )
+            {|
+                category = "Components"
+                elements = [
+                    (
+                        "Component emitting a value",
+                        "TODO",
+                        start (Demos.Components.visualComponentReturningValues)
+                    )
+                ]
+            |}
 
-            (
-                "Direct access to HTMLElement (on init and eval)",
-                "TODO",
-                start Demos.directAccessToHtmlElement
-            )
+            {|
+                category = "Async"
+                elements = [
+                    (
+                        "Async (hello world)",
+                        "TODO",
+                        start Demos.Async.asyncHelloWorld
+                    )
 
-            (
-                "Async (hello world)",
-                "TODO",
-                start Demos.asyncHelloWorld
-            )
+                    (
+                        "Async (inside elements)",
+                        "TODO",
+                        start Demos.Async.asyncInsideHtmlElements
+                    )
 
-            (
-                "Async (inside elements)",
-                "TODO",
-                start Demos.asyncInsideHtmlElements
-            )
+                    (
+                        "Async (with return values)",
+                        "TODO",
+                        start Demos.Async.asyncWithSubsequentResults
+                    )
+                ]
+            |}
 
-            (
-                "Async (with return values)",
-                "TODO",
-                start Demos.asyncWithSubsequentResults
-            )
+            {|
+                category = "Input"
+                elements = [
+                    (
+                        "Retrieving text values",
+                        "TODO",
+                        start Demos.Input.textInput
+                    )
+                ]
+            |}
+            {|
+                category = "Advanced"
+                elements = [
+                    (
+                        "Direct access to HTMLElement (on init and eval)",
+                        "TODO",
+                        start Demos.Advanced.directAccessToHtmlElement
+                    )
+                ]
+            |}
         ]
     demos
 
 let menu = document.getElementById("menu")
 let demoHost = document.getElementById("demo")
-for title,desc,runDemo in demos do
-    let btn = document.createElement("button") :?> HTMLButtonElement
-    btn.innerText <- title
-    btn.onclick <- fun _ ->
-        do console.clear()
-        let innerDemoHostId = "innerDemoHost"
-        demoHost.innerHTML <-
-            $"""
-            <h2>{title}</h2> 
-            <blockquote>{desc}</blockquote>
-            <div id={innerDemoHostId}></div>
-            """
-        let innerDemoHost = demoHost.querySelector($"#{innerDemoHostId}") :?> HTMLElement
-        runDemo innerDemoHost
-    menu.appendChild(btn) |> ignore
+for x in demos do
+    do
+        let cat = document.createElement("h4")
+        cat.textContent <- x.category
+        menu.appendChild(cat) |> ignore
+    for title,desc,runDemo in x.elements do
+        let btn = document.createElement("button") :?> HTMLButtonElement
+        btn.innerText <- title
+        btn.onclick <- fun _ ->
+            do console.clear()
+            let innerDemoHostId = "innerDemoHost"
+            demoHost.innerHTML <-
+                $"""
+                <h2>{title}</h2> 
+                <blockquote>{desc}</blockquote>
+                <div id={innerDemoHostId}></div>
+                """
+            let innerDemoHost = demoHost.querySelector($"#{innerDemoHostId}") :?> HTMLElement
+            runDemo innerDemoHost
+        menu.appendChild(btn) |> ignore
 
 document.getElementById("evaluate").onclick <- fun _ ->
     currentApp |> Option.iter (fun app -> app.RequestEvaluation())

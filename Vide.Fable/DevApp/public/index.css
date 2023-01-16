@@ -1,16 +1,24 @@
 @import "https://unpkg.com/marx-css/css/marx.min.css";
 
+body {
+    height: 100%;
+    padding: 0;
+}
+
 .container {
+    height: 100%;
     display: grid;
-    grid-template-columns: 350px auto;
+    grid-template-columns: 450px auto;
     gap: 50px;
 }
 
 #menu {
+    overflow: auto;
+    height: 100%;
+    padding: 30px;
     display: grid;
     align-items: stretch;
     align-content: start;
-    padding: 10px;
     padding-right: 20px;
     border-right: 1px solid black;
 }
