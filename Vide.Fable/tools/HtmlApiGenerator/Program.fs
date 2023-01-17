@@ -11,10 +11,21 @@ if
 then
     Directory.Delete(MdnScrape.cacheDir, true)
 
-let output = 
-    let res = MdnScrape.generate ()
-    HtmlApiGenerator.generate res.elements res.globalAttrs
-let outDir = __SOURCE_DIRECTORY__ </> "../../src/Vide.Fable/htmlApi.fs"
-do 
-    File.WriteAllText(outDir, output)
-    printfn $"Output written to: {outDir}"
+let gen generator relOutFileName =
+    let output = 
+        let res = MdnScrape.generate ()
+        generator res
+    let outDir = __SOURCE_DIRECTORY__ </> relOutFileName
+    do 
+        File.WriteAllText(outDir, output)
+        printfn $"Output written to: {outDir}"
+
+let genHtmlApi () =
+    "../../src/Vide.Fable/htmlApi.fs"
+    |> gen (fun res -> HtmlApiGenerator.generate res.elements res.globalAttrs)
+
+let genHtmlSpec () =
+    "../../src/Vide.Fable/htmlSpec.csv"
+    |> gen (fun res -> HtmlSpecGenerator.generate res.elements res.globalAttrs)
+
+genHtmlSpec()

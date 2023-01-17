@@ -8,8 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="w3schoolScrape.fs" />
     <Compile Include="mdnScrape.fs" />
     <Compile Include="htmlApiGen.fs" />
+    <Compile Include="htmlSpecGen.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
@@ -19,6 +21,10 @@
     <PackageReference Include="FSharp.SystemTextJson" Version="1.0.7" />
     <PackageReference Include="FSharp.Text.TypedTemplateProvider" Version="1.0.1" />
     <PackageReference Include="FsHttp" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="w3sCache\" />
   </ItemGroup>
 
 </Project>

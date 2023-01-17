@@ -72,6 +72,8 @@ Components
     * Input soll automatisch "OnChange" auslösen
     * Kontext weiter abstrahieren, damit man ohne Browser testen kann
 
+* MemLeaks bei evt reg?
+
 let x1 = X().myProp()
 let x2 = X(myProp = 12).myProp()
 

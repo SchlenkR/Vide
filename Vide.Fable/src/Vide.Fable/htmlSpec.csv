@@ -1,0 +1,277 @@
+elementName|attributeName|fsharpAttributeName|types|felizAttr|url|desc
+a|download|download|string|{"name":"download","types":["Boolean","String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a|Causes the browser to treat the linked URL as a dow
+a|href|href|string|{"name":"href","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a|The URL that the hyperlink points to. Links are not
+a|hreflang|hreflang|System.String|{"name":"hrefLang","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a|Hints at the human language of the linked URL. No b
+a|ping|ping|System.String|{"name":"ping","types":["String","f"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a|A space-separated list of URLs. When the link is fo
+a|referrerpolicy|referrerpolicy|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a|How much of the referrer to send when following the
+a|rel|rel|System.String|{"name":"rel","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a|The relationship of the linked URL as space-separat
+a|target|target|string|{"name":"target","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a|Where to display the linked URL, as the name for a 
+a|type|type'|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a|Hints at the linked URL's format with a MIME type. 
+area|alt|alt|System.String|{"name":"alt","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/area|A text string alternative to display on browsers th
+area|coords|coords|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/area|The coords attribute details the coordinates of the
+area|download|download|System.String|{"name":"download","types":["Boolean","String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/area|This attribute, if present, indicates that the auth
+area|href|href|System.String|{"name":"href","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/area|The hyperlink target for the area. Its value is a v
+area|hreflang|hreflang|System.String|{"name":"hrefLang","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/area|Indicates the language of the linked resource. Allo
+area|ping|ping|System.String|{"name":"ping","types":["String","f"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/area|Contains a space-separated list of URLs to which, w
+area|referrerpolicy|referrerpolicy|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/area|A string indicating which referrer to use when fetc
+area|rel|rel|System.String|{"name":"rel","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/area|For anchors containing the href attribute, this att
+area|shape|shape|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/area|The shape of the associated hot spot. The specifica
+area|target|target|string|{"name":"target","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/area|A keyword or author-defined name of the browsing co
+audio|autoplay|autoplay|System.String|{"name":"autoPlay","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio|A Boolean attribute: if specified, the audio will a
+audio|controls|controls|System.String|{"name":"controls","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio|If this attribute is present, the browser will offe
+audio|controlslist|controlslist|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio|The controlslist attribute, when specified, helps t
+audio|crossorigin|crossorigin|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio|This enumerated attribute indicates whether to use 
+audio|disableremoteplayback|disableremoteplayback|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio|A Boolean attribute used to disable the capability 
+audio|loop|loop|System.String|{"name":"loop","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio|A Boolean attribute: if specified, the audio player
+audio|muted|muted|System.String|{"name":"muted","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio|A Boolean attribute that indicates whether the audi
+audio|preload|preload|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio|This enumerated attribute is intended to provide a 
+audio|src|src|System.String|{"name":"src","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio|The URL of the audio to embed. This is subject to H
+base|href|href|System.String|{"name":"href","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base|The base URL to be used throughout the document for
+base|target|target|string|{"name":"target","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base|A keyword or author-defined name of the default bro
+bdo|dir|dir|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/bdo|The direction in which text should be rendered in t
+blockquote|cite|cite|System.String|{"name":"cite","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/blockquote|A URL that designates a source document or message 
+body|alink|alink|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Color of text for hyperlinks when selected. Do not 
+body|background|background|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|URI of an image to use as a background. Do not use 
+body|bgcolor|bgcolor|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Background color for the document. Do not use this 
+body|bottommargin|bottommargin|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|The margin of the bottom of the body. Do not use th
+body|leftmargin|leftmargin|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|The margin of the left of the body. Do not use this
+body|link|link|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Color of text for unvisited hypertext links. Do not
+body|onafterprint|onafterprint|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Function to call after the user has printed the doc
+body|onbeforeprint|onbeforeprint|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Function to call when the user requests printing of
+body|onbeforeunload|onbeforeunload|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Function to call when the document is about to be u
+body|onblur|onblur|System.String|{"name":"onBlur","types":["FSharpFunc\u00602"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Function to call when the document loses focus.Func
+body|onerror|onerror|System.String|{"name":"onError","types":["FSharpFunc\u00602","FSharpFunc\u00602"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Function to call when the document fails to load pr
+body|onfocus|onfocus|System.String|{"name":"onFocus","types":["FSharpFunc\u00602"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Function to call when the document receives focus.F
+body|onhashchange|onhashchange|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Function to call when the fragment identifier part 
+body|onlanguagechange|onlanguagechange|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Function to call when the preferred languages chang
+body|onload|onload|System.String|{"name":"onLoad","types":["FSharpFunc\u00602"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Function to call when the document has finished loa
+body|onmessage|onmessage|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Function to call when the document has received a m
+body|onoffline|onoffline|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Function to call when network communication has fai
+body|ononline|ononline|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Function to call when network communication has bee
+body|onpopstate|onpopstate|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Function to call when the user has navigated sessio
+body|onredo|onredo|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Function to call when the user has moved forward in
+body|onresize|onresize|System.String|{"name":"onResize","types":["FSharpFunc\u00602"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Function to call when the document has been resized
+body|onstorage|onstorage|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Function to call when the storage area has changed.
+body|onundo|onundo|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Function to call when the user has moved backward i
+body|onunload|onunload|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Function to call when the document is going away.Fu
+body|rightmargin|rightmargin|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|The margin of the right of the body. Do not use thi
+body|text|text|System.String|{"name":"text","types":["Double","Int32","String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Foreground color of text. Do not use this attribute
+body|topmargin|topmargin|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|The margin of the top of the body. Do not use this 
+body|vlink|vlink|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body|Color of text for visited hypertext links. Do not u
+button|autocomplete|autocomplete|System.String|{"name":"autoComplete","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button|This attribute on a <button> is nonstandard and Fir
+button|autofocus|autofocus|System.String|{"name":"autoFocus","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button|This Boolean attribute specifies that the button sh
+button|disabled|disabled|System.String|{"name":"disabled","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button|This Boolean attribute prevents the user from inter
+button|form|form|System.String|{"name":"form","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button|The <form> element to associate the button with (it
+button|formaction|formaction|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button|The URL that processes the information submitted by
+button|formenctype|formenctype|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button|If the button is a submit button (it's inside/assoc
+button|formmethod|formmethod|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button|If the button is a submit button (it's inside/assoc
+button|formnovalidate|formnovalidate|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button|If the button is a submit button, this Boolean attr
+button|formtarget|formtarget|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button|If the button is a submit button, this attribute is
+button|name|name|System.String|{"name":"name","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button|The name of the button, submitted as a pair with th
+button|type|type'|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button|The default behavior of the button. Possible values
+button|value|value|System.String|{"name":"value","types":["Boolean","Double","Guid","Int32","String","IEnumerable\u00601","IEnumerable\u00601","IEnumerable\u00601","DateTime"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button|Defines the value associated with the button's name
+canvas|height|height|System.String|{"name":"height","types":["Double","ICssUnit","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas|The height of the coordinate space in CSS pixels. D
+canvas|moz-opaque|mozOpaque|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas|Lets the canvas know whether translucency will be a
+canvas|width|width|System.String|{"name":"width","types":["Double","ICssUnit","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas|The width of the coordinate space in CSS pixels. De
+col|span|span|System.String|{"name":"span","types":["Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/col|This attribute contains a positive integer indicati
+colgroup|span|span|System.String|{"name":"span","types":["Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/colgroup|This attribute contains a positive integer indicati
+data|value|value|System.String|{"name":"value","types":["Boolean","Double","Guid","Int32","String","IEnumerable\u00601","IEnumerable\u00601","IEnumerable\u00601","DateTime"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/data|This attribute specifies the machine-readable trans
+dd|nowrap|nowrap|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dd|If the value of this attribute is set to yes, the d
+del|cite|cite|System.String|{"name":"cite","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/del|A URI for a resource that explains the change (for 
+del|datetime|datetime|System.String|{"name":"dateTime","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/del|This attribute indicates the time and date of the c
+details|open|open'|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details|This Boolean attribute indicates whether the detail
+dialog|open|open'|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog|Indicates that the dialog is active and can be inte
+embed|height|height|System.String|{"name":"height","types":["Double","ICssUnit","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/embed|The displayed height of the resource, in CSS pixels
+embed|src|src|System.String|{"name":"src","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/embed|The URL of the resource being embedded.The URL of t
+embed|type|type'|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/embed|The MIME type to use to select the plug-in to insta
+embed|width|width|System.String|{"name":"width","types":["Double","ICssUnit","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/embed|The displayed width of the resource, in CSS pixels.
+fieldset|disabled|disabled|System.String|{"name":"disabled","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/fieldset|If this Boolean attribute is set, all form controls
+fieldset|form|form|System.String|{"name":"form","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/fieldset|This attribute takes the value of the id attribute 
+fieldset|name|name|System.String|{"name":"name","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/fieldset|The name associated with the group.The name associa
+form|accept|accept|System.String|{"name":"accept","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form|Comma-separated content types the server accepts.Co
+form|accept-charset|acceptCharset|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form|Space-separated character encodings the server acce
+form|autocapitalize|autocapitalize|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form|A nonstandard attribute used by iOS Safari that con
+form|autocomplete|autocomplete|string|{"name":"autoComplete","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form|Indicates whether input elements can by default hav
+form|name|name|System.String|{"name":"name","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form|The name of the form. The value must not be the emp
+form|rel|rel|System.String|{"name":"rel","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form|Controls the annotations and what kinds of links th
+head|profile|profile|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/head|The URIs of one or more metadata profiles, separate
+hr|align|align|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/hr|Sets the alignment of the rule on the page. If no v
+hr|color|color|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/hr|Sets the color of the rule through color name or he
+hr|noshade|noshade|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/hr|Sets the rule to have no shading.Sets the rule to h
+hr|size|size|System.String|{"name":"size","types":["Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/hr|Sets the height, in pixels, of the rule.Sets the he
+hr|width|width|System.String|{"name":"width","types":["Double","ICssUnit","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/hr|Sets the length of the rule on the page through a p
+html|manifest|manifest|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/html|Specifies the URI of a resource manifest indicating
+html|version|version|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/html|Specifies the version of the HTML Document Type Def
+html|xmlns|xmlns|System.String|{"name":"xmlns","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/html|Specifies the XMLNamespace of the document. Default
+iframe|allow|allow|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe|Specifies a Permissions Policy for the <iframe>. Th
+iframe|allowfullscreen|allowfullscreen|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe|Set to true if the <iframe> can activate fullscreen
+iframe|allowpaymentrequest|allowpaymentrequest|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe|Set to true if a cross-origin <iframe> should be al
+iframe|credentialless|credentialless|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe|Set to true to make the <iframe> credentialless, me
+iframe|csp|csp|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe|A Content Security Policy enforced for the embedded
+iframe|fetchpriority|fetchpriority|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe|Provides a hint of the relative priority to use whe
+iframe|height|height|System.String|{"name":"height","types":["Double","ICssUnit","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe|The height of the frame in CSS pixels. Default is 1
+iframe|loading|loading|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe|Indicates how the browser should load the iframe:In
+iframe|name|name|System.String|{"name":"name","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe|A targetable name for the embedded browsing context
+iframe|referrerpolicy|referrerpolicy|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe|Indicates which referrer to send when fetching the 
+iframe|sandbox|sandbox|string|{"name":"sandbox","types":["c"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe|Applies extra restrictions to the content in the fr
+iframe|src|src|System.String|{"name":"src","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe|The URL of the page to embed. Use a value of about:
+iframe|srcdoc|srcdoc|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe|Inline HTML to embed, overriding the src attribute.
+iframe|width|width|System.String|{"name":"width","types":["Double","ICssUnit","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe|The width of the frame in CSS pixels. Default is 30
+img|alt|alt|System.String|{"name":"alt","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img|Defines an alternative text description of the imag
+img|crossorigin|crossorigin|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img|Indicates if the fetching of the image must be done
+img|decoding|decoding|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img|Provides an image decoding hint to the browser. All
+img|fetchpriority|fetchpriority|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img|Provides a hint of the relative priority to use whe
+img|height|height|System.String|{"name":"height","types":["Double","ICssUnit","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img|The intrinsic height of the image, in pixels. Must 
+img|ismap|ismap|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img|This Boolean attribute indicates that the image is 
+img|loading|loading|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img|Indicates how the browser should load the image:Ind
+img|referrerpolicy|referrerpolicy|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img|A string indicating which referrer to use when fetc
+img|sizes|sizes|System.String|{"name":"sizes","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img|One or more strings separated by commas, indicating
+img|src|src|System.String|{"name":"src","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img|The image URL. Mandatory for the <img> element. On 
+img|srcset|srcset|System.String|{"name":"srcset","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img|One or more strings separated by commas, indicating
+img|usemap|usemap|System.String|{"name":"usemap","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img|The partial URL (starting with #) of an image map a
+img|width|width|System.String|{"name":"width","types":["Double","ICssUnit","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img|The intrinsic width of the image in pixels. Must be
+ins|cite|cite|System.String|{"name":"cite","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ins|This attribute defines the URI of a resource that e
+ins|datetime|datetime|System.String|{"name":"dateTime","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ins|This attribute indicates the time and date of the c
+label|for|for'|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/label|The value of the for attribute must be a single id 
+li|type|type'|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/li|This character attribute indicates the numbering ty
+li|value|value|System.String|{"name":"value","types":["Boolean","Double","Guid","Int32","String","IEnumerable\u00601","IEnumerable\u00601","IEnumerable\u00601","DateTime"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/li|This integer attribute indicates the current ordina
+link|as|as'|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link|This attribute is only used when rel="preload" or r
+link|blocking|blocking|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link|This attribute explicitly indicates that certain op
+link|crossorigin|crossorigin|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link|This enumerated attribute indicates whether CORS mu
+link|disabled|disabled|System.String|{"name":"disabled","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link|For rel="stylesheet" only, the disabled Boolean att
+link|fetchpriority|fetchpriority|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link|Provides a hint of the relative priority to use whe
+link|href|href|System.String|{"name":"href","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link|This attribute specifies the URL of the linked reso
+link|hreflang|hreflang|System.String|{"name":"hrefLang","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link|This attribute indicates the language of the linked
+link|imagesizes|imagesizes|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link|For rel="preload" and as="image" only, the imagesiz
+link|imagesrcset|imagesrcset|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link|For rel="preload" and as="image" only, the imagesrc
+link|integrity|integrity|System.String|{"name":"integrity","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link|Contains inline metadata — a base64-encoded cryptog
+link|media|media|System.String|{"name":"media","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link|This attribute specifies the media that the linked 
+link|prefetch|prefetch|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link|Identifies a resource that might be required by the
+link|referrerpolicy|referrerpolicy|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link|A string indicating which referrer to use when fetc
+link|rel|rel|System.String|{"name":"rel","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link|This attribute names a relationship of the linked d
+link|sizes|sizes|string|{"name":"sizes","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link|This attribute defines the sizes of the icons for v
+link|title|title|System.String|{"name":"title","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link|The title attribute has special semantics on the <l
+link|type|type'|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link|This attribute is used to define the type of the co
+map|name|name|System.String|{"name":"name","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/map|The name attribute gives the map a name so that it 
+meta|charset|charset|System.String|{"name":"charset","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta|This attribute declares the document's character en
+meta|content|content|System.String|{"name":"content","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta|This attribute contains the value for the http-equi
+meta|http-equiv|httpEquiv|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta|Defines a pragma directive. The attribute is named 
+meta|name|name|System.String|{"name":"name","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta|The name and content attributes can be used togethe
+meter|high|high|System.String|{"name":"high","types":["Double","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meter|The lower numeric bound of the high end of the meas
+meter|low|low|System.String|{"name":"low","types":["Double","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meter|The upper numeric bound of the low end of the measu
+meter|max|max|System.String|{"name":"max","types":["Double","Int32","DateTime"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meter|The upper numeric bound of the measured range. This
+meter|min|min|System.String|{"name":"min","types":["Double","Int32","DateTime"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meter|The lower numeric bound of the measured range. This
+meter|optimum|optimum|System.String|{"name":"optimum","types":["Double","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meter|This attribute indicates the optimal numeric value.
+meter|value|value|System.String|{"name":"value","types":["Boolean","Double","Guid","Int32","String","IEnumerable\u00601","IEnumerable\u00601","IEnumerable\u00601","DateTime"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meter|The current numeric value. This must be between the
+object|archive|archive|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object|A space-separated list of URIs for archives of reso
+object|border|border|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object|The width of a border around the control, in pixels
+object|classid|classid|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object|The URI of the object's implementation. It can be u
+object|codebase|codebase|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object|The base path used to resolve relative URIs specifi
+object|codetype|codetype|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object|The content type of the data specified by classid.T
+object|data|data|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object|The address of the resource as a valid URL. At leas
+object|declare|declare|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object|The presence of this Boolean attribute makes this e
+object|form|form|System.String|{"name":"form","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object|The form element, if any, that the object element i
+object|height|height|System.String|{"name":"height","types":["Double","ICssUnit","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object|The height of the displayed resource, in CSS pixels
+object|name|name|System.String|{"name":"name","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object|The name of valid browsing context (HTML5), or the 
+object|standby|standby|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object|A message that the browser can show while loading t
+object|type|type'|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object|The content type of the resource specified by data.
+object|usemap|usemap|System.String|{"name":"usemap","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object|A hash-name reference to a <map> element; that is a
+object|width|width|System.String|{"name":"width","types":["Double","ICssUnit","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object|The width of the display resource, in CSS pixels. —
+ol|reversed|reversed|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ol|This Boolean attribute specifies that the list's it
+ol|start|start|System.String|{"name":"start","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ol|An integer to start counting from for the list item
+ol|type|type'|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ol|Sets the numbering type:Sets the numbering type:a f
+optgroup|disabled|disabled|System.String|{"name":"disabled","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/optgroup|If this Boolean attribute is set, none of the items
+optgroup|label|label|System.String|{"name":"label","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/optgroup|The name of the group of options, which the browser
+option|disabled|disabled|System.String|{"name":"disabled","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/option|If this Boolean attribute is set, this option is no
+option|label|label|System.String|{"name":"label","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/option|This attribute is text for the label indicating the
+option|selected|selected|System.String|{"name":"selected","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/option|If present, this Boolean attribute indicates that t
+option|value|value|System.String|{"name":"value","types":["Boolean","Double","Guid","Int32","String","IEnumerable\u00601","IEnumerable\u00601","IEnumerable\u00601","DateTime"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/option|The content of this attribute represents the value 
+output|for|for'|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output|A space-separated list of other elements' ids, indi
+output|form|form|System.String|{"name":"form","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output|The <form> element to associate the output with (it
+output|name|name|System.String|{"name":"name","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output|The element's name. Used in the form.elements API.T
+portal|referrerpolicy|referrerpolicy|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/portal|Sets the referrer policy to use when requesting the
+portal|src|src|System.String|{"name":"src","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/portal|The URL of the page to embed.The URL of the page to
+pre|cols|cols|System.String|{"name":"cols","types":["Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/pre|Contains the preferred count of characters that a l
+pre|width|width|System.String|{"name":"width","types":["Double","ICssUnit","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/pre|Contains the preferred count of characters that a l
+pre|wrap|wrap|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/pre|Is a hint indicating how the overflow must happen. 
+progress|max|max|System.String|{"name":"max","types":["Double","Int32","DateTime"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress|This attribute describes how much work the task ind
+progress|value|value|System.String|{"name":"value","types":["Boolean","Double","Guid","Int32","String","IEnumerable\u00601","IEnumerable\u00601","IEnumerable\u00601","DateTime"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress|This attribute specifies how much of the task that 
+q|cite|cite|System.String|{"name":"cite","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/q|The value of this attribute is a URL that designate
+script|async|async|System.String|{"name":"async","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script|For classic scripts, if the async attribute is pres
+script|blocking|blocking|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script|This attribute explicitly indicates that certain op
+script|crossorigin|crossorigin|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script|Normal script elements pass minimal information to 
+script|defer|defer|System.String|{"name":"defer","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script|This Boolean attribute is set to indicate to a brow
+script|fetchpriority|fetchpriority|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script|Provides a hint of the relative priority to use whe
+script|integrity|integrity|System.String|{"name":"integrity","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script|This attribute contains inline metadata that a user
+script|nomodule|nomodule|System.String|{"name":"nomodule","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script|This Boolean attribute is set to indicate that the 
+script|nonce|nonce|System.String|{"name":"nonce","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script|A cryptographic nonce (number used once) to allow s
+script|referrerpolicy|referrerpolicy|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script|Indicates which referrer to send when fetching the 
+script|src|src|System.String|{"name":"src","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script|This attribute specifies the URI of an external scr
+script|type|type'|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script|This attribute indicates the type of script represe
+select|autocomplete|autocomplete|System.String|{"name":"autoComplete","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select|A string providing a hint for a user agent's autoco
+select|autofocus|autofocus|System.String|{"name":"autoFocus","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select|This Boolean attribute lets you specify that a form
+select|disabled|disabled|System.String|{"name":"disabled","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select|This Boolean attribute indicates that the user cann
+select|form|form|System.String|{"name":"form","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select|The <form> element to associate the <select> with (
+select|multiple|multiple|System.String|{"name":"multiple","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select|This Boolean attribute indicates that multiple opti
+select|name|name|System.String|{"name":"name","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select|This attribute is used to specify the name of the c
+select|required|required|System.String|{"name":"required","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select|A Boolean attribute indicating that an option with 
+select|size|size|System.String|{"name":"size","types":["Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select|If the control is presented as a scrolling list box
+slot|name|name|System.String|{"name":"name","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/slot|The slot's name.The slot's name.A named slot is a <
+source|height|height|System.String|{"name":"height","types":["Double","ICssUnit","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/source|Allowed if the source element's parent is a <pictur
+source|media|media|System.String|{"name":"media","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/source|Allowed if the source element's parent is a <pictur
+source|sizes|sizes|System.String|{"name":"sizes","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/source|Allowed if the source element's parent is a <pictur
+source|src|src|System.String|{"name":"src","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/source|Required if the source element's parent is an <audi
+source|srcset|srcset|System.String|{"name":"srcset","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/source|Required if the source element's parent is a <pictu
+source|type|type'|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/source|The MIME media type of the image or other media typ
+source|width|width|System.String|{"name":"width","types":["Double","ICssUnit","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/source|Allowed if the source element's parent is a <pictur
+style|blocking|blocking|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/style|This attribute explicitly indicates that certain op
+style|media|media|System.String|{"name":"media","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/style|This attribute defines which media the style should
+style|nonce|nonce|System.String|{"name":"nonce","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/style|A cryptographic nonce (number used once) used to al
+style|title|title|System.String|{"name":"title","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/style|This attribute specifies alternative style sheet se
+td|colspan|colspan|System.String|{"name":"colSpan","types":["Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/td|This attribute contains a non-negative integer valu
+td|headers|headers|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/td|This attribute contains a list of space-separated s
+td|rowspan|rowspan|System.String|{"name":"rowSpan","types":["Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/td|This attribute contains a non-negative integer valu
+textarea|autocomplete|autocomplete|string|{"name":"autoComplete","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea|This attribute indicates whether the value of the c
+textarea|autocorrect|autocorrect|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea|A string which indicates whether to activate automa
+textarea|autofocus|autofocus|System.String|{"name":"autoFocus","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea|This Boolean attribute lets you specify that a form
+textarea|cols|cols|System.String|{"name":"cols","types":["Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea|The visible width of the text control, in average c
+textarea|disabled|disabled|System.String|{"name":"disabled","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea|This Boolean attribute indicates that the user cann
+textarea|form|form|System.String|{"name":"form","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea|The form element that the <textarea> element is ass
+textarea|maxlength|maxlength|System.String|{"name":"maxLength","types":["Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea|The maximum number of characters (UTF-16 code units
+textarea|minlength|minlength|System.String|{"name":"minLength","types":["Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea|The minimum number of characters (UTF-16 code units
+textarea|name|name|System.String|{"name":"name","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea|The name of the control.The name of the control.
+textarea|placeholder|placeholder|System.String|{"name":"placeholder","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea|A hint to the user of what can be entered in the co
+textarea|readonly|readonly|System.String|{"name":"readOnly","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea|This Boolean attribute indicates that the user cann
+textarea|required|required|System.String|{"name":"required","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea|This attribute specifies that the user must fill in
+textarea|rows|rows|System.String|{"name":"rows","types":["Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea|The number of visible text lines for the control. I
+textarea|spellcheck|spellcheck|string|{"name":"spellcheck","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea|Specifies whether the <textarea> is subject to spel
+textarea|wrap|wrap|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea|Indicates how the control should wrap the value for
+th|abbr|abbr|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/th|This attribute contains a short abbreviated descrip
+th|colspan|colspan|System.String|{"name":"colSpan","types":["Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/th|This attribute contains a non-negative integer valu
+th|headers|headers|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/th|This attribute contains a list of space-separated s
+th|rowspan|rowspan|System.String|{"name":"rowSpan","types":["Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/th|This attribute contains a non-negative integer valu
+th|scope|scope|string|{"name":"scope","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/th|This enumerated attribute defines the cells that th
+time|datetime|datetime|System.String|{"name":"dateTime","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/time|This attribute indicates the time and/or date of th
+track|default|default'|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track|This attribute indicates that the track should be e
+track|kind|kind|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track|How the text track is meant to be used. If omitted 
+track|label|label|System.String|{"name":"label","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track|A user-readable title of the text track which is us
+track|src|src|System.String|{"name":"src","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track|Address of the track (.vtt file). Must be a valid U
+track|srclang|srclang|System.String|{"name":"srcLang","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track|Language of the track text data. It must be a valid
+ul|compact|compact|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ul|This Boolean attribute hints that the list should b
+ul|type|type'|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ul|This attribute sets the bullet style for the list. 
+video|autopictureinpicture|autopictureinpicture|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video|A Boolean attribute which if true indicates that th
+video|autoplay|autoplay|System.String|{"name":"autoPlay","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video|A Boolean attribute; if specified, the video automa
+video|controls|controls|System.String|{"name":"controls","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video|If this attribute is present, the browser will offe
+video|controlslist|controlslist|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video|The controlslist attribute, when specified, helps t
+video|crossorigin|crossorigin|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video|This enumerated attribute indicates whether to use 
+video|disablepictureinpicture|disablepictureinpicture|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video|Prevents the browser from suggesting a Picture-in-P
+video|disableremoteplayback|disableremoteplayback|System.String|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video|A Boolean attribute used to disable the capability 
+video|height|height|System.String|{"name":"height","types":["Double","ICssUnit","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video|The height of the video's display area, in CSS pixe
+video|loop|loop|System.String|{"name":"loop","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video|A Boolean attribute; if specified, the browser will
+video|muted|muted|System.String|{"name":"muted","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video|A Boolean attribute that indicates the default sett
+video|playsinline|playsinline|System.String|{"name":"playsInline","types":["Boolean"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video|A Boolean attribute indicating that the video is to
+video|poster|poster|System.String|{"name":"poster","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video|A URL for an image to be shown while the video is d
+video|preload|preload|string|null|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video|This enumerated attribute is intended to provide a 
+video|src|src|System.String|{"name":"src","types":["String"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video|The URL of the video to embed. This is optional; yo
+video|width|width|System.String|{"name":"width","types":["Double","ICssUnit","Int32"]}|https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video|The width of the video's display area, in CSS pixel
+
