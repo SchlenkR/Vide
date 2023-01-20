@@ -1,9 +1,10 @@
-module HtmlSpecGenerator
+module HtmlSpecGeneratorCsv
 
 open FSharp.Text.TypedTemplateProvider
 open MdnScrape
 
-let [<Literal>] HtmlSpecTemplate = """elementName|attributeName|fsharpAttributeName|types|felizAttr|url|desc
+let [<Literal>] HtmlSpecTemplate = """
+elementName|attributeName|fsharpAttributeName|types|felizAttr|url|desc
 {{for attr in attributes}}{{attr.elementName}}|{{attr.attributeName}}|{{attr.fsharpAttributeName}}|{{attr.types}}|{{attr.felizAttr}}|{{attr.url}}|{{attr.desc}}
 {{end}}
 """
@@ -13,7 +14,7 @@ type Api = Template<HtmlSpecTemplate>
 module Corrections =
     let attrNameCorrections =
         [
-            "class", "className"
+            "class", "class'"
             "type", "type'"
             "as", "as'"
             "default", "default'"

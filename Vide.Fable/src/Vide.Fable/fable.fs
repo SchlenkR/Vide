@@ -192,6 +192,18 @@ type NodeBuilderExtensions =
         do this.EvalModifiers <- m :: this.EvalModifiers
         this
 
+type VoidWithoutResultValue = struct end with
+    static member CreateInstance(node: #Node) = VoidWithoutResultValue()
+
+type VoidWithResultValue =
+    {
+        textValue: string
+    }
+    static member CreateInstance(node: #HTMLInputElement) =
+        {
+            textValue = node.value
+        }
+
 module App =
     let inline doCreate appCtor (host: #Node) (content: Vide<'v,'s,FableContext>) onEvaluated =
         let content = 

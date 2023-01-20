@@ -8,12 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="w3schoolScrape.fs" />
-    <Compile Include="mdnScrape.fs" />
+    <Compile Include="w3schoolScrape.fsx" />
+    <None Include="scrapeFiddle.fsx" />
     <Compile Include="htmlApiGen.fs" />
-    <Compile Include="htmlSpecGen.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
+
+  <ItemGroup />
 
   <ItemGroup>
     <PackageReference Include="Feliz" Version="2.3.0" />
@@ -21,10 +22,6 @@
     <PackageReference Include="FSharp.SystemTextJson" Version="1.0.7" />
     <PackageReference Include="FSharp.Text.TypedTemplateProvider" Version="1.0.1" />
     <PackageReference Include="FsHttp" Version="10.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="w3sCache\" />
   </ItemGroup>
 
 </Project>

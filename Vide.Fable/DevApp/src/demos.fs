@@ -27,7 +27,7 @@ module GettingStarted =
                 $"Hit me! Count = {count.Value}"
             }
             "TODO: That doesn'a work right now"
-            div.className("the-message") {
+            div.class'("the-message") {
                 ()
                 //span.hidden(count.Value <> 5) {
                 //    "You have the right to defend yourself!"
@@ -47,7 +47,7 @@ module GettingStarted =
 
             if count.Value = 5 || count.Value = 6 then
                 let! valueString = Vide.preserveValue "Hello String"
-                div.className("the-message") { 
+                div.class'("the-message") { 
                     $"You have the right to defend yourself! (string value {valueString})" 
                 }
             // TODO:
@@ -78,7 +78,7 @@ module GettingStarted =
             ////// TODO: That should not be used at all? And: That this seems to work
             ////// is only an edge case, because state has same type
             ////if count.Value = 5 then
-            ////    div.className("the-message") { 
+            ////    div.class'("the-message") { 
             ////        $"You have the right to defend yourself!" 
             ////    }
             ////else
@@ -88,7 +88,7 @@ module GettingStarted =
     let simpleFor =
         vide {
             for x in 0..5 do
-                div.className("card") { $"I'm element no. {x}" }
+                div.class'("card") { $"I'm element no. {x}" }
         }
 
     let statelessFor =
@@ -104,7 +104,7 @@ module GettingStarted =
             button.onclick(removeAll) { "Remove All" }
         
             for x in items.Value do
-                div.className("card") {
+                div.class'("card") {
                     let removeMe _ _ = items := items.Value |> List.except [x]
                     button.onclick(removeMe) { $"Remove {x}" }
             }
@@ -123,7 +123,7 @@ module GettingStarted =
             button.onclick(removeAll) { "Remove All" }
         
             for x in items.Value do
-                div.className("card") {
+                div.class'("card") {
                     let removeMe _ _ = items := items.Value |> List.except [x]
                     button.onclick(removeMe) { $"Remove {x}" }
 
@@ -266,7 +266,7 @@ module Async =
 
         vide {
             let! currRes = Vide.ofMutable 0
-            div.className("async-box") {
+            div.class'("async-box") {
                 $"Current component result: {currRes.Value}"
             }
         

@@ -1,7 +1,7 @@
 module HtmlApiGenerator
 
 open FSharp.Text.TypedTemplateProvider
-open MdnScrape
+open W3schoolScrape
 
 let [<Literal>] HtmlApiTemplate = """
 //------------------------------------------------------------------------------
@@ -17,243 +17,135 @@ open Browser.Types
 open Vide
 
 module HtmlElementBuilders =
-    {{for elem in elements}}
-    type {{elem.builderName}}{{elem.typeParams}}({{elem.ctorParams}}) =
-        inherit {{elem.inheritorName}}<{{elem.inheritorGenTypParam}}>({{elem.ctorBaseArgs}})
+    type HTMLGlobalAttrsVoidElementBuilder<'v,'n when 'n :> HTMLElement>(tagName, resultSelector) =
+        inherit HTMLVoidElementBuilder<'v,'n>(tagName, resultSelector)
+
+    type HTMLGlobalAttrsContentElementBuilder<'n when 'n :> HTMLElement>(tagName) =
+        inherit HTMLContentElementBuilder<'n>(tagName)
+
+    {{for builder in builders}}
+    type {{builder.name}}() =
+        inherit {{builder.inheritorName}}<{{builder.inheritorGenTypArgs}}>
+            (
+                {{builder.ctorBaseArgs}}
+            )
     {{end}}
 
 open HtmlElementBuilders
 
-{{for elem in elements}}
+{{for ext in builderExtensions}}
 [<Extension>]
-type {{elem.builderName}}Extensions =
+type {{ext.builderName}}Extensions =
     class
-        {{for attr in elem.attributes}}
+        // Attributes
+        {{for attr in ext.attributes}}
+{{attr.xmlDoc}}
         [<Extension>]
-        static member {{attr.memberName}}(this: #{{elem.builderName}}{{if elem.hasGenArgs}}<_>{{end}}, value: {{attr.typ}}) =
-            this.OnEval(fun x -> x.setAttribute("{{attr.name}}", value{{attr.toString}}))       {{end}}
-        {{for evt in elem.events}}
+        static member {{attr.memberName}}(this: {{ext.builderParamTypeAnnotation}}, value: {{attr.typ}}) =
+            this.OnEval(fun x -> x.setAttribute("{{attr.name}}", value{{attr.toString}}))
+        {{end}}
+    
+        // Events
+        {{for evt in ext.events}}
+{{evt.xmlDoc}}
         [<Extension>]
-        static member {{evt.name}}(this: #{{elem.builderName}}{{if elem.hasGenArgs}}<_>{{end}}, handler) =
-            this.OnInit(fun x -> x.{{evt.name}} <- (fun evt -> handler x evt))       {{end}}
+        static member {{evt.memberName}}(this: {{ext.builderParamTypeAnnotation}}, handler) =
+            this.OnInit(fun x -> x.{{evt.name}} <- (fun evt -> handler x evt))
+        {{end}}
     end
 {{end}}
 
 type Html =
-    {{for elem in elements}}
-    {{if elem.isHtmlElement}}static member inline {{elem.fsharpTageName}} = HtmlElementBuilders.{{elem.builderName}}(){{end}}
+    {{for builder in builders}}
+{{builder.xmlDoc}}
+    static member inline {{builder.name}} = HtmlElementBuilders.{{builder.name}}()
     {{end}}
 """
 
 type Api = Template<HtmlApiTemplate>
 
-module Corrections =
-    let attrNameCorrections =
-        [
-            "class", "className"
-            "type", "type'"
-            "as", "as'"
-            "default", "default'"
-            "for", "for'"
-            "open", "open'"
-            "http-equiv", "httpEquiv"
-            "moz-opaque", "mozOpaque"
-            "accept-charset", "acceptCharset"
-        ]
-
-    let attrExcludes =
-        [
-            "data-*"
-        ]
-        
-    let elemNameCorrections =
-        [
-            "base", "base'"
-        ]
-
-    let additionalElemAttrs =
-        let makeAttr (elemName: string) name typ =
-            elemName,
-            {
-                name = name
-                isDeprecated = false
-                isNonStandard = false
-                desc = ""
-                typ = typ
-                felizAttr = None
-                url = ""
-            }
-        [
-            makeAttr "input" "type" (AttrTyp.Dotnet typeof<string>)
-        ]
-        |> List.groupBy fst
-        |> List.map (fun (k,v) -> k, v |> List.map snd)
-        |> Map.ofList
-
-    let elemExcludes =
-        [
-            "base"
-            "data"
-            "time"
-            "picture"
-            "meter"
-            "output"
-            "details"
-            "dialog"
-            "slot"
-            "template"
-            "portal"
-        ]
-
-    let globalEvents =
-        [
-            "onabort"
-            //"onautocomplete"
-            //"onautocompleteerror"
-            "onblur"
-            //"oncancel"
-            "oncanplay"
-            "oncanplaythrough"
-            "onchange"
-            "onclick"
-            //"onclose"
-            "oncontextmenu"
-            "oncuechange"
-            "ondblclick"
-            "ondrag"
-            "ondragend"
-            "ondragenter"
-            "ondragleave"
-            "ondragover"
-            "ondragstart"
-            "ondrop"
-            "ondurationchange"
-            "onemptied"
-            "onended"
-            "onerror"
-            "onfocus"
-            "oninput"
-            //"oninvalid"
-            "onkeydown"
-            "onkeypress"
-            "onkeyup"
-            "onload"
-            "onloadeddata"
-            "onloadedmetadata"
-            "onloadstart"
-            "onmousedown"
-            "onmouseenter"
-            "onmouseleave"
-            "onmousemove"
-            "onmouseout"
-            "onmouseover"
-            "onmouseup"
-            "onmousewheel"
-            "onpause"
-            "onplay"
-            "onplaying"
-            "onprogress"
-            "onratechange"
-            "onreset"
-            //"onresize"
-            "onscroll"
-            "onseeked"
-            "onseeking"
-            "onselect"
-            //"onshow"
-            //"onsort"
-            "onstalled"
-            "onsubmit"
-            "onsuspend"
-            "ontimeupdate"
-            //"ontoggle"
-            "onvolumechange"
-            "onwaiting"
-        ]
 
 let htmlGlobalAttrsElementBuilderName = "HTMLGlobalAttrsElementBuilder"
 
-let generate (elements: Element list) (globalAttrs: Attr list) = 
-    let correctWith altNames name =
-        altNames 
-        |> List.tryFind (fun x -> fst x = name)
-        |> Option.map snd
-        |> Option.defaultValue name
+let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Evt list) =
+    let makeCodeDoc (desc: string) indent =
+        desc.Split('\n')
+        |> Array.map (fun s ->
+            let indent = String.replicate indent "    "
+            $"{indent}/// {s}")
+        |> String.concat "\n"
 
-    let makeAttr (attr: Attr) =
-        let memberName = attr.name |> correctWith Corrections.attrNameCorrections
-        let typ,toString =
-            match attr.typ with
-            | AttrTyp.Dotnet typ ->
-                let toString =
-                    match typ with
-                    | t when t = typeof<string> -> ""
-                    | _ -> ".ToString()"
-                typ.FullName, toString
-            | AttrTyp.Enum labels -> "string", ""
-            | AttrTyp.Choice labels -> "string", ""
-        Api.attr(memberName,attr.name, toString, typ)
+    let builders =
+        [ for elem in elements do
+            let ctorBaseArg,inheritorGenTypArgs,inheritorName =
+                match elem.elementType with
+                | Content -> 
+                    $""" "{elem.tagName}" """,
+                    elem.domInterfaceName,
+                    "HTMLGlobalAttrsContentElementBuilder"
+                | Void voidType ->
+                    let valueTypeName = 
+                        if voidType.hasReturnValue
+                        then "VoidWithResultValue"
+                        else "VoidWithoutResultValue"
 
-    let makeAttrs (attrs: Attr list)=
-        attrs
-        |> List.distinctBy (fun a -> a.name)
-        |> List.sortBy (fun x -> x.name)
-        |> List.filter (fun attr -> Corrections.attrExcludes |> List.contains attr.name |> not)
-        |> List.map makeAttr
-
-    let globalElem =
-        let ctorParams = "tagName"
-        Api.elem(
-            globalAttrs |> makeAttrs,
-            htmlGlobalAttrsElementBuilderName,
-            ctorParams,
-            ctorParams,
-            Corrections.globalEvents |> List.map Api.evt,
-            htmlGlobalAttrsElementBuilderName,
-            true,
-            "'n",
-            "HTMLElementBuilder",
-            false,
-            "<'n when 'n :> HTMLElement>"
-        )
-
-    let makeElem (elem: Element) =
-        let events = [] //Corrections.globalEvents |> List.map Api.evt
-        let attrs =
-            (
-                elem.attrs.attrs
-                @ (Corrections.additionalElemAttrs |> Map.tryFind elem.name |> Option.defaultValue [])
+                    $""" "{elem.tagName}", fun node -> {valueTypeName}.CreateInstance(node) """,
+                    $"{valueTypeName}, {elem.domInterfaceName}",
+                    "HTMLGlobalAttrsVoidElementBuilder"
+            Api.builder(
+                ctorBaseArg, 
+                inheritorGenTypArgs, 
+                inheritorName, 
+                elem.fsharpName, 
+                makeCodeDoc elem.desc 1
             )
-            |> makeAttrs
-        let fsharpTageName = elem.name |> correctWith Corrections.elemNameCorrections
-        let inheritorName = 
-            if elem.attrs.includeGlobalAttrs 
-            then htmlGlobalAttrsElementBuilderName
-            else "HTMLElementBuilder"
-        let tagName = $""" "{elem.name}" """
-        Api.elem(
-            attrs,
-            fsharpTageName,
-            tagName,
-            "",
-            events, 
-            fsharpTageName,
-            false,
-            elem.domInterfaceName,
-            inheritorName,
-            true,
-            ""
-        )
+        ]
+    
+    let builderExtensions =
+        let makeAttrs (attrs: Attr list) =
+            [ for attr in attrs do
+                let typ,toString = "string", ""
+                    // TODO
+                    //match attr.types with
+                    //| AttrTyp.Text -> "string", ""
+                    //| AttrTyp.Boolean -> "bool", ".ToString()"
+                    //| AttrTyp.Enum labels -> "string", ""
+                Api.attr(
+                    attr.fsharpName, 
+                    attr.name, 
+                    toString, 
+                    typ,
+                    makeCodeDoc attr.desc 2
+                )
+            ]
+        let makeEvts (evts: Evt list) =
+            [ for evt in evts do
+                Api.evt(evt.name, evt.name, makeCodeDoc evt.desc 2)
+            ]
 
-    let elems =
-        globalElem
-        :: (
-            elements
-            |> List.filter (fun e -> Corrections.elemExcludes |> List.contains e.name |> not)
-            |> List.map makeElem
-        )
-        |> List.sortBy (fun x -> x.fsharpTageName)
+        [
+            Api.ext(
+                makeAttrs globalAttrs,
+                "HTMLGlobalAttrsVoidElementBuilder",
+                "#HTMLGlobalAttrsVoidElementBuilder<_,_>",
+                makeEvts globalEvents
+            )
+            Api.ext(
+                makeAttrs globalAttrs,
+                "HTMLGlobalAttrsContentElementBuilder",
+                "#HTMLGlobalAttrsContentElementBuilder<_>",
+                makeEvts globalEvents
+            )
 
-    let root = Api.Root(elems)
+            for elem in elements do
+                Api.ext(
+                    makeAttrs elem.attrs, 
+                    elem.fsharpName, 
+                    $"#{elem.fsharpName}", 
+                    []
+                )
+        ]
+
+    let root = Api.Root(builderExtensions, builders)
 
     Api.Render(root)
