@@ -34,10 +34,10 @@ type FableContext
         do elem |> appendToParent
         elem
     member _.KeepChild(child: Node) =
-        child |> keepChild
+        child |> keepChild |> ignore
     member _.RemoveChild(child: Node) =
         removeFromParent child
-    member internal _.GetObsoleteChildren() =
+    member _.GetObsoleteChildren() =
         let childNodes =
             let nodes = parent.childNodes
             [ for i in 0 .. nodes.length-1 do nodes.Item i ]
@@ -61,7 +61,7 @@ let inline text text =
                     createNode ()
         (), Some node
 
-type NodeBuilderState<'n,'s> = option<'n * FableContext> * option<'s>
+type NodeBuilderState<'n,'s> = option<'n> * option<'s>
 type ChildAction = Keep | DiscardAndCreateNew
 
 module BuilderHelper =
@@ -79,37 +79,40 @@ module BuilderHelper =
         checkOrUpdateNode
         initModifiers
         evalModifiers
+        afterEvalModifiers
         (Vide childVide: Vide<'v1,'fs,FableContext>)
         resultSelector
         : Vide<'v2, NodeBuilderState<'n,'fs>, FableContext>
         =
         Vide <| fun s (ctx: FableContext) ->
             Debug.print 0 "RUN:NodeBuilder"
-            let inline runModifiers modifiers node ctx =
-                for m in modifiers do m node ctx
+            let inline runModifiers modifiers node =
+                for m in modifiers do
+                    m node ctx
             let s,cs = BuilderHelper.separateStatePair s
-            let node,cs,childCtx =
+            let node,cs =
                 // Can it happen that s is Some and cs is None? I don't think so.
                 // But: See comment in definition of: Vide.Core.Vide
                 match s with
                 | None ->
                     let newNode,s = createNode ctx,cs
-                    do runModifiers initModifiers newNode ctx
-                    let childCtx = FableContext(newNode, ctx.EvaluateView)
-                    newNode,s,childCtx
-                | Some (node,childCtx) ->
+                    do runModifiers initModifiers newNode
+                    newNode,s
+                | Some node ->
                     match checkOrUpdateNode node with
                     | Keep ->
-                        do ctx.KeepChild(node)
-                        node,cs,childCtx
+                        ctx.KeepChild(node)
+                        node,cs
                     | DiscardAndCreateNew ->
-                        createNode ctx,None,childCtx
-            do runModifiers evalModifiers node ctx
+                        createNode ctx,None
+            do runModifiers evalModifiers node
+            let childCtx = FableContext(node, ctx.EvaluateView)
             let cv,cs = childVide cs childCtx
             for x in childCtx.GetObsoleteChildren() do
                 childCtx.RemoveChild(x)
+            do runModifiers afterEvalModifiers node
             let result = resultSelector node cv
-            let state = Some (Some (node,childCtx), cs)
+            let state = Some (Some node, cs)
             result,state
 
 type NodeModifier<'n,'c> = 'n -> 'c -> unit
@@ -126,6 +129,7 @@ type NodeBuilder<'n when 'n :> Node>
 
     member val InitModifiers: NodeModifier<'n, FableContext> list = [] with get,set
     member val EvalModifiers: NodeModifier<'n, FableContext> list = [] with get,set
+    member val AfterEvalModifiers: NodeModifier<'n, FableContext> list = [] with get,set
 
     member this.DoRun(childVide, resultSelector) =
         BuilderHelper.runBuilder
@@ -133,14 +137,22 @@ type NodeBuilder<'n when 'n :> Node>
             checkOrUpdateNode 
             this.InitModifiers 
             this.EvalModifiers 
+            this.AfterEvalModifiers 
             childVide 
             resultSelector
+
+type TextBuilder(value: string) =
+    inherit NodeBuilder<Text>(
+        (fun ctx -> ctx.AddText(value)),
+        (fun node -> BuilderHelper.checkOrUpdateNode "#text" node))
+    member this.Run(childVide) =
+        this.DoRun(childVide, fun node _ -> node.textContent <- value)
 
 module Yield =
     let inline yieldNodeBuilder (nb: #NodeBuilder<'n>) =
         nb { () }
-    let inline yieldText (s: string) =
-        text s
+    let inline yieldText (value: string) =
+        TextBuilder(value) { () }
     let inline yieldBuilderOp (op: BuilderOperations) =
         Vide <| fun s (ctx: FableContext) ->
             match op with
@@ -211,6 +223,12 @@ type NodeBuilderExtensions =
     [<Extension>]
     static member OnEval(this: #NodeBuilder<_>, m: NodeModifier<_, FableContext>) =
         do this.EvalModifiers <- m :: this.EvalModifiers
+        this
+    
+    /// Called after every Vide evaluatiopn cycle.
+    [<Extension>]
+    static member OnAfterEval(this: #NodeBuilder<_>, m: NodeModifier<_, FableContext>) =
+        do this.AfterEvalModifiers <- m :: this.AfterEvalModifiers
         this
 
 type VoidWithoutResultValue = struct end with
