@@ -109,3 +109,8 @@ Docu: We need "nothing" (that's F#)
 # Ideen
 
 * Vide als .fsx file und dann einen C# SourceGen
+
+# Bugs
+
+* Yielden eines NBs OHNE {()} - OnEval wird nicht aufgerufen
+* Click button -> Evaluating 2 times
