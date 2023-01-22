@@ -753,595 +753,595 @@ type HTMLGlobalAttrsVoidElementBuilderExtensions =
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onblur <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onblur <- Event.handle x ctx handler)
 
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onblur <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onblur <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onchange <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onchange <- Event.handle x ctx handler)
 
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onchange <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onchange <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.oncontextmenu <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.oncontextmenu <- Event.handle x ctx handler)
 
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.oncontextmenu <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.oncontextmenu <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onfocus <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onfocus <- Event.handle x ctx handler)
 
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onfocus <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onfocus <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.oninput <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.oninput <- Event.handle x ctx handler)
 
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.oninput <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.oninput <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onreset <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onreset <- Event.handle x ctx handler)
 
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onreset <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onreset <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onselect <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onselect <- Event.handle x ctx handler)
 
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onselect <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onselect <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onsubmit <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onsubmit <- Event.handle x ctx handler)
 
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onsubmit <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onsubmit <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onkeydown <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onkeydown <- Event.handle x ctx handler)
 
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onkeydown <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onkeydown <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onkeypress <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onkeypress <- Event.handle x ctx handler)
 
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onkeypress <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onkeypress <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onkeyup <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onkeyup <- Event.handle x ctx handler)
 
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onkeyup <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onkeyup <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onclick <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onclick <- Event.handle x ctx handler)
 
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onclick <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onclick <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.ondblclick <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ondblclick <- Event.handle x ctx handler)
 
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ondblclick <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ondblclick <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onmousedown <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onmousedown <- Event.handle x ctx handler)
 
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onmousedown <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onmousedown <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onmousemove <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onmousemove <- Event.handle x ctx handler)
 
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onmousemove <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onmousemove <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onmouseout <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onmouseout <- Event.handle x ctx handler)
 
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onmouseout <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onmouseout <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onmouseover <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onmouseover <- Event.handle x ctx handler)
 
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onmouseover <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onmouseover <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onmouseup <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onmouseup <- Event.handle x ctx handler)
 
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onmouseup <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onmouseup <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onmousewheel <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onmousewheel <- Event.handle x ctx handler)
 
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onmousewheel <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onmousewheel <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onwheel <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onwheel <- Event.handle x ctx handler)
 
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onwheel <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onwheel <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.ondrag <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ondrag <- Event.handle x ctx handler)
 
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ondrag <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ondrag <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.ondragend <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ondragend <- Event.handle x ctx handler)
 
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ondragend <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ondragend <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.ondragenter <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ondragenter <- Event.handle x ctx handler)
 
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ondragenter <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ondragenter <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.ondragleave <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ondragleave <- Event.handle x ctx handler)
 
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ondragleave <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ondragleave <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.ondragover <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ondragover <- Event.handle x ctx handler)
 
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ondragover <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ondragover <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.ondragstart <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ondragstart <- Event.handle x ctx handler)
 
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ondragstart <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ondragstart <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.ondrop <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ondrop <- Event.handle x ctx handler)
 
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ondrop <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ondrop <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onscroll <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onscroll <- Event.handle x ctx handler)
 
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onscroll <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onscroll <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.oncopy <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.oncopy <- Event.handle x ctx handler)
 
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.oncopy <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.oncopy <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.oncut <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.oncut <- Event.handle x ctx handler)
 
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.oncut <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.oncut <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onpaste <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onpaste <- Event.handle x ctx handler)
 
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onpaste <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onpaste <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onabort <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onabort <- Event.handle x ctx handler)
 
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onabort <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onabort <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.oncanplay <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.oncanplay <- Event.handle x ctx handler)
 
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.oncanplay <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.oncanplay <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.oncanplaythrough <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.oncanplaythrough <- Event.handle x ctx handler)
 
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.oncanplaythrough <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.oncanplaythrough <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.oncuechange <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.oncuechange <- Event.handle x ctx handler)
 
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.oncuechange <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.oncuechange <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.ondurationchange <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ondurationchange <- Event.handle x ctx handler)
 
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ondurationchange <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ondurationchange <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onemptied <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onemptied <- Event.handle x ctx handler)
 
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onemptied <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onemptied <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onended <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onended <- Event.handle x ctx handler)
 
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onended <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onended <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onerror <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onerror <- Event.handle x ctx handler)
 
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onerror <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onerror <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onloadeddata <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onloadeddata <- Event.handle x ctx handler)
 
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onloadeddata <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onloadeddata <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onloadedmetadata <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onloadedmetadata <- Event.handle x ctx handler)
 
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onloadedmetadata <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onloadedmetadata <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onloadstart <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onloadstart <- Event.handle x ctx handler)
 
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onloadstart <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onloadstart <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onpause <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onpause <- Event.handle x ctx handler)
 
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onpause <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onpause <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onplay <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onplay <- Event.handle x ctx handler)
 
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onplay <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onplay <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onplaying <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onplaying <- Event.handle x ctx handler)
 
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onplaying <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onplaying <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onprogress <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onprogress <- Event.handle x ctx handler)
 
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onprogress <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onprogress <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onratechange <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onratechange <- Event.handle x ctx handler)
 
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onratechange <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onratechange <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onseeked <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onseeked <- Event.handle x ctx handler)
 
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onseeked <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onseeked <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onseeking <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onseeking <- Event.handle x ctx handler)
 
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onseeking <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onseeking <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onstalled <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onstalled <- Event.handle x ctx handler)
 
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onstalled <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onstalled <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onsuspend <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onsuspend <- Event.handle x ctx handler)
 
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onsuspend <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onsuspend <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.ontimeupdate <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ontimeupdate <- Event.handle x ctx handler)
 
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ontimeupdate <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ontimeupdate <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onvolumechange <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onvolumechange <- Event.handle x ctx handler)
 
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onvolumechange <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onvolumechange <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x ctx -> x.onwaiting <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onwaiting <- Event.handle x ctx handler)
 
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onwaiting <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onwaiting <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
     end
@@ -1422,595 +1422,595 @@ type HTMLGlobalAttrsContentElementBuilderExtensions =
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onblur <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onblur <- Event.handle x ctx handler)
 
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onblur <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onblur <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onchange <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onchange <- Event.handle x ctx handler)
 
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onchange <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onchange <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.oncontextmenu <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.oncontextmenu <- Event.handle x ctx handler)
 
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.oncontextmenu <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.oncontextmenu <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onfocus <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onfocus <- Event.handle x ctx handler)
 
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onfocus <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onfocus <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.oninput <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.oninput <- Event.handle x ctx handler)
 
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.oninput <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.oninput <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onreset <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onreset <- Event.handle x ctx handler)
 
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onreset <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onreset <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onselect <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onselect <- Event.handle x ctx handler)
 
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onselect <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onselect <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onsubmit <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onsubmit <- Event.handle x ctx handler)
 
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onsubmit <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onsubmit <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onkeydown <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onkeydown <- Event.handle x ctx handler)
 
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onkeydown <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onkeydown <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onkeypress <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onkeypress <- Event.handle x ctx handler)
 
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onkeypress <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onkeypress <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onkeyup <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onkeyup <- Event.handle x ctx handler)
 
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onkeyup <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onkeyup <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onclick <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onclick <- Event.handle x ctx handler)
 
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onclick <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onclick <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.ondblclick <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ondblclick <- Event.handle x ctx handler)
 
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ondblclick <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ondblclick <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onmousedown <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onmousedown <- Event.handle x ctx handler)
 
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onmousedown <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onmousedown <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onmousemove <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onmousemove <- Event.handle x ctx handler)
 
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onmousemove <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onmousemove <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onmouseout <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onmouseout <- Event.handle x ctx handler)
 
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onmouseout <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onmouseout <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onmouseover <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onmouseover <- Event.handle x ctx handler)
 
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onmouseover <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onmouseover <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onmouseup <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onmouseup <- Event.handle x ctx handler)
 
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onmouseup <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onmouseup <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onmousewheel <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onmousewheel <- Event.handle x ctx handler)
 
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onmousewheel <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onmousewheel <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onwheel <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onwheel <- Event.handle x ctx handler)
 
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onwheel <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onwheel <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.ondrag <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ondrag <- Event.handle x ctx handler)
 
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ondrag <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ondrag <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.ondragend <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ondragend <- Event.handle x ctx handler)
 
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ondragend <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ondragend <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.ondragenter <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ondragenter <- Event.handle x ctx handler)
 
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ondragenter <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ondragenter <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.ondragleave <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ondragleave <- Event.handle x ctx handler)
 
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ondragleave <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ondragleave <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.ondragover <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ondragover <- Event.handle x ctx handler)
 
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ondragover <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ondragover <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.ondragstart <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ondragstart <- Event.handle x ctx handler)
 
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ondragstart <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ondragstart <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.ondrop <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ondrop <- Event.handle x ctx handler)
 
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ondrop <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ondrop <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onscroll <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onscroll <- Event.handle x ctx handler)
 
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onscroll <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onscroll <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.oncopy <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.oncopy <- Event.handle x ctx handler)
 
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.oncopy <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.oncopy <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.oncut <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.oncut <- Event.handle x ctx handler)
 
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.oncut <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.oncut <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onpaste <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onpaste <- Event.handle x ctx handler)
 
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onpaste <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onpaste <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onabort <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onabort <- Event.handle x ctx handler)
 
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onabort <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onabort <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.oncanplay <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.oncanplay <- Event.handle x ctx handler)
 
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.oncanplay <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.oncanplay <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.oncanplaythrough <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.oncanplaythrough <- Event.handle x ctx handler)
 
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.oncanplaythrough <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.oncanplaythrough <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.oncuechange <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.oncuechange <- Event.handle x ctx handler)
 
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.oncuechange <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.oncuechange <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.ondurationchange <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ondurationchange <- Event.handle x ctx handler)
 
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ondurationchange <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ondurationchange <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onemptied <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onemptied <- Event.handle x ctx handler)
 
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onemptied <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onemptied <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onended <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onended <- Event.handle x ctx handler)
 
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onended <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onended <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onerror <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onerror <- Event.handle x ctx handler)
 
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onerror <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onerror <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onloadeddata <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onloadeddata <- Event.handle x ctx handler)
 
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onloadeddata <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onloadeddata <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onloadedmetadata <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onloadedmetadata <- Event.handle x ctx handler)
 
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onloadedmetadata <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onloadedmetadata <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onloadstart <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onloadstart <- Event.handle x ctx handler)
 
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onloadstart <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onloadstart <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onpause <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onpause <- Event.handle x ctx handler)
 
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onpause <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onpause <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onplay <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onplay <- Event.handle x ctx handler)
 
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onplay <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onplay <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onplaying <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onplaying <- Event.handle x ctx handler)
 
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onplaying <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onplaying <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onprogress <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onprogress <- Event.handle x ctx handler)
 
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onprogress <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onprogress <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onratechange <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onratechange <- Event.handle x ctx handler)
 
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onratechange <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onratechange <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onseeked <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onseeked <- Event.handle x ctx handler)
 
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onseeked <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onseeked <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onseeking <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onseeking <- Event.handle x ctx handler)
 
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onseeking <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onseeking <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onstalled <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onstalled <- Event.handle x ctx handler)
 
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onstalled <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onstalled <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onsuspend <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onsuspend <- Event.handle x ctx handler)
 
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onsuspend <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onsuspend <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.ontimeupdate <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.ontimeupdate <- Event.handle x ctx handler)
 
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.ontimeupdate <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.ontimeupdate <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onvolumechange <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onvolumechange <- Event.handle x ctx handler)
 
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onvolumechange <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onvolumechange <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x ctx -> x.onwaiting <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.onwaiting <- Event.handle x ctx handler)
 
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.onwaiting <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.onwaiting <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
     end

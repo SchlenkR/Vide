@@ -50,12 +50,12 @@ type {{ext.builderName}}Extensions =
 {{evt.xmlDoc}}
         [<Extension>]
         static member {{evt.memberName}}(this: {{ext.builderParamTypeAnnotation}}, handler) =
-            this.OnInit(fun x ctx -> x.{{evt.name}} <- Event.handle x ctx handler)
+            this.OnEval(fun x ctx -> x.{{evt.name}} <- Event.handle x ctx handler)
 
 {{evt.xmlDoc}}
         [<Extension>]
         static member {{evt.memberName}}(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnInit(fun x ctx -> x.{{evt.name}} <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x ctx -> x.{{evt.name}} <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         {{end}}
     end
