@@ -164,20 +164,19 @@ type VideBuilder() =
             input: seq<'a>,
             body: 'a -> Vide<'v,'s,'c>
         ) 
-        : Vide<'v list, Map<'a, 's option>,'c>
+        : Vide<'v list, list<'s option>, 'c>
         = 
         Vide <| fun s ctx ->
             Debug.print 0 "FOR"
-            let mutable currMap = s |> Option.defaultValue Map.empty
+            let lastStates = s |> Option.defaultValue []
             let resValues,resStates =
-                [ for x in input do
-                    let matchingState = currMap |> Map.tryFind x |> Option.flatten
+                [ for i,x in input |> Seq.indexed do
+                    let matchingState = lastStates |> List.tryItem i |> Option.flatten
                     let v,s = let (Vide v) = body x in v matchingState ctx
-                    do currMap <- currMap |> Map.remove x
-                    v, (x,s)
+                    v,s
                 ]
                 |> List.unzip
-            resValues, Some (resStates |> Map.ofList)
+            resValues, Some resStates
 
     // ---------------------
     // ASYNC
@@ -262,6 +261,7 @@ type VideApp<'v,'s,'c when 'c :> VideContext>
             do
                 currValue <- Some value
                 currentState <- newState
+                evaluationCount <- evaluationCount + 1
             do onEvaluated value currentState
             do isEvaluating <- false
             Debug.print 10 $"Evaluation done ({evaluationCount})"
