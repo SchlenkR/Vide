@@ -51,6 +51,10 @@ Components
         <>
             <....
         <>
+    * Welche Arten?
+        * CompoundComponents (=vide { ... })
+        * RenderComponents (die die direkt auf ctx zugreuif)
+    * Gutes Beispiel: Aus "input" eine "checkbox"-Komponente machen
 
 * HTML Api
     * globals as base class
@@ -71,11 +75,9 @@ Components
             - Eventkontext mit "TriggerEval: bool"
     * Input soll automatisch "OnChange" auslösen
     * Kontext weiter abstrahieren, damit man ohne Browser testen kann
+    * input: checked / radio / etc.
 
 * MemLeaks bei evt reg?
-
-let x1 = X().myProp()
-let x2 = X(myProp = 12).myProp()
 
 * Way of emitting HTML (not only text)
 * "Placeholder": A box that can be used later to place elements into
@@ -99,3 +101,11 @@ Docu: We need "nothing" (that's F#)
 * events not as hardcoded list
 * type and member docu
 * elem.attrs.attrs |> List.distinctBy (fun a -> a.name)
+*
+    let x1 = X()config..myProp()
+    let x2 = X(myProp = 12).attrs.myProp()
+    let x2 = X(myProp = 12).attrs.myProp()
+
+# Ideen
+
+* Vide als .fsx file und dann einen C# SourceGen

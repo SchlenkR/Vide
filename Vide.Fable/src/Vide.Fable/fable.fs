@@ -15,8 +15,10 @@ type FableContext
     inherit VideContext()
     
     let mutable keptChildren = []
+
     let keepChild child = keptChildren <- (child :> Node) :: keptChildren
     let appendToParent child = parent.appendChild(child) |> ignore
+    let removeFromParent child = parent.removeChild(child) |> ignore
 
     override this.RequestEvaluation() = evaluateView this
     member internal _.EvaluateView = evaluateView
@@ -32,8 +34,10 @@ type FableContext
         do elem |> appendToParent
         elem
     member _.KeepChild(child: Node) =
-        child |> keepChild |> ignore
-    member _.GetObsoleteChildren() =
+        child |> keepChild
+    member _.RemoveChild(child: Node) =
+        removeFromParent child
+    member internal _.GetObsoleteChildren() =
         let childNodes =
             let nodes = parent.childNodes
             [ for i in 0 .. nodes.length-1 do nodes.Item i ]
@@ -57,8 +61,7 @@ let inline text text =
                     createNode ()
         (), Some node
 
-type Modifier<'n> = 'n -> unit
-type NodeBuilderState<'n,'s> = option<'n> * option<'s>
+type NodeBuilderState<'n,'s> = option<'n * FableContext> * option<'s>
 type ChildAction = Keep | DiscardAndCreateNew
 
 module BuilderHelper =
@@ -82,32 +85,34 @@ module BuilderHelper =
         =
         Vide <| fun s (ctx: FableContext) ->
             Debug.print 0 "RUN:NodeBuilder"
-            let inline runModifiers modifiers node =
-                for m in modifiers do m node
+            let inline runModifiers modifiers node ctx =
+                for m in modifiers do m node ctx
             let s,cs = BuilderHelper.separateStatePair s
-            let node,cs =
+            let node,cs,childCtx =
                 // Can it happen that s is Some and cs is None? I don't think so.
                 // But: See comment in definition of: Vide.Core.Vide
                 match s with
                 | None ->
                     let newNode,s = createNode ctx,cs
-                    do runModifiers initModifiers newNode
-                    newNode,s
-                | Some node ->
+                    do runModifiers initModifiers newNode ctx
+                    let childCtx = FableContext(newNode, ctx.EvaluateView)
+                    newNode,s,childCtx
+                | Some (node,childCtx) ->
                     match checkOrUpdateNode node with
                     | Keep ->
-                        ctx.KeepChild(node)
-                        node,cs
+                        do ctx.KeepChild(node)
+                        node,cs,childCtx
                     | DiscardAndCreateNew ->
-                        createNode ctx,None
-            do runModifiers evalModifiers node
-            let childCtx = FableContext(node, ctx.EvaluateView)
+                        createNode ctx,None,childCtx
+            do runModifiers evalModifiers node ctx
             let cv,cs = childVide cs childCtx
             for x in childCtx.GetObsoleteChildren() do
-                node.removeChild(x) |> ignore
-                // we don'tneed this? Weak enough?
-                // events.RemoveListener(node)
-            resultSelector node cv, Some (Some node, cs)
+                childCtx.RemoveChild(x)
+            let result = resultSelector node cv
+            let state = Some (Some (node,childCtx), cs)
+            result,state
+
+type NodeModifier<'n,'c> = 'n -> 'c -> unit
 
 type NodeBuilder<'n when 'n :> Node>
     (
@@ -115,12 +120,12 @@ type NodeBuilder<'n when 'n :> Node>
         checkOrUpdateNode: 'n -> ChildAction
     ) =
     inherit VideBuilder()
-    
+
     member _.CreateNode = createNode
     member _.CheckOrUpdateNode = checkOrUpdateNode
-    
-    member val InitModifiers: Modifier<'n> list = [] with get,set
-    member val EvalModifiers: Modifier<'n> list = [] with get,set
+
+    member val InitModifiers: NodeModifier<'n, FableContext> list = [] with get,set
+    member val EvalModifiers: NodeModifier<'n, FableContext> list = [] with get,set
 
     member this.DoRun(childVide, resultSelector) =
         BuilderHelper.runBuilder
@@ -176,19 +181,35 @@ type HTMLContentElementBuilder<'n when 'n :> HTMLElement>(elemName) =
         BuilderHelper.createNode elemName,
         BuilderHelper.checkOrUpdateNode elemName)
 
+module Event =
+    type FableEventArgs<'evt,'n when 'n :> Node> =
+        {
+            node: 'n
+            evt: 'evt
+            ctx: FableContext
+            mutable requestEvaluation: bool
+        }
+    
+    let inline handle node (ctx: FableContext) callback =
+        fun evt ->
+            let args = { node = node; evt = evt; ctx = ctx; requestEvaluation = true }
+            do callback args
+            if args.requestEvaluation then
+                ctx.RequestEvaluation()
+
 [<Extension>]
 type NodeBuilderExtensions =
     // TODO: Switch back to non-inheritance API
 
     /// Called once on initialization.
     [<Extension>]
-    static member OnInit(this: #NodeBuilder<_>, m: Modifier<_>) =
+    static member OnInit(this: #NodeBuilder<_>, m: NodeModifier<_, FableContext>) =
         do this.InitModifiers <- m :: this.InitModifiers
         this
     
     /// Called on every Vide evaluatiopn cycle.
     [<Extension>]
-    static member OnEval(this: #NodeBuilder<_>, m: Modifier<_>) =
+    static member OnEval(this: #NodeBuilder<_>, m: NodeModifier<_, FableContext>) =
         do this.EvalModifiers <- m :: this.EvalModifiers
         this
 

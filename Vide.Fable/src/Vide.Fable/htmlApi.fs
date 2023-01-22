@@ -685,67 +685,67 @@ type HTMLGlobalAttrsVoidElementBuilderExtensions =
         /// Specifies a shortcut key to activate/focus an element
         [<Extension>]
         static member accesskey(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("accesskey", value))
+            this.OnEval(fun x ctx -> x.setAttribute("accesskey", value))
         
         /// Specifies one or more classnames for an element (refers to a class in a style sheet)
         [<Extension>]
         static member class'(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("class", value))
+            this.OnEval(fun x ctx -> x.setAttribute("class", value))
         
         /// Specifies whether the content of an element is editable or not
         [<Extension>]
         static member contenteditable(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("contenteditable", value))
+            this.OnEval(fun x ctx -> x.setAttribute("contenteditable", value))
         
         /// Specifies the text direction for the content in an element
         [<Extension>]
         static member dir(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("dir", value))
+            this.OnEval(fun x ctx -> x.setAttribute("dir", value))
         
         /// Specifies whether an element is draggable or not
         [<Extension>]
         static member draggable(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("draggable", value))
+            this.OnEval(fun x ctx -> x.setAttribute("draggable", value))
         
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
         static member hidden(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("hidden", value))
+            this.OnEval(fun x ctx -> x.setAttribute("hidden", value))
         
         /// Specifies a unique id for an element
         [<Extension>]
         static member id(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("id", value))
+            this.OnEval(fun x ctx -> x.setAttribute("id", value))
         
         /// Specifies the language of the element's content
         [<Extension>]
         static member lang(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("lang", value))
+            this.OnEval(fun x ctx -> x.setAttribute("lang", value))
         
         /// Specifies whether the element is to have its spelling and grammar checked or not
         [<Extension>]
         static member spellcheck(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("spellcheck", value))
+            this.OnEval(fun x ctx -> x.setAttribute("spellcheck", value))
         
         /// Specifies an inline CSS style for an element
         [<Extension>]
         static member style(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("style", value))
+            this.OnEval(fun x ctx -> x.setAttribute("style", value))
         
         /// Specifies the tabbing order of an element
         [<Extension>]
         static member tabindex(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("tabindex", value))
+            this.OnEval(fun x ctx -> x.setAttribute("tabindex", value))
         
         /// Specifies extra information about an element
         [<Extension>]
         static member title(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("title", value))
+            this.OnEval(fun x ctx -> x.setAttribute("title", value))
         
         /// Specifies whether the content of an element should be translated or not
         [<Extension>]
         static member translate(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("translate", value))
+            this.OnEval(fun x ctx -> x.setAttribute("translate", value))
         
     
         // Events
@@ -753,272 +753,596 @@ type HTMLGlobalAttrsVoidElementBuilderExtensions =
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onblur <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onblur <- Event.handle x ctx handler)
+
+        /// Fires the moment that the element loses focus
+        [<Extension>]
+        static member onblur(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onblur <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onchange <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onchange <- Event.handle x ctx handler)
+
+        /// Fires the moment when the value of the element is changed
+        [<Extension>]
+        static member onchange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onchange <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.oncontextmenu <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.oncontextmenu <- Event.handle x ctx handler)
+
+        /// Script to be run when a context menu is triggered
+        [<Extension>]
+        static member oncontextmenu(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.oncontextmenu <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onfocus <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onfocus <- Event.handle x ctx handler)
+
+        /// Fires the moment when the element gets focus
+        [<Extension>]
+        static member onfocus(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onfocus <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.oninput <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.oninput <- Event.handle x ctx handler)
+
+        /// Script to be run when an element gets user input
+        [<Extension>]
+        static member oninput(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.oninput <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onreset <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onreset <- Event.handle x ctx handler)
+
+        /// Fires when the Reset button in a form is clicked
+        [<Extension>]
+        static member onreset(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onreset <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onselect <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onselect <- Event.handle x ctx handler)
+
+        /// Fires after some text has been selected in an element
+        [<Extension>]
+        static member onselect(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onselect <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onsubmit <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onsubmit <- Event.handle x ctx handler)
+
+        /// Fires when a form is submitted
+        [<Extension>]
+        static member onsubmit(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onsubmit <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onkeydown <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onkeydown <- Event.handle x ctx handler)
+
+        /// Fires when a user is pressing a key
+        [<Extension>]
+        static member onkeydown(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onkeydown <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onkeypress <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onkeypress <- Event.handle x ctx handler)
+
+        /// Fires when a user presses a key
+        [<Extension>]
+        static member onkeypress(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onkeypress <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onkeyup <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onkeyup <- Event.handle x ctx handler)
+
+        /// Fires when a user releases a key
+        [<Extension>]
+        static member onkeyup(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onkeyup <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onclick <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onclick <- Event.handle x ctx handler)
+
+        /// Fires on a mouse click on the element
+        [<Extension>]
+        static member onclick(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onclick <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.ondblclick <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ondblclick <- Event.handle x ctx handler)
+
+        /// Fires on a mouse double-click on the element
+        [<Extension>]
+        static member ondblclick(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ondblclick <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onmousedown <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onmousedown <- Event.handle x ctx handler)
+
+        /// Fires when a mouse button is pressed down on an element
+        [<Extension>]
+        static member onmousedown(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onmousedown <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onmousemove <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onmousemove <- Event.handle x ctx handler)
+
+        /// Fires when the mouse pointer is moving while it is over an element
+        [<Extension>]
+        static member onmousemove(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onmousemove <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onmouseout <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onmouseout <- Event.handle x ctx handler)
+
+        /// Fires when the mouse pointer moves out of an element
+        [<Extension>]
+        static member onmouseout(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onmouseout <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onmouseover <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onmouseover <- Event.handle x ctx handler)
+
+        /// Fires when the mouse pointer moves over an element
+        [<Extension>]
+        static member onmouseover(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onmouseover <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onmouseup <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onmouseup <- Event.handle x ctx handler)
+
+        /// Fires when a mouse button is released over an element
+        [<Extension>]
+        static member onmouseup(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onmouseup <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onmousewheel <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onmousewheel <- Event.handle x ctx handler)
+
+        /// Deprecated. Use the onwheel attribute instead
+        [<Extension>]
+        static member onmousewheel(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onmousewheel <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onwheel <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onwheel <- Event.handle x ctx handler)
+
+        /// Fires when the mouse wheel rolls up or down over an element
+        [<Extension>]
+        static member onwheel(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onwheel <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.ondrag <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ondrag <- Event.handle x ctx handler)
+
+        /// Script to be run when an element is dragged
+        [<Extension>]
+        static member ondrag(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ondrag <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.ondragend <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ondragend <- Event.handle x ctx handler)
+
+        /// Script to be run at the end of a drag operation
+        [<Extension>]
+        static member ondragend(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ondragend <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.ondragenter <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ondragenter <- Event.handle x ctx handler)
+
+        /// Script to be run when an element has been dragged to a valid drop target
+        [<Extension>]
+        static member ondragenter(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ondragenter <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.ondragleave <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ondragleave <- Event.handle x ctx handler)
+
+        /// Script to be run when an element leaves a valid drop target
+        [<Extension>]
+        static member ondragleave(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ondragleave <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.ondragover <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ondragover <- Event.handle x ctx handler)
+
+        /// Script to be run when an element is being dragged over a valid drop target
+        [<Extension>]
+        static member ondragover(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ondragover <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.ondragstart <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ondragstart <- Event.handle x ctx handler)
+
+        /// Script to be run at the start of a drag operation
+        [<Extension>]
+        static member ondragstart(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ondragstart <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.ondrop <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ondrop <- Event.handle x ctx handler)
+
+        /// Script to be run when dragged element is being dropped
+        [<Extension>]
+        static member ondrop(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ondrop <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onscroll <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onscroll <- Event.handle x ctx handler)
+
+        /// Script to be run when an element's scrollbar is being scrolled
+        [<Extension>]
+        static member onscroll(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onscroll <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.oncopy <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.oncopy <- Event.handle x ctx handler)
+
+        /// Fires when the user copies the content of an element
+        [<Extension>]
+        static member oncopy(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.oncopy <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.oncut <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.oncut <- Event.handle x ctx handler)
+
+        /// Fires when the user cuts the content of an element
+        [<Extension>]
+        static member oncut(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.oncut <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onpaste <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onpaste <- Event.handle x ctx handler)
+
+        /// Fires when the user pastes some content in an element
+        [<Extension>]
+        static member onpaste(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onpaste <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onabort <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onabort <- Event.handle x ctx handler)
+
+        /// Script to be run on abort
+        [<Extension>]
+        static member onabort(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onabort <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.oncanplay <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.oncanplay <- Event.handle x ctx handler)
+
+        /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
+        [<Extension>]
+        static member oncanplay(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.oncanplay <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.oncanplaythrough <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.oncanplaythrough <- Event.handle x ctx handler)
+
+        /// Script to be run when a file can be played all the way to the end without pausing for buffering
+        [<Extension>]
+        static member oncanplaythrough(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.oncanplaythrough <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.oncuechange <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.oncuechange <- Event.handle x ctx handler)
+
+        /// Script to be run when the cue changes in a <track> element
+        [<Extension>]
+        static member oncuechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.oncuechange <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.ondurationchange <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ondurationchange <- Event.handle x ctx handler)
+
+        /// Script to be run when the length of the media changes
+        [<Extension>]
+        static member ondurationchange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ondurationchange <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onemptied <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onemptied <- Event.handle x ctx handler)
+
+        /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
+        [<Extension>]
+        static member onemptied(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onemptied <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onended <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onended <- Event.handle x ctx handler)
+
+        /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
+        [<Extension>]
+        static member onended(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onended <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onerror <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onerror <- Event.handle x ctx handler)
+
+        /// Script to be run when an error occurs when the file is being loaded
+        [<Extension>]
+        static member onerror(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onerror <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onloadeddata <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onloadeddata <- Event.handle x ctx handler)
+
+        /// Script to be run when media data is loaded
+        [<Extension>]
+        static member onloadeddata(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onloadeddata <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onloadedmetadata <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onloadedmetadata <- Event.handle x ctx handler)
+
+        /// Script to be run when meta data (like dimensions and duration) are loaded
+        [<Extension>]
+        static member onloadedmetadata(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onloadedmetadata <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onloadstart <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onloadstart <- Event.handle x ctx handler)
+
+        /// Script to be run just as the file begins to load before anything is actually loaded
+        [<Extension>]
+        static member onloadstart(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onloadstart <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onpause <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onpause <- Event.handle x ctx handler)
+
+        /// Script to be run when the media is paused either by the user or programmatically
+        [<Extension>]
+        static member onpause(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onpause <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onplay <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onplay <- Event.handle x ctx handler)
+
+        /// Script to be run when the media is ready to start playing
+        [<Extension>]
+        static member onplay(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onplay <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onplaying <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onplaying <- Event.handle x ctx handler)
+
+        /// Script to be run when the media actually has started playing
+        [<Extension>]
+        static member onplaying(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onplaying <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onprogress <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onprogress <- Event.handle x ctx handler)
+
+        /// Script to be run when the browser is in the process of getting the media data
+        [<Extension>]
+        static member onprogress(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onprogress <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onratechange <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onratechange <- Event.handle x ctx handler)
+
+        /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
+        [<Extension>]
+        static member onratechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onratechange <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onseeked <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onseeked <- Event.handle x ctx handler)
+
+        /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
+        [<Extension>]
+        static member onseeked(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onseeked <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onseeking <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onseeking <- Event.handle x ctx handler)
+
+        /// Script to be run when the seeking attribute is set to true indicating that seeking is active
+        [<Extension>]
+        static member onseeking(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onseeking <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onstalled <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onstalled <- Event.handle x ctx handler)
+
+        /// Script to be run when the browser is unable to fetch the media data for whatever reason
+        [<Extension>]
+        static member onstalled(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onstalled <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onsuspend <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onsuspend <- Event.handle x ctx handler)
+
+        /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
+        [<Extension>]
+        static member onsuspend(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onsuspend <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.ontimeupdate <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ontimeupdate <- Event.handle x ctx handler)
+
+        /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
+        [<Extension>]
+        static member ontimeupdate(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ontimeupdate <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onvolumechange <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onvolumechange <- Event.handle x ctx handler)
+
+        /// Script to be run each time the volume is changed which (includes setting the volume to mute)
+        [<Extension>]
+        static member onvolumechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onvolumechange <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, handler) =
-            this.OnInit(fun x -> x.onwaiting <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onwaiting <- Event.handle x ctx handler)
+
+        /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
+        [<Extension>]
+        static member onwaiting(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onwaiting <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
     end
 
@@ -1030,67 +1354,67 @@ type HTMLGlobalAttrsContentElementBuilderExtensions =
         /// Specifies a shortcut key to activate/focus an element
         [<Extension>]
         static member accesskey(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("accesskey", value))
+            this.OnEval(fun x ctx -> x.setAttribute("accesskey", value))
         
         /// Specifies one or more classnames for an element (refers to a class in a style sheet)
         [<Extension>]
         static member class'(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("class", value))
+            this.OnEval(fun x ctx -> x.setAttribute("class", value))
         
         /// Specifies whether the content of an element is editable or not
         [<Extension>]
         static member contenteditable(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("contenteditable", value))
+            this.OnEval(fun x ctx -> x.setAttribute("contenteditable", value))
         
         /// Specifies the text direction for the content in an element
         [<Extension>]
         static member dir(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("dir", value))
+            this.OnEval(fun x ctx -> x.setAttribute("dir", value))
         
         /// Specifies whether an element is draggable or not
         [<Extension>]
         static member draggable(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("draggable", value))
+            this.OnEval(fun x ctx -> x.setAttribute("draggable", value))
         
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
         static member hidden(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("hidden", value))
+            this.OnEval(fun x ctx -> x.setAttribute("hidden", value))
         
         /// Specifies a unique id for an element
         [<Extension>]
         static member id(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("id", value))
+            this.OnEval(fun x ctx -> x.setAttribute("id", value))
         
         /// Specifies the language of the element's content
         [<Extension>]
         static member lang(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("lang", value))
+            this.OnEval(fun x ctx -> x.setAttribute("lang", value))
         
         /// Specifies whether the element is to have its spelling and grammar checked or not
         [<Extension>]
         static member spellcheck(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("spellcheck", value))
+            this.OnEval(fun x ctx -> x.setAttribute("spellcheck", value))
         
         /// Specifies an inline CSS style for an element
         [<Extension>]
         static member style(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("style", value))
+            this.OnEval(fun x ctx -> x.setAttribute("style", value))
         
         /// Specifies the tabbing order of an element
         [<Extension>]
         static member tabindex(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("tabindex", value))
+            this.OnEval(fun x ctx -> x.setAttribute("tabindex", value))
         
         /// Specifies extra information about an element
         [<Extension>]
         static member title(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("title", value))
+            this.OnEval(fun x ctx -> x.setAttribute("title", value))
         
         /// Specifies whether the content of an element should be translated or not
         [<Extension>]
         static member translate(this: #HTMLGlobalAttrsContentElementBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.setAttribute("translate", value))
+            this.OnEval(fun x ctx -> x.setAttribute("translate", value))
         
     
         // Events
@@ -1098,272 +1422,596 @@ type HTMLGlobalAttrsContentElementBuilderExtensions =
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onblur <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onblur <- Event.handle x ctx handler)
+
+        /// Fires the moment that the element loses focus
+        [<Extension>]
+        static member onblur(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onblur <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onchange <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onchange <- Event.handle x ctx handler)
+
+        /// Fires the moment when the value of the element is changed
+        [<Extension>]
+        static member onchange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onchange <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.oncontextmenu <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.oncontextmenu <- Event.handle x ctx handler)
+
+        /// Script to be run when a context menu is triggered
+        [<Extension>]
+        static member oncontextmenu(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.oncontextmenu <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onfocus <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onfocus <- Event.handle x ctx handler)
+
+        /// Fires the moment when the element gets focus
+        [<Extension>]
+        static member onfocus(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onfocus <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.oninput <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.oninput <- Event.handle x ctx handler)
+
+        /// Script to be run when an element gets user input
+        [<Extension>]
+        static member oninput(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.oninput <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onreset <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onreset <- Event.handle x ctx handler)
+
+        /// Fires when the Reset button in a form is clicked
+        [<Extension>]
+        static member onreset(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onreset <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onselect <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onselect <- Event.handle x ctx handler)
+
+        /// Fires after some text has been selected in an element
+        [<Extension>]
+        static member onselect(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onselect <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onsubmit <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onsubmit <- Event.handle x ctx handler)
+
+        /// Fires when a form is submitted
+        [<Extension>]
+        static member onsubmit(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onsubmit <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onkeydown <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onkeydown <- Event.handle x ctx handler)
+
+        /// Fires when a user is pressing a key
+        [<Extension>]
+        static member onkeydown(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onkeydown <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onkeypress <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onkeypress <- Event.handle x ctx handler)
+
+        /// Fires when a user presses a key
+        [<Extension>]
+        static member onkeypress(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onkeypress <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onkeyup <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onkeyup <- Event.handle x ctx handler)
+
+        /// Fires when a user releases a key
+        [<Extension>]
+        static member onkeyup(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onkeyup <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onclick <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onclick <- Event.handle x ctx handler)
+
+        /// Fires on a mouse click on the element
+        [<Extension>]
+        static member onclick(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onclick <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ondblclick <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ondblclick <- Event.handle x ctx handler)
+
+        /// Fires on a mouse double-click on the element
+        [<Extension>]
+        static member ondblclick(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ondblclick <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onmousedown <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onmousedown <- Event.handle x ctx handler)
+
+        /// Fires when a mouse button is pressed down on an element
+        [<Extension>]
+        static member onmousedown(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onmousedown <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onmousemove <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onmousemove <- Event.handle x ctx handler)
+
+        /// Fires when the mouse pointer is moving while it is over an element
+        [<Extension>]
+        static member onmousemove(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onmousemove <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onmouseout <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onmouseout <- Event.handle x ctx handler)
+
+        /// Fires when the mouse pointer moves out of an element
+        [<Extension>]
+        static member onmouseout(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onmouseout <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onmouseover <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onmouseover <- Event.handle x ctx handler)
+
+        /// Fires when the mouse pointer moves over an element
+        [<Extension>]
+        static member onmouseover(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onmouseover <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onmouseup <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onmouseup <- Event.handle x ctx handler)
+
+        /// Fires when a mouse button is released over an element
+        [<Extension>]
+        static member onmouseup(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onmouseup <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onmousewheel <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onmousewheel <- Event.handle x ctx handler)
+
+        /// Deprecated. Use the onwheel attribute instead
+        [<Extension>]
+        static member onmousewheel(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onmousewheel <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onwheel <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onwheel <- Event.handle x ctx handler)
+
+        /// Fires when the mouse wheel rolls up or down over an element
+        [<Extension>]
+        static member onwheel(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onwheel <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ondrag <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ondrag <- Event.handle x ctx handler)
+
+        /// Script to be run when an element is dragged
+        [<Extension>]
+        static member ondrag(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ondrag <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ondragend <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ondragend <- Event.handle x ctx handler)
+
+        /// Script to be run at the end of a drag operation
+        [<Extension>]
+        static member ondragend(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ondragend <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ondragenter <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ondragenter <- Event.handle x ctx handler)
+
+        /// Script to be run when an element has been dragged to a valid drop target
+        [<Extension>]
+        static member ondragenter(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ondragenter <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ondragleave <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ondragleave <- Event.handle x ctx handler)
+
+        /// Script to be run when an element leaves a valid drop target
+        [<Extension>]
+        static member ondragleave(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ondragleave <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ondragover <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ondragover <- Event.handle x ctx handler)
+
+        /// Script to be run when an element is being dragged over a valid drop target
+        [<Extension>]
+        static member ondragover(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ondragover <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ondragstart <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ondragstart <- Event.handle x ctx handler)
+
+        /// Script to be run at the start of a drag operation
+        [<Extension>]
+        static member ondragstart(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ondragstart <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ondrop <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ondrop <- Event.handle x ctx handler)
+
+        /// Script to be run when dragged element is being dropped
+        [<Extension>]
+        static member ondrop(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ondrop <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onscroll <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onscroll <- Event.handle x ctx handler)
+
+        /// Script to be run when an element's scrollbar is being scrolled
+        [<Extension>]
+        static member onscroll(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onscroll <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.oncopy <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.oncopy <- Event.handle x ctx handler)
+
+        /// Fires when the user copies the content of an element
+        [<Extension>]
+        static member oncopy(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.oncopy <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.oncut <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.oncut <- Event.handle x ctx handler)
+
+        /// Fires when the user cuts the content of an element
+        [<Extension>]
+        static member oncut(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.oncut <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onpaste <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onpaste <- Event.handle x ctx handler)
+
+        /// Fires when the user pastes some content in an element
+        [<Extension>]
+        static member onpaste(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onpaste <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onabort <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onabort <- Event.handle x ctx handler)
+
+        /// Script to be run on abort
+        [<Extension>]
+        static member onabort(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onabort <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.oncanplay <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.oncanplay <- Event.handle x ctx handler)
+
+        /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
+        [<Extension>]
+        static member oncanplay(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.oncanplay <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.oncanplaythrough <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.oncanplaythrough <- Event.handle x ctx handler)
+
+        /// Script to be run when a file can be played all the way to the end without pausing for buffering
+        [<Extension>]
+        static member oncanplaythrough(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.oncanplaythrough <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.oncuechange <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.oncuechange <- Event.handle x ctx handler)
+
+        /// Script to be run when the cue changes in a <track> element
+        [<Extension>]
+        static member oncuechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.oncuechange <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ondurationchange <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ondurationchange <- Event.handle x ctx handler)
+
+        /// Script to be run when the length of the media changes
+        [<Extension>]
+        static member ondurationchange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ondurationchange <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onemptied <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onemptied <- Event.handle x ctx handler)
+
+        /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
+        [<Extension>]
+        static member onemptied(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onemptied <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onended <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onended <- Event.handle x ctx handler)
+
+        /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
+        [<Extension>]
+        static member onended(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onended <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onerror <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onerror <- Event.handle x ctx handler)
+
+        /// Script to be run when an error occurs when the file is being loaded
+        [<Extension>]
+        static member onerror(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onerror <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onloadeddata <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onloadeddata <- Event.handle x ctx handler)
+
+        /// Script to be run when media data is loaded
+        [<Extension>]
+        static member onloadeddata(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onloadeddata <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onloadedmetadata <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onloadedmetadata <- Event.handle x ctx handler)
+
+        /// Script to be run when meta data (like dimensions and duration) are loaded
+        [<Extension>]
+        static member onloadedmetadata(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onloadedmetadata <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onloadstart <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onloadstart <- Event.handle x ctx handler)
+
+        /// Script to be run just as the file begins to load before anything is actually loaded
+        [<Extension>]
+        static member onloadstart(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onloadstart <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onpause <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onpause <- Event.handle x ctx handler)
+
+        /// Script to be run when the media is paused either by the user or programmatically
+        [<Extension>]
+        static member onpause(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onpause <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onplay <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onplay <- Event.handle x ctx handler)
+
+        /// Script to be run when the media is ready to start playing
+        [<Extension>]
+        static member onplay(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onplay <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onplaying <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onplaying <- Event.handle x ctx handler)
+
+        /// Script to be run when the media actually has started playing
+        [<Extension>]
+        static member onplaying(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onplaying <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onprogress <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onprogress <- Event.handle x ctx handler)
+
+        /// Script to be run when the browser is in the process of getting the media data
+        [<Extension>]
+        static member onprogress(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onprogress <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onratechange <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onratechange <- Event.handle x ctx handler)
+
+        /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
+        [<Extension>]
+        static member onratechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onratechange <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onseeked <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onseeked <- Event.handle x ctx handler)
+
+        /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
+        [<Extension>]
+        static member onseeked(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onseeked <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onseeking <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onseeking <- Event.handle x ctx handler)
+
+        /// Script to be run when the seeking attribute is set to true indicating that seeking is active
+        [<Extension>]
+        static member onseeking(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onseeking <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onstalled <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onstalled <- Event.handle x ctx handler)
+
+        /// Script to be run when the browser is unable to fetch the media data for whatever reason
+        [<Extension>]
+        static member onstalled(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onstalled <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onsuspend <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onsuspend <- Event.handle x ctx handler)
+
+        /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
+        [<Extension>]
+        static member onsuspend(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onsuspend <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.ontimeupdate <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.ontimeupdate <- Event.handle x ctx handler)
+
+        /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
+        [<Extension>]
+        static member ontimeupdate(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.ontimeupdate <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onvolumechange <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onvolumechange <- Event.handle x ctx handler)
+
+        /// Script to be run each time the volume is changed which (includes setting the volume to mute)
+        [<Extension>]
+        static member onvolumechange(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onvolumechange <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HTMLGlobalAttrsContentElementBuilder<_>, handler) =
-            this.OnInit(fun x -> x.onwaiting <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.onwaiting <- Event.handle x ctx handler)
+
+        /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
+        [<Extension>]
+        static member onwaiting(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.onwaiting <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         
     end
 
@@ -1375,47 +2023,47 @@ type aExtensions =
         /// Specifies that the target will be downloaded when a user clicks on the hyperlink
         [<Extension>]
         static member download(this: #a, value: string) =
-            this.OnEval(fun x -> x.setAttribute("download", value))
+            this.OnEval(fun x ctx -> x.setAttribute("download", value))
         
         /// Specifies the URL of the page the link goes to
         [<Extension>]
         static member href(this: #a, value: string) =
-            this.OnEval(fun x -> x.setAttribute("href", value))
+            this.OnEval(fun x ctx -> x.setAttribute("href", value))
         
         /// Specifies the language of the linked document
         [<Extension>]
         static member hreflang(this: #a, value: string) =
-            this.OnEval(fun x -> x.setAttribute("hreflang", value))
+            this.OnEval(fun x ctx -> x.setAttribute("hreflang", value))
         
         /// Specifies what media/device the linked document is optimized for
         [<Extension>]
         static member media(this: #a, value: string) =
-            this.OnEval(fun x -> x.setAttribute("media", value))
+            this.OnEval(fun x ctx -> x.setAttribute("media", value))
         
         /// Specifies a space-separated list of URLs to which, when the link is followed, post requests with the body ping will be sent by the browser (in the background). Typically used for tracking.
         [<Extension>]
         static member ping(this: #a, value: string) =
-            this.OnEval(fun x -> x.setAttribute("ping", value))
+            this.OnEval(fun x ctx -> x.setAttribute("ping", value))
         
         /// Specifies which referrer information to send with the link
         [<Extension>]
         static member referrerpolicy(this: #a, value: string) =
-            this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
+            this.OnEval(fun x ctx -> x.setAttribute("referrerpolicy", value))
         
         /// Specifies the relationship between the current document and the linked document
         [<Extension>]
         static member rel(this: #a, value: string) =
-            this.OnEval(fun x -> x.setAttribute("rel", value))
+            this.OnEval(fun x ctx -> x.setAttribute("rel", value))
         
         /// Specifies where to open the linked document
         [<Extension>]
         static member target(this: #a, value: string) =
-            this.OnEval(fun x -> x.setAttribute("target", value))
+            this.OnEval(fun x ctx -> x.setAttribute("target", value))
         
         /// Specifies the media type of the linked document
         [<Extension>]
         static member type'(this: #a, value: string) =
-            this.OnEval(fun x -> x.setAttribute("type", value))
+            this.OnEval(fun x ctx -> x.setAttribute("type", value))
         
     
         // Events
@@ -1450,57 +2098,57 @@ type areaExtensions =
         /// Specifies an alternate text for the area. Required if the href attribute is present
         [<Extension>]
         static member alt(this: #area, value: string) =
-            this.OnEval(fun x -> x.setAttribute("alt", value))
+            this.OnEval(fun x ctx -> x.setAttribute("alt", value))
         
         /// Specifies the coordinates of the area
         [<Extension>]
         static member coords(this: #area, value: string) =
-            this.OnEval(fun x -> x.setAttribute("coords", value))
+            this.OnEval(fun x ctx -> x.setAttribute("coords", value))
         
         /// Specifies that the target will be downloaded when a user clicks on the hyperlink
         [<Extension>]
         static member download(this: #area, value: string) =
-            this.OnEval(fun x -> x.setAttribute("download", value))
+            this.OnEval(fun x ctx -> x.setAttribute("download", value))
         
         /// Specifies the hyperlink target for the area
         [<Extension>]
         static member href(this: #area, value: string) =
-            this.OnEval(fun x -> x.setAttribute("href", value))
+            this.OnEval(fun x ctx -> x.setAttribute("href", value))
         
         /// Specifies the language of the target URL
         [<Extension>]
         static member hreflang(this: #area, value: string) =
-            this.OnEval(fun x -> x.setAttribute("hreflang", value))
+            this.OnEval(fun x ctx -> x.setAttribute("hreflang", value))
         
         /// Specifies what media/device the target URL is optimized for
         [<Extension>]
         static member media(this: #area, value: string) =
-            this.OnEval(fun x -> x.setAttribute("media", value))
+            this.OnEval(fun x ctx -> x.setAttribute("media", value))
         
         /// Specifies which referrer information to send with the link
         [<Extension>]
         static member referrerpolicy(this: #area, value: string) =
-            this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
+            this.OnEval(fun x ctx -> x.setAttribute("referrerpolicy", value))
         
         /// Specifies the relationship between the current document and the target URL
         [<Extension>]
         static member rel(this: #area, value: string) =
-            this.OnEval(fun x -> x.setAttribute("rel", value))
+            this.OnEval(fun x ctx -> x.setAttribute("rel", value))
         
         /// Specifies the shape of the area
         [<Extension>]
         static member shape(this: #area, value: string) =
-            this.OnEval(fun x -> x.setAttribute("shape", value))
+            this.OnEval(fun x ctx -> x.setAttribute("shape", value))
         
         /// Specifies where to open the target URL
         [<Extension>]
         static member target(this: #area, value: string) =
-            this.OnEval(fun x -> x.setAttribute("target", value))
+            this.OnEval(fun x ctx -> x.setAttribute("target", value))
         
         /// Specifies the media type of the target URL
         [<Extension>]
         static member type'(this: #area, value: string) =
-            this.OnEval(fun x -> x.setAttribute("type", value))
+            this.OnEval(fun x ctx -> x.setAttribute("type", value))
         
     
         // Events
@@ -1535,32 +2183,32 @@ type audioExtensions =
         /// Specifies that the audio will start playing as soon as it is ready
         [<Extension>]
         static member autoplay(this: #audio, value: string) =
-            this.OnEval(fun x -> x.setAttribute("autoplay", value))
+            this.OnEval(fun x ctx -> x.setAttribute("autoplay", value))
         
         /// Specifies that audio controls should be displayed (such as a play/pause button etc)
         [<Extension>]
         static member controls(this: #audio, value: string) =
-            this.OnEval(fun x -> x.setAttribute("controls", value))
+            this.OnEval(fun x ctx -> x.setAttribute("controls", value))
         
         /// Specifies that the audio will start over again, every time it is finished
         [<Extension>]
         static member loop(this: #audio, value: string) =
-            this.OnEval(fun x -> x.setAttribute("loop", value))
+            this.OnEval(fun x ctx -> x.setAttribute("loop", value))
         
         /// Specifies that the audio output should be muted
         [<Extension>]
         static member muted(this: #audio, value: string) =
-            this.OnEval(fun x -> x.setAttribute("muted", value))
+            this.OnEval(fun x ctx -> x.setAttribute("muted", value))
         
         /// Specifies if and how the author thinks the audio should be loaded when the page loads
         [<Extension>]
         static member preload(this: #audio, value: string) =
-            this.OnEval(fun x -> x.setAttribute("preload", value))
+            this.OnEval(fun x ctx -> x.setAttribute("preload", value))
         
         /// Specifies the URL of the audio file
         [<Extension>]
         static member src(this: #audio, value: string) =
-            this.OnEval(fun x -> x.setAttribute("src", value))
+            this.OnEval(fun x ctx -> x.setAttribute("src", value))
         
     
         // Events
@@ -1585,12 +2233,12 @@ type base'Extensions =
         /// Specifies the base URL for all relative URLs in the page
         [<Extension>]
         static member href(this: #base', value: string) =
-            this.OnEval(fun x -> x.setAttribute("href", value))
+            this.OnEval(fun x ctx -> x.setAttribute("href", value))
         
         /// Specifies the default target for all hyperlinks and forms in the page
         [<Extension>]
         static member target(this: #base', value: string) =
-            this.OnEval(fun x -> x.setAttribute("target", value))
+            this.OnEval(fun x ctx -> x.setAttribute("target", value))
         
     
         // Events
@@ -1615,7 +2263,7 @@ type bdoExtensions =
         /// Required. Specifies the text direction of the text inside the <bdo> element
         [<Extension>]
         static member dir(this: #bdo, value: string) =
-            this.OnEval(fun x -> x.setAttribute("dir", value))
+            this.OnEval(fun x ctx -> x.setAttribute("dir", value))
         
     
         // Events
@@ -1630,7 +2278,7 @@ type blockquoteExtensions =
         /// Specifies the source of the quotation
         [<Extension>]
         static member cite(this: #blockquote, value: string) =
-            this.OnEval(fun x -> x.setAttribute("cite", value))
+            this.OnEval(fun x ctx -> x.setAttribute("cite", value))
         
     
         // Events
@@ -1665,57 +2313,57 @@ type buttonExtensions =
         /// Specifies that a button should automatically get focus when the page loads
         [<Extension>]
         static member autofocus(this: #button, value: string) =
-            this.OnEval(fun x -> x.setAttribute("autofocus", value))
+            this.OnEval(fun x ctx -> x.setAttribute("autofocus", value))
         
         /// Specifies that a button should be disabled
         [<Extension>]
         static member disabled(this: #button, value: string) =
-            this.OnEval(fun x -> x.setAttribute("disabled", value))
+            this.OnEval(fun x ctx -> x.setAttribute("disabled", value))
         
         /// Specifies which form the button belongs to
         [<Extension>]
         static member form(this: #button, value: string) =
-            this.OnEval(fun x -> x.setAttribute("form", value))
+            this.OnEval(fun x ctx -> x.setAttribute("form", value))
         
         /// Specifies where to send the form-data when a form is submitted. Only for type="submit"
         [<Extension>]
         static member formaction(this: #button, value: string) =
-            this.OnEval(fun x -> x.setAttribute("formaction", value))
+            this.OnEval(fun x ctx -> x.setAttribute("formaction", value))
         
         /// Specifies how form-data should be encoded before sending it to a server. Only for type="submit"
         [<Extension>]
         static member formenctype(this: #button, value: string) =
-            this.OnEval(fun x -> x.setAttribute("formenctype", value))
+            this.OnEval(fun x ctx -> x.setAttribute("formenctype", value))
         
         /// Specifies how to send the form-data (which HTTP method to use). Only for type="submit"
         [<Extension>]
         static member formmethod(this: #button, value: string) =
-            this.OnEval(fun x -> x.setAttribute("formmethod", value))
+            this.OnEval(fun x ctx -> x.setAttribute("formmethod", value))
         
         /// Specifies that the form-data should not be validated on submission. Only for type="submit"
         [<Extension>]
         static member formnovalidate(this: #button, value: string) =
-            this.OnEval(fun x -> x.setAttribute("formnovalidate", value))
+            this.OnEval(fun x ctx -> x.setAttribute("formnovalidate", value))
         
         /// Specifies where to display the response after submitting the form. Only for type="submit"
         [<Extension>]
         static member formtarget(this: #button, value: string) =
-            this.OnEval(fun x -> x.setAttribute("formtarget", value))
+            this.OnEval(fun x ctx -> x.setAttribute("formtarget", value))
         
         /// Specifies a name for the button
         [<Extension>]
         static member name(this: #button, value: string) =
-            this.OnEval(fun x -> x.setAttribute("name", value))
+            this.OnEval(fun x ctx -> x.setAttribute("name", value))
         
         /// Specifies the type of button
         [<Extension>]
         static member type'(this: #button, value: string) =
-            this.OnEval(fun x -> x.setAttribute("type", value))
+            this.OnEval(fun x ctx -> x.setAttribute("type", value))
         
         /// Specifies an initial value for the button
         [<Extension>]
         static member value(this: #button, value: string) =
-            this.OnEval(fun x -> x.setAttribute("value", value))
+            this.OnEval(fun x ctx -> x.setAttribute("value", value))
         
     
         // Events
@@ -1730,12 +2378,12 @@ type canvasExtensions =
         /// Specifies the height of the canvas. Default value is 150
         [<Extension>]
         static member height(this: #canvas, value: string) =
-            this.OnEval(fun x -> x.setAttribute("height", value))
+            this.OnEval(fun x ctx -> x.setAttribute("height", value))
         
         /// Specifies the width of the canvas Default value is 300
         [<Extension>]
         static member width(this: #canvas, value: string) =
-            this.OnEval(fun x -> x.setAttribute("width", value))
+            this.OnEval(fun x ctx -> x.setAttribute("width", value))
         
     
         // Events
@@ -1780,7 +2428,7 @@ type colExtensions =
         /// Specifies the number of columns a <col> element should span
         [<Extension>]
         static member span(this: #col, value: string) =
-            this.OnEval(fun x -> x.setAttribute("span", value))
+            this.OnEval(fun x ctx -> x.setAttribute("span", value))
         
     
         // Events
@@ -1795,7 +2443,7 @@ type colgroupExtensions =
         /// Specifies the number of columns a column group should span
         [<Extension>]
         static member span(this: #colgroup, value: string) =
-            this.OnEval(fun x -> x.setAttribute("span", value))
+            this.OnEval(fun x ctx -> x.setAttribute("span", value))
         
     
         // Events
@@ -1810,7 +2458,7 @@ type dataExtensions =
         /// Specifies the machine-readable translation of the content of the element
         [<Extension>]
         static member value(this: #data, value: string) =
-            this.OnEval(fun x -> x.setAttribute("value", value))
+            this.OnEval(fun x ctx -> x.setAttribute("value", value))
         
     
         // Events
@@ -1845,12 +2493,12 @@ type delExtensions =
         /// Specifies a URL to a document that explains the reason why the text was deleted/changed
         [<Extension>]
         static member cite(this: #del, value: string) =
-            this.OnEval(fun x -> x.setAttribute("cite", value))
+            this.OnEval(fun x ctx -> x.setAttribute("cite", value))
         
         /// Specifies the date and time of when the text was deleted/changed
         [<Extension>]
         static member datetime(this: #del, value: string) =
-            this.OnEval(fun x -> x.setAttribute("datetime", value))
+            this.OnEval(fun x ctx -> x.setAttribute("datetime", value))
         
     
         // Events
@@ -1865,7 +2513,7 @@ type detailsExtensions =
         /// Specifies that the details should be visible (open) to the user
         [<Extension>]
         static member open'(this: #details, value: string) =
-            this.OnEval(fun x -> x.setAttribute("open", value))
+            this.OnEval(fun x ctx -> x.setAttribute("open", value))
         
     
         // Events
@@ -1890,7 +2538,7 @@ type dialogExtensions =
         /// Specifies that the dialog element is active and that the user can interact with it
         [<Extension>]
         static member open'(this: #dialog, value: string) =
-            this.OnEval(fun x -> x.setAttribute("open", value))
+            this.OnEval(fun x ctx -> x.setAttribute("open", value))
         
     
         // Events
@@ -1945,22 +2593,22 @@ type embedExtensions =
         /// Specifies the height of the embedded content
         [<Extension>]
         static member height(this: #embed, value: string) =
-            this.OnEval(fun x -> x.setAttribute("height", value))
+            this.OnEval(fun x ctx -> x.setAttribute("height", value))
         
         /// Specifies the address of the external file to embed
         [<Extension>]
         static member src(this: #embed, value: string) =
-            this.OnEval(fun x -> x.setAttribute("src", value))
+            this.OnEval(fun x ctx -> x.setAttribute("src", value))
         
         /// Specifies the media type of the embedded content
         [<Extension>]
         static member type'(this: #embed, value: string) =
-            this.OnEval(fun x -> x.setAttribute("type", value))
+            this.OnEval(fun x ctx -> x.setAttribute("type", value))
         
         /// Specifies the width of the embedded content
         [<Extension>]
         static member width(this: #embed, value: string) =
-            this.OnEval(fun x -> x.setAttribute("width", value))
+            this.OnEval(fun x ctx -> x.setAttribute("width", value))
         
     
         // Events
@@ -1975,17 +2623,17 @@ type fieldsetExtensions =
         /// Specifies that a group of related form elements should be disabled
         [<Extension>]
         static member disabled(this: #fieldset, value: string) =
-            this.OnEval(fun x -> x.setAttribute("disabled", value))
+            this.OnEval(fun x ctx -> x.setAttribute("disabled", value))
         
         /// Specifies which form the fieldset belongs to
         [<Extension>]
         static member form(this: #fieldset, value: string) =
-            this.OnEval(fun x -> x.setAttribute("form", value))
+            this.OnEval(fun x ctx -> x.setAttribute("form", value))
         
         /// Specifies a name for the fieldset
         [<Extension>]
         static member name(this: #fieldset, value: string) =
-            this.OnEval(fun x -> x.setAttribute("name", value))
+            this.OnEval(fun x ctx -> x.setAttribute("name", value))
         
     
         // Events
@@ -2030,47 +2678,47 @@ type formExtensions =
         /// Specifies the character encodings that are to be used for the form submission
         [<Extension>]
         static member acceptCharset(this: #form, value: string) =
-            this.OnEval(fun x -> x.setAttribute("accept-charset", value))
+            this.OnEval(fun x ctx -> x.setAttribute("accept-charset", value))
         
         /// Specifies where to send the form-data when a form is submitted
         [<Extension>]
         static member action(this: #form, value: string) =
-            this.OnEval(fun x -> x.setAttribute("action", value))
+            this.OnEval(fun x ctx -> x.setAttribute("action", value))
         
         /// Specifies whether a form should have autocomplete on or off
         [<Extension>]
         static member autocomplete(this: #form, value: string) =
-            this.OnEval(fun x -> x.setAttribute("autocomplete", value))
+            this.OnEval(fun x ctx -> x.setAttribute("autocomplete", value))
         
         /// Specifies how the form-data should be encoded when submitting it to the server (only for method="post")
         [<Extension>]
         static member enctype(this: #form, value: string) =
-            this.OnEval(fun x -> x.setAttribute("enctype", value))
+            this.OnEval(fun x ctx -> x.setAttribute("enctype", value))
         
         /// Specifies the HTTP method to use when sending form-data
         [<Extension>]
         static member method(this: #form, value: string) =
-            this.OnEval(fun x -> x.setAttribute("method", value))
+            this.OnEval(fun x ctx -> x.setAttribute("method", value))
         
         /// Specifies the name of a form
         [<Extension>]
         static member name(this: #form, value: string) =
-            this.OnEval(fun x -> x.setAttribute("name", value))
+            this.OnEval(fun x ctx -> x.setAttribute("name", value))
         
         /// Specifies that the form should not be validated when submitted
         [<Extension>]
         static member novalidate(this: #form, value: string) =
-            this.OnEval(fun x -> x.setAttribute("novalidate", value))
+            this.OnEval(fun x ctx -> x.setAttribute("novalidate", value))
         
         /// Specifies the relationship between a linked resource and the current document
         [<Extension>]
         static member rel(this: #form, value: string) =
-            this.OnEval(fun x -> x.setAttribute("rel", value))
+            this.OnEval(fun x ctx -> x.setAttribute("rel", value))
         
         /// Specifies where to display the response that is received after submitting the form
         [<Extension>]
         static member target(this: #form, value: string) =
-            this.OnEval(fun x -> x.setAttribute("target", value))
+            this.OnEval(fun x ctx -> x.setAttribute("target", value))
         
     
         // Events
@@ -2175,7 +2823,7 @@ type htmlExtensions =
         /// Specifies the XML namespace attribute (If you need your content to conform to XHTML)
         [<Extension>]
         static member xmlns(this: #html, value: string) =
-            this.OnEval(fun x -> x.setAttribute("xmlns", value))
+            this.OnEval(fun x ctx -> x.setAttribute("xmlns", value))
         
     
         // Events
@@ -2200,57 +2848,57 @@ type iframeExtensions =
         /// Specifies a feature policy for the <iframe>
         [<Extension>]
         static member allow(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.setAttribute("allow", value))
+            this.OnEval(fun x ctx -> x.setAttribute("allow", value))
         
         /// Set to true if the <iframe> can activate fullscreen mode by calling the requestFullscreen() method
         [<Extension>]
         static member allowfullscreen(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.setAttribute("allowfullscreen", value))
+            this.OnEval(fun x ctx -> x.setAttribute("allowfullscreen", value))
         
         /// Set to true if a cross-origin <iframe> should be allowed to invoke the Payment Request API
         [<Extension>]
         static member allowpaymentrequest(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.setAttribute("allowpaymentrequest", value))
+            this.OnEval(fun x ctx -> x.setAttribute("allowpaymentrequest", value))
         
         /// Specifies the height of an <iframe>. Default height is 150 pixels
         [<Extension>]
         static member height(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.setAttribute("height", value))
+            this.OnEval(fun x ctx -> x.setAttribute("height", value))
         
         /// Specifies whether a browser should load an iframe immediately or to defer loading of iframes until some conditions are met
         [<Extension>]
         static member loading(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.setAttribute("loading", value))
+            this.OnEval(fun x ctx -> x.setAttribute("loading", value))
         
         /// Specifies the name of an <iframe>
         [<Extension>]
         static member name(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.setAttribute("name", value))
+            this.OnEval(fun x ctx -> x.setAttribute("name", value))
         
         /// Specifies which referrer information to send when fetching the iframe 
         [<Extension>]
         static member referrerpolicy(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
+            this.OnEval(fun x ctx -> x.setAttribute("referrerpolicy", value))
         
         /// Enables an extra set of restrictions for the content in an <iframe>
         [<Extension>]
         static member sandbox(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.setAttribute("sandbox", value))
+            this.OnEval(fun x ctx -> x.setAttribute("sandbox", value))
         
         /// Specifies the address of the document to embed in the <iframe>
         [<Extension>]
         static member src(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.setAttribute("src", value))
+            this.OnEval(fun x ctx -> x.setAttribute("src", value))
         
         /// Specifies the HTML content of the page to show in the <iframe>
         [<Extension>]
         static member srcdoc(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.setAttribute("srcdoc", value))
+            this.OnEval(fun x ctx -> x.setAttribute("srcdoc", value))
         
         /// Specifies the width of an <iframe>. Default width is 300 pixels
         [<Extension>]
         static member width(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.setAttribute("width", value))
+            this.OnEval(fun x ctx -> x.setAttribute("width", value))
         
     
         // Events
@@ -2265,62 +2913,62 @@ type imgExtensions =
         /// Specifies an alternate text for an image
         [<Extension>]
         static member alt(this: #img, value: string) =
-            this.OnEval(fun x -> x.setAttribute("alt", value))
+            this.OnEval(fun x ctx -> x.setAttribute("alt", value))
         
         /// Allow images from third-party sites that allow cross-origin access to be used with canvas
         [<Extension>]
         static member crossorigin(this: #img, value: string) =
-            this.OnEval(fun x -> x.setAttribute("crossorigin", value))
+            this.OnEval(fun x ctx -> x.setAttribute("crossorigin", value))
         
         /// Specifies the height of an image
         [<Extension>]
         static member height(this: #img, value: string) =
-            this.OnEval(fun x -> x.setAttribute("height", value))
+            this.OnEval(fun x ctx -> x.setAttribute("height", value))
         
         /// Specifies an image as a server-side image map
         [<Extension>]
         static member ismap(this: #img, value: string) =
-            this.OnEval(fun x -> x.setAttribute("ismap", value))
+            this.OnEval(fun x ctx -> x.setAttribute("ismap", value))
         
         /// Specifies whether a browser should load an image immediately or to defer loading of images until some conditions are met
         [<Extension>]
         static member loading(this: #img, value: string) =
-            this.OnEval(fun x -> x.setAttribute("loading", value))
+            this.OnEval(fun x ctx -> x.setAttribute("loading", value))
         
         /// Specifies a URL to a detailed description of an image
         [<Extension>]
         static member longdesc(this: #img, value: string) =
-            this.OnEval(fun x -> x.setAttribute("longdesc", value))
+            this.OnEval(fun x ctx -> x.setAttribute("longdesc", value))
         
         /// Specifies which referrer information to use when fetching an image
         [<Extension>]
         static member referrerpolicy(this: #img, value: string) =
-            this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
+            this.OnEval(fun x ctx -> x.setAttribute("referrerpolicy", value))
         
         /// Specifies image sizes for different page layouts
         [<Extension>]
         static member sizes(this: #img, value: string) =
-            this.OnEval(fun x -> x.setAttribute("sizes", value))
+            this.OnEval(fun x ctx -> x.setAttribute("sizes", value))
         
         /// Specifies the path to the image
         [<Extension>]
         static member src(this: #img, value: string) =
-            this.OnEval(fun x -> x.setAttribute("src", value))
+            this.OnEval(fun x ctx -> x.setAttribute("src", value))
         
         /// Specifies a list of image files to use in different situations
         [<Extension>]
         static member srcset(this: #img, value: string) =
-            this.OnEval(fun x -> x.setAttribute("srcset", value))
+            this.OnEval(fun x ctx -> x.setAttribute("srcset", value))
         
         /// Specifies an image as a client-side image map
         [<Extension>]
         static member usemap(this: #img, value: string) =
-            this.OnEval(fun x -> x.setAttribute("usemap", value))
+            this.OnEval(fun x ctx -> x.setAttribute("usemap", value))
         
         /// Specifies the width of an image
         [<Extension>]
         static member width(this: #img, value: string) =
-            this.OnEval(fun x -> x.setAttribute("width", value))
+            this.OnEval(fun x ctx -> x.setAttribute("width", value))
         
     
         // Events
@@ -2335,158 +2983,158 @@ type inputExtensions =
         /// Specifies a filter for what file types the user can pick from the file input dialog box (only for type="file")
         [<Extension>]
         static member accept(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("accept", value))
+            this.OnEval(fun x ctx -> x.setAttribute("accept", value))
         
         /// Specifies an alternate text for images (only for type="image")
         [<Extension>]
         static member alt(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("alt", value))
+            this.OnEval(fun x ctx -> x.setAttribute("alt", value))
         
         /// Specifies whether an <input> element should have autocomplete enabled
         [<Extension>]
         static member autocomplete(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("autocomplete", value))
+            this.OnEval(fun x ctx -> x.setAttribute("autocomplete", value))
         
         /// Specifies that an <input> element should automatically get focus when the page loads
         [<Extension>]
         static member autofocus(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("autofocus", value))
+            this.OnEval(fun x ctx -> x.setAttribute("autofocus", value))
         
         /// Specifies that an <input> element should be pre-selected when the page loads (for type="checkbox" or type="radio")
         [<Extension>]
         static member checked'(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("checked", value))
+            this.OnEval(fun x ctx -> x.setAttribute("checked", value))
         
         /// Specifies that the text direction will be submitted
         [<Extension>]
         static member dirname(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("dirname", value))
+            this.OnEval(fun x ctx -> x.setAttribute("dirname", value))
         
         /// Specifies that an <input> element should be disabled
         [<Extension>]
         static member disabled(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("disabled", value))
+            this.OnEval(fun x ctx -> x.setAttribute("disabled", value))
         
         /// Specifies the form the <input> element belongs to
         [<Extension>]
         static member form(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("form", value))
+            this.OnEval(fun x ctx -> x.setAttribute("form", value))
         
         /// Specifies the URL of the file that will process the input control when the form is submitted (for type="submit" and type="image")
         [<Extension>]
         static member formaction(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("formaction", value))
+            this.OnEval(fun x ctx -> x.setAttribute("formaction", value))
         
         /// Specifies how the form-data should be encoded when submitting it to the server (for type="submit" and type="image")
         [<Extension>]
         static member formenctype(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("formenctype", value))
+            this.OnEval(fun x ctx -> x.setAttribute("formenctype", value))
         
         /// Defines the HTTP method for sending data to the action URL (for type="submit" and type="image")
         [<Extension>]
         static member formmethod(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("formmethod", value))
+            this.OnEval(fun x ctx -> x.setAttribute("formmethod", value))
         
         /// Defines that form elements should not be validated when submitted
         [<Extension>]
         static member formnovalidate(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("formnovalidate", value))
+            this.OnEval(fun x ctx -> x.setAttribute("formnovalidate", value))
         
         /// Specifies where to display the response that is received after submitting the form (for type="submit" and type="image")
         [<Extension>]
         static member formtarget(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("formtarget", value))
+            this.OnEval(fun x ctx -> x.setAttribute("formtarget", value))
         
         /// Specifies the height of an <input> element (only for type="image")
         [<Extension>]
         static member height(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("height", value))
+            this.OnEval(fun x ctx -> x.setAttribute("height", value))
         
         /// Refers to a <datalist> element that contains pre-defined options for an <input> element
         [<Extension>]
         static member list(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("list", value))
+            this.OnEval(fun x ctx -> x.setAttribute("list", value))
         
         /// Specifies the maximum value for an <input> element
         [<Extension>]
         static member max(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("max", value))
+            this.OnEval(fun x ctx -> x.setAttribute("max", value))
         
         /// Specifies the maximum number of characters allowed in an <input> element
         [<Extension>]
         static member maxlength(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("maxlength", value))
+            this.OnEval(fun x ctx -> x.setAttribute("maxlength", value))
         
         /// Specifies a minimum value for an <input> element
         [<Extension>]
         static member min(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("min", value))
+            this.OnEval(fun x ctx -> x.setAttribute("min", value))
         
         /// Specifies the minimum number of characters required in an <input> element
         [<Extension>]
         static member minlength(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("minlength", value))
+            this.OnEval(fun x ctx -> x.setAttribute("minlength", value))
         
         /// Specifies that a user can enter more than one value in an <input> element
         [<Extension>]
         static member multiple(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("multiple", value))
+            this.OnEval(fun x ctx -> x.setAttribute("multiple", value))
         
         /// Specifies the name of an <input> element
         [<Extension>]
         static member name(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("name", value))
+            this.OnEval(fun x ctx -> x.setAttribute("name", value))
         
         /// Specifies a regular expression that an <input> element's value is checked against
         [<Extension>]
         static member pattern(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("pattern", value))
+            this.OnEval(fun x ctx -> x.setAttribute("pattern", value))
         
         /// Specifies a short hint that describes the expected value of an <input> element
         [<Extension>]
         static member placeholder(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("placeholder", value))
+            this.OnEval(fun x ctx -> x.setAttribute("placeholder", value))
         
         /// Specifies that an input field is read-only
         [<Extension>]
         static member readonly(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("readonly", value))
+            this.OnEval(fun x ctx -> x.setAttribute("readonly", value))
         
         /// Specifies that an input field must be filled out before submitting the form
         [<Extension>]
         static member required(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("required", value))
+            this.OnEval(fun x ctx -> x.setAttribute("required", value))
         
         /// Specifies the width, in characters, of an <input> element
         [<Extension>]
         static member size(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("size", value))
+            this.OnEval(fun x ctx -> x.setAttribute("size", value))
         
         /// Specifies the URL of the image to use as a submit button (only for type="image")
         [<Extension>]
         static member src(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("src", value))
+            this.OnEval(fun x ctx -> x.setAttribute("src", value))
         
         /// Specifies the interval between legal numbers in an input field
         [<Extension>]
         static member step(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("step", value))
+            this.OnEval(fun x ctx -> x.setAttribute("step", value))
         
         /// Specifies the type <input> element to display
         [<Extension>]
         static member type'(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("type", value))
+            this.OnEval(fun x ctx -> x.setAttribute("type", value))
         
         /// Specifies the value of an <input> element
         ///  
         [<Extension>]
         static member value(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("value", value))
+            this.OnEval(fun x ctx -> x.setAttribute("value", value))
         
         /// Specifies the width of an <input> element (only for type="image")
         [<Extension>]
         static member width(this: #input, value: string) =
-            this.OnEval(fun x -> x.setAttribute("width", value))
+            this.OnEval(fun x ctx -> x.setAttribute("width", value))
         
     
         // Events
@@ -2501,12 +3149,12 @@ type insExtensions =
         /// Specifies a URL to a document that explains the reason why the text was inserted/changed
         [<Extension>]
         static member cite(this: #ins, value: string) =
-            this.OnEval(fun x -> x.setAttribute("cite", value))
+            this.OnEval(fun x ctx -> x.setAttribute("cite", value))
         
         /// Specifies the date and time when the text was inserted/changed
         [<Extension>]
         static member datetime(this: #ins, value: string) =
-            this.OnEval(fun x -> x.setAttribute("datetime", value))
+            this.OnEval(fun x ctx -> x.setAttribute("datetime", value))
         
     
         // Events
@@ -2531,12 +3179,12 @@ type labelExtensions =
         /// Specifies the id of the form element the label should be bound to
         [<Extension>]
         static member for'(this: #label, value: string) =
-            this.OnEval(fun x -> x.setAttribute("for", value))
+            this.OnEval(fun x ctx -> x.setAttribute("for", value))
         
         /// Specifies which form the label belongs to
         [<Extension>]
         static member form(this: #label, value: string) =
-            this.OnEval(fun x -> x.setAttribute("form", value))
+            this.OnEval(fun x ctx -> x.setAttribute("form", value))
         
     
         // Events
@@ -2561,7 +3209,7 @@ type liExtensions =
         /// Only for <ol> lists. Specifies the start value of a list item. The following list items will increment from that number
         [<Extension>]
         static member value(this: #li, value: string) =
-            this.OnEval(fun x -> x.setAttribute("value", value))
+            this.OnEval(fun x ctx -> x.setAttribute("value", value))
         
     
         // Events
@@ -2576,47 +3224,47 @@ type linkExtensions =
         /// Specifies how the element handles cross-origin requests
         [<Extension>]
         static member crossorigin(this: #link, value: string) =
-            this.OnEval(fun x -> x.setAttribute("crossorigin", value))
+            this.OnEval(fun x ctx -> x.setAttribute("crossorigin", value))
         
         /// Specifies the location of the linked document
         [<Extension>]
         static member href(this: #link, value: string) =
-            this.OnEval(fun x -> x.setAttribute("href", value))
+            this.OnEval(fun x ctx -> x.setAttribute("href", value))
         
         /// Specifies the language of the text in the linked document
         [<Extension>]
         static member hreflang(this: #link, value: string) =
-            this.OnEval(fun x -> x.setAttribute("hreflang", value))
+            this.OnEval(fun x ctx -> x.setAttribute("hreflang", value))
         
         /// Specifies on what device the linked document will be displayed
         [<Extension>]
         static member media(this: #link, value: string) =
-            this.OnEval(fun x -> x.setAttribute("media", value))
+            this.OnEval(fun x ctx -> x.setAttribute("media", value))
         
         /// Specifies which referrer to use when fetching the resource
         [<Extension>]
         static member referrerpolicy(this: #link, value: string) =
-            this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
+            this.OnEval(fun x ctx -> x.setAttribute("referrerpolicy", value))
         
         /// Required. Specifies the relationship between the current document and the linked document
         [<Extension>]
         static member rel(this: #link, value: string) =
-            this.OnEval(fun x -> x.setAttribute("rel", value))
+            this.OnEval(fun x ctx -> x.setAttribute("rel", value))
         
         /// Specifies the size of the linked resource. Only for rel="icon"
         [<Extension>]
         static member sizes(this: #link, value: string) =
-            this.OnEval(fun x -> x.setAttribute("sizes", value))
+            this.OnEval(fun x ctx -> x.setAttribute("sizes", value))
         
         /// Defines a preferred or an alternate stylesheet
         [<Extension>]
         static member title(this: #link, value: string) =
-            this.OnEval(fun x -> x.setAttribute("title", value))
+            this.OnEval(fun x ctx -> x.setAttribute("title", value))
         
         /// Specifies the media type of the linked document
         [<Extension>]
         static member type'(this: #link, value: string) =
-            this.OnEval(fun x -> x.setAttribute("type", value))
+            this.OnEval(fun x ctx -> x.setAttribute("type", value))
         
     
         // Events
@@ -2641,7 +3289,7 @@ type mapExtensions =
         /// Required. Specifies the name of the image map
         [<Extension>]
         static member name(this: #map, value: string) =
-            this.OnEval(fun x -> x.setAttribute("name", value))
+            this.OnEval(fun x ctx -> x.setAttribute("name", value))
         
     
         // Events
@@ -2666,22 +3314,22 @@ type metaExtensions =
         /// Specifies the character encoding for the HTML document 
         [<Extension>]
         static member charset(this: #meta, value: string) =
-            this.OnEval(fun x -> x.setAttribute("charset", value))
+            this.OnEval(fun x ctx -> x.setAttribute("charset", value))
         
         /// Specifies the value associated with the http-equiv or name attribute
         [<Extension>]
         static member content(this: #meta, value: string) =
-            this.OnEval(fun x -> x.setAttribute("content", value))
+            this.OnEval(fun x ctx -> x.setAttribute("content", value))
         
         /// Provides an HTTP header for the information/value of the content attribute
         [<Extension>]
         static member httpEquiv(this: #meta, value: string) =
-            this.OnEval(fun x -> x.setAttribute("http-equiv", value))
+            this.OnEval(fun x ctx -> x.setAttribute("http-equiv", value))
         
         /// Specifies a name for the metadata
         [<Extension>]
         static member name(this: #meta, value: string) =
-            this.OnEval(fun x -> x.setAttribute("name", value))
+            this.OnEval(fun x ctx -> x.setAttribute("name", value))
         
     
         // Events
@@ -2696,37 +3344,37 @@ type meterExtensions =
         /// Specifies which form the <meter> element belongs to
         [<Extension>]
         static member form(this: #meter, value: string) =
-            this.OnEval(fun x -> x.setAttribute("form", value))
+            this.OnEval(fun x ctx -> x.setAttribute("form", value))
         
         /// Specifies the range that is considered to be a high value
         [<Extension>]
         static member high(this: #meter, value: string) =
-            this.OnEval(fun x -> x.setAttribute("high", value))
+            this.OnEval(fun x ctx -> x.setAttribute("high", value))
         
         /// Specifies the range that is considered to be a low value
         [<Extension>]
         static member low(this: #meter, value: string) =
-            this.OnEval(fun x -> x.setAttribute("low", value))
+            this.OnEval(fun x ctx -> x.setAttribute("low", value))
         
         /// Specifies the maximum value of the range
         [<Extension>]
         static member max(this: #meter, value: string) =
-            this.OnEval(fun x -> x.setAttribute("max", value))
+            this.OnEval(fun x ctx -> x.setAttribute("max", value))
         
         /// Specifies the minimum value of the range. Default value is 0
         [<Extension>]
         static member min(this: #meter, value: string) =
-            this.OnEval(fun x -> x.setAttribute("min", value))
+            this.OnEval(fun x ctx -> x.setAttribute("min", value))
         
         /// Specifies what value is the optimal value for the gauge
         [<Extension>]
         static member optimum(this: #meter, value: string) =
-            this.OnEval(fun x -> x.setAttribute("optimum", value))
+            this.OnEval(fun x ctx -> x.setAttribute("optimum", value))
         
         /// Required. Specifies the current value of the gauge
         [<Extension>]
         static member value(this: #meter, value: string) =
-            this.OnEval(fun x -> x.setAttribute("value", value))
+            this.OnEval(fun x ctx -> x.setAttribute("value", value))
         
     
         // Events
@@ -2761,42 +3409,42 @@ type objectExtensions =
         /// Specifies the URL of the resource to be used by the object
         [<Extension>]
         static member data(this: #object, value: string) =
-            this.OnEval(fun x -> x.setAttribute("data", value))
+            this.OnEval(fun x ctx -> x.setAttribute("data", value))
         
         /// Specifies which form the object belongs to
         [<Extension>]
         static member form(this: #object, value: string) =
-            this.OnEval(fun x -> x.setAttribute("form", value))
+            this.OnEval(fun x ctx -> x.setAttribute("form", value))
         
         /// Specifies the height of the object
         [<Extension>]
         static member height(this: #object, value: string) =
-            this.OnEval(fun x -> x.setAttribute("height", value))
+            this.OnEval(fun x ctx -> x.setAttribute("height", value))
         
         /// Specifies a name for the object
         [<Extension>]
         static member name(this: #object, value: string) =
-            this.OnEval(fun x -> x.setAttribute("name", value))
+            this.OnEval(fun x ctx -> x.setAttribute("name", value))
         
         /// Specifies the media type of data specified in the data attribute
         [<Extension>]
         static member type'(this: #object, value: string) =
-            this.OnEval(fun x -> x.setAttribute("type", value))
+            this.OnEval(fun x ctx -> x.setAttribute("type", value))
         
         /// Specifies whether the type attribute and the actual content of the resource must match to be displayed
         [<Extension>]
         static member typemustmatch(this: #object, value: string) =
-            this.OnEval(fun x -> x.setAttribute("typemustmatch", value))
+            this.OnEval(fun x ctx -> x.setAttribute("typemustmatch", value))
         
         /// Specifies the name of a client-side image map to be used with the object
         [<Extension>]
         static member usemap(this: #object, value: string) =
-            this.OnEval(fun x -> x.setAttribute("usemap", value))
+            this.OnEval(fun x ctx -> x.setAttribute("usemap", value))
         
         /// Specifies the width of the object
         [<Extension>]
         static member width(this: #object, value: string) =
-            this.OnEval(fun x -> x.setAttribute("width", value))
+            this.OnEval(fun x ctx -> x.setAttribute("width", value))
         
     
         // Events
@@ -2811,17 +3459,17 @@ type olExtensions =
         /// Specifies that the list order should be reversed (9,8,7...)
         [<Extension>]
         static member reversed(this: #ol, value: string) =
-            this.OnEval(fun x -> x.setAttribute("reversed", value))
+            this.OnEval(fun x ctx -> x.setAttribute("reversed", value))
         
         /// Specifies the start value of an ordered list
         [<Extension>]
         static member start(this: #ol, value: string) =
-            this.OnEval(fun x -> x.setAttribute("start", value))
+            this.OnEval(fun x ctx -> x.setAttribute("start", value))
         
         /// Specifies the kind of marker to use in the list
         [<Extension>]
         static member type'(this: #ol, value: string) =
-            this.OnEval(fun x -> x.setAttribute("type", value))
+            this.OnEval(fun x ctx -> x.setAttribute("type", value))
         
     
         // Events
@@ -2836,12 +3484,12 @@ type optgroupExtensions =
         /// Specifies that an option-group should be disabled
         [<Extension>]
         static member disabled(this: #optgroup, value: string) =
-            this.OnEval(fun x -> x.setAttribute("disabled", value))
+            this.OnEval(fun x ctx -> x.setAttribute("disabled", value))
         
         /// Specifies a label for an option-group
         [<Extension>]
         static member label(this: #optgroup, value: string) =
-            this.OnEval(fun x -> x.setAttribute("label", value))
+            this.OnEval(fun x ctx -> x.setAttribute("label", value))
         
     
         // Events
@@ -2856,22 +3504,22 @@ type optionExtensions =
         /// Specifies that an option should be disabled
         [<Extension>]
         static member disabled(this: #option, value: string) =
-            this.OnEval(fun x -> x.setAttribute("disabled", value))
+            this.OnEval(fun x ctx -> x.setAttribute("disabled", value))
         
         /// Specifies a shorter label for an option
         [<Extension>]
         static member label(this: #option, value: string) =
-            this.OnEval(fun x -> x.setAttribute("label", value))
+            this.OnEval(fun x ctx -> x.setAttribute("label", value))
         
         /// Specifies that an option should be pre-selected when the page loads
         [<Extension>]
         static member selected(this: #option, value: string) =
-            this.OnEval(fun x -> x.setAttribute("selected", value))
+            this.OnEval(fun x ctx -> x.setAttribute("selected", value))
         
         /// Specifies the value to be sent to a server
         [<Extension>]
         static member value(this: #option, value: string) =
-            this.OnEval(fun x -> x.setAttribute("value", value))
+            this.OnEval(fun x ctx -> x.setAttribute("value", value))
         
     
         // Events
@@ -2886,17 +3534,17 @@ type outputExtensions =
         /// Specifies the relationship between the result of the calculation, and the elements used in the calculation
         [<Extension>]
         static member for'(this: #output, value: string) =
-            this.OnEval(fun x -> x.setAttribute("for", value))
+            this.OnEval(fun x ctx -> x.setAttribute("for", value))
         
         /// Specifies which form the output element belongs to
         [<Extension>]
         static member form(this: #output, value: string) =
-            this.OnEval(fun x -> x.setAttribute("form", value))
+            this.OnEval(fun x ctx -> x.setAttribute("form", value))
         
         /// Specifies a name for the output element
         [<Extension>]
         static member name(this: #output, value: string) =
-            this.OnEval(fun x -> x.setAttribute("name", value))
+            this.OnEval(fun x ctx -> x.setAttribute("name", value))
         
     
         // Events
@@ -2921,12 +3569,12 @@ type paramExtensions =
         /// Specifies the name of a parameter
         [<Extension>]
         static member name(this: #param, value: string) =
-            this.OnEval(fun x -> x.setAttribute("name", value))
+            this.OnEval(fun x ctx -> x.setAttribute("name", value))
         
         /// Specifies the value of the parameter
         [<Extension>]
         static member value(this: #param, value: string) =
-            this.OnEval(fun x -> x.setAttribute("value", value))
+            this.OnEval(fun x ctx -> x.setAttribute("value", value))
         
     
         // Events
@@ -2961,12 +3609,12 @@ type progressExtensions =
         /// Specifies how much work the task requires in total. Default value is 1
         [<Extension>]
         static member max(this: #progress, value: string) =
-            this.OnEval(fun x -> x.setAttribute("max", value))
+            this.OnEval(fun x ctx -> x.setAttribute("max", value))
         
         /// Specifies how much of the task has been completed
         [<Extension>]
         static member value(this: #progress, value: string) =
-            this.OnEval(fun x -> x.setAttribute("value", value))
+            this.OnEval(fun x ctx -> x.setAttribute("value", value))
         
     
         // Events
@@ -2981,7 +3629,7 @@ type qExtensions =
         /// Specifies the source URL of the quote
         [<Extension>]
         static member cite(this: #q, value: string) =
-            this.OnEval(fun x -> x.setAttribute("cite", value))
+            this.OnEval(fun x ctx -> x.setAttribute("cite", value))
         
     
         // Events
@@ -3046,42 +3694,42 @@ type scriptExtensions =
         /// Specifies that the script is downloaded in parallel to parsing the page, and executed as soon as it is available (before parsing completes) (only for external scripts)
         [<Extension>]
         static member async(this: #script, value: string) =
-            this.OnEval(fun x -> x.setAttribute("async", value))
+            this.OnEval(fun x ctx -> x.setAttribute("async", value))
         
         /// Sets the mode of the request to an HTTP CORS Request
         [<Extension>]
         static member crossorigin(this: #script, value: string) =
-            this.OnEval(fun x -> x.setAttribute("crossorigin", value))
+            this.OnEval(fun x ctx -> x.setAttribute("crossorigin", value))
         
         /// Specifies that the script is downloaded in parallel to parsing the page, and executed after the page has finished parsing (only for external scripts)
         [<Extension>]
         static member defer(this: #script, value: string) =
-            this.OnEval(fun x -> x.setAttribute("defer", value))
+            this.OnEval(fun x ctx -> x.setAttribute("defer", value))
         
         /// Allows a browser to check the fetched script to ensure that the code is never loaded if the source has been manipulated
         [<Extension>]
         static member integrity(this: #script, value: string) =
-            this.OnEval(fun x -> x.setAttribute("integrity", value))
+            this.OnEval(fun x ctx -> x.setAttribute("integrity", value))
         
         /// Specifies that the script should not be executed in browsers supporting ES2015 modules 
         [<Extension>]
         static member nomodule(this: #script, value: string) =
-            this.OnEval(fun x -> x.setAttribute("nomodule", value))
+            this.OnEval(fun x ctx -> x.setAttribute("nomodule", value))
         
         /// Specifies which referrer information to send when fetching a script
         [<Extension>]
         static member referrerpolicy(this: #script, value: string) =
-            this.OnEval(fun x -> x.setAttribute("referrerpolicy", value))
+            this.OnEval(fun x ctx -> x.setAttribute("referrerpolicy", value))
         
         /// Specifies the URL of an external script file
         [<Extension>]
         static member src(this: #script, value: string) =
-            this.OnEval(fun x -> x.setAttribute("src", value))
+            this.OnEval(fun x ctx -> x.setAttribute("src", value))
         
         /// Specifies the media type of the script
         [<Extension>]
         static member type'(this: #script, value: string) =
-            this.OnEval(fun x -> x.setAttribute("type", value))
+            this.OnEval(fun x ctx -> x.setAttribute("type", value))
         
     
         // Events
@@ -3106,37 +3754,37 @@ type selectExtensions =
         /// Specifies that the drop-down list should automatically get focus when the page loads
         [<Extension>]
         static member autofocus(this: #select, value: string) =
-            this.OnEval(fun x -> x.setAttribute("autofocus", value))
+            this.OnEval(fun x ctx -> x.setAttribute("autofocus", value))
         
         /// Specifies that a drop-down list should be disabled
         [<Extension>]
         static member disabled(this: #select, value: string) =
-            this.OnEval(fun x -> x.setAttribute("disabled", value))
+            this.OnEval(fun x ctx -> x.setAttribute("disabled", value))
         
         /// Defines which form the drop-down list belongs to
         [<Extension>]
         static member form(this: #select, value: string) =
-            this.OnEval(fun x -> x.setAttribute("form", value))
+            this.OnEval(fun x ctx -> x.setAttribute("form", value))
         
         /// Specifies that multiple options can be selected at once
         [<Extension>]
         static member multiple(this: #select, value: string) =
-            this.OnEval(fun x -> x.setAttribute("multiple", value))
+            this.OnEval(fun x ctx -> x.setAttribute("multiple", value))
         
         /// Defines a name for the drop-down list
         [<Extension>]
         static member name(this: #select, value: string) =
-            this.OnEval(fun x -> x.setAttribute("name", value))
+            this.OnEval(fun x ctx -> x.setAttribute("name", value))
         
         /// Specifies that the user is required to select a value before submitting the form
         [<Extension>]
         static member required(this: #select, value: string) =
-            this.OnEval(fun x -> x.setAttribute("required", value))
+            this.OnEval(fun x ctx -> x.setAttribute("required", value))
         
         /// Defines the number of visible options in a drop-down list
         [<Extension>]
         static member size(this: #select, value: string) =
-            this.OnEval(fun x -> x.setAttribute("size", value))
+            this.OnEval(fun x ctx -> x.setAttribute("size", value))
         
     
         // Events
@@ -3161,27 +3809,27 @@ type sourceExtensions =
         /// Accepts any valid media query that would normally be defined in a CSS 
         [<Extension>]
         static member media(this: #source, value: string) =
-            this.OnEval(fun x -> x.setAttribute("media", value))
+            this.OnEval(fun x ctx -> x.setAttribute("media", value))
         
         /// Specifies image sizes for different page layouts
         [<Extension>]
         static member sizes(this: #source, value: string) =
-            this.OnEval(fun x -> x.setAttribute("sizes", value))
+            this.OnEval(fun x ctx -> x.setAttribute("sizes", value))
         
         /// Required when <source> is used in <audio> and <video>. Specifies the URL of the media file
         [<Extension>]
         static member src(this: #source, value: string) =
-            this.OnEval(fun x -> x.setAttribute("src", value))
+            this.OnEval(fun x ctx -> x.setAttribute("src", value))
         
         /// Required when <source> is used in <picture>. Specifies the URL of the image to use in different situations
         [<Extension>]
         static member srcset(this: #source, value: string) =
-            this.OnEval(fun x -> x.setAttribute("srcset", value))
+            this.OnEval(fun x ctx -> x.setAttribute("srcset", value))
         
         /// Specifies the MIME-type of the resource
         [<Extension>]
         static member type'(this: #source, value: string) =
-            this.OnEval(fun x -> x.setAttribute("type", value))
+            this.OnEval(fun x ctx -> x.setAttribute("type", value))
         
     
         // Events
@@ -3216,12 +3864,12 @@ type styleExtensions =
         /// Specifies what media/device the media resource is optimized for
         [<Extension>]
         static member media(this: #style, value: string) =
-            this.OnEval(fun x -> x.setAttribute("media", value))
+            this.OnEval(fun x ctx -> x.setAttribute("media", value))
         
         /// Specifies the media type of the <style> tag
         [<Extension>]
         static member type'(this: #style, value: string) =
-            this.OnEval(fun x -> x.setAttribute("type", value))
+            this.OnEval(fun x ctx -> x.setAttribute("type", value))
         
     
         // Events
@@ -3286,17 +3934,17 @@ type tdExtensions =
         /// Specifies the number of columns a cell should span
         [<Extension>]
         static member colspan(this: #td, value: string) =
-            this.OnEval(fun x -> x.setAttribute("colspan", value))
+            this.OnEval(fun x ctx -> x.setAttribute("colspan", value))
         
         /// Specifies one or more header cells a cell is related to
         [<Extension>]
         static member headers(this: #td, value: string) =
-            this.OnEval(fun x -> x.setAttribute("headers", value))
+            this.OnEval(fun x ctx -> x.setAttribute("headers", value))
         
         /// Sets the number of rows a cell should span
         [<Extension>]
         static member rowspan(this: #td, value: string) =
-            this.OnEval(fun x -> x.setAttribute("rowspan", value))
+            this.OnEval(fun x ctx -> x.setAttribute("rowspan", value))
         
     
         // Events
@@ -3321,62 +3969,62 @@ type textareaExtensions =
         /// Specifies that a text area should automatically get focus when the page loads
         [<Extension>]
         static member autofocus(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.setAttribute("autofocus", value))
+            this.OnEval(fun x ctx -> x.setAttribute("autofocus", value))
         
         /// Specifies the visible width of a text area
         [<Extension>]
         static member cols(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.setAttribute("cols", value))
+            this.OnEval(fun x ctx -> x.setAttribute("cols", value))
         
         /// Specifies that the text direction of the textarea will be submitted
         [<Extension>]
         static member dirname(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.setAttribute("dirname", value))
+            this.OnEval(fun x ctx -> x.setAttribute("dirname", value))
         
         /// Specifies that a text area should be disabled
         [<Extension>]
         static member disabled(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.setAttribute("disabled", value))
+            this.OnEval(fun x ctx -> x.setAttribute("disabled", value))
         
         /// Specifies which form the text area belongs to
         [<Extension>]
         static member form(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.setAttribute("form", value))
+            this.OnEval(fun x ctx -> x.setAttribute("form", value))
         
         /// Specifies the maximum number of characters allowed in the text area
         [<Extension>]
         static member maxlength(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.setAttribute("maxlength", value))
+            this.OnEval(fun x ctx -> x.setAttribute("maxlength", value))
         
         /// Specifies a name for a text area
         [<Extension>]
         static member name(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.setAttribute("name", value))
+            this.OnEval(fun x ctx -> x.setAttribute("name", value))
         
         /// Specifies a short hint that describes the expected value of a text area
         [<Extension>]
         static member placeholder(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.setAttribute("placeholder", value))
+            this.OnEval(fun x ctx -> x.setAttribute("placeholder", value))
         
         /// Specifies that a text area should be read-only
         [<Extension>]
         static member readonly(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.setAttribute("readonly", value))
+            this.OnEval(fun x ctx -> x.setAttribute("readonly", value))
         
         /// Specifies that a text area is required/must be filled out
         [<Extension>]
         static member required(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.setAttribute("required", value))
+            this.OnEval(fun x ctx -> x.setAttribute("required", value))
         
         /// Specifies the visible number of lines in a text area
         [<Extension>]
         static member rows(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.setAttribute("rows", value))
+            this.OnEval(fun x ctx -> x.setAttribute("rows", value))
         
         /// Specifies how the text in a text area is to be wrapped when submitted in a form
         [<Extension>]
         static member wrap(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.setAttribute("wrap", value))
+            this.OnEval(fun x ctx -> x.setAttribute("wrap", value))
         
     
         // Events
@@ -3401,27 +4049,27 @@ type thExtensions =
         /// Specifies an abbreviated version of the content in a header cell
         [<Extension>]
         static member abbr(this: #th, value: string) =
-            this.OnEval(fun x -> x.setAttribute("abbr", value))
+            this.OnEval(fun x ctx -> x.setAttribute("abbr", value))
         
         /// Specifies the number of columns a header cell should span
         [<Extension>]
         static member colspan(this: #th, value: string) =
-            this.OnEval(fun x -> x.setAttribute("colspan", value))
+            this.OnEval(fun x ctx -> x.setAttribute("colspan", value))
         
         /// Specifies one or more header cells a cell is related to
         [<Extension>]
         static member headers(this: #th, value: string) =
-            this.OnEval(fun x -> x.setAttribute("headers", value))
+            this.OnEval(fun x ctx -> x.setAttribute("headers", value))
         
         /// Specifies the number of rows a header cell should span
         [<Extension>]
         static member rowspan(this: #th, value: string) =
-            this.OnEval(fun x -> x.setAttribute("rowspan", value))
+            this.OnEval(fun x ctx -> x.setAttribute("rowspan", value))
         
         /// Specifies whether a header cell is a header for a column, row, or group of columns or rows 
         [<Extension>]
         static member scope(this: #th, value: string) =
-            this.OnEval(fun x -> x.setAttribute("scope", value))
+            this.OnEval(fun x ctx -> x.setAttribute("scope", value))
         
     
         // Events
@@ -3446,7 +4094,7 @@ type timeExtensions =
         /// Represent a machine-readable format of the <time> element
         [<Extension>]
         static member datetime(this: #time, value: string) =
-            this.OnEval(fun x -> x.setAttribute("datetime", value))
+            this.OnEval(fun x ctx -> x.setAttribute("datetime", value))
         
     
         // Events
@@ -3481,27 +4129,27 @@ type trackExtensions =
         /// Specifies that the track is to be enabled if the user's preferences do not indicate that another track would be more appropriate
         [<Extension>]
         static member default'(this: #track, value: string) =
-            this.OnEval(fun x -> x.setAttribute("default", value))
+            this.OnEval(fun x ctx -> x.setAttribute("default", value))
         
         /// Specifies the kind of text track
         [<Extension>]
         static member kind(this: #track, value: string) =
-            this.OnEval(fun x -> x.setAttribute("kind", value))
+            this.OnEval(fun x ctx -> x.setAttribute("kind", value))
         
         /// Specifies the title of the text track
         [<Extension>]
         static member label(this: #track, value: string) =
-            this.OnEval(fun x -> x.setAttribute("label", value))
+            this.OnEval(fun x ctx -> x.setAttribute("label", value))
         
         /// Required. Specifies the URL of the track file
         [<Extension>]
         static member src(this: #track, value: string) =
-            this.OnEval(fun x -> x.setAttribute("src", value))
+            this.OnEval(fun x ctx -> x.setAttribute("src", value))
         
         /// Specifies the language of the track text data (required if kind="subtitles")
         [<Extension>]
         static member srclang(this: #track, value: string) =
-            this.OnEval(fun x -> x.setAttribute("srclang", value))
+            this.OnEval(fun x ctx -> x.setAttribute("srclang", value))
         
     
         // Events
@@ -3546,47 +4194,47 @@ type videoExtensions =
         /// Specifies that the video will start playing as soon as it is ready
         [<Extension>]
         static member autoplay(this: #video, value: string) =
-            this.OnEval(fun x -> x.setAttribute("autoplay", value))
+            this.OnEval(fun x ctx -> x.setAttribute("autoplay", value))
         
         /// Specifies that video controls should be displayed (such as a play/pause button etc).
         [<Extension>]
         static member controls(this: #video, value: string) =
-            this.OnEval(fun x -> x.setAttribute("controls", value))
+            this.OnEval(fun x ctx -> x.setAttribute("controls", value))
         
         /// Sets the height of the video player
         [<Extension>]
         static member height(this: #video, value: string) =
-            this.OnEval(fun x -> x.setAttribute("height", value))
+            this.OnEval(fun x ctx -> x.setAttribute("height", value))
         
         /// Specifies that the video will start over again, every time it is finished
         [<Extension>]
         static member loop(this: #video, value: string) =
-            this.OnEval(fun x -> x.setAttribute("loop", value))
+            this.OnEval(fun x ctx -> x.setAttribute("loop", value))
         
         /// Specifies that the audio output of the video should be muted
         [<Extension>]
         static member muted(this: #video, value: string) =
-            this.OnEval(fun x -> x.setAttribute("muted", value))
+            this.OnEval(fun x ctx -> x.setAttribute("muted", value))
         
         /// Specifies an image to be shown while the video is downloading, or until the user hits the play button
         [<Extension>]
         static member poster(this: #video, value: string) =
-            this.OnEval(fun x -> x.setAttribute("poster", value))
+            this.OnEval(fun x ctx -> x.setAttribute("poster", value))
         
         /// Specifies if and how the author thinks the video should be loaded when the page loads
         [<Extension>]
         static member preload(this: #video, value: string) =
-            this.OnEval(fun x -> x.setAttribute("preload", value))
+            this.OnEval(fun x ctx -> x.setAttribute("preload", value))
         
         /// Specifies the URL of the video file
         [<Extension>]
         static member src(this: #video, value: string) =
-            this.OnEval(fun x -> x.setAttribute("src", value))
+            this.OnEval(fun x ctx -> x.setAttribute("src", value))
         
         /// Sets the width of the video player
         [<Extension>]
         static member width(this: #video, value: string) =
-            this.OnEval(fun x -> x.setAttribute("width", value))
+            this.OnEval(fun x ctx -> x.setAttribute("width", value))
         
     
         // Events
@@ -3760,7 +4408,7 @@ type Html =
     static member inline img = HtmlElementBuilders.img()
     
     /// Defines an input control
-    static member inline input = HtmlElementBuilders.input()
+    static member inline input = HtmlElementBuilders.input().oninput()
     
     /// Defines a text that has been inserted into a document
     static member inline ins = HtmlElementBuilders.ins()

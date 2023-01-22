@@ -15,15 +15,15 @@ module GettingStarted =
             let! count = Vide.ofMutable 0
 
             div { $"Count = {count.Value}" }
-            button.onclick(fun _ _ -> count -= 1) { "dec" }
-            button.onclick(fun _ _ -> count += 1) { "inc" }
+            button.onclick(fun _ -> count -= 1) { "dec" }
+            button.onclick(fun _ -> count += 1) { "inc" }
         }
 
     let conditionalAttributes =
         vide {
             let! count = Vide.ofMutable 0
 
-            button.onclick(fun _ _ -> count += 1) {
+            button.onclick(fun _ -> count += 1) {
                 $"Hit me! Count = {count.Value}"
             }
             "TODO: That doesn'a work right now"
@@ -39,7 +39,7 @@ module GettingStarted =
         vide {
             let! count = Vide.ofMutable 0
 
-            button.onclick(fun _ _ -> count += 1) {
+            button.onclick(fun _ -> count += 1) {
                 $"Hit me! Count = {count.Value}"
             }
 
@@ -69,7 +69,7 @@ module GettingStarted =
         vide {
             let! count = Vide.ofMutable 0
 
-            button.onclick(fun _ _ -> count += 1) {
+            button.onclick(fun _ -> count += 1) {
                 $"Hit me! Count = {count.Value}"
             }
 
@@ -95,9 +95,9 @@ module GettingStarted =
         let nextNum() = System.Random().Next(10000)
         vide {
             let! items = Vide.ofMutable []
-            let add1 _ _ = items := items.Value @ [nextNum()]
-            let add100 _ _ = items := items.Value @ [ for _ in 0..100 do nextNum() ]
-            let removeAll _ _ = items :=  []
+            let add1 _ = items := items.Value @ [nextNum()]
+            let add100 _ = items := items.Value @ [ for _ in 0..100 do nextNum() ]
+            let removeAll _ = items :=  []
 
             button.onclick(add1) { "Add One" }
             button.onclick(add100) { "Add 100" }
@@ -105,7 +105,7 @@ module GettingStarted =
         
             for x in items.Value do
                 div.class'("card") {
-                    let removeMe _ _ = items := items.Value |> List.except [x]
+                    let removeMe _ = items := items.Value |> List.except [x]
                     button.onclick(removeMe) { $"Remove {x}" }
             }
         }
@@ -114,9 +114,9 @@ module GettingStarted =
         let nextNum() = System.Random().Next(10000)
         vide {
             let! items = Vide.ofMutable []
-            let add1 _ _ = items := items.Value @ [nextNum()]
-            let add100 _ _ = items := items.Value @ [ for _ in 0..100 do nextNum() ]
-            let removeAll _ _ = items := []
+            let add1 _ = items := items.Value @ [nextNum()]
+            let add100 _ = items := items.Value @ [ for _ in 0..100 do nextNum() ]
+            let removeAll _ = items := []
 
             button.onclick(add1) { "Add One" }
             button.onclick(add100) { "Add 100" }
@@ -124,22 +124,49 @@ module GettingStarted =
         
             for x in items.Value do
                 div.class'("card") {
-                    let removeMe _ _ = items := items.Value |> List.except [x]
+                    let removeMe _ = items := items.Value |> List.except [x]
                     button.onclick(removeMe) { $"Remove {x}" }
 
                     let! count = Vide.ofMutable 0
-                    button.onclick(fun _ _ -> count -= 1) { "dec" }
+                    button.onclick(fun _ -> count -= 1) { "dec" }
                     $"{count.Value}  "
-                    button.onclick(fun _ _ -> count += 1) { "inc" }
+                    button.onclick(fun _ -> count += 1) { "inc" }
             }
         }
 
 module Input =
     let textInput = 
         vide {
-            let! enteredValue = input.type'("text")
+            // TODO: Docu - wie ändert man das PropertyChangedTrigger-Verhalten
+            let! enteredValue = input.type'("text").oninput()
             div {
                 $"You say: {enteredValue.textValue}"
+            }
+        }
+    
+    let textInputAsState = 
+        vide {
+            let! enteredText = Vide.ofMutable ""
+
+            div {
+                $"You say: %s{enteredText.Value}"
+            }
+
+            let! enteredValue = input.type'("text").oninput()
+            enteredText.Value <- enteredValue.textValue
+            
+            ()
+        }
+    
+    let textInputComponent = 
+        vide {
+            let! enteredText = div {
+                let! enteredValue = input.type'("text").oninput()
+                return enteredValue.textValue
+            }
+
+            div {
+                $"You say: {enteredText}"
             }
         }
 
@@ -151,8 +178,8 @@ module Components =
             vide {
                 let! count = Vide.ofMutable 0
 
-                button.onclick(fun _ _ -> count -= 1) { "dec" }
-                button.onclick(fun _ _ -> count += 1) { "inc" }
+                button.onclick(fun _ -> count -= 1) { "dec" }
+                button.onclick(fun _ -> count += 1) { "inc" }
 
                 return count.Value
             }
@@ -165,11 +192,11 @@ module Components =
 module Advanced =
     let directAccessToHtmlElement =
         vide {
-            div.OnEval(fun x -> x.className <- "bam")  {
+            div.OnEval(fun x _ -> x.className <- "bam")  {
                 "I'm the OnEval div"
             }
 
-            div.OnInit(fun x -> x.className <- "bam2") {
+            div.OnInit(fun x _ -> x.className <- "bam2") {
                 "I'm the OnInit div"
             }
         }

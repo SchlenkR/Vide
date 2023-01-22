@@ -42,7 +42,7 @@ type {{ext.builderName}}Extensions =
 {{attr.xmlDoc}}
         [<Extension>]
         static member {{attr.memberName}}(this: {{ext.builderParamTypeAnnotation}}, value: {{attr.typ}}) =
-            this.OnEval(fun x -> x.setAttribute("{{attr.name}}", value{{attr.toString}}))
+            this.OnEval(fun x ctx -> x.setAttribute("{{attr.name}}", value{{attr.toString}}))
         {{end}}
     
         // Events
@@ -50,7 +50,13 @@ type {{ext.builderName}}Extensions =
 {{evt.xmlDoc}}
         [<Extension>]
         static member {{evt.memberName}}(this: {{ext.builderParamTypeAnnotation}}, handler) =
-            this.OnInit(fun x -> x.{{evt.name}} <- (fun evt -> handler x evt))
+            this.OnInit(fun x ctx -> x.{{evt.name}} <- Event.handle x ctx handler)
+
+{{evt.xmlDoc}}
+        [<Extension>]
+        static member {{evt.memberName}}(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+            this.OnInit(fun x ctx -> x.{{evt.name}} <- Event.handle x ctx (fun args ->
+                args.requestEvaluation <- defaultArg requestEvaluation true))
         {{end}}
     end
 {{end}}
@@ -58,7 +64,7 @@ type {{ext.builderName}}Extensions =
 type Html =
     {{for builder in builders}}
 {{builder.xmlDoc}}
-    static member inline {{builder.name}} = HtmlElementBuilders.{{builder.name}}()
+    static member inline {{builder.name}} = HtmlElementBuilders.{{builder.name}}(){{builder.pipedConfig}}
     {{end}}
 """
 
@@ -77,26 +83,29 @@ let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Ev
 
     let builders =
         [ for elem in elements do
-            let ctorBaseArg,inheritorGenTypArgs,inheritorName =
+            let ctorBaseArg,inheritorGenTypArgs,inheritorName,pipedConfig =
                 match elem.elementType with
                 | Content -> 
                     $""" "{elem.tagName}" """,
                     elem.domInterfaceName,
-                    "HTMLGlobalAttrsContentElementBuilder"
+                    "HTMLGlobalAttrsContentElementBuilder",
+                    ""
                 | Void voidType ->
-                    let valueTypeName = 
+                    let valueTypeName,pipedConfig = 
                         if voidType.hasReturnValue
-                        then "VoidWithResultValue"
-                        else "VoidWithoutResultValue"
+                        then "VoidWithResultValue", ".oninput()"
+                        else "VoidWithoutResultValue", ""
 
                     $""" "{elem.tagName}", fun node -> {valueTypeName}.CreateInstance(node) """,
                     $"{valueTypeName}, {elem.domInterfaceName}",
-                    "HTMLGlobalAttrsVoidElementBuilder"
+                    "HTMLGlobalAttrsVoidElementBuilder",
+                    pipedConfig
             Api.builder(
                 ctorBaseArg, 
                 inheritorGenTypArgs, 
                 inheritorName, 
-                elem.fsharpName, 
+                elem.fsharpName,
+                pipedConfig,
                 makeCodeDoc elem.desc 1
             )
         ]

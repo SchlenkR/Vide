@@ -128,6 +128,16 @@ let demos =
                         "TODO",
                         start Demos.Input.textInput
                     )
+                    (
+                        "Retrieving text values (as state)",
+                        "TODO",
+                        start Demos.Input.textInputAsState
+                    )
+                    (
+                        "Component with input",
+                        "TODO",
+                        start Demos.Input.textInputComponent
+                    )
                 ]
             |}
             {|
