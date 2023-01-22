@@ -1,6 +1,5 @@
 ﻿module TodoList
 
-open Fable.Core.JS
 open Vide
 open type Html
 
@@ -34,13 +33,10 @@ let view = vide {
     }
     
     div {
-        console.log(">>>>>>>>>>>>>>>")
         for item in items.Value.items do
-            console.log item.name
             div {
                 p { item.name }
             }
-        console.log("<<<<<<<<<<<<<<<")
     }
 
     
