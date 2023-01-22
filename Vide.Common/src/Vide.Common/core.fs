@@ -11,6 +11,10 @@ type IEvaluationManager =
     abstract member RequestEvaluation: unit -> unit
     abstract member Suspend: unit -> unit
     abstract member Resume: unit -> unit
+    abstract member IsEvaluating: bool
+    abstract member HasPendingEvaluationRequests: bool
+    abstract member EvaluationCount: uint64
+
 
 [<AbstractClass>]
 type VideContext() =
@@ -255,7 +259,7 @@ type VideApp<'v,'s,'c when 'c :> VideContext>
     let mutable currentState = None
     let mutable isEvaluating = false
     let mutable hasPendingEvaluationRequests = false
-    let mutable evaluationCount = 0
+    let mutable evaluationCount = 0uL
     let mutable suspendEvaluation = false
         
     let ctx = ctxCtor(this)
@@ -277,7 +281,7 @@ type VideApp<'v,'s,'c when 'c :> VideContext>
                         currValue <- Some value
                         currentState <- newState
                         isEvaluating <- false
-                        evaluationCount <- evaluationCount + 1
+                        evaluationCount <- evaluationCount + 1uL
                     do onEvaluated value currentState
                     Debug.print 10 $"Evaluation done ({evaluationCount})"
                     if hasPendingEvaluationRequests then
@@ -292,13 +296,13 @@ type VideApp<'v,'s,'c when 'c :> VideContext>
             do suspendEvaluation <- false
             if hasPendingEvaluationRequests then
                 (this :> IEvaluationManager).RequestEvaluation()
+        member _.IsEvaluating = isEvaluating
+        member _.HasPendingEvaluationRequests = hasPendingEvaluationRequests
+        member _.EvaluationCount = evaluationCount
 
-    member _.CurrentState = currentState
-    member _.IsEvaluating = isEvaluating
-    member _.HasPendingEvaluationRequests = hasPendingEvaluationRequests
-    member _.EvaluationCount = evaluationCount
     member _.RootContext = ctx
     member _.EvaluationManager = this :> IEvaluationManager
+    member _.CurrentState = currentState
 
 module App =
     let create content ctxCtor onEvaluated =
