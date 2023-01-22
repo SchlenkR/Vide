@@ -1,5 +1,6 @@
 module Demos
 
+open Fable.Core.JS
 open Vide
 open type Vide.Html
 
@@ -189,18 +190,6 @@ module Components =
             p { $"COUNT = {count}"}
         }
 
-module Advanced =
-    let directAccessToHtmlElement =
-        vide {
-            div.OnEval(fun x _ -> x.className <- "bam")  {
-                "I'm the OnEval div"
-            }
-
-            div.OnInit(fun x _ -> x.className <- "bam2") {
-                "I'm the OnInit div"
-            }
-        }
-
 
 module Async =
     let asyncHelloWorld =
@@ -300,3 +289,57 @@ module Async =
             let! componentResult = myAsyncComponent
             currRes := componentResult
         }
+
+
+module Advanced =
+    let directAccessToHtmlElement =
+        vide {
+            div.OnEval(fun x _ -> x.className <- "bam")  {
+                "I'm the OnEval div"
+            }
+
+            div.OnInit(fun x _ -> x.className <- "bam2") {
+                "I'm the OnInit div"
+            }
+        }
+
+
+module TodoList =
+    type TodoItem =
+        {
+            name: string
+        }
+    
+    type TodoList =
+        {
+            items: TodoItem list
+        }
+    
+    let view = vide {
+        h1.class'("title") { "TODO List" }
+    
+        let! items = Vide.ofMutable { items = [] }
+    
+        div {
+            let! itemName = p {
+                let! text = input.type'("text")
+                return text.textValue
+            }
+    
+            p {
+                let addItem _ =
+                    let newItem = { name = itemName }
+                    items.Value <- { items.Value with items = newItem :: items.Value.items }
+                button.onclick(addItem) { "Add Item" }
+            }
+        }
+        
+        div {
+            do console.log (items.Value.items |> List.map (fun x -> x.name) |> List.toArray)
+            for item in items.Value.items do
+                div {
+                    p { item.name }
+                }
+        }
+    }
+    

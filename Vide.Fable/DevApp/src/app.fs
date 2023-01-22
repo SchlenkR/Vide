@@ -140,6 +140,7 @@ let demos =
                     )
                 ]
             |}
+
             {|
                 category = "Advanced"
                 elements = [
@@ -147,6 +148,17 @@ let demos =
                         "Direct access to HTMLElement (on init and eval)",
                         "TODO",
                         start Demos.Advanced.directAccessToHtmlElement
+                    )
+                ]
+            |}
+
+            {|
+                category = "Apps"
+                elements = [
+                    (
+                        "Todo List",
+                        "TODO",
+                        start Demos.TodoList.view
                     )
                 ]
             |}
