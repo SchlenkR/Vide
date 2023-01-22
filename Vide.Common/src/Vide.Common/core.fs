@@ -7,9 +7,14 @@ module Debug =
     let mutable enabledDebugChannels : int list = []
     let print channel s = if enabledDebugChannels |> List.contains channel then printfn "%s" s
 
+type IEvaluationManager =
+    abstract member RequestEvaluation: unit -> unit
+    abstract member Suspend: unit -> unit
+    abstract member Resume: unit -> unit
+
 [<AbstractClass>]
 type VideContext() =
-    abstract member RequestEvaluation: unit -> unit
+    abstract member EvaluationManager: IEvaluationManager
 
 type ComputationState<'v> =
     {
@@ -28,13 +33,13 @@ module BuilderHelper =
 
 [<AutoOpen>]
 module MutableValue =
-    type MutableValue<'a when 'a: equality>(init: 'a, requestEvaluation: unit -> unit) =
+    type MutableValue<'a when 'a: equality>(init: 'a, evalManager: IEvaluationManager) =
         let mutable state = init
         member _.Set(value) =
             // Not just a perf opt: prevent stack overflows (see demo case asyncHelloWorld)!
             if value <> state then
                 do state <- value
-                do requestEvaluation()
+                do evalManager.RequestEvaluation()
         member this.Value
             with get() = state
             and set(value) = this.Set(value)
@@ -79,7 +84,7 @@ module Vide =
 
     let ofMutable x =
         Vide <| fun s (c: #VideContext) ->
-            let s = s |> Option.defaultWith (fun () -> MutableValue(x, c.RequestEvaluation))
+            let s = s |> Option.defaultWith (fun () -> MutableValue(x, c.EvaluationManager))
             s, Some s
         
 type VideBuilder() =
@@ -221,7 +226,7 @@ type VideBuilder() =
                         let onsuccess res =
                             Debug.print 1 $"awaited result: {res}"
                             do result.Value <- Some res
-                            do ctx.RequestEvaluation()
+                            do ctx.EvaluationManager.RequestEvaluation()
                         // TODO: global cancellation handler / ex / cancellation, etc.
                         let onexception ex = ()
                         let oncancel ex = ()
@@ -242,49 +247,63 @@ type VideBuilder() =
 type VideApp<'v,'s,'c when 'c :> VideContext>
     (
         content: Vide<'v,'s,'c>,
-        ctxCtor: ('c -> unit) -> 'c,
+        ctxCtor: IEvaluationManager -> 'c,
         onEvaluated: 'v -> 's option -> unit
-    ) =
+    ) as this 
+    =
     let mutable currValue = None
     let mutable currentState = None
     let mutable isEvaluating = false
     let mutable hasPendingEvaluationRequests = false
     let mutable evaluationCount = 0
+    let mutable suspendEvaluation = false
         
-    let (Vide content) = content
-    let evaluate ctx =
-        // During an evaluation, requests for another evaluation can
-        // occur, which have to be handled as _subsequent_ evaluations!
-        let rec eval () =
-            do isEvaluating <- true
-            let value,newState = content currentState ctx
-            do
-                currValue <- Some value
-                currentState <- newState
-                evaluationCount <- evaluationCount + 1
-            do onEvaluated value currentState
-            do isEvaluating <- false
-            Debug.print 10 $"Evaluation done ({evaluationCount})"
+    let ctx = ctxCtor(this)
+
+    interface IEvaluationManager with
+        member _.RequestEvaluation() =
+            if suspendEvaluation then
+                hasPendingEvaluationRequests <- true
+            else
+                // During an evaluation, requests for another evaluation can
+                // occur, which have to be handled as _subsequent_ evaluations!
+                let (Vide content) = content
+                let rec eval () =
+                    do 
+                        hasPendingEvaluationRequests <- false
+                        isEvaluating <- true
+                    let value,newState = content currentState this.RootContext
+                    do
+                        currValue <- Some value
+                        currentState <- newState
+                        isEvaluating <- false
+                        evaluationCount <- evaluationCount + 1
+                    do onEvaluated value currentState
+                    Debug.print 10 $"Evaluation done ({evaluationCount})"
+                    if hasPendingEvaluationRequests then
+                        eval ()
+                do
+                    match isEvaluating with
+                    | true -> hasPendingEvaluationRequests <- true
+                    | false -> eval ()
+        member _.Suspend() =
+            do suspendEvaluation <- true
+        member _.Resume() =
+            do suspendEvaluation <- false
             if hasPendingEvaluationRequests then
-                do hasPendingEvaluationRequests <- false
-                do eval ()
-        do 
-            match isEvaluating with
-            | true -> hasPendingEvaluationRequests <- true
-            | false -> eval ()
-    let ctx = ctxCtor evaluate
+                (this :> IEvaluationManager).RequestEvaluation()
 
     member _.CurrentState = currentState
     member _.IsEvaluating = isEvaluating
     member _.HasPendingEvaluationRequests = hasPendingEvaluationRequests
     member _.EvaluationCount = evaluationCount
     member _.RootContext = ctx
-    member _.RequestEvaluation() = ctx.RequestEvaluation()
+    member _.EvaluationManager = this :> IEvaluationManager
 
 module App =
     let create content ctxCtor onEvaluated =
         VideApp(content, ctxCtor, onEvaluated)
-    let createWithObjState content ctxCtor onEvaluated =
+    let createWithUntypedState content ctxCtor onEvaluated =
         let content =
             Vide <| fun (s: obj option) ctx ->
                 let (Vide content) = content

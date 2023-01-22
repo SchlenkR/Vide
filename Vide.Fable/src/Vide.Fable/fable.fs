@@ -10,7 +10,7 @@ open System
 type FableContext
     (
         parent: Node, 
-        evaluateView: FableContext -> unit
+        evaluationManager: IEvaluationManager
     ) =
     inherit VideContext()
     
@@ -20,8 +20,7 @@ type FableContext
     let appendToParent child = parent.appendChild(child) |> ignore
     let removeFromParent child = parent.removeChild(child) |> ignore
 
-    override this.RequestEvaluation() = evaluateView this
-    member internal _.EvaluateView = evaluateView
+    override this.EvaluationManager = evaluationManager
     member _.Parent = parent
     member _.AddElement<'n when 'n :> HTMLElement>(tagName: string) =
         let elem = document.createElement tagName 
@@ -106,7 +105,7 @@ module BuilderHelper =
                     | DiscardAndCreateNew ->
                         createNode ctx,None
             do runModifiers evalModifiers node
-            let childCtx = FableContext(node, ctx.EvaluateView)
+            let childCtx = FableContext(node, ctx.EvaluationManager)
             let cv,cs = childVide cs childCtx
             for x in childCtx.GetObsoleteChildren() do
                 childCtx.RemoveChild(x)
@@ -205,9 +204,13 @@ module Event =
     let inline handle node (ctx: FableContext) callback =
         fun evt ->
             let args = { node = node; evt = evt; ctx = ctx; requestEvaluation = true }
-            do callback args
-            if args.requestEvaluation then
-                ctx.RequestEvaluation()
+            try
+                do ctx.EvaluationManager.Suspend()
+                do callback args
+                if args.requestEvaluation then
+                    ctx.EvaluationManager.RequestEvaluation()
+            finally
+                do ctx.EvaluationManager.Resume()
 
 [<Extension>]
 type NodeBuilderExtensions =
@@ -253,6 +256,6 @@ module App =
     let createFable host content onEvaluated =
         doCreate App.create host content onEvaluated
     let createFableWithObjState host content onEvaluated =
-        doCreate App.createWithObjState host content onEvaluated
+        doCreate App.createWithUntypedState host content onEvaluated
 
 let vide = VideComponentBuilder()

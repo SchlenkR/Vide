@@ -19,7 +19,7 @@ let demos =
         let content = content |> Vide.map ignore
         let app = App.createFableWithObjState host content (fun _ _ -> ())
         do currentApp <- Some app
-        do app.RequestEvaluation()
+        do app.EvaluationManager.RequestEvaluation()
     let demos =
         [
             {|
@@ -189,7 +189,7 @@ for x in demos do
         menu.appendChild(btn) |> ignore
 
 document.getElementById("evaluate").onclick <- fun _ ->
-    currentApp |> Option.iter (fun app -> app.RequestEvaluation())
+    currentApp |> Option.iter (fun app -> app.EvaluationManager.RequestEvaluation())
 
 document.getElementById("logState").onclick <- fun _ ->
     currentApp |> Option.iter (fun app -> console.log(app))

@@ -335,7 +335,6 @@ module TodoList =
         }
         
         div {
-            do console.log (items.Value.items |> List.map (fun x -> x.name) |> List.toArray)
             for item in items.Value.items do
                 div {
                     p { item.name }

@@ -113,4 +113,4 @@ Docu: We need "nothing" (that's F#)
 # Bugs
 
 * Yielden eines NBs OHNE {()} - OnEval wird nicht aufgerufen
-* Click button -> Evaluating 2 times
+
