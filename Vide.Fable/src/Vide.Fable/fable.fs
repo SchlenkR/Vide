@@ -44,22 +44,6 @@ type FableContext
 
 type BuilderOperations = | Clear
 
-let inline text text =
-    Vide <| fun s (ctx: FableContext) ->
-        let createNode () = ctx.AddText(text)
-        let node =
-            match s with
-            | None -> createNode ()
-            | Some (node: Text) ->
-                if typeof<Text>.IsInstanceOfType(node) then
-                    if node.textContent <> text then
-                        node.textContent <- text
-                    ctx.KeepChild(node)
-                    node
-                else
-                    createNode ()
-        (), Some node
-
 type NodeBuilderState<'n,'s> = option<'n> * option<'s>
 type ChildAction = Keep | DiscardAndCreateNew
 
@@ -140,18 +124,25 @@ type NodeBuilder<'n when 'n :> Node>
             childVide 
             resultSelector
 
-type TextBuilder(value: string) =
-    inherit NodeBuilder<Text>(
-        (fun ctx -> ctx.AddText(value)),
-        (fun node -> BuilderHelper.checkOrUpdateNode "#text" node))
-    member this.Run(childVide) =
-        this.DoRun(childVide, fun node _ -> node.textContent <- value)
+////type TextBuilder(value: string) =
+////    inherit NodeBuilder<Text>(
+////        (fun ctx -> ctx.AddText(value)),
+////        (fun node -> BuilderHelper.checkOrUpdateNode "#text" node))
+////    member this.Run(childVide) =
+////        this.DoRun(childVide, fun node _ -> node.textContent <- value)
+let inline text value =
+    Vide <| fun s (ctx: FableContext) ->
+        let node = s |> Option.defaultWith (fun () -> ctx.AddText(value))
+        do
+            node.textContent <- value
+            ctx.KeepChild(node)
+        (), Some node
 
 module Yield =
     let inline yieldNodeBuilder (nb: #NodeBuilder<'n>) =
         nb { () }
     let inline yieldText (value: string) =
-        TextBuilder(value) { () }
+        text value
     let inline yieldBuilderOp (op: BuilderOperations) =
         Vide <| fun s (ctx: FableContext) ->
             match op with
