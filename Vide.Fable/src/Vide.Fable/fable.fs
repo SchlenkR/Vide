@@ -134,7 +134,8 @@ let inline text value =
     Vide <| fun s (ctx: FableContext) ->
         let node = s |> Option.defaultWith (fun () -> ctx.AddText(value))
         do
-            node.textContent <- value
+            if node.textContent <> value then
+                node.textContent <- value
             ctx.KeepChild(node)
         (), Some node
 
