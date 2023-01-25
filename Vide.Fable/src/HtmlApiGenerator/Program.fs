@@ -21,7 +21,7 @@ let gen generator relOutFileName =
         printfn $"Output written to: {outDir}"
 
 let genHtmlApi () =
-    "../../src/Vide.Fable/htmlApi.fs"
+    "../Vide.Fable/htmlApi.fs"
     |> gen (fun res -> HtmlApiGenerator.generate res.elements res.globalAttrs res.globalEvents)
 
 //let genHtmlSpec () =
