@@ -141,7 +141,7 @@ module Input =
             // TODO: Docu - wie ändert man das PropertyChangedTrigger-Verhalten
             let! enteredValue = input.type'("text").oninput()
             div {
-                $"You say: {enteredValue.textValue}"
+                $"You say: {enteredValue.TextValue}"
             }
         }
     
@@ -154,7 +154,7 @@ module Input =
             }
 
             let! enteredValue = input.type'("text").oninput()
-            enteredText.Value <- enteredValue.textValue
+            enteredText.Value <- enteredValue.TextValue
             
             ()
         }
@@ -163,7 +163,7 @@ module Input =
         vide {
             let! enteredText = div {
                 let! enteredValue = input.type'("text").oninput()
-                return enteredValue.textValue
+                return enteredValue.TextValue
             }
 
             div {
@@ -323,7 +323,7 @@ module TodoList =
         div {
             let! itemName = p {
                 let! text = input.type'("text")
-                return text.textValue
+                return text.TextValue
             }
     
             p {

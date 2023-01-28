@@ -377,9 +377,11 @@ let (</>) (url1: string) (url2: string) =
 let generate () =
     let loadPage (relUrl: string) =
         let relUrl = "/tags" </> relUrl
-        let cachePath = cacheDir </> relUrl + ".html"
-        if not (File.Exists(cachePath)) then 
-            get (w3sRoot </> relUrl)
+        let cachePath = cacheDir </> (relUrl + ".html")
+        if not (File.Exists(cachePath)) then
+            let url = w3sRoot </> relUrl
+            printfn $"Downloading {url} ..."
+            get url
             |> Request.send
             |> Response.saveFile cachePath
         printfn $"LOADING URL: {relUrl}"

@@ -114,6 +114,10 @@ type NodeBuilder<'n when 'n :> Node>
     member val EvalModifiers: NodeModifier<'n, FableContext> list = [] with get,set
     member val AfterEvalModifiers: NodeModifier<'n, FableContext> list = [] with get,set
 
+    // Important: Run must be defined on this type so that it is visible in upcoming
+    // yields - otherwise, Run is not called even though inheritors define it.
+    // See Bug: nb {()} - OnEval will not be called
+
     member this.DoRun(childVide, resultSelector) =
         BuilderHelper.runBuilder
             createNode 
@@ -184,26 +188,6 @@ type HTMLContentElementBuilder<'n when 'n :> HTMLElement>(elemName) =
         BuilderHelper.createNode elemName,
         BuilderHelper.checkOrUpdateNode elemName)
 
-module Event =
-    type FableEventArgs<'evt,'n when 'n :> Node> =
-        {
-            node: 'n
-            evt: 'evt
-            ctx: FableContext
-            mutable requestEvaluation: bool
-        }
-    
-    let inline handle node (ctx: FableContext) callback =
-        fun evt ->
-            let args = { node = node; evt = evt; ctx = ctx; requestEvaluation = true }
-            try
-                do ctx.EvaluationManager.Suspend()
-                do callback args
-                if args.requestEvaluation then
-                    ctx.EvaluationManager.RequestEvaluation()
-            finally
-                do ctx.EvaluationManager.Resume()
-
 [<Extension>]
 type NodeBuilderExtensions =
     // TODO: Switch back to non-inheritance API
@@ -226,17 +210,51 @@ type NodeBuilderExtensions =
         do this.AfterEvalModifiers <- m :: this.AfterEvalModifiers
         this
 
-type VoidWithoutResultValue = struct end with
-    static member CreateInstance(node: #Node) = VoidWithoutResultValue()
+type VoidResult = unit
 
-type VoidWithResultValue =
-    {
-        textValue: string
-    }
-    static member CreateInstance(node: #HTMLInputElement) =
+// TODO: All other input possibilities
+type InputResult(node: HTMLInputElement) =
+    member _.Node = node
+    member _.TextValue = node.value
+    member _.DateValue = node.valueAsDate
+    member _.FloatValue = node.valueAsNumber
+    member _.IntValue = node.valueAsNumber |> int
+    member _.IsChecked = node.checked
+
+module Event =
+    type FableEventArgs<'evt,'n when 'n :> Node> =
         {
-            textValue = node.value
+            node: 'n
+            evt: 'evt
+            ctx: FableContext
+            mutable requestEvaluation: bool
         }
+    
+    let inline handle node (ctx: FableContext) callback =
+        fun evt ->
+            let args = { node = node; evt = evt; ctx = ctx; requestEvaluation = true }
+            try
+                do ctx.EvaluationManager.Suspend()
+                do callback args
+                if args.requestEvaluation then
+                    ctx.EvaluationManager.RequestEvaluation()
+            finally
+                do ctx.EvaluationManager.Resume()
+
+type Event =
+    static member inline doBind(value: MutableValue<_>, getter) =
+        fun (args: Event.FableEventArgs<_, HTMLInputElement>) ->
+            value.Value <- getter(InputResult(args.node))
+    static member inline bind(value: MutableValue<string>) =
+        Event.doBind(value, fun x -> x.TextValue)
+    static member inline bind(value: MutableValue<int>) =
+        Event.doBind(value, fun x -> x.IntValue)
+    static member inline bind(value: MutableValue<float>) =
+        Event.doBind(value, fun x -> x.FloatValue)
+    static member inline bind(value: MutableValue<DateTime>) =
+        Event.doBind(value, fun x -> x.DateValue)
+    static member inline bind(value: MutableValue<bool>) =
+        Event.doBind(value, fun x -> x.IsChecked)
 
 module App =
     let inline doCreate appCtor (host: #Node) (content: Vide<'v,'s,FableContext>) onEvaluated =

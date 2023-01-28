@@ -91,12 +91,18 @@ let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Ev
                     "HTMLGlobalAttrsContentElementBuilder",
                     ""
                 | Void voidType ->
-                    let valueTypeName,pipedConfig = 
+                    let valueTypeName,createResult,pipedConfig = 
                         if voidType.hasReturnValue
-                        then "VoidWithResultValue", ".oninput()"
-                        else "VoidWithoutResultValue", ""
+                        then 
+                            "InputResult",
+                            "InputResult(node)", 
+                            ".oninput()"
+                        else
+                            "VoidResult",
+                            "()", 
+                            ""
 
-                    $""" "{elem.tagName}", fun node -> {valueTypeName}.CreateInstance(node) """,
+                    $""" "{elem.tagName}", fun node -> {createResult} """,
                     $"{valueTypeName}, {elem.domInterfaceName}",
                     "HTMLGlobalAttrsVoidElementBuilder",
                     pipedConfig

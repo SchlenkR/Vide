@@ -38,9 +38,9 @@ module HtmlElementBuilders =
             )
     
     type area() =
-        inherit HTMLGlobalAttrsVoidElementBuilder<VoidWithoutResultValue, HTMLAreaElement>
+        inherit HTMLGlobalAttrsVoidElementBuilder<VoidResult, HTMLAreaElement>
             (
-                 "area", fun node -> VoidWithoutResultValue.CreateInstance(node) 
+                 "area", fun node -> () 
             )
     
     type article() =
@@ -68,9 +68,9 @@ module HtmlElementBuilders =
             )
     
     type base'() =
-        inherit HTMLGlobalAttrsVoidElementBuilder<VoidWithoutResultValue, HTMLBaseElement>
+        inherit HTMLGlobalAttrsVoidElementBuilder<VoidResult, HTMLBaseElement>
             (
-                 "base", fun node -> VoidWithoutResultValue.CreateInstance(node) 
+                 "base", fun node -> () 
             )
     
     type bdi() =
@@ -98,9 +98,9 @@ module HtmlElementBuilders =
             )
     
     type br() =
-        inherit HTMLGlobalAttrsVoidElementBuilder<VoidWithoutResultValue, HTMLBRElement>
+        inherit HTMLGlobalAttrsVoidElementBuilder<VoidResult, HTMLBRElement>
             (
-                 "br", fun node -> VoidWithoutResultValue.CreateInstance(node) 
+                 "br", fun node -> () 
             )
     
     type button() =
@@ -134,9 +134,9 @@ module HtmlElementBuilders =
             )
     
     type col() =
-        inherit HTMLGlobalAttrsVoidElementBuilder<VoidWithoutResultValue, HTMLTableColElement>
+        inherit HTMLGlobalAttrsVoidElementBuilder<VoidResult, HTMLTableColElement>
             (
-                 "col", fun node -> VoidWithoutResultValue.CreateInstance(node) 
+                 "col", fun node -> () 
             )
     
     type colgroup() =
@@ -212,9 +212,9 @@ module HtmlElementBuilders =
             )
     
     type embed() =
-        inherit HTMLGlobalAttrsVoidElementBuilder<VoidWithoutResultValue, HTMLEmbedElement>
+        inherit HTMLGlobalAttrsVoidElementBuilder<VoidResult, HTMLEmbedElement>
             (
-                 "embed", fun node -> VoidWithoutResultValue.CreateInstance(node) 
+                 "embed", fun node -> () 
             )
     
     type fieldset() =
@@ -296,9 +296,9 @@ module HtmlElementBuilders =
             )
     
     type hr() =
-        inherit HTMLGlobalAttrsVoidElementBuilder<VoidWithoutResultValue, HTMLHRElement>
+        inherit HTMLGlobalAttrsVoidElementBuilder<VoidResult, HTMLHRElement>
             (
-                 "hr", fun node -> VoidWithoutResultValue.CreateInstance(node) 
+                 "hr", fun node -> () 
             )
     
     type html() =
@@ -320,15 +320,15 @@ module HtmlElementBuilders =
             )
     
     type img() =
-        inherit HTMLGlobalAttrsVoidElementBuilder<VoidWithoutResultValue, HTMLImageElement>
+        inherit HTMLGlobalAttrsVoidElementBuilder<VoidResult, HTMLImageElement>
             (
-                 "img", fun node -> VoidWithoutResultValue.CreateInstance(node) 
+                 "img", fun node -> () 
             )
     
     type input() =
-        inherit HTMLGlobalAttrsVoidElementBuilder<VoidWithResultValue, HTMLInputElement>
+        inherit HTMLGlobalAttrsVoidElementBuilder<InputResult, HTMLInputElement>
             (
-                 "input", fun node -> VoidWithResultValue.CreateInstance(node) 
+                 "input", fun node -> InputResult(node) 
             )
     
     type ins() =
@@ -362,9 +362,9 @@ module HtmlElementBuilders =
             )
     
     type link() =
-        inherit HTMLGlobalAttrsVoidElementBuilder<VoidWithoutResultValue, HTMLLinkElement>
+        inherit HTMLGlobalAttrsVoidElementBuilder<VoidResult, HTMLLinkElement>
             (
-                 "link", fun node -> VoidWithoutResultValue.CreateInstance(node) 
+                 "link", fun node -> () 
             )
     
     type main() =
@@ -386,9 +386,9 @@ module HtmlElementBuilders =
             )
     
     type meta() =
-        inherit HTMLGlobalAttrsVoidElementBuilder<VoidWithoutResultValue, HTMLMetaElement>
+        inherit HTMLGlobalAttrsVoidElementBuilder<VoidResult, HTMLMetaElement>
             (
-                 "meta", fun node -> VoidWithoutResultValue.CreateInstance(node) 
+                 "meta", fun node -> () 
             )
     
     type meter() =
@@ -446,9 +446,9 @@ module HtmlElementBuilders =
             )
     
     type param() =
-        inherit HTMLGlobalAttrsVoidElementBuilder<VoidWithoutResultValue, HTMLParamElement>
+        inherit HTMLGlobalAttrsVoidElementBuilder<VoidResult, HTMLParamElement>
             (
-                 "param", fun node -> VoidWithoutResultValue.CreateInstance(node) 
+                 "param", fun node -> () 
             )
     
     type picture() =
@@ -530,9 +530,9 @@ module HtmlElementBuilders =
             )
     
     type source() =
-        inherit HTMLGlobalAttrsVoidElementBuilder<VoidWithoutResultValue, HTMLSourceElement>
+        inherit HTMLGlobalAttrsVoidElementBuilder<VoidResult, HTMLSourceElement>
             (
-                 "source", fun node -> VoidWithoutResultValue.CreateInstance(node) 
+                 "source", fun node -> () 
             )
     
     type span() =
@@ -638,9 +638,9 @@ module HtmlElementBuilders =
             )
     
     type track() =
-        inherit HTMLGlobalAttrsVoidElementBuilder<VoidWithoutResultValue, HTMLTrackElement>
+        inherit HTMLGlobalAttrsVoidElementBuilder<VoidResult, HTMLTrackElement>
             (
-                 "track", fun node -> VoidWithoutResultValue.CreateInstance(node) 
+                 "track", fun node -> () 
             )
     
     type u() =
@@ -668,9 +668,9 @@ module HtmlElementBuilders =
             )
     
     type wbr() =
-        inherit HTMLGlobalAttrsVoidElementBuilder<VoidWithoutResultValue, HTMLElement>
+        inherit HTMLGlobalAttrsVoidElementBuilder<VoidResult, HTMLElement>
             (
-                 "wbr", fun node -> VoidWithoutResultValue.CreateInstance(node) 
+                 "wbr", fun node -> () 
             )
     
 

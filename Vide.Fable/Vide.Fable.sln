@@ -7,7 +7,7 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Fable", "src\Vide.Fabl
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Common", "..\Vide.Common\src\Vide.Common\Vide.Common.fsproj", "{FB1AA86E-5A85-4B0F-A0EB-7A02EFFFF3D8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{21D9ADB0-A709-4259-9104-9EDF3B8B854F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{21D9ADB0-A709-4259-9104-9EDF3B8B854F}"
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Fable.DevApp", "src\DevApp\src\Vide.Fable.DevApp.fsproj", "{83422735-CA81-4FF5-A8B7-7A18C1D5B88A}"
 EndProject
@@ -38,6 +38,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3BE15C07-98CF-4E13-826F-99388A29A317} = {21D9ADB0-A709-4259-9104-9EDF3B8B854F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BA9EFFD2-32F2-4B96-9AAC-189F510310BB}

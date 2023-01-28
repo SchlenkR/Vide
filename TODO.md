@@ -110,7 +110,4 @@ Docu: We need "nothing" (that's F#)
 
 * Vide als .fsx file und dann einen C# SourceGen
 
-# Bugs
-
-* Yielden eines NBs OHNE {()} - OnEval wird nicht aufgerufen
 
