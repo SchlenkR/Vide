@@ -128,12 +128,6 @@ type NodeBuilder<'n when 'n :> Node>
             childVide 
             resultSelector
 
-////type TextBuilder(value: string) =
-////    inherit NodeBuilder<Text>(
-////        (fun ctx -> ctx.AddText(value)),
-////        (fun node -> BuilderHelper.checkOrUpdateNode "#text" node))
-////    member this.Run(childVide) =
-////        this.DoRun(childVide, fun node _ -> node.textContent <- value)
 let inline text value =
     Vide <| fun s (ctx: FableContext) ->
         let node = s |> Option.defaultWith (fun () -> ctx.AddText(value))
@@ -144,8 +138,6 @@ let inline text value =
         (), Some node
 
 module Yield =
-    let inline yieldNodeBuilder (nb: #NodeBuilder<'n>) =
-        nb { () }
     let inline yieldText (value: string) =
         text value
     let inline yieldBuilderOp (op: BuilderOperations) =
@@ -154,24 +146,23 @@ module Yield =
             | Clear -> ctx.Parent.textContent <- ""
             (),None
 
-type VideComponentBuilder() =
-    inherit VideBuilder()
-    member _.Yield(nb) = Yield.yieldNodeBuilder nb
-    member _.Yield(s) = Yield.yieldText s
-    member _.Yield(op) = Yield.yieldBuilderOp op
-
 type VoidBuilder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, resultSelector: 'n -> 'v) =
     inherit NodeBuilder<'n>(createNode, checkOrUpdateNode)
-    member this.Run(childVide) =
-        this.DoRun(childVide, fun node _ -> resultSelector node)
+    member this.Run(v) = this.DoRun(v, fun node _ -> resultSelector node)
 
 type ContentBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
     inherit NodeBuilder<'n>(createNode, checkOrUpdateNode)
-    member _.Yield(nb) = Yield.yieldNodeBuilder nb
+    member _.Yield(b: #NodeBuilder<'n>) = b {()}
     member _.Yield(s) = Yield.yieldText s
     member _.Yield(op) = Yield.yieldBuilderOp op
-    member this.Run(childVide) =
-        this.DoRun(childVide, fun node childRes -> childRes)
+    member this.Run(v) = this.DoRun(v, fun node vres -> vres)
+
+type VideComponentBuilder() =
+    inherit VideBuilder()
+    member _.Yield(b: #VoidBuilder<'v,'n>) = b {()}
+    member _.Yield(b: #ContentBuilder<'n>) = b {()}
+    member _.Yield(s) = Yield.yieldText s
+    member _.Yield(op) = Yield.yieldBuilderOp op
 
 type VideBuilder with
     member this.Bind(m: VoidBuilder<'v,'n>, f) =
