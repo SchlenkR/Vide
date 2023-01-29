@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Fable", "src\Vide.Fable\Vide.Fable.fsproj", "{8C2EF9C3-586B-48AC-B011-C7081C7027AE}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Fable", "Vide.Fable\Vide.Fable.fsproj", "{8C2EF9C3-586B-48AC-B011-C7081C7027AE}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Common", "..\Vide.Common\src\Vide.Common\Vide.Common.fsproj", "{FB1AA86E-5A85-4B0F-A0EB-7A02EFFFF3D8}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Common", "..\Vide.Common\Vide.Common\Vide.Common.fsproj", "{FB1AA86E-5A85-4B0F-A0EB-7A02EFFFF3D8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{21D9ADB0-A709-4259-9104-9EDF3B8B854F}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Fable.DevApp", "src\DevApp\src\Vide.Fable.DevApp.fsproj", "{83422735-CA81-4FF5-A8B7-7A18C1D5B88A}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Fable.DevApp", "DevApp\src\Vide.Fable.DevApp.fsproj", "{83422735-CA81-4FF5-A8B7-7A18C1D5B88A}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "HtmlApiGenerator", "src\HtmlApiGenerator\HtmlApiGenerator.fsproj", "{3BE15C07-98CF-4E13-826F-99388A29A317}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "HtmlApiGenerator", "HtmlApiGenerator\HtmlApiGenerator.fsproj", "{3BE15C07-98CF-4E13-826F-99388A29A317}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
