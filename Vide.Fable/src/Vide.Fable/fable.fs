@@ -20,7 +20,7 @@ type FableContext
     let appendToParent child = parent.appendChild(child) |> ignore
     let removeFromParent child = parent.removeChild(child) |> ignore
 
-    override this.EvaluationManager = evaluationManager
+    override _.EvaluationManager = evaluationManager
     member _.Parent = parent
     member _.AddElement<'n when 'n :> HTMLElement>(tagName: string) =
         let elem = document.createElement tagName 
@@ -152,15 +152,17 @@ type VoidBuilder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, resultSel
 
 type ContentBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
     inherit NodeBuilder<'n>(createNode, checkOrUpdateNode)
-    member _.Yield(b: #NodeBuilder<'n>) = b {()}
+    // Oh, this is a good one: Run must definitely defined before Yield(ContentBuilder)
+    member this.Run(v) = this.DoRun(v, fun node vres -> vres)
+    member _.Yield(b: VoidBuilder<_,_>) = b {()}
+    member _.Yield(b: ContentBuilder<_>) = b {()}
     member _.Yield(s) = Yield.yieldText s
     member _.Yield(op) = Yield.yieldBuilderOp op
-    member this.Run(v) = this.DoRun(v, fun node vres -> vres)
 
 type VideComponentBuilder() =
     inherit VideBuilder()
-    member _.Yield(b: #VoidBuilder<'v,'n>) = b {()}
-    member _.Yield(b: #ContentBuilder<'n>) = b {()}
+    member _.Yield(b: VoidBuilder<_,_>) = b {()}
+    member _.Yield(b: ContentBuilder<_>) = b {()}
     member _.Yield(s) = Yield.yieldText s
     member _.Yield(op) = Yield.yieldBuilderOp op
 

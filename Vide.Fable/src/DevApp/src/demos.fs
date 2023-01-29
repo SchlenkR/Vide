@@ -251,9 +251,11 @@ module Async =
     let asyncWithSubsequentResults =
 
         let myAsyncComponent =
+            // TODO: Docu: Before(!) every awaited value must be a return.
             vide {
                 p { "loading 1st number ..." }
                 return 0
+
                 let! res1 = async {
                     do! Async.Sleep 2000
                     return 42
@@ -263,6 +265,7 @@ module Async =
 
                 p { "loading 2nd number ..." }
                 return res1
+                
                 let! res2 = async {
                     do! Async.Sleep 2000
                     return 187
@@ -272,6 +275,7 @@ module Async =
             
                 p { "waiting again for a whie..." }
                 return res2
+                
                 do! Async.Sleep 2000
                 p { "Done :)" }
 
@@ -301,39 +305,50 @@ module Advanced =
             }
         }
 
+    let shouldCompile1 =
+        // Both void and content builders should be able to yield
+        // from inside of a content workflow
+        vide {
+            div {
+                hr
+                p
+            }
+        }
+    
+    let shouldCompile2 =
+        // Both void and content builders should be able to yield
+        // from inside of a vide workflow
+        vide {
+            hr
+            p
+        }
+
 
 module TodoList =
-    type TodoItem =
-        {
-            name: string
-        }
-    
-    type TodoList =
-        {
-            items: TodoItem list
-        }
+    type TodoItem = { name: string; isDone: bool }
+    type TodoList = { items: TodoItem list }
     
     let view = vide {
+        let! todoList = Vide.ofMutable { items = [] }
+        
         h1.class'("title") { "TODO List" }
-    
-        let! items = Vide.ofMutable { items = [] }
-    
         div {
-            let! itemName = p {
-                let! text = input.type'("text")
-                return text.TextValue
+            let! itemName = Vide.ofMutable ""
+
+            p {
+                let x : VoidBuilder<_,_> = input.type'("text").oninput(fun x -> itemName.Value <- x.node.value)
+                yield x
             }
     
             p {
                 let addItem _ =
-                    let newItem = { name = itemName }
-                    items.Value <- { items.Value with items = newItem :: items.Value.items }
+                    let newItem = { name = itemName.Value; isDone = false }
+                    do todoList.Value <- { todoList.Value with items = newItem :: todoList.Value.items }
                 button.onclick(addItem) { "Add Item" }
             }
         }
-        
         div {
-            for item in items.Value.items do
+            for item in todoList.Value.items do
                 div {
                     p { item.name }
                 }

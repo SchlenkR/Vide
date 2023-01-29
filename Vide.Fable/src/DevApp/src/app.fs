@@ -126,12 +126,12 @@ let demos =
                     (
                         "Retrieving text values",
                         "TODO",
-                        start Demos.Input.textInput
+                        start Demos.Input.textInputReturnsValue
                     )
                     (
                         "Retrieving text values (as state)",
                         "TODO",
-                        start Demos.Input.textInputAsState
+                        start Demos.Input.textInputReturnsValue
                     )
                     (
                         "Component with input",

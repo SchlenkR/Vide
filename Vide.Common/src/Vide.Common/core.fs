@@ -15,12 +15,11 @@ type IEvaluationManager =
     abstract member HasPendingEvaluationRequests: bool
     abstract member EvaluationCount: uint64
 
-
 [<AbstractClass>]
 type VideContext() =
     abstract member EvaluationManager: IEvaluationManager
 
-type ComputationState<'v> =
+type AsyncState<'v> =
     {
         startedWorker: Async<'v>
         result: Ref<'v option>
@@ -212,7 +211,7 @@ type VideBuilder() =
             Vide a: Vide<'v,'s1,'c>,
             b: AsyncBindResult<'x, Vide<'v,'s2,'c>>
         )
-        : Vide<'v, 's1 option * ComputationState<_> option * 's2 option, 'c>
+        : Vide<'v, 's1 option * AsyncState<_> option * 's2 option, 'c>
         =
         Vide <| fun s ctx ->
             let sa,comp,sb =
