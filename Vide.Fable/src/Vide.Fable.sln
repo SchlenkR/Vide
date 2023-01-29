@@ -5,13 +5,13 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Fable", "Vide.Fable\Vide.Fable.fsproj", "{8C2EF9C3-586B-48AC-B011-C7081C7027AE}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Common", "..\Vide.Common\Vide.Common\Vide.Common.fsproj", "{FB1AA86E-5A85-4B0F-A0EB-7A02EFFFF3D8}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{21D9ADB0-A709-4259-9104-9EDF3B8B854F}"
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Fable.DevApp", "DevApp\src\Vide.Fable.DevApp.fsproj", "{83422735-CA81-4FF5-A8B7-7A18C1D5B88A}"
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "HtmlApiGenerator", "HtmlApiGenerator\HtmlApiGenerator.fsproj", "{3BE15C07-98CF-4E13-826F-99388A29A317}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Common", "..\..\Vide.Common\src\Vide.Common\Vide.Common.fsproj", "{6968D15F-8038-475E-B5CB-D63DF4E90331}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,6 @@ Global
 		{8C2EF9C3-586B-48AC-B011-C7081C7027AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C2EF9C3-586B-48AC-B011-C7081C7027AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C2EF9C3-586B-48AC-B011-C7081C7027AE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FB1AA86E-5A85-4B0F-A0EB-7A02EFFFF3D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB1AA86E-5A85-4B0F-A0EB-7A02EFFFF3D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB1AA86E-5A85-4B0F-A0EB-7A02EFFFF3D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB1AA86E-5A85-4B0F-A0EB-7A02EFFFF3D8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{83422735-CA81-4FF5-A8B7-7A18C1D5B88A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{83422735-CA81-4FF5-A8B7-7A18C1D5B88A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83422735-CA81-4FF5-A8B7-7A18C1D5B88A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -35,6 +31,10 @@ Global
 		{3BE15C07-98CF-4E13-826F-99388A29A317}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BE15C07-98CF-4E13-826F-99388A29A317}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BE15C07-98CF-4E13-826F-99388A29A317}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6968D15F-8038-475E-B5CB-D63DF4E90331}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6968D15F-8038-475E-B5CB-D63DF4E90331}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6968D15F-8038-475E-B5CB-D63DF4E90331}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6968D15F-8038-475E-B5CB-D63DF4E90331}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

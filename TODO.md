@@ -55,6 +55,7 @@ Components
         * CompoundComponents (=vide { ... })
         * RenderComponents (die die direkt auf ctx zugreuif)
     * Gutes Beispiel: Aus "input" eine "checkbox"-Komponente machen
+    * Components with events
 
 * HTML Api
     * globals as base class

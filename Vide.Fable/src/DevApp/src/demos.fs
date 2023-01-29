@@ -136,7 +136,7 @@ module GettingStarted =
         }
 
 module Input =
-    let textInput = 
+    let textInputReturnsValue = 
         vide {
             // TODO: Docu - wie ändert man das PropertyChangedTrigger-Verhalten
             let! enteredValue = input.type'("text").oninput()
@@ -145,7 +145,7 @@ module Input =
             }
         }
     
-    let textInputAsState = 
+    let textInputEvent = 
         vide {
             let! enteredText = Vide.ofMutable ""
 
@@ -153,10 +153,8 @@ module Input =
                 $"You say: %s{enteredText.Value}"
             }
 
-            let! enteredValue = input.type'("text").oninput()
-            enteredText.Value <- enteredValue.TextValue
-            
-            ()
+            // TODO: Docu - Default-Verhalten von input
+            input.type'("text").oninput(fun e -> enteredText.Value <- e.node.value)
         }
     
     let textInputComponent = 
