@@ -90,9 +90,9 @@ module Vide =
         Vide <| fun s (c: #VideContext) ->
             let s = s |> Option.defaultWith (fun () -> MutableValue(x, c.EvaluationManager))
             s, Some s
-        
-type VideBuilder() =
-    member _.Bind
+
+module BuilderBricks =
+    let bind
         (
             Vide m: Vide<'v1,'s1,'c>,
             f: 'v1 -> Vide<'v2,'s2,'c>
@@ -107,13 +107,13 @@ type VideBuilder() =
             let fv,fs = f fs ctx
             fv, Some (ms,fs)
 
-    member _.Return
+    let return'
         (x: 'v)
         : Vide<'v,unit,'c> 
         =
         Vide <| fun s ctx -> x,None
 
-    member _.Yield<'v,'s,'c>
+    let yield'<'v,'s,'c>
         (v: Vide<'v,'s,'c>)
         : Vide<'v,'s,'c>
         =
@@ -124,12 +124,12 @@ type VideBuilder() =
     // Another zero (with 's as state) is required for "if"s without an "else".
     // Unfortunately, we cannot have both. For that reason, "if"s without "else"
     // must use "else elseZero".
-    member _.Zero
+    let zero
         ()
         : Vide<unit,unit,'c>
         = Vide.zero<unit,'c>
 
-    member _.Delay
+    let delay
         (f: unit -> Vide<'v,'s,'c>)
         : Vide<'v,'s,'c>
         =
@@ -154,7 +154,7 @@ type VideBuilder() =
     //    : Vide<'v,'s1 option * 's2 option,'c>
     //    =
     //    combine a b fst
-    member _.Combine
+    let combine
         (
             Vide a: Vide<'v1,'s1,'c>,
             Vide b: Vide<'v2,'s2,'c>
@@ -168,7 +168,7 @@ type VideBuilder() =
             let vb,sb = b sb ctx
             vb, Some (sa,sb)
 
-    member _.For
+    let for'
         (
             input: seq<'a>,
             body: 'a -> Vide<'v,'s,'c>
@@ -191,62 +191,80 @@ type VideBuilder() =
     // ASYNC
     // ---------------------
     
-    member _.Bind<'v1,'v2,'s,'c>
-        (
-            m: Async<'v1>,
-            f: 'v1 -> Vide<'v2,'s,'c>
-        ) : AsyncBindResult<'v1, Vide<'v2,'s,'c>>
-        =
-        Debug.print 0 "BIND async"
-        AsyncBindResult(m, f)
+    module Async =
+        let bind<'v1,'v2,'s,'c>
+            (
+                m: Async<'v1>,
+                f: 'v1 -> Vide<'v2,'s,'c>
+            ) : AsyncBindResult<'v1, Vide<'v2,'s,'c>>
+            =
+            Debug.print 0 "BIND async"
+            AsyncBindResult(m, f)
     
-    member _.Delay
-        (f: unit -> AsyncBindResult<'v1,'v2>)
-        : AsyncBindResult<'v1,'v2>
-        =
-        Debug.print 0 "DELAY async"
-        f()
+        let delay
+            (f: unit -> AsyncBindResult<'v1,'v2>)
+            : AsyncBindResult<'v1,'v2>
+            =
+            Debug.print 0 "DELAY async"
+            f()
     
-    member _.Combine<'v,'x,'s1,'s2,'c when 'c :> VideContext>
-        (
-            Vide a: Vide<'v,'s1,'c>,
-            b: AsyncBindResult<'x, Vide<'v,'s2,'c>>
-        )
-        : Vide<'v, 's1 option * AsyncState<_> option * 's2 option, 'c>
-        =
-        Vide <| fun s ctx ->
-            let sa,comp,sb =
-                match s with
-                | None -> None,None,None
-                | Some (sa,comp,sb) -> sa,comp,sb
-            // TODO: Really reevaluate here at this place?
-            let va,sa = a sa ctx
-            let v,comp,sb =
-                match comp with
-                | None ->
-                    let (AsyncBindResult (comp,_)) = b
-                    let result = ref None
-                    do
-                        let onsuccess res =
-                            Debug.print 1 $"awaited result: {res}"
-                            do result.Value <- Some res
-                            do ctx.EvaluationManager.RequestEvaluation()
-                        // TODO: global cancellation handler / ex / cancellation, etc.
-                        let onexception ex = ()
-                        let oncancel ex = ()
-                        do Async.StartWithContinuations(comp, onsuccess, onexception, oncancel)
-                    let comp = { startedWorker = comp; result = result }
-                    va,comp,None
-                | Some comp ->
-                    match comp.result.Value with
-                    | Some v ->
-                        let (AsyncBindResult (_,f)) = b
-                        let (Vide b) = f v
-                        let vb,sb = b sb ctx
-                        vb,comp,sb
+        let combine<'v,'x,'s1,'s2,'c when 'c :> VideContext>
+            (
+                Vide a: Vide<'v,'s1,'c>,
+                b: AsyncBindResult<'x, Vide<'v,'s2,'c>>
+            )
+            : Vide<'v, 's1 option * AsyncState<_> option * 's2 option, 'c>
+            =
+            Vide <| fun s ctx ->
+                let sa,comp,sb =
+                    match s with
+                    | None -> None,None,None
+                    | Some (sa,comp,sb) -> sa,comp,sb
+                // TODO: Really reevaluate here at this place?
+                let va,sa = a sa ctx
+                let v,comp,sb =
+                    match comp with
                     | None ->
-                        va,comp,sb
-            v, Some (sa, Some comp, sb)
+                        let (AsyncBindResult (comp,_)) = b
+                        let result = ref None
+                        do
+                            let onsuccess res =
+                                Debug.print 1 $"awaited result: {res}"
+                                do result.Value <- Some res
+                                do ctx.EvaluationManager.RequestEvaluation()
+                            // TODO: global cancellation handler / ex / cancellation, etc.
+                            let onexception ex = ()
+                            let oncancel ex = ()
+                            do Async.StartWithContinuations(comp, onsuccess, onexception, oncancel)
+                        let comp = { startedWorker = comp; result = result }
+                        va,comp,None
+                    | Some comp ->
+                        match comp.result.Value with
+                        | Some v ->
+                            let (AsyncBindResult (_,f)) = b
+                            let (Vide b) = f v
+                            let vb,sb = b sb ctx
+                            vb,comp,sb
+                        | None ->
+                            va,comp,sb
+                v, Some (sa, Some comp, sb)
+
+    
+type VideBuilder() =
+    member _.Bind(m, f) = BuilderBricks.bind(m, f)
+    member _.Return(x) = BuilderBricks.return'(x)
+    member _.Yield(x) = BuilderBricks.yield'(x)
+    member _.Zero() = BuilderBricks.zero()
+    member _.Delay(f) = BuilderBricks.delay(f)
+    member _.Combine(a, b) = BuilderBricks.combine(a, b)
+    member _.For(seq, body) = BuilderBricks.for'(seq, body)
+
+    // ---------------------
+    // ASYNC
+    // ---------------------
+    member _.Bind(m, f) = BuilderBricks.Async.bind(m, f)
+    member _.Delay(f) = BuilderBricks.Async.delay(f)
+    member _.Combine(a, b) = BuilderBricks.Async.combine(a, b)
 
 type VideApp<'v,'s,'c when 'c :> VideContext>
     (
