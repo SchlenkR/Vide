@@ -336,14 +336,15 @@ module TodoList =
             let! itemName = Vide.ofMutable ""
 
             p {
-                let x : VoidBuilder<_,_> = input.type'("text").oninput(fun x -> itemName.Value <- x.node.value)
-                yield x
+                input.type'("text").onchange(fun x -> itemName.Value <- x.node.value)
             }
     
             p {
                 let addItem _ =
                     let newItem = { name = itemName.Value; isDone = false }
                     do todoList.Value <- { todoList.Value with items = newItem :: todoList.Value.items }
+                    do itemName.Reset()
+                
                 button.onclick(addItem) { "Add Item" }
             }
         }

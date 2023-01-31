@@ -36,13 +36,14 @@ module BuilderHelper =
 
 [<AutoOpen>]
 module MutableValue =
-    type MutableValue<'a when 'a: equality>(init: 'a, evalManager: IEvaluationManager) =
-        let mutable state = init
+    type MutableValue<'a when 'a: equality>(initial: 'a, evalManager: IEvaluationManager) =
+        let mutable state = initial
         member _.Set(value) =
             // Not just a perf opt: prevent stack overflows (see demo case asyncHelloWorld)!
             if value <> state then
                 do state <- value
                 do evalManager.RequestEvaluation()
+        member this.Reset() = this.Set(initial)
         member this.Value
             with get() = state
             and set(value) = this.Set(value)
