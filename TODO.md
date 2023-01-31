@@ -77,6 +77,7 @@ Components
     * Input soll automatisch "OnChange" auslösen
     * Kontext weiter abstrahieren, damit man ohne Browser testen kann
     * input: checked / radio / etc.
+    * form elements
 
 * MemLeaks bei evt reg?
 
