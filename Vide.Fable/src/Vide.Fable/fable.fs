@@ -12,15 +12,15 @@ type FableContext
         parent: Node, 
         evaluationManager: IEvaluationManager
     ) =
-    inherit VideContext()
-    
     let mutable keptChildren = []
 
     let keepChild child = keptChildren <- (child :> Node) :: keptChildren
     let appendToParent child = parent.appendChild(child) |> ignore
     let removeFromParent child = parent.removeChild(child) |> ignore
 
-    override _.EvaluationManager = evaluationManager
+    interface IVideContext with
+        member _.EvaluationManager = evaluationManager
+    member _.EvaluationManager = evaluationManager
     member _.Parent = parent
     member _.AddElement<'n when 'n :> HTMLElement>(tagName: string) =
         let elem = document.createElement tagName 

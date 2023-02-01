@@ -15,8 +15,7 @@ type IEvaluationManager =
     abstract member HasPendingEvaluationRequests: bool
     abstract member EvaluationCount: uint64
 
-[<AbstractClass>]
-type VideContext() =
+type IVideContext =
     abstract member EvaluationManager: IEvaluationManager
 
 type AsyncState<'v> =
@@ -82,7 +81,7 @@ module Vide =
         Vide <| fun s ctx -> ctx,None
 
     let ofMutable x =
-        Vide <| fun s (c: #VideContext) ->
+        Vide <| fun s (c: #IVideContext) ->
             let s = s |> Option.defaultWith (fun () -> MutableValue(x, c.EvaluationManager))
             s, Some s
 
@@ -203,7 +202,7 @@ module BuilderBricks =
             =
             f()
     
-        let combine<'v,'x,'s1,'s2,'c when 'c :> VideContext>
+        let combine<'v,'x,'s1,'s2,'c when 'c :> IVideContext>
             (
                 Vide a: Vide<'v,'s1,'c>,
                 b: AsyncBindResult<'x, Vide<'v,'s2,'c>>
@@ -260,7 +259,7 @@ type VideBuilder() =
     member _.Delay(f) = BuilderBricks.Async.delay(f)
     member _.Combine(a, b) = BuilderBricks.Async.combine(a, b)
 
-type VideApp<'v,'s,'c when 'c :> VideContext>
+type VideApp<'v,'s,'c when 'c :> IVideContext>
     (
         content: Vide<'v,'s,'c>,
         ctxCtor: IEvaluationManager -> 'c,
