@@ -312,6 +312,7 @@ module BuilderBricks =
                             va,comp,sb
                 v, Some (sa, Some comp, sb)
 
+[<AbstractClass>]
 type VideBaseBuilder() =
     member _.Bind(m, f) = BuilderBricks.bind(m, f)
     member _.Zero() = BuilderBricks.zero()

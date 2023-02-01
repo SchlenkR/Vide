@@ -136,10 +136,26 @@ module BuilderBricks =
             | Clear -> ctx.Parent.textContent <- ""
             (),None
 
-// -------------------------------------------------------------------
-// The four basic builders for renderers (used for HTML elements like
+// ---------------------------------------------------------------------------------
+// The four (+1 base) basic builders for renderers (used for HTML elements like
 //    div, p, etc.) in their forms (with content, with returns, specific
 //    result value like for "input"), and the vide component builder.
+// ---------------------------------------------------------------------------------
+
+[<AbstractClass>]
+type RenderBaseBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
+    inherit VideBaseBuilder()
+    let modifierContext = ModifierContext(createNode, checkOrUpdateNode)
+    interface IRenderBuilder<'n, FableContext> with
+        member _.ModifierContext = modifierContext
+    member _.ModifierContext = modifierContext
+
+// -------------------------------------------------------------------
+// Builder definitions
+//   + Run
+//   + Return
+//     - every Content builder should bind every other builder)
+//     - standard yields
 // -------------------------------------------------------------------
 
 type RenderValC0Builder<'v,'n when 'n :> Node>
@@ -148,29 +164,17 @@ type RenderValC0Builder<'v,'n when 'n :> Node>
         checkOrUpdateNode, 
         createResultVal: 'n -> 'v
     ) =
-    inherit VideBaseBuilder()
-    let modifierContext = ModifierContext(createNode, checkOrUpdateNode)
-    interface IRenderBuilder<'n, FableContext> with
-        member _.ModifierContext = modifierContext
-    // --- div. builder methods ---
-    member _.Run(v) = modifierContext |> ModifierContext.apply v (fun n v -> createResultVal n)
+    inherit RenderBaseBuilder<'n>(createNode, checkOrUpdateNode)
+    member this.Run(v) = this.ModifierContext |> ModifierContext.apply v (fun n v -> createResultVal n)
 
 type RenderRetC0Builder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
-    inherit VideBaseBuilder()
-    let modifierContext = ModifierContext(createNode, checkOrUpdateNode)
-    interface IRenderBuilder<'n, FableContext> with
-        member _.ModifierContext = modifierContext
-    // --- div. builder methods ---
-    member _.Run(v) = modifierContext |> ModifierContext.apply v (fun n v -> v)
+    inherit RenderBaseBuilder<'n>(createNode, checkOrUpdateNode)
+    member this.Run(v) = this.ModifierContext |> ModifierContext.apply v (fun n v -> v)
     member _.Return(x) = BuilderBricks.return'(x)
 
 type RenderRetCnBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
-    inherit VideBaseBuilder()
-    let modifierContext = ModifierContext(createNode, checkOrUpdateNode)
-    interface IRenderBuilder<'n, FableContext> with
-        member _.ModifierContext = modifierContext
-    // --- div. builder methods ---
-    member _.Run(v) = modifierContext |> ModifierContext.apply v (fun n v -> v)
+    inherit RenderBaseBuilder<'n>(createNode, checkOrUpdateNode)
+    member this.Run(v) = this.ModifierContext |> ModifierContext.apply v (fun n v -> v)
     member _.Return(x) = BuilderBricks.return'(x)
 
 type ComponentRetCnBuilder() =
