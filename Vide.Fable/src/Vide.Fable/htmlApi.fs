@@ -10,6 +10,7 @@ namespace Vide
 open System.Runtime.CompilerServices
 open Browser.Types
 open Vide
+open Vide.HtmlApiPreparation
 
 module HtmlElementBuilders =
     type HTMLGlobalAttrsVoidElementBuilder<'v,'n when 'n :> HTMLElement>(tagName, resultSelector) =

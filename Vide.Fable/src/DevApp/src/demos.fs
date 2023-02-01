@@ -140,9 +140,10 @@ module Input =
         vide {
             // TODO: Docu - wie ändert man das PropertyChangedTrigger-Verhalten
             let! enteredValue = input.type'("text").oninput()
-            div {
-                $"You say: {enteredValue.TextValue}"
-            }
+            return ()
+            //div {
+            //    $"You say: {enteredValue.TextValue}"
+            //}
         }
     
     let textInputEvent = 

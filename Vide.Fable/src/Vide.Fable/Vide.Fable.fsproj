@@ -15,8 +15,8 @@
   
   <ItemGroup>
     <None Include="..\..\..\README.md" Pack="true" PackagePath="\" />
-    <Content Include="*.fsproj; *.fs; *.js;" Exclude="**\*.fs.js" PackagePath="fable\" />
     <Compile Include="fable.fs" />
+    <Compile Include="htmlApiPreparation.fs" />
     <Compile Include="htmlApi.fs" />
   </ItemGroup>
   
@@ -24,3 +24,4 @@
     <ProjectReference Include="..\..\..\Vide.Common\src\Vide.Common\Vide.Common.fsproj" />
   </ItemGroup>
 </Project>
+

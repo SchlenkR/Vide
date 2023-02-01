@@ -1,11 +1,11 @@
 [<AutoOpen>]
 module Vide.Fable
 
+open System
 open System.Runtime.CompilerServices
 open Browser
 open Browser.Types
 open Vide
-open System
 
 type FableContext
     (
@@ -47,24 +47,26 @@ type BuilderOperations = | Clear
 type NodeBuilderState<'n,'s> = option<'n> * option<'s>
 type ChildAction = Keep | DiscardAndCreateNew
 
-module BuilderHelper =
-    let createNode elemName (ctx: FableContext) =
-        ctx.AddElement<'n>(elemName)
-    let checkOrUpdateNode elemName (node: #Node) =
-        match node.nodeName.Equals(elemName, StringComparison.OrdinalIgnoreCase) with
-        | true -> Keep
-        | false ->
-            // TODO:
-            console.log($"TODO: if/else detection? Expected node name: {elemName}, but was: {node.nodeName}")
-            DiscardAndCreateNew
-    let runBuilder
-        createNode
-        checkOrUpdateNode
-        initModifiers
-        evalModifiers
-        afterEvalModifiers
+type NodeModifier<'n,'c> = 'n -> 'c -> unit
+
+type ModifierContext<'n,'c>
+    (
+        createNode: 'c -> 'n,
+        checkOrUpdateNode: 'n -> ChildAction
+    ) =
+
+    member _.CreateNode = createNode
+    member _.CheckOrUpdateNode = checkOrUpdateNode
+
+    member val InitModifiers: ResizeArray<NodeModifier<'n,'c>> = ResizeArray() with get
+    member val EvalModifiers: ResizeArray<NodeModifier<'n,'c>> = ResizeArray() with get
+    member val AfterEvalModifiers: ResizeArray<NodeModifier<'n,'c>> = ResizeArray() with get
+
+module ModifierContext =
+    let apply
         (Vide childVide: Vide<'v1,'fs,FableContext>)
-        resultSelector
+        createResultVal
+        (modifierCtx: ModifierContext<'n,FableContext>)
         : Vide<'v2, NodeBuilderState<'n,'fs>, FableContext>
         =
         Vide <| fun s (ctx: FableContext) ->
@@ -81,141 +83,161 @@ module BuilderHelper =
                 // But: See comment in definition of: Vide.Core.Vide
                 match s with
                 | None ->
-                    let newNode,s = createNode ctx,cs
-                    do runModifiers initModifiers newNode
+                    let newNode,s = modifierCtx.CreateNode ctx,cs
+                    do runModifiers modifierCtx.InitModifiers newNode
                     newNode,s
                 | Some node ->
-                    match checkOrUpdateNode node with
+                    match modifierCtx.CheckOrUpdateNode node with
                     | Keep ->
                         ctx.KeepChild(node)
                         node,cs
                     | DiscardAndCreateNew ->
-                        createNode ctx,None
-            do runModifiers evalModifiers node
+                        modifierCtx.CreateNode ctx,None
+            do runModifiers modifierCtx.EvalModifiers node
             let childCtx = FableContext(node, ctx.EvaluationManager)
             let cv,cs = childVide cs childCtx
             for x in childCtx.GetObsoleteChildren() do
                 childCtx.RemoveChild(x)
-            do runModifiers afterEvalModifiers node
-            let result = resultSelector node cv
+            do runModifiers modifierCtx.AfterEvalModifiers node
+            let result = createResultVal node cv
             let state = Some (Some node, cs)
             result,state
 
-type NodeModifier<'n,'c> = 'n -> 'c -> unit
+type IRenderBuilder<'n,'c> =
+    abstract member ModifierContext: ModifierContext<'n,'c> with get
 
-type NodeBuilder<'n when 'n :> Node>
-    (
-        createNode: FableContext -> 'n,
-        checkOrUpdateNode: 'n -> ChildAction
-    ) =
-    inherit VideBuilder()
-
-    member _.CreateNode = createNode
-    member _.CheckOrUpdateNode = checkOrUpdateNode
-
-    member val InitModifiers: NodeModifier<'n, FableContext> list = [] with get,set
-    member val EvalModifiers: NodeModifier<'n, FableContext> list = [] with get,set
-    member val AfterEvalModifiers: NodeModifier<'n, FableContext> list = [] with get,set
-
-    // Important: Run must be defined on this type so that it is visible in upcoming
-    // yields - otherwise, Run is not called even though inheritors define it.
-    // See Bug: nb {()} - OnEval will not be called
-
-    member this.DoRun(childVide, resultSelector) =
-        BuilderHelper.runBuilder
-            createNode 
-            checkOrUpdateNode 
-            this.InitModifiers 
-            this.EvalModifiers 
-            this.AfterEvalModifiers 
-            childVide 
-            resultSelector
-
-let inline text value =
-    Vide <| fun s (ctx: FableContext) ->
-        let node = s |> Option.defaultWith (fun () -> ctx.AddText(value))
-        do
-            if node.textContent <> value then
-                node.textContent <- value
-            ctx.KeepChild(node)
-        (), Some node
-
-module Yield =
-    let inline yieldText (value: string) =
-        text value
-    let inline yieldBuilderOp (op: BuilderOperations) =
+module BuilderBricks =
+    let createNode elemName (ctx: FableContext) =
+        ctx.AddElement<'n>(elemName)
+    
+    let checkOrUpdateNode elemName (node: #Node) =
+        match node.nodeName.Equals(elemName, StringComparison.OrdinalIgnoreCase) with
+        | true -> Keep
+        | false ->
+            // TODO:
+            console.log($"TODO: if/else detection? Expected node name: {elemName}, but was: {node.nodeName}")
+            DiscardAndCreateNew
+    
+    let inline yieldText(value: string) =
+        Vide <| fun s (ctx: FableContext) ->
+            let node = s |> Option.defaultWith (fun () -> ctx.AddText(value))
+            do
+                if node.textContent <> value then
+                    node.textContent <- value
+                ctx.KeepChild(node)
+            (), Some node
+    
+    let inline yieldVide(v: Vide<_,_,_>) =
+        v
+    
+    let inline yieldBuilderOp(op: BuilderOperations) =
         Vide <| fun s (ctx: FableContext) ->
             match op with
             | Clear -> ctx.Parent.textContent <- ""
             (),None
 
-type VoidBuilder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, resultSelector: 'n -> 'v) =
-    inherit NodeBuilder<'n>(createNode, checkOrUpdateNode)
-    member this.Run(v) = this.DoRun(v, fun node _ -> resultSelector node)
+// -------------------------------------------------------------------
+// The four basic builders for renderers (used for HTML elements like
+//    div, p, etc.) in their forms (with content, with returns, specific
+//    result value like for "input"), and the vide component builder.
+// -------------------------------------------------------------------
 
-type ContentBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
-    inherit NodeBuilder<'n>(createNode, checkOrUpdateNode)
-    // Oh, this is a good one: Run must definitely defined before Yield(ContentBuilder)
-    member this.Run(v) = this.DoRun(v, fun node vres -> vres)
-    member _.Yield(b: VoidBuilder<_,_>) = b {()}
-    member _.Yield(b: ContentBuilder<_>) = b {()}
-    member _.Yield(s) = Yield.yieldText s
-    member _.Yield(op) = Yield.yieldBuilderOp op
+type RenderValC0Builder<'v,'n when 'n :> Node>
+    (
+        createNode, 
+        checkOrUpdateNode, 
+        createResultVal: 'n -> 'v
+    ) =
+    inherit VideBaseBuilder()
+    let modifierContext = ModifierContext(createNode, checkOrUpdateNode)
+    interface IRenderBuilder<'n, FableContext> with
+        member _.ModifierContext = modifierContext
+    // --- div. builder methods ---
+    member _.Run(v) = modifierContext |> ModifierContext.apply v (fun n v -> createResultVal n)
 
-type VideComponentBuilder() =
-    inherit VideBuilder()
-    member _.Yield(b: VoidBuilder<_,_>) = b {()}
-    member _.Yield(b: ContentBuilder<_>) = b {()}
-    member _.Yield(s) = Yield.yieldText s
-    member _.Yield(op) = Yield.yieldBuilderOp op
+type RenderRetC0Builder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
+    inherit VideBaseBuilder()
+    let modifierContext = ModifierContext(createNode, checkOrUpdateNode)
+    interface IRenderBuilder<'n, FableContext> with
+        member _.ModifierContext = modifierContext
+    // --- div. builder methods ---
+    member _.Run(v) = modifierContext |> ModifierContext.apply v (fun n v -> v)
+    member _.Return(x) = BuilderBricks.return'(x)
 
-type VideBuilder with
-    member this.Bind(m: VoidBuilder<'v,'n>, f) =
-        this.Bind(m {()}, f)
+type RenderRetCnBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
+    inherit VideBaseBuilder()
+    let modifierContext = ModifierContext(createNode, checkOrUpdateNode)
+    interface IRenderBuilder<'n, FableContext> with
+        member _.ModifierContext = modifierContext
+    // --- div. builder methods ---
+    member _.Run(v) = modifierContext |> ModifierContext.apply v (fun n v -> v)
+    member _.Return(x) = BuilderBricks.return'(x)
 
-type HTMLVoidElementBuilder<'v,'n when 'n :> HTMLElement>(elemName, resultSelector) =
-    inherit VoidBuilder<'v,'n>(
-        BuilderHelper.createNode elemName,
-        BuilderHelper.checkOrUpdateNode elemName,
-        resultSelector)
+type ComponentRetCnBuilder() =
+    inherit VideBaseBuilder()
+    member _.Return(x) = BuilderBricks.return'(x)
 
-type HTMLContentElementBuilder<'n when 'n :> HTMLElement>(elemName) =
-    inherit ContentBuilder<'n>(
-        BuilderHelper.createNode elemName,
-        BuilderHelper.checkOrUpdateNode elemName)
+// -------------------------------------------------------------------
+// "Yielsd"s 
+//     - every Content builder should bind every other builder)
+//     - standard yields
+// -------------------------------------------------------------------
+
+type RenderRetCnBuilder<'n when 'n :> Node> with
+    member _.Yield(b: RenderValC0Builder<_,_>) = b {()}
+    member _.Yield(b: RenderRetC0Builder<_>) = b {()}
+    member _.Yield(b: RenderRetCnBuilder<_>) = b {()}
+    member _.Yield(b: ComponentRetCnBuilder) = b {()}
+    member _.Yield(s) = BuilderBricks.yieldText s
+    member _.Yield(v) = BuilderBricks.yieldVide(v)
+    member _.Yield(op) = BuilderBricks.yieldBuilderOp op
+
+type ComponentRetCnBuilder with
+    member _.Yield(b: RenderValC0Builder<_,_>) = b {()}
+    member _.Yield(b: RenderRetC0Builder<_>) = b {()}
+    member _.Yield(b: RenderRetCnBuilder<_>) = b {()}
+    member _.Yield(b: ComponentRetCnBuilder) = b {()}
+    member _.Yield(s) = BuilderBricks.yieldText s
+    member _.Yield(v) = BuilderBricks.yieldVide(v)
+    member _.Yield(op) = BuilderBricks.yieldBuilderOp op
+
+// ----------------------------------------------------------------------------
+// "Bind"s (every Content builder can bind every builder that returns values)
+// ----------------------------------------------------------------------------
+
+type RenderRetCnBuilder<'n when 'n :> Node> with
+    member _.Bind(m: RenderValC0Builder<_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderRetC0Builder<_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderRetCnBuilder<_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: ComponentRetCnBuilder, f) = BuilderBricks.bind(m {()}, f)
+
+type ComponentRetCnBuilder with
+    member _.Bind(m: RenderValC0Builder<_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderRetC0Builder<_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderRetCnBuilder<_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: ComponentRetCnBuilder, f) = BuilderBricks.bind(m {()}, f)
+
 
 [<Extension>]
 type NodeBuilderExtensions =
-    // TODO: Switch back to non-inheritance API
-
+    
     /// Called once on initialization.
     [<Extension>]
-    static member OnInit(this: #NodeBuilder<_>, m: NodeModifier<_, FableContext>) =
-        do this.InitModifiers <- m :: this.InitModifiers
+    static member OnInit(this: #IRenderBuilder<_,_>, m: NodeModifier<_,_>) =
+        do this.ModifierContext.InitModifiers.Add(m)
         this
     
     /// Called on every Vide evaluatiopn cycle.
     [<Extension>]
-    static member OnEval(this: #NodeBuilder<_>, m: NodeModifier<_, FableContext>) =
-        do this.EvalModifiers <- m :: this.EvalModifiers
+    static member OnEval(this: #IRenderBuilder<_,_>, m: NodeModifier<_,_>) =
+        do this.ModifierContext.EvalModifiers.Add(m)
         this
     
     /// Called after every Vide evaluatiopn cycle.
     [<Extension>]
-    static member OnAfterEval(this: #NodeBuilder<_>, m: NodeModifier<_, FableContext>) =
-        do this.AfterEvalModifiers <- m :: this.AfterEvalModifiers
+    static member OnAfterEval(this: #IRenderBuilder<_,_>, m: NodeModifier<_,_>) =
+        do this.ModifierContext.AfterEvalModifiers.Add(m)
         this
-
-type VoidResult = unit
-
-// TODO: All other input possibilities
-type InputResult(node: HTMLInputElement) =
-    member _.Node = node
-    member _.TextValue = node.value
-    member _.DateValue = node.valueAsDate
-    member _.FloatValue = node.valueAsNumber
-    member _.IntValue = node.valueAsNumber |> int
-    member _.IsChecked = node.checked
 
 module Event =
     type FableEventArgs<'evt,'n when 'n :> Node> =
@@ -237,26 +259,11 @@ module Event =
             finally
                 do ctx.EvaluationManager.Resume()
 
-type Event =
-    static member inline doBind(value: MutableValue<_>, getter) =
-        fun (args: Event.FableEventArgs<_, HTMLInputElement>) ->
-            value.Value <- getter(InputResult(args.node))
-    static member inline bind(value: MutableValue<string>) =
-        Event.doBind(value, fun x -> x.TextValue)
-    static member inline bind(value: MutableValue<int>) =
-        Event.doBind(value, fun x -> x.IntValue)
-    static member inline bind(value: MutableValue<float>) =
-        Event.doBind(value, fun x -> x.FloatValue)
-    static member inline bind(value: MutableValue<DateTime>) =
-        Event.doBind(value, fun x -> x.DateValue)
-    static member inline bind(value: MutableValue<bool>) =
-        Event.doBind(value, fun x -> x.IsChecked)
-
 module App =
     let inline doCreate appCtor (host: #Node) (content: Vide<'v,'s,FableContext>) onEvaluated =
         let content = 
             // TODO: Really a ContentBuilder? Why?
-            ContentBuilder((fun _ -> host), fun _ -> Keep) { content }
+            RenderRetCnBuilder((fun _ -> host), fun _ -> Keep) { content }
         let ctxCtor = fun eval -> FableContext(host, eval)
         appCtor content ctxCtor onEvaluated
     let createFable host content onEvaluated =
@@ -264,4 +271,4 @@ module App =
     let createFableWithObjState host content onEvaluated =
         doCreate App.createWithUntypedState host content onEvaluated
 
-let vide = VideComponentBuilder()
+let vide = ComponentRetCnBuilder()

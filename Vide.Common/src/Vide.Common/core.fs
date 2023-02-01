@@ -15,18 +15,6 @@ type IEvaluationManager =
     abstract member HasPendingEvaluationRequests: bool
     abstract member EvaluationCount: uint64
 
-type IVideContext =
-    abstract member EvaluationManager: IEvaluationManager
-
-type AsyncState<'v> =
-    {
-        startedWorker: Async<'v>
-        result: Ref<'v option>
-    }
-
-type AsyncBindResult<'v1,'v2> = 
-    AsyncBindResult of comp: Async<'v1> * cont: ('v1 -> 'v2)
-
 [<AutoOpen>]
 module MutableValue =
     type MutableValue<'a when 'a: equality>(initial: 'a, evalManager: IEvaluationManager) =
@@ -51,6 +39,87 @@ module MutableValue =
     let inline ( := ) (mutVal: MutableValue<_>) x = mutVal.Value <- x
     
     // TODO: override arithmetic ops
+
+type IVideContext =
+    abstract member EvaluationManager: IEvaluationManager
+
+type AsyncState<'v> =
+    {
+        startedWorker: Async<'v>
+        result: Ref<'v option>
+    }
+
+type AsyncBindResult<'v1,'v2> = 
+    AsyncBindResult of comp: Async<'v1> * cont: ('v1 -> 'v2)
+
+type VideApp<'v,'s,'c when 'c :> IVideContext>
+    (
+        content: Vide<'v,'s,'c>,
+        ctxCtor: IEvaluationManager -> 'c,
+        onEvaluated: 'v -> 's option -> unit
+    ) as this 
+    =
+    let mutable currValue = None
+    let mutable currentState = None
+    let mutable isEvaluating = false
+    let mutable hasPendingEvaluationRequests = false
+    let mutable evaluationCount = 0uL
+    let mutable suspendEvaluation = false
+        
+    let ctx = ctxCtor(this)
+
+    interface IEvaluationManager with
+        member _.RequestEvaluation() =
+            if suspendEvaluation then
+                hasPendingEvaluationRequests <- true
+            else
+                // During an evaluation, requests for another evaluation can
+                // occur, which have to be handled as _subsequent_ evaluations!
+                let (Vide content) = content
+                let rec eval () =
+                    do 
+                        hasPendingEvaluationRequests <- false
+                        isEvaluating <- true
+                    let value,newState = content currentState this.RootContext
+                    do
+                        currValue <- Some value
+                        currentState <- newState
+                        isEvaluating <- false
+                        evaluationCount <- evaluationCount + 1uL
+                    do onEvaluated value currentState
+                    Debug.print 10 $"Evaluation done ({evaluationCount})"
+                    if hasPendingEvaluationRequests then
+                        eval ()
+                do
+                    match isEvaluating with
+                    | true -> hasPendingEvaluationRequests <- true
+                    | false -> eval ()
+        member _.Suspend() =
+            do suspendEvaluation <- true
+        member _.Resume() =
+            do suspendEvaluation <- false
+            if hasPendingEvaluationRequests then
+                (this :> IEvaluationManager).RequestEvaluation()
+        member _.IsEvaluating = isEvaluating
+        member _.HasPendingEvaluationRequests = hasPendingEvaluationRequests
+        member _.EvaluationCount = evaluationCount
+
+    member _.RootContext = ctx
+    member _.EvaluationManager = this :> IEvaluationManager
+    member _.CurrentState = currentState
+
+module App =
+    let create content ctxCtor onEvaluated =
+        VideApp(content, ctxCtor, onEvaluated)
+    let createWithUntypedState content ctxCtor onEvaluated =
+        let content =
+            Vide <| fun (s: obj option) ctx ->
+                let (Vide content) = content
+                let typedS = s |> Option.map (fun s -> s :?> 's)
+                let v,s = content typedS ctx
+                let untypedS = s |> Option.map (fun s -> s :> obj)
+                v,untypedS
+        create content ctxCtor onEvaluated
 
 module Vide =
 
@@ -243,87 +312,15 @@ module BuilderBricks =
                             va,comp,sb
                 v, Some (sa, Some comp, sb)
 
-type VideBuilder() =
+type VideBaseBuilder() =
     member _.Bind(m, f) = BuilderBricks.bind(m, f)
-    member _.Return(x) = BuilderBricks.return'(x)
-    member _.Yield(x) = BuilderBricks.yield'(x)
     member _.Zero() = BuilderBricks.zero()
     member _.Delay(f) = BuilderBricks.delay(f)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
-
     // ---------------------
     // ASYNC
     // ---------------------
     member _.Bind(m, f) = BuilderBricks.Async.bind(m, f)
     member _.Delay(f) = BuilderBricks.Async.delay(f)
     member _.Combine(a, b) = BuilderBricks.Async.combine(a, b)
-
-type VideApp<'v,'s,'c when 'c :> IVideContext>
-    (
-        content: Vide<'v,'s,'c>,
-        ctxCtor: IEvaluationManager -> 'c,
-        onEvaluated: 'v -> 's option -> unit
-    ) as this 
-    =
-    let mutable currValue = None
-    let mutable currentState = None
-    let mutable isEvaluating = false
-    let mutable hasPendingEvaluationRequests = false
-    let mutable evaluationCount = 0uL
-    let mutable suspendEvaluation = false
-        
-    let ctx = ctxCtor(this)
-
-    interface IEvaluationManager with
-        member _.RequestEvaluation() =
-            if suspendEvaluation then
-                hasPendingEvaluationRequests <- true
-            else
-                // During an evaluation, requests for another evaluation can
-                // occur, which have to be handled as _subsequent_ evaluations!
-                let (Vide content) = content
-                let rec eval () =
-                    do 
-                        hasPendingEvaluationRequests <- false
-                        isEvaluating <- true
-                    let value,newState = content currentState this.RootContext
-                    do
-                        currValue <- Some value
-                        currentState <- newState
-                        isEvaluating <- false
-                        evaluationCount <- evaluationCount + 1uL
-                    do onEvaluated value currentState
-                    Debug.print 10 $"Evaluation done ({evaluationCount})"
-                    if hasPendingEvaluationRequests then
-                        eval ()
-                do
-                    match isEvaluating with
-                    | true -> hasPendingEvaluationRequests <- true
-                    | false -> eval ()
-        member _.Suspend() =
-            do suspendEvaluation <- true
-        member _.Resume() =
-            do suspendEvaluation <- false
-            if hasPendingEvaluationRequests then
-                (this :> IEvaluationManager).RequestEvaluation()
-        member _.IsEvaluating = isEvaluating
-        member _.HasPendingEvaluationRequests = hasPendingEvaluationRequests
-        member _.EvaluationCount = evaluationCount
-
-    member _.RootContext = ctx
-    member _.EvaluationManager = this :> IEvaluationManager
-    member _.CurrentState = currentState
-
-module App =
-    let create content ctxCtor onEvaluated =
-        VideApp(content, ctxCtor, onEvaluated)
-    let createWithUntypedState content ctxCtor onEvaluated =
-        let content =
-            Vide <| fun (s: obj option) ctx ->
-                let (Vide content) = content
-                let typedS = s |> Option.map (fun s -> s :?> 's)
-                let v,s = content typedS ctx
-                let untypedS = s |> Option.map (fun s -> s :> obj)
-                v,untypedS
-        create content ctxCtor onEvaluated
