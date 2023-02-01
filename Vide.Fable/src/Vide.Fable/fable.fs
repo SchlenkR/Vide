@@ -72,7 +72,10 @@ module BuilderHelper =
             let inline runModifiers modifiers node =
                 for m in modifiers do
                     m node ctx
-            let s,cs = BuilderHelper.separateStatePair s
+            let s,cs =
+                match s with
+                | None -> None,None
+                | Some (ms,fs) -> ms,fs
             let node,cs =
                 // Can it happen that s is Some and cs is None? I don't think so.
                 // But: See comment in definition of: Vide.Core.Vide

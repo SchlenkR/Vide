@@ -28,12 +28,6 @@ type AsyncState<'v> =
 type AsyncBindResult<'v1,'v2> = 
     AsyncBindResult of comp: Async<'v1> * cont: ('v1 -> 'v2)
 
-module BuilderHelper =
-    let inline separateStatePair s =
-        match s with
-        | None -> None,None
-        | Some (ms,fs) -> ms,fs
-
 [<AutoOpen>]
 module MutableValue =
     type MutableValue<'a when 'a: equality>(initial: 'a, evalManager: IEvaluationManager) =
@@ -60,6 +54,7 @@ module MutableValue =
     // TODO: override arithmetic ops
 
 module Vide =
+
     // Preserves the first value given and discards subsequent values.
     let preserveValue x =
         Vide <| fun s ctx ->
@@ -100,7 +95,10 @@ module BuilderBricks =
         : Vide<'v2,'s1 option * 's2 option,'c>
         =
         Vide <| fun s ctx ->
-            let ms,fs = BuilderHelper.separateStatePair s
+            let ms,fs =
+                match s with
+                | None -> None,None
+                | Some (ms,fs) -> ms,fs
             let mv,ms = m ms ctx
             let (Vide f) = f mv
             let fv,fs = f fs ctx
@@ -160,7 +158,10 @@ module BuilderBricks =
         : Vide<'v2,'s1 option * 's2 option,'c>
         =
         Vide <| fun s ctx ->
-            let sa,sb = BuilderHelper.separateStatePair s
+            let sa,sb =
+                match s with
+                | None -> None,None
+                | Some (ms,fs) -> ms,fs
             let va,sa = a sa ctx
             let vb,sb = b sb ctx
             vb, Some (sa,sb)
