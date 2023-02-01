@@ -100,7 +100,6 @@ module BuilderBricks =
         : Vide<'v2,'s1 option * 's2 option,'c>
         =
         Vide <| fun s ctx ->
-            Debug.print 0 "BIND"
             let ms,fs = BuilderHelper.separateStatePair s
             let mv,ms = m ms ctx
             let (Vide f) = f mv
@@ -117,7 +116,6 @@ module BuilderBricks =
         (v: Vide<'v,'s,'c>)
         : Vide<'v,'s,'c>
         =
-        Debug.print 0 "YIELD Vide"
         v
 
     // This zero (with "unit" as state) is required for multiple returns.
@@ -133,9 +131,9 @@ module BuilderBricks =
         (f: unit -> Vide<'v,'s,'c>)
         : Vide<'v,'s,'c>
         =
-        Debug.print 0 "DELAY"
         f()
 
+    // TODO
     // those 2 are important for being able to combine
     // HTML elements, returns and asyncs in arbitrary order
     //member _.Combine
@@ -162,7 +160,6 @@ module BuilderBricks =
         : Vide<'v2,'s1 option * 's2 option,'c>
         =
         Vide <| fun s ctx ->
-            Debug.print 0 "COMBINE"
             let sa,sb = BuilderHelper.separateStatePair s
             let va,sa = a sa ctx
             let vb,sb = b sb ctx
@@ -176,7 +173,6 @@ module BuilderBricks =
         : Vide<'v list, list<'s option>, 'c>
         = 
         Vide <| fun s ctx ->
-            Debug.print 0 "FOR"
             let lastStates = s |> Option.defaultValue []
             let resValues,resStates =
                 [ for i,x in input |> Seq.indexed do
@@ -198,14 +194,12 @@ module BuilderBricks =
                 f: 'v1 -> Vide<'v2,'s,'c>
             ) : AsyncBindResult<'v1, Vide<'v2,'s,'c>>
             =
-            Debug.print 0 "BIND async"
             AsyncBindResult(m, f)
     
         let delay
             (f: unit -> AsyncBindResult<'v1,'v2>)
             : AsyncBindResult<'v1,'v2>
             =
-            Debug.print 0 "DELAY async"
             f()
     
         let combine<'v,'x,'s1,'s2,'c when 'c :> VideContext>
@@ -249,7 +243,6 @@ module BuilderBricks =
                             va,comp,sb
                 v, Some (sa, Some comp, sb)
 
-    
 type VideBuilder() =
     member _.Bind(m, f) = BuilderBricks.bind(m, f)
     member _.Return(x) = BuilderBricks.return'(x)
