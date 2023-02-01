@@ -1,7 +1,6 @@
 namespace Vide.HtmlApiPreparation
 
 open Browser.Types
-open Vide
 
 type VoidResult = unit
 
@@ -13,18 +12,6 @@ type InputResult(node: HTMLInputElement) =
     member _.FloatValue = node.valueAsNumber
     member _.IntValue = node.valueAsNumber |> int
     member _.IsChecked = node.checked
-
-
-type HTMLVoidElementBuilder<'v,'n when 'n :> HTMLElement>(elemName, resultSelector) =
-    inherit RenderValC0Builder<'v,'n>(
-        BuilderBricks.createNode elemName,
-        BuilderBricks.checkOrUpdateNode elemName,
-        resultSelector)
-
-type HTMLContentElementBuilder<'n when 'n :> HTMLElement>(elemName) =
-    inherit RenderRetCnBuilder<'n>(
-        BuilderBricks.createNode elemName,
-        BuilderBricks.checkOrUpdateNode elemName)
 
 //type Event =
 //    static member inline doBind(value: MutableValue<_>, getter) =

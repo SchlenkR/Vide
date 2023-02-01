@@ -14,10 +14,10 @@ open Vide.HtmlApiPreparation
 
 module HtmlElementBuilders =
     type HTMLGlobalAttrsVoidElementBuilder<'v,'n when 'n :> HTMLElement>(tagName, resultSelector) =
-        inherit HTMLVoidElementBuilder<'v,'n>(tagName, resultSelector)
+        inherit RenderValC0Builder<'v,'n>(BuilderBricks.createNode tagName, BuilderBricks.checkOrUpdateNode tagName, resultSelector)
 
     type HTMLGlobalAttrsContentElementBuilder<'n when 'n :> HTMLElement>(tagName) =
-        inherit HTMLContentElementBuilder<'n>(tagName)
+        inherit RenderRetCnBuilder<'n>(BuilderBricks.createNode tagName, BuilderBricks.checkOrUpdateNode tagName)
 
     
     type a() =
