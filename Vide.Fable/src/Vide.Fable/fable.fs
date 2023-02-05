@@ -158,12 +158,7 @@ type RenderBaseBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
 //     - standard yields
 // -------------------------------------------------------------------
 
-type RenderValC0Builder<'v,'n when 'n :> Node>
-    (
-        createNode, 
-        checkOrUpdateNode, 
-        createResultVal: 'n -> 'v
-    ) =
+type RenderValC0Builder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, createResultVal: 'n -> 'v) =
     inherit RenderBaseBuilder<'n>(createNode, checkOrUpdateNode)
     member this.Run(v) = this.ModifierContext |> ModifierContext.apply v (fun n v -> createResultVal n)
 
@@ -171,6 +166,10 @@ type RenderRetC0Builder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
     inherit RenderBaseBuilder<'n>(createNode, checkOrUpdateNode)
     member this.Run(v) = this.ModifierContext |> ModifierContext.apply v (fun n v -> v)
     member _.Return(x) = BuilderBricks.return'(x)
+
+type RenderValCnBuilder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, createResultVal: 'n -> 'v) =
+    inherit RenderBaseBuilder<'n>(createNode, checkOrUpdateNode)
+    member this.Run(v) = this.ModifierContext |> ModifierContext.apply v (fun n v -> createResultVal n)
 
 type RenderRetCnBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
     inherit RenderBaseBuilder<'n>(createNode, checkOrUpdateNode)

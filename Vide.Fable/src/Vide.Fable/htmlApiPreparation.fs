@@ -5,13 +5,28 @@ open Browser.Types
 type VoidResult = unit
 
 // TODO: All other input possibilities
-type InputResult(node: HTMLInputElement) =
+type inputValue(node: HTMLInputElement) =
     member _.Node = node
     member _.TextValue = node.value
     member _.DateValue = node.valueAsDate
     member _.FloatValue = node.valueAsNumber
     member _.IntValue = node.valueAsNumber |> int
     member _.IsChecked = node.checked
+
+type datalistValue(node: HTMLDataListElement) =
+    class end
+
+type optionValue(node: HTMLOptionElement) =
+    class end
+
+type outputValue(node: HTMLElement) =
+    class end
+
+type selectValue(node: HTMLSelectElement) =
+    class end
+
+type textareaValue(node: HTMLTextAreaElement) =
+    class end
 
 //type Event =
 //    static member inline doBind(value: MutableValue<_>, getter) =

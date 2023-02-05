@@ -18,19 +18,19 @@ open Vide
 open Vide.HtmlApiPreparation
 
 module HtmlElementBuilders =
-    type HTMLGlobalAttrsVoidElementBuilder<'v,'n when 'n :> HTMLElement>(tagName, resultSelector) =
+    type HtmlGARenderValC0Builder<'v,'n when 'n :> HTMLElement>(tagName, resultSelector) =
         inherit RenderValC0Builder<'v,'n>(BuilderBricks.createNode tagName, BuilderBricks.checkOrUpdateNode tagName, resultSelector)
 
-    type HTMLGlobalAttrsContentElementBuilder<'n when 'n :> HTMLElement>(tagName) =
+    type HtmlGARenderRetC0Builder<'n when 'n :> HTMLElement>(tagName) =
+        inherit RenderRetC0Builder<'n>(BuilderBricks.createNode tagName, BuilderBricks.checkOrUpdateNode tagName)
+
+    type HtmlGARenderValCnBuilder<'v,'n when 'n :> HTMLElement>(tagName, resultSelector) =
+        inherit RenderValCnBuilder<'v,'n>(BuilderBricks.createNode tagName, BuilderBricks.checkOrUpdateNode tagName, resultSelector)
+
+    type HtmlGARenderRetCnBuilder<'n when 'n :> HTMLElement>(tagName) =
         inherit RenderRetCnBuilder<'n>(BuilderBricks.createNode tagName, BuilderBricks.checkOrUpdateNode tagName)
 
-    {{for builder in builders}}
-    type {{builder.name}}() =
-        inherit {{builder.inheritorName}}<{{builder.inheritorGenTypArgs}}>
-            (
-                {{builder.ctorBaseArgs}}
-            )
-    {{end}}
+    {{for builder in builders}}{{builder.definition}}{{end}}
 
 open HtmlElementBuilders
 
@@ -55,7 +55,7 @@ type {{ext.builderName}}Extensions =
 
 {{evt.xmlDoc}}
         [<Extension>]
-        static member {{evt.memberName}}(this: #HTMLGlobalAttrsVoidElementBuilder<_,_>, ?requestEvaluation: bool) =
+        static member {{evt.memberName}}(this: {{ext.builderParamTypeAnnotation}}, ?requestEvaluation: bool) =
             this.OnEval(fun x ctx -> x.{{evt.name}} <- Event.handle x ctx (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         {{end}}
@@ -72,8 +72,6 @@ type Html =
 type Api = Template<HtmlApiTemplate>
 
 
-let htmlGlobalAttrsElementBuilderName = "HTMLGlobalAttrsElementBuilder"
-
 let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Evt list) =
     let makeCodeDoc (desc: string) indent =
         desc.Split('\n')
@@ -84,33 +82,47 @@ let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Ev
 
     let builders =
         [ for elem in elements do
-            let ctorBaseArg,inheritorGenTypArgs,inheritorName,pipedConfig =
-                match elem.elementType with
-                | Content -> 
-                    $""" "{elem.tagName}" """,
-                    elem.domInterfaceName,
-                    "HTMLGlobalAttrsContentElementBuilder",
-                    ""
-                | Void voidType ->
-                    let valueTypeName,createResult,pipedConfig = 
-                        if voidType.hasReturnValue
-                        then 
-                            "InputResult",
-                            "InputResult(node)", 
-                            ".oninput()"
-                        else
-                            "VoidResult",
-                            "()", 
-                            ""
+            let builderDefinition =
+                let valueTypeName = $"{elem.tagName}Value"
+                match elem.returnsValue, elem.elementType with
+                | true,Void ->
+                    $"""
+    type {elem.fsharpName}() =
+        inherit HtmlGARenderValC0Builder<{valueTypeName}, {elem.domInterfaceName}>
+            (
+                "{elem.tagName}",
+                fun node -> {valueTypeName}(node)
+            )
+                    """
 
-                    $""" "{elem.tagName}", fun node -> {createResult} """,
-                    $"{valueTypeName}, {elem.domInterfaceName}",
-                    "HTMLGlobalAttrsVoidElementBuilder",
-                    pipedConfig
+                | false,Void ->
+                    $"""
+    type {elem.fsharpName}() =
+        inherit HtmlGARenderRetC0Builder<{elem.domInterfaceName}>("{elem.tagName}")
+                    """
+                
+                | true,Content ->
+                    $"""
+    type {elem.fsharpName}() =
+        inherit HtmlGARenderValC0Builder<{valueTypeName}, {elem.domInterfaceName}>
+            (
+                "{elem.tagName}",
+                fun node -> {valueTypeName}(node)
+            )
+                    """
+
+
+                | false,Content ->
+
+                    $"""
+    type {elem.fsharpName}() =
+        inherit HtmlGARenderRetCnBuilder<{elem.domInterfaceName}>("{elem.tagName}")
+                    """
+
+            let pipedConfig = if elem.returnsValue then ".oninput()" else ""
+
             Api.builder(
-                ctorBaseArg, 
-                inheritorGenTypArgs, 
-                inheritorName, 
+                builderDefinition,
                 elem.fsharpName,
                 pipedConfig,
                 makeCodeDoc elem.desc 1
@@ -142,14 +154,26 @@ let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Ev
         [
             Api.ext(
                 makeAttrs globalAttrs,
-                "HTMLGlobalAttrsVoidElementBuilder",
-                "#HTMLGlobalAttrsVoidElementBuilder<_,_>",
+                "HtmlGARenderValC0Builder",
+                "#HtmlGARenderValC0Builder<_,_>",
                 makeEvts globalEvents
             )
             Api.ext(
                 makeAttrs globalAttrs,
-                "HTMLGlobalAttrsContentElementBuilder",
-                "#HTMLGlobalAttrsContentElementBuilder<_>",
+                "HtmlGARenderRetC0Builder",
+                "#HtmlGARenderRetC0Builder<_>",
+                makeEvts globalEvents
+            )
+            Api.ext(
+                makeAttrs globalAttrs,
+                "HtmlGARenderValCnBuilder",
+                "#HtmlGARenderValCnBuilder<_,_>",
+                makeEvts globalEvents
+            )
+            Api.ext(
+                makeAttrs globalAttrs,
+                "HtmlGARenderRetCnBuilder",
+                "#HtmlGARenderRetCnBuilder<_>",
                 makeEvts globalEvents
             )
 

@@ -44,7 +44,7 @@ type Evt =
     }
 
 type VoidOrContent =
-    | Void of {| hasReturnValue: bool |}
+    | Void
     | Content
 
 type Element =
@@ -53,6 +53,7 @@ type Element =
         fsharpName: string
         domInterfaceName: string
         elementType: VoidOrContent
+        returnsValue: bool
         desc: string
         link: string
         includeGlobalAttrs: bool
@@ -197,6 +198,7 @@ let additionalElements =
                 tagName = tagName
                 fsharpName = tagName
                 elementType = Content
+                returnsValue = false
                 domInterfaceName = "HTMLHeadingElement"
                 desc = "Defines HTML headings"
                 link = "tag_hn.asp"
@@ -233,23 +235,38 @@ let elemNameCorrections =
 
 let voidElements =
     [
-        "area", false
-        "base", false
-        "br", false
-        "col", false
-        "embed", false
-        "hr", false
-        "img", false
-        "input", true
-        "keygen", false
-        "link", false
-        "meta", false
-        "param", false
-        "source", false
-        "track", false
-        "wbr", false
+        "area"
+        "base"
+        "br"
+        "col"
+        "embed"
+        "hr"
+        "img"
+        "input"
+        "keygen"
+        "link"
+        "meta"
+        "param"
+        "source"
+        "track"
+        "wbr"
     ]
-    |> Map.ofList
+
+let elementsWithReturnValue =
+    [
+        "input"
+        //"label"
+        "select"
+        "textarea"
+        //"button"
+        //"fieldset"
+        //"legend"
+        "datalist"
+        "output"
+        "option"
+        //"optgroup"
+    ]
+
 
 let eventDefinitions =
     {|
@@ -483,11 +500,13 @@ let generate () =
                         {
                             Element.tagName = elemTagName
                             fsharpName = correctName elemNameCorrections elemTagName
-                            elementType = 
-                                voidElements 
-                                |> Map.tryFind elemTagName
-                                |> Option.map (fun x -> Void {| hasReturnValue = x |})
-                                |> Option.defaultValue Content
+                            elementType =
+                                if voidElements |> List.contains elemTagName
+                                then Void
+                                else Content
+                            returnsValue =
+                                elementsWithReturnValue
+                                |> List.contains elemTagName
                             domInterfaceName =  try domInterfaceMap[elemTagName] with _ -> failwith elemTagName
                             desc = elemDesc
                             link = elemLink
