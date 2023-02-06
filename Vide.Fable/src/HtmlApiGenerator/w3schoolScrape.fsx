@@ -23,9 +23,13 @@ type Label =
         desc: string 
     }
 
+type BooleanAttrStyle =
+    | Present
+    | TrueFalse
+
 [<RequireQualifiedAccess>]
 type AttrTyp =
-    | Boolean
+    | Boolean of BooleanAttrStyle
     | Text
     | Enum of Label list
 
@@ -448,10 +452,12 @@ let generate () =
                     | None -> [AttrTyp.Text]
                     | Some attrLink ->
                         let attrPage = loadPage attrLink
-                        let isBoolean = attrPage.InnerText().Contains("attribute is a boolean attribute")
+                        let innerText = attrPage.InnerText().ToLowerInvariant()
+                        let isBoolean = innerText.Contains("attribute is a boolean attribute")
+                        let booleanAttrStyle = if innerText.Contains("when present") then Present else TrueFalse
                         let attrType =
                             match attrPage |> tryFindTable "Value" with
-                            | None -> AttrTyp.Boolean
+                            | None -> AttrTyp.Boolean booleanAttrStyle
                             | Some [_] -> AttrTyp.Text
                             | Some trs ->
                                 [ for tr in trs do
@@ -475,7 +481,8 @@ let generate () =
                                 ]
                                 |> AttrTyp.Enum
                         [
-                            if isBoolean then AttrTyp.Boolean
+                            if isBoolean then
+                                AttrTyp.Boolean booleanAttrStyle
                             AttrTyp.Text
                             attrType
                         ]

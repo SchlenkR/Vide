@@ -29,6 +29,10 @@ body {
     padding: 3px 10px;
 }
 
+#innerDemoHost {
+    max-width: 95%;
+}
+
 #innerDemoHost div {
     margin-bottom: 10px;
 }
@@ -37,13 +41,15 @@ body {
     padding: 3px 15px;
 }
 
+.flex-row {
+    display: flex;
+    gap: 5px;
+}
 
 
 /* -----------------------------------
    Styles for specific demo cases
 ----------------------------------- */
-
-
 #demo .the-message {
     font-weight: bold;
 }

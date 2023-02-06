@@ -918,7 +918,7 @@ type HtmlGARenderValC0BuilderExtensions =
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
         static member hidden(this: #HtmlGARenderValC0Builder<_,_>, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("hidden", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("hidden", null) else x.node.removeAttribute("hidden") )
         
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
@@ -1617,7 +1617,7 @@ type HtmlGARenderRetC0BuilderExtensions =
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
         static member hidden(this: #HtmlGARenderRetC0Builder<_>, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("hidden", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("hidden", null) else x.node.removeAttribute("hidden") )
         
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
@@ -2316,7 +2316,7 @@ type HtmlGARenderValCnBuilderExtensions =
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
         static member hidden(this: #HtmlGARenderValCnBuilder<_,_>, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("hidden", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("hidden", null) else x.node.removeAttribute("hidden") )
         
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
@@ -3015,7 +3015,7 @@ type HtmlGARenderRetCnBuilderExtensions =
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
         static member hidden(this: #HtmlGARenderRetCnBuilder<_>, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("hidden", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("hidden", null) else x.node.removeAttribute("hidden") )
         
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
@@ -3884,7 +3884,7 @@ type audioExtensions =
         /// Specifies that the audio will start playing as soon as it is ready
         [<Extension>]
         static member autoplay(this: #audio, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("autoplay", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("autoplay", null) else x.node.removeAttribute("autoplay") )
         
         /// Specifies that the audio will start playing as soon as it is ready
         [<Extension>]
@@ -3894,7 +3894,7 @@ type audioExtensions =
         /// Specifies that audio controls should be displayed (such as a play/pause button etc)
         [<Extension>]
         static member controls(this: #audio, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("controls", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("controls", null) else x.node.removeAttribute("controls") )
         
         /// Specifies that audio controls should be displayed (such as a play/pause button etc)
         [<Extension>]
@@ -3904,7 +3904,7 @@ type audioExtensions =
         /// Specifies that the audio will start over again, every time it is finished
         [<Extension>]
         static member loop(this: #audio, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("loop", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("loop", null) else x.node.removeAttribute("loop") )
         
         /// Specifies that the audio will start over again, every time it is finished
         [<Extension>]
@@ -3914,7 +3914,7 @@ type audioExtensions =
         /// Specifies that the audio output should be muted
         [<Extension>]
         static member muted(this: #audio, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("muted", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("muted", null) else x.node.removeAttribute("muted") )
         
         /// Specifies that the audio output should be muted
         [<Extension>]
@@ -4049,7 +4049,7 @@ type buttonExtensions =
         /// Specifies that a button should automatically get focus when the page loads
         [<Extension>]
         static member autofocus(this: #button, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("autofocus", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("autofocus", null) else x.node.removeAttribute("autofocus") )
         
         /// Specifies that a button should automatically get focus when the page loads
         [<Extension>]
@@ -4059,7 +4059,7 @@ type buttonExtensions =
         /// Specifies that a button should be disabled
         [<Extension>]
         static member disabled(this: #button, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("disabled", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("disabled", null) else x.node.removeAttribute("disabled") )
         
         /// Specifies that a button should be disabled
         [<Extension>]
@@ -4099,7 +4099,7 @@ type buttonExtensions =
         /// Specifies that the form-data should not be validated on submission. Only for type="submit"
         [<Extension>]
         static member formnovalidate(this: #button, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("formnovalidate", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("formnovalidate", null) else x.node.removeAttribute("formnovalidate") )
         
         /// Specifies that the form-data should not be validated on submission. Only for type="submit"
         [<Extension>]
@@ -4284,7 +4284,7 @@ type detailsExtensions =
         /// Specifies that the details should be visible (open) to the user
         [<Extension>]
         static member open'(this: #details, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("open", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("open", null) else x.node.removeAttribute("open") )
         
         /// Specifies that the details should be visible (open) to the user
         [<Extension>]
@@ -4314,7 +4314,7 @@ type dialogExtensions =
         /// Specifies that the dialog element is active and that the user can interact with it
         [<Extension>]
         static member open'(this: #dialog, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("open", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("open", null) else x.node.removeAttribute("open") )
         
         /// Specifies that the dialog element is active and that the user can interact with it
         [<Extension>]
@@ -4404,7 +4404,7 @@ type fieldsetExtensions =
         /// Specifies that a group of related form elements should be disabled
         [<Extension>]
         static member disabled(this: #fieldset, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("disabled", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("disabled", null) else x.node.removeAttribute("disabled") )
         
         /// Specifies that a group of related form elements should be disabled
         [<Extension>]
@@ -4509,7 +4509,7 @@ type formExtensions =
         /// Specifies that the form should not be validated when submitted
         [<Extension>]
         static member novalidate(this: #form, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("novalidate", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("novalidate", null) else x.node.removeAttribute("novalidate") )
         
         /// Specifies that the form should not be validated when submitted
         [<Extension>]
@@ -4754,7 +4754,7 @@ type imgExtensions =
         /// Specifies an image as a server-side image map
         [<Extension>]
         static member ismap(this: #img, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("ismap", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("ismap", null) else x.node.removeAttribute("ismap") )
         
         /// Specifies an image as a server-side image map
         [<Extension>]
@@ -4849,7 +4849,7 @@ type inputExtensions =
         /// Specifies that an <input> element should automatically get focus when the page loads
         [<Extension>]
         static member autofocus(this: #input, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("autofocus", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("autofocus", null) else x.node.removeAttribute("autofocus") )
         
         /// Specifies that an <input> element should automatically get focus when the page loads
         [<Extension>]
@@ -4859,7 +4859,7 @@ type inputExtensions =
         /// Specifies that an <input> element should be pre-selected when the page loads (for type="checkbox" or type="radio")
         [<Extension>]
         static member checked'(this: #input, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("checked", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("checked", null) else x.node.removeAttribute("checked") )
         
         /// Specifies that an <input> element should be pre-selected when the page loads (for type="checkbox" or type="radio")
         [<Extension>]
@@ -4874,7 +4874,7 @@ type inputExtensions =
         /// Specifies that an <input> element should be disabled
         [<Extension>]
         static member disabled(this: #input, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("disabled", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("disabled", null) else x.node.removeAttribute("disabled") )
         
         /// Specifies that an <input> element should be disabled
         [<Extension>]
@@ -4914,7 +4914,7 @@ type inputExtensions =
         /// Defines that form elements should not be validated when submitted
         [<Extension>]
         static member formnovalidate(this: #input, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("formnovalidate", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("formnovalidate", null) else x.node.removeAttribute("formnovalidate") )
         
         /// Defines that form elements should not be validated when submitted
         [<Extension>]
@@ -4974,7 +4974,7 @@ type inputExtensions =
         /// Specifies that a user can enter more than one value in an <input> element
         [<Extension>]
         static member multiple(this: #input, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("multiple", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("multiple", null) else x.node.removeAttribute("multiple") )
         
         /// Specifies that a user can enter more than one value in an <input> element
         [<Extension>]
@@ -4999,7 +4999,7 @@ type inputExtensions =
         /// Specifies that an input field is read-only
         [<Extension>]
         static member readonly(this: #input, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("readonly", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("readonly", null) else x.node.removeAttribute("readonly") )
         
         /// Specifies that an input field is read-only
         [<Extension>]
@@ -5009,7 +5009,7 @@ type inputExtensions =
         /// Specifies that an input field must be filled out before submitting the form
         [<Extension>]
         static member required(this: #input, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("required", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("required", null) else x.node.removeAttribute("required") )
         
         /// Specifies that an input field must be filled out before submitting the form
         [<Extension>]
@@ -5410,7 +5410,7 @@ type olExtensions =
         /// Specifies that the list order should be reversed (9,8,7...)
         [<Extension>]
         static member reversed(this: #ol, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("reversed", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("reversed", null) else x.node.removeAttribute("reversed") )
         
         /// Specifies that the list order should be reversed (9,8,7...)
         [<Extension>]
@@ -5445,7 +5445,7 @@ type optgroupExtensions =
         /// Specifies that an option-group should be disabled
         [<Extension>]
         static member disabled(this: #optgroup, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("disabled", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("disabled", null) else x.node.removeAttribute("disabled") )
         
         /// Specifies that an option-group should be disabled
         [<Extension>]
@@ -5470,7 +5470,7 @@ type optionExtensions =
         /// Specifies that an option should be disabled
         [<Extension>]
         static member disabled(this: #option, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("disabled", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("disabled", null) else x.node.removeAttribute("disabled") )
         
         /// Specifies that an option should be disabled
         [<Extension>]
@@ -5485,7 +5485,7 @@ type optionExtensions =
         /// Specifies that an option should be pre-selected when the page loads
         [<Extension>]
         static member selected(this: #option, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("selected", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("selected", null) else x.node.removeAttribute("selected") )
         
         /// Specifies that an option should be pre-selected when the page loads
         [<Extension>]
@@ -5745,7 +5745,7 @@ type selectExtensions =
         /// Specifies that the drop-down list should automatically get focus when the page loads
         [<Extension>]
         static member autofocus(this: #select, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("autofocus", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("autofocus", null) else x.node.removeAttribute("autofocus") )
         
         /// Specifies that the drop-down list should automatically get focus when the page loads
         [<Extension>]
@@ -5755,7 +5755,7 @@ type selectExtensions =
         /// Specifies that a drop-down list should be disabled
         [<Extension>]
         static member disabled(this: #select, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("disabled", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("disabled", null) else x.node.removeAttribute("disabled") )
         
         /// Specifies that a drop-down list should be disabled
         [<Extension>]
@@ -5770,7 +5770,7 @@ type selectExtensions =
         /// Specifies that multiple options can be selected at once
         [<Extension>]
         static member multiple(this: #select, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("multiple", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("multiple", null) else x.node.removeAttribute("multiple") )
         
         /// Specifies that multiple options can be selected at once
         [<Extension>]
@@ -5785,7 +5785,7 @@ type selectExtensions =
         /// Specifies that the user is required to select a value before submitting the form
         [<Extension>]
         static member required(this: #select, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("required", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("required", null) else x.node.removeAttribute("required") )
         
         /// Specifies that the user is required to select a value before submitting the form
         [<Extension>]
@@ -5990,7 +5990,7 @@ type textareaExtensions =
         /// Specifies that a text area should automatically get focus when the page loads
         [<Extension>]
         static member autofocus(this: #textarea, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("autofocus", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("autofocus", null) else x.node.removeAttribute("autofocus") )
         
         /// Specifies that a text area should automatically get focus when the page loads
         [<Extension>]
@@ -6010,7 +6010,7 @@ type textareaExtensions =
         /// Specifies that a text area should be disabled
         [<Extension>]
         static member disabled(this: #textarea, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("disabled", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("disabled", null) else x.node.removeAttribute("disabled") )
         
         /// Specifies that a text area should be disabled
         [<Extension>]
@@ -6040,7 +6040,7 @@ type textareaExtensions =
         /// Specifies that a text area should be read-only
         [<Extension>]
         static member readonly(this: #textarea, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("readonly", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("readonly", null) else x.node.removeAttribute("readonly") )
         
         /// Specifies that a text area should be read-only
         [<Extension>]
@@ -6050,7 +6050,7 @@ type textareaExtensions =
         /// Specifies that a text area is required/must be filled out
         [<Extension>]
         static member required(this: #textarea, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("required", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("required", null) else x.node.removeAttribute("required") )
         
         /// Specifies that a text area is required/must be filled out
         [<Extension>]
@@ -6180,7 +6180,7 @@ type trackExtensions =
         /// Specifies that the track is to be enabled if the user's preferences do not indicate that another track would be more appropriate
         [<Extension>]
         static member default'(this: #track, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("default", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("default", null) else x.node.removeAttribute("default") )
         
         /// Specifies that the track is to be enabled if the user's preferences do not indicate that another track would be more appropriate
         [<Extension>]
@@ -6255,7 +6255,7 @@ type videoExtensions =
         /// Specifies that the video will start playing as soon as it is ready
         [<Extension>]
         static member autoplay(this: #video, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("autoplay", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("autoplay", null) else x.node.removeAttribute("autoplay") )
         
         /// Specifies that the video will start playing as soon as it is ready
         [<Extension>]
@@ -6265,7 +6265,7 @@ type videoExtensions =
         /// Specifies that video controls should be displayed (such as a play/pause button etc).
         [<Extension>]
         static member controls(this: #video, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("controls", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("controls", null) else x.node.removeAttribute("controls") )
         
         /// Specifies that video controls should be displayed (such as a play/pause button etc).
         [<Extension>]
@@ -6280,7 +6280,7 @@ type videoExtensions =
         /// Specifies that the video will start over again, every time it is finished
         [<Extension>]
         static member loop(this: #video, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("loop", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("loop", null) else x.node.removeAttribute("loop") )
         
         /// Specifies that the video will start over again, every time it is finished
         [<Extension>]
@@ -6290,7 +6290,7 @@ type videoExtensions =
         /// Specifies that the audio output of the video should be muted
         [<Extension>]
         static member muted(this: #video, value: bool) =
-            this.OnEval(fun x -> x.node.setAttribute("muted", if value then "true" else "false" ))
+            this.OnEval(fun x -> if value then x.node.setAttribute("muted", null) else x.node.removeAttribute("muted") )
         
         /// Specifies that the audio output of the video should be muted
         [<Extension>]

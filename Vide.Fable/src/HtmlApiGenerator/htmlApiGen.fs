@@ -168,15 +168,28 @@ let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Ev
         let makeAttrs (elemName: string) (attrs: Attr list) =
             [ for attr in attrs do
                 for attrType in attr.types do
-                    let typ,valueAsString =
+                    let typ =
                         match attrType with
-                        | AttrTyp.Text -> "string", "value"
-                        | AttrTyp.Boolean -> "bool", """if value then "true" else "false" """
-                        | AttrTyp.Enum _ -> $"{elemName}.``{makeEnumTypeName attr.name}``", "value.ToString()"
+                        | AttrTyp.Text -> "string"
+                        | AttrTyp.Boolean Present -> "bool"
+                        | AttrTyp.Boolean TrueFalse -> "bool"
+                        | AttrTyp.Enum _ -> $"{elemName}.``{makeEnumTypeName attr.name}``"
                     let setterCode =
                         match attr.setMode with
                         | SetAttribute ->
-                            $"""fun x -> x.node.setAttribute("{attr.name}", {valueAsString})"""
+                            let setAttrString valueAsString =
+                                $"""fun x -> x.node.setAttribute("{attr.name}", %s{valueAsString})"""
+                            let body =
+                                match attrType with
+                                | AttrTyp.Text -> 
+                                    setAttrString "value"
+                                | AttrTyp.Boolean Present ->
+                                    $"""fun x -> if value then x.node.setAttribute("{attr.name}", null) else x.node.removeAttribute("{attr.name}") """
+                                | AttrTyp.Boolean TrueFalse ->
+                                    setAttrString """if value then "true" else "false" """
+                                | AttrTyp.Enum _ ->
+                                    setAttrString "value.ToString()"
+                            body
                         | DomPropertySetter ->
                             $"""fun x -> x.node.{attr.name} <- value"""
                     Api.attr(

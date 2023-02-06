@@ -1,5 +1,6 @@
 module Demos
 
+open System
 open Browser.Types
 open Vide
 open type Vide.Html
@@ -348,27 +349,29 @@ module TodoList =
         h1.class'("title") { "TODO List" }
         div {
             let! itemName = Vide.ofMutable ""
-
-            p {
-                input
-                    .type'("text")
-                    .value(itemName.Value)
-                    .oninput(fun x -> itemName.Value <- x.node.value)
-            }
     
             p {
-                let addItem _ =
+                let addItem () =
                     let newItem = { name = itemName.Value; isDone = false }
                     do
                         todoList.Value <- { todoList.Value with items = newItem :: todoList.Value.items }
                         itemName.Reset()
                 
-                button.onclick(addItem) { "Add Item" }
+                input
+                    .type'("text")
+                    .value(itemName.Value)
+                    .oninput(fun x -> itemName.Value <- x.node.value)
+                
+                button
+                    .disabled(String.IsNullOrWhiteSpace(itemName.Value))
+                    .onclick(fun _ -> addItem()) { 
+                        "Add Item" 
+                    }
             }
         }
         div {
             for item in todoList.Value.items do
-                div {
+                div.class'("flex-row") {
                     p { item.name }
                     input
                         .type'("checkbox")
