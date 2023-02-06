@@ -295,16 +295,25 @@ module Async =
 
 
 module Advanced =
-    let directAccessToHtmlElementVIaInitAndEval =
+    let directAccessToHtmlElementViaInitAndEval =
         vide {
-            div.OnEval(fun x _ -> x.className <- "bam")  {
+            div.OnEval(fun x -> x.node.className <- "bam")  {
                 "I'm the OnEval div"
             }
 
-            div.OnInit(fun x _ -> x.className <- "bam2") {
+            div.OnInit(fun x -> x.node.className <- "bam2") {
                 "I'm the OnInit div"
             }
         }
+
+    //let directAccessToHtmlElementViaComputation =
+    //    vide {
+    //        let x = div {
+    //            let y = div {()}
+    //            ()
+    //        }
+    //        ()
+    //    }
 
     let shouldCompile1 =
         // Both void and content builders should be able to yield

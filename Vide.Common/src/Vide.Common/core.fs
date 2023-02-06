@@ -115,7 +115,7 @@ type VideApp<'v,'s,'c when 'c :> IVideContext>
     member _.EvaluationManager = this :> IEvaluationManager
     member _.CurrentState = currentState
 
-module App =
+module VideApp =
     let create content ctxCtor onEvaluated =
         VideApp(content, ctxCtor, onEvaluated)
     let createWithUntypedState content ctxCtor onEvaluated =

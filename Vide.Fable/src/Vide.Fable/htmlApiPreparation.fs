@@ -16,8 +16,8 @@ type inputValue(node: HTMLInputElement) =
         with get() = node.value
         and set(value) = node.value <- value
     member _.IsChecked
-        with get() = node.checked
-        and set(value) = node.checked <- value
+        with get() = node.``checked``
+        and set(value) = node.``checked`` <- value
 
 type datalistValue(node: HTMLDataListElement) =
     inherit NodeValue<HTMLDataListElement>(node)

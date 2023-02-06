@@ -43,20 +43,20 @@ type {{ext.builderName}}Extensions =
 {{attr.xmlDoc}}
         [<Extension>]
         static member {{attr.memberName}}(this: {{ext.builderParamTypeAnnotation}}, value: {{attr.typ}}) =
-            this.OnEval(fun x ctx -> x.setAttribute("{{attr.name}}", value{{attr.toString}}))
+            this.OnEval(fun x -> x.node.setAttribute("{{attr.name}}", value{{attr.toString}}))
         {{end}}
-    
+
         // Events
         {{for evt in ext.events}}
 {{evt.xmlDoc}}
         [<Extension>]
         static member {{evt.memberName}}(this: {{ext.builderParamTypeAnnotation}}, handler) =
-            this.OnEval(fun x ctx -> x.{{evt.name}} <- Event.handle x ctx handler)
+            this.OnEval(fun x -> x.node.{{evt.name}} <- Event.handle x.node x.context handler)
 
 {{evt.xmlDoc}}
         [<Extension>]
         static member {{evt.memberName}}(this: {{ext.builderParamTypeAnnotation}}, ?requestEvaluation: bool) =
-            this.OnEval(fun x ctx -> x.{{evt.name}} <- Event.handle x ctx (fun args ->
+            this.OnEval(fun x -> x.node.{{evt.name}} <- Event.handle x.node x.context (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         {{end}}
     end

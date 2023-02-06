@@ -47,7 +47,12 @@ type BuilderOperations = | Clear
 type NodeBuilderState<'n,'s> = option<'n> * option<'s>
 type ChildAction = Keep | DiscardAndCreateNew
 
-type NodeModifier<'n,'c> = 'n -> 'c -> unit
+type NodeModifierContext<'n,'c> =
+    {
+        node: 'n
+        context: 'c
+    }
+type NodeModifier<'n,'c> = NodeModifierContext<'n,'c> -> unit
 
 type ModifierContext<'n,'c>
     (
@@ -73,7 +78,7 @@ module ModifierContext =
             Debug.print 0 "RUN:NodeBuilder"
             let inline runModifiers modifiers node =
                 for m in modifiers do
-                    m node ctx
+                    m { node = node; context = ctx }
             let s,cs =
                 match s with
                 | None -> None,None
@@ -220,7 +225,6 @@ type ComponentRetCnBuilder with
     member _.Bind(m: RenderRetCnBuilder<_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: ComponentRetCnBuilder, f) = BuilderBricks.bind(m {()}, f)
 
-
 [<Extension>]
 type NodeBuilderExtensions =
     
@@ -262,7 +266,14 @@ module Event =
             finally
                 do ctx.EvaluationManager.Resume()
 
-module App =
+//module Vide =
+//    [<GeneralizableValue>]
+//    let node<'n when 'n :> Node> : Vide<_, NodeBuilderState<'n,'s>, _> =
+//        Vide <| fun s ctx ->
+//            // TODO: OUCH! 
+//            ctx.Parent,None
+
+module VideApp =
     let inline doCreate appCtor (host: #Node) (content: Vide<'v,'s,FableContext>) onEvaluated =
         let content = 
             // TODO: Really a ContentBuilder? Why?
@@ -270,8 +281,8 @@ module App =
         let ctxCtor = fun eval -> FableContext(host, eval)
         appCtor content ctxCtor onEvaluated
     let createFable host content onEvaluated =
-        doCreate App.create host content onEvaluated
+        doCreate VideApp.create host content onEvaluated
     let createFableWithObjState host content onEvaluated =
-        doCreate App.createWithUntypedState host content onEvaluated
+        doCreate VideApp.createWithUntypedState host content onEvaluated
 
 let vide = ComponentRetCnBuilder()
