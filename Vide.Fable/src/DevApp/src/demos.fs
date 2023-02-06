@@ -6,7 +6,6 @@ open Vide
 open type Vide.Html
 
 // TODO: demo for async + clear
-//Clear
 
 module GettingStarted =
     let helloWorld =
@@ -28,12 +27,10 @@ module GettingStarted =
             button.onclick(fun _ -> count += 1) {
                 $"Hit me! Count = {count.Value}"
             }
-            "TODO: That doesn'a work right now"
             div.class'("the-message") {
-                ()
-                //span.hidden(count.Value <> 5) {
-                //    "You have the right to defend yourself!"
-                //}
+                span.hidden(count.Value <> 5) {
+                    "You have the right to defend yourself!"
+                }
             }
         }
 
@@ -141,10 +138,9 @@ module Input =
         vide {
             // TODO: Docu - wie ändert man das PropertyChangedTrigger-Verhalten
             let! enteredValue = input.type'("text").oninput()
-            return ()
-            //div {
-            //    $"You say: {enteredValue.TextValue}"
-            //}
+            div {
+                $"You say: {enteredValue.TextValue}"
+            }
         }
     
     let textInputEvent = 
@@ -340,6 +336,12 @@ module Advanced =
 
 
 module TodoList =
+    // Document:
+    // - here: mutable model (doesn't have to be that way)
+    // - "Vide.ofMutable": This also doesn't have to be that way,
+    //   but it's an ideomatic building block of Vide (in depth: if not,
+    //   emitting control statements like in LocSta would be necessary).
+
     type TodoItem = { name: string; mutable isDone: bool }
     type TodoList = { items: TodoItem list }
     
