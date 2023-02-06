@@ -1,6 +1,6 @@
 module Demos
 
-open Fable.Core.JS
+open Browser.Types
 open Vide
 open type Vide.Html
 
@@ -306,14 +306,14 @@ module Advanced =
             }
         }
 
-    //let directAccessToHtmlElementViaComputation =
-    //    vide {
-    //        let x = div {
-    //            let y = div {()}
-    //            ()
-    //        }
-    //        ()
-    //    }
+    let directAccessToHtmlElementViaComputation =
+        vide {
+            let x = div {
+                let! htmlDivElement = Vide.node<HTMLDivElement>
+                $"...we can now access HTML element: {htmlDivElement.nodeName}"
+            }
+            x
+        }
 
     let shouldCompile1 =
         // Both void and content builders should be able to yield

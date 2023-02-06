@@ -266,12 +266,17 @@ module Event =
             finally
                 do ctx.EvaluationManager.Resume()
 
-//module Vide =
-//    [<GeneralizableValue>]
-//    let node<'n when 'n :> Node> : Vide<_, NodeBuilderState<'n,'s>, _> =
-//        Vide <| fun s ctx ->
-//            // TODO: OUCH! 
-//            ctx.Parent,None
+module Vide =
+
+    [<GeneralizableValue>]
+    let fableContext : Vide<FableContext,unit,FableContext> =
+        Vide <| fun s ctx -> ctx,None
+
+    [<GeneralizableValue>]
+    let node<'n when 'n :> Node> : Vide<'n, unit, FableContext> =
+        Vide <| fun s ctx ->
+            // TODO: OUCH!!! Was ist da los - wieso bekomme ich das nicht besser hin?
+            ctx.Parent :?> 'n,None
 
 module VideApp =
     let inline doCreate appCtor (host: #Node) (content: Vide<'v,'s,FableContext>) onEvaluated =
