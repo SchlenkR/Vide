@@ -295,7 +295,7 @@ module Async =
 
 
 module Advanced =
-    let directAccessToHtmlElement =
+    let directAccessToHtmlElementVIaInitAndEval =
         vide {
             div.OnEval(fun x _ -> x.className <- "bam")  {
                 "I'm the OnEval div"
@@ -323,6 +323,8 @@ module Advanced =
             hr
             p
         }
+
+    // TODO: returning a node from inside { .. } to enable "let! node = ..."
 
 
 module TodoList =
@@ -357,3 +359,17 @@ module TodoList =
         }
     }
     
+
+//module Playground =
+
+//    let bindTest =
+//        vide {
+//            div.OnEval(fun x _ -> x.className <- "bam")  {
+//                "I'm the OnEval div"
+//            }
+
+//            div.OnInit(fun x _ -> x.className <- "bam2") {
+//                "I'm the OnInit div"
+//            }
+//        }
+

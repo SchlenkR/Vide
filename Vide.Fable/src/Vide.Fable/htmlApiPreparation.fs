@@ -4,29 +4,35 @@ open Browser.Types
 
 type VoidResult = unit
 
-// TODO: All other input possibilities
-type inputValue(node: HTMLInputElement) =
+[<AbstractClass>]
+type NodeValue<'n>(node: 'n) =
     member _.Node = node
-    member _.TextValue = node.value
-    member _.DateValue = node.valueAsDate
-    member _.FloatValue = node.valueAsNumber
-    member _.IntValue = node.valueAsNumber |> int
-    member _.IsChecked = node.checked
+
+// TODO: "Value"s: Forward other (common) properties of the HTMLElements
+
+type inputValue(node: HTMLInputElement) =
+    inherit NodeValue<HTMLInputElement>(node)
+    member _.TextValue
+        with get() = node.value
+        and set(value) = node.value <- value
+    member _.IsChecked
+        with get() = node.checked
+        and set(value) = node.checked <- value
 
 type datalistValue(node: HTMLDataListElement) =
-    class end
+    inherit NodeValue<HTMLDataListElement>(node)
 
 type optionValue(node: HTMLOptionElement) =
-    class end
+    inherit NodeValue<HTMLOptionElement>(node)
 
 type outputValue(node: HTMLElement) =
-    class end
+    inherit NodeValue<HTMLElement>(node)
 
 type selectValue(node: HTMLSelectElement) =
-    class end
+    inherit NodeValue<HTMLSelectElement>(node)
 
 type textareaValue(node: HTMLTextAreaElement) =
-    class end
+    inherit NodeValue<HTMLTextAreaElement>(node)
 
 //type Event =
 //    static member inline doBind(value: MutableValue<_>, getter) =
