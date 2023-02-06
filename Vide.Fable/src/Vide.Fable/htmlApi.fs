@@ -12,6 +12,495 @@ open Browser.Types
 open Vide
 open Vide.HtmlApiPreparation
 
+[<AutoOpen>]
+module HtmlEnumAttributeTypes =
+    
+    module a =
+        
+        [<RequireQualifiedAccess>]
+        type ``media`` = 
+        | ``and`` 
+        | ``not`` 
+        | ``,`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``referrerpolicy`` = 
+        | ``no-referrer`` 
+        | ``no-referrer-when-downgrade`` 
+        | ``origin`` 
+        | ``origin-when-cross-origin`` 
+        | ``same-origin`` 
+        | ``strict-origin-when-cross-origin`` 
+        | ``unsafe-url`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``rel`` = 
+        | ``alternate`` 
+        | ``author`` 
+        | ``bookmark`` 
+        | ``external`` 
+        | ``help`` 
+        | ``license`` 
+        | ``next`` 
+        | ``nofollow`` 
+        | ``noopener`` 
+        | ``noreferrer`` 
+        | ``prev`` 
+        | ``search`` 
+        | ``tag`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``target`` = 
+        | ``_blank`` 
+        | ``_self`` 
+        | ``_parent`` 
+        | ``_top`` 
+        | ``framename`` 
+        
+    
+    module area =
+        
+        [<RequireQualifiedAccess>]
+        type ``coords`` = 
+        | ``x1,y1,x2,y2`` 
+        | ``x,y,radius`` 
+        | ``x1,y1,x2,y2,__,xn,yn`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``media`` = 
+        | ``and`` 
+        | ``not`` 
+        | ``,`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``referrerpolicy`` = 
+        | ``no-referrer`` 
+        | ``no-referrer-when-downgrade`` 
+        | ``origin`` 
+        | ``origin-when-cross-origin`` 
+        | ``same-origin`` 
+        | ``strict-origin-when-cross-origin`` 
+        | ``unsafe-url`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``rel`` = 
+        | ``alternate`` 
+        | ``author`` 
+        | ``bookmark`` 
+        | ``help`` 
+        | ``license`` 
+        | ``next`` 
+        | ``nofollow`` 
+        | ``noreferrer`` 
+        | ``prefetch`` 
+        | ``prev`` 
+        | ``search`` 
+        | ``tag`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``shape`` = 
+        | ``default`` 
+        | ``rect`` 
+        | ``circle`` 
+        | ``poly`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``target`` = 
+        | ``_blank`` 
+        | ``_self`` 
+        | ``_parent`` 
+        | ``_top`` 
+        | ``framename`` 
+        
+    
+    module audio =
+        
+        [<RequireQualifiedAccess>]
+        type ``preload`` = 
+        | ``auto`` 
+        | ``metadata`` 
+        | ``none`` 
+        
+    
+    module base' =
+        
+        [<RequireQualifiedAccess>]
+        type ``target`` = 
+        | ``_blank`` 
+        | ``_self`` 
+        | ``_parent`` 
+        | ``_top`` 
+        
+    
+    module bdo =
+        
+        [<RequireQualifiedAccess>]
+        type ``dir`` = 
+        | ``ltr`` 
+        | ``rtl`` 
+        
+    
+    module button =
+        
+        [<RequireQualifiedAccess>]
+        type ``formenctype`` = 
+        | ``application_x-www-form-urlencoded`` 
+        | ``multipart_form-data`` 
+        | ``text_plain`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``formmethod`` = 
+        | ``get`` 
+        | ``post`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``formtarget`` = 
+        | ``_blank`` 
+        | ``_self`` 
+        | ``_parent`` 
+        | ``_top`` 
+        | ``framename`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``type`` = 
+        | ``button`` 
+        | ``submit`` 
+        | ``reset`` 
+        
+    
+    module form =
+        
+        [<RequireQualifiedAccess>]
+        type ``autocomplete`` = 
+        | ``on`` 
+        | ``off`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``enctype`` = 
+        | ``application_x-www-form-urlencoded`` 
+        | ``multipart_form-data`` 
+        | ``text_plain`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``method`` = 
+        | ``get`` 
+        | ``post`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``rel`` = 
+        | ``external`` 
+        | ``help`` 
+        | ``license`` 
+        | ``next`` 
+        | ``nofollow`` 
+        | ``noopener`` 
+        | ``noreferrer`` 
+        | ``opener`` 
+        | ``prev`` 
+        | ``search`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``target`` = 
+        | ``_blank`` 
+        | ``_self`` 
+        | ``_parent`` 
+        | ``_top`` 
+        | ``framename`` 
+        
+    
+    module iframe =
+        
+        [<RequireQualifiedAccess>]
+        type ``referrerpolicy`` = 
+        | ``no-referrer`` 
+        | ``no-referrer-when-downgrade`` 
+        | ``origin`` 
+        | ``origin-when-cross-origin`` 
+        | ``same-origin`` 
+        | ``strict-origin`` 
+        | ``strict-origin-when-cross-origin`` 
+        | ``unsafe-url`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``sandbox`` = 
+        | ``(no value)`` 
+        | ``allow-forms`` 
+        | ``allow-modals`` 
+        | ``allow-orientation-lock`` 
+        | ``allow-pointer-lock`` 
+        | ``allow-popups`` 
+        | ``allow-popups-to-escape-sandbox`` 
+        | ``allow-presentation`` 
+        | ``allow-same-origin`` 
+        | ``allow-scripts`` 
+        | ``allow-top-navigation`` 
+        | ``allow-top-navigation-by-user-activation`` 
+        
+    
+    module img =
+        
+        [<RequireQualifiedAccess>]
+        type ``loading`` = 
+        | ``eager`` 
+        | ``lazy`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``referrerpolicy`` = 
+        | ``no-referrer`` 
+        | ``no-referrer-when-downgrade`` 
+        | ``origin`` 
+        | ``origin-when-cross-origin`` 
+        | ``unsafe-url`` 
+        
+    
+    module input =
+        
+        [<RequireQualifiedAccess>]
+        type ``accept`` = 
+        | ``file_extension`` 
+        | ``audio__`` 
+        | ``video__`` 
+        | ``image__`` 
+        | ``media_type`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``autocomplete`` = 
+        | ``on`` 
+        | ``off`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``formenctype`` = 
+        | ``application_x-www-form-urlencoded`` 
+        | ``multipart_form-data`` 
+        | ``text_plain`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``formmethod`` = 
+        | ``get`` 
+        | ``post`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``formtarget`` = 
+        | ``_blank`` 
+        | ``_self`` 
+        | ``_parent`` 
+        | ``_top`` 
+        | ``framename`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``max`` = 
+        | ``number`` 
+        | ``date`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``min`` = 
+        | ``number`` 
+        | ``date`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``step`` = 
+        | ``number`` 
+        | ``any`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``type`` = 
+        | ``button`` 
+        | ``checkbox`` 
+        | ``color`` 
+        | ``date`` 
+        | ``datetime-local`` 
+        | ``email`` 
+        | ``file`` 
+        | ``hidden`` 
+        | ``image`` 
+        | ``month`` 
+        | ``number`` 
+        | ``password`` 
+        | ``radio`` 
+        | ``range`` 
+        | ``reset`` 
+        | ``search`` 
+        | ``submit`` 
+        | ``tel`` 
+        | ``text`` 
+        | ``time`` 
+        | ``url`` 
+        | ``week`` 
+        
+    
+    module link =
+        
+        [<RequireQualifiedAccess>]
+        type ``media`` = 
+        | ``and`` 
+        | ``not`` 
+        | ``,`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``referrerpolicy`` = 
+        | ``no-referrer`` 
+        | ``no-referrer-when-downgrade`` 
+        | ``origin`` 
+        | ``origin-when-cross-origin`` 
+        | ``same-origin`` 
+        | ``strict-origin`` 
+        | ``strict-origin-when-cross-origin`` 
+        | ``unsafe-url`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``rel`` = 
+        | ``alternate`` 
+        | ``author`` 
+        | ``dns-prefetch`` 
+        | ``help`` 
+        | ``icon`` 
+        | ``license`` 
+        | ``next`` 
+        | ``pingback`` 
+        | ``preconnect`` 
+        | ``prefetch`` 
+        | ``preload`` 
+        | ``prerender`` 
+        | ``prev`` 
+        | ``search`` 
+        | ``stylesheet`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``sizes`` = 
+        | ``HeightxWidth`` 
+        | ``any`` 
+        
+    
+    module meta =
+        
+        [<RequireQualifiedAccess>]
+        type ``http-equiv`` = 
+        | ``content-security-policy`` 
+        | ``content-type`` 
+        | ``default-style`` 
+        | ``refresh`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``name`` = 
+        | ``application-name`` 
+        | ``author`` 
+        | ``description`` 
+        | ``generator`` 
+        | ``keywords`` 
+        | ``viewport`` 
+        
+    
+    module ol =
+        
+        [<RequireQualifiedAccess>]
+        type ``type`` = 
+        | ``1`` 
+        | ``a`` 
+        | ``A`` 
+        | ``i`` 
+        | ``I`` 
+        
+    
+    module script =
+        
+        [<RequireQualifiedAccess>]
+        type ``referrerpolicy`` = 
+        | ``no-referrer`` 
+        | ``no-referrer-when-downgrade`` 
+        | ``origin`` 
+        | ``origin-when-cross-origin`` 
+        | ``same-origin`` 
+        | ``strict-origin-when-cross-origin`` 
+        | ``unsafe-url`` 
+        
+    
+    module source =
+        
+        [<RequireQualifiedAccess>]
+        type ``media`` = 
+        | ``and`` 
+        | ``not`` 
+        | ``,`` 
+        
+    
+    module style =
+        
+        [<RequireQualifiedAccess>]
+        type ``media`` = 
+        | ``and`` 
+        | ``not`` 
+        | ``,`` 
+        
+    
+    module textarea =
+        
+        [<RequireQualifiedAccess>]
+        type ``wrap`` = 
+        | ``soft`` 
+        | ``hard`` 
+        
+    
+    module th =
+        
+        [<RequireQualifiedAccess>]
+        type ``scope`` = 
+        | ``col`` 
+        | ``row`` 
+        | ``colgroup`` 
+        | ``rowgroup`` 
+        
+    
+    module track =
+        
+        [<RequireQualifiedAccess>]
+        type ``kind`` = 
+        | ``captions`` 
+        | ``chapters`` 
+        | ``descriptions`` 
+        | ``metadata`` 
+        | ``subtitles`` 
+        
+    
+    module video =
+        
+        [<RequireQualifiedAccess>]
+        type ``preload`` = 
+        | ``auto`` 
+        | ``metadata`` 
+        | ``none`` 
+        
+    
+    module Global =
+        
+        [<RequireQualifiedAccess>]
+        type ``contenteditable`` = 
+        | ``true`` 
+        | ``false`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``dir`` = 
+        | ``ltr`` 
+        | ``rtl`` 
+        | ``auto`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``draggable`` = 
+        | ``true`` 
+        | ``false`` 
+        | ``auto`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``spellcheck`` = 
+        | ``true`` 
+        | ``false`` 
+        
+        [<RequireQualifiedAccess>]
+        type ``translate`` = 
+        | ``yes`` 
+        | ``no`` 
+        
+    
+
 module HtmlElementBuilders =
     type HtmlGARenderValC0Builder<'v,'n when 'n :> HTMLElement>(tagName, resultSelector) =
         inherit RenderValC0Builder<'v,'n>(BuilderBricks.createNode tagName, BuilderBricks.checkOrUpdateNode tagName, resultSelector)
@@ -401,15 +890,35 @@ type HtmlGARenderValC0BuilderExtensions =
         static member contenteditable(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("contenteditable", value))
         
+        /// Specifies whether the content of an element is editable or not
+        [<Extension>]
+        static member contenteditable(this: #HtmlGARenderValC0Builder<_,_>, value: Global.``contenteditable``) =
+            this.OnEval(fun x -> x.node.setAttribute("contenteditable", value.ToString()))
+        
         /// Specifies the text direction for the content in an element
         [<Extension>]
         static member dir(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("dir", value))
         
+        /// Specifies the text direction for the content in an element
+        [<Extension>]
+        static member dir(this: #HtmlGARenderValC0Builder<_,_>, value: Global.``dir``) =
+            this.OnEval(fun x -> x.node.setAttribute("dir", value.ToString()))
+        
         /// Specifies whether an element is draggable or not
         [<Extension>]
         static member draggable(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("draggable", value))
+        
+        /// Specifies whether an element is draggable or not
+        [<Extension>]
+        static member draggable(this: #HtmlGARenderValC0Builder<_,_>, value: Global.``draggable``) =
+            this.OnEval(fun x -> x.node.setAttribute("draggable", value.ToString()))
+        
+        /// Specifies that an element is not yet, or is no longer, relevant
+        [<Extension>]
+        static member hidden(this: #HtmlGARenderValC0Builder<_,_>, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("hidden", if value then "true" else "false" ))
         
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
@@ -431,6 +940,11 @@ type HtmlGARenderValC0BuilderExtensions =
         static member spellcheck(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("spellcheck", value))
         
+        /// Specifies whether the element is to have its spelling and grammar checked or not
+        [<Extension>]
+        static member spellcheck(this: #HtmlGARenderValC0Builder<_,_>, value: Global.``spellcheck``) =
+            this.OnEval(fun x -> x.node.setAttribute("spellcheck", value.ToString()))
+        
         /// Specifies an inline CSS style for an element
         [<Extension>]
         static member style(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
@@ -450,6 +964,11 @@ type HtmlGARenderValC0BuilderExtensions =
         [<Extension>]
         static member translate(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("translate", value))
+        
+        /// Specifies whether the content of an element should be translated or not
+        [<Extension>]
+        static member translate(this: #HtmlGARenderValC0Builder<_,_>, value: Global.``translate``) =
+            this.OnEval(fun x -> x.node.setAttribute("translate", value.ToString()))
         
 
         // Events
@@ -1070,15 +1589,35 @@ type HtmlGARenderRetC0BuilderExtensions =
         static member contenteditable(this: #HtmlGARenderRetC0Builder<_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("contenteditable", value))
         
+        /// Specifies whether the content of an element is editable or not
+        [<Extension>]
+        static member contenteditable(this: #HtmlGARenderRetC0Builder<_>, value: Global.``contenteditable``) =
+            this.OnEval(fun x -> x.node.setAttribute("contenteditable", value.ToString()))
+        
         /// Specifies the text direction for the content in an element
         [<Extension>]
         static member dir(this: #HtmlGARenderRetC0Builder<_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("dir", value))
         
+        /// Specifies the text direction for the content in an element
+        [<Extension>]
+        static member dir(this: #HtmlGARenderRetC0Builder<_>, value: Global.``dir``) =
+            this.OnEval(fun x -> x.node.setAttribute("dir", value.ToString()))
+        
         /// Specifies whether an element is draggable or not
         [<Extension>]
         static member draggable(this: #HtmlGARenderRetC0Builder<_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("draggable", value))
+        
+        /// Specifies whether an element is draggable or not
+        [<Extension>]
+        static member draggable(this: #HtmlGARenderRetC0Builder<_>, value: Global.``draggable``) =
+            this.OnEval(fun x -> x.node.setAttribute("draggable", value.ToString()))
+        
+        /// Specifies that an element is not yet, or is no longer, relevant
+        [<Extension>]
+        static member hidden(this: #HtmlGARenderRetC0Builder<_>, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("hidden", if value then "true" else "false" ))
         
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
@@ -1100,6 +1639,11 @@ type HtmlGARenderRetC0BuilderExtensions =
         static member spellcheck(this: #HtmlGARenderRetC0Builder<_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("spellcheck", value))
         
+        /// Specifies whether the element is to have its spelling and grammar checked or not
+        [<Extension>]
+        static member spellcheck(this: #HtmlGARenderRetC0Builder<_>, value: Global.``spellcheck``) =
+            this.OnEval(fun x -> x.node.setAttribute("spellcheck", value.ToString()))
+        
         /// Specifies an inline CSS style for an element
         [<Extension>]
         static member style(this: #HtmlGARenderRetC0Builder<_>, value: string) =
@@ -1119,6 +1663,11 @@ type HtmlGARenderRetC0BuilderExtensions =
         [<Extension>]
         static member translate(this: #HtmlGARenderRetC0Builder<_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("translate", value))
+        
+        /// Specifies whether the content of an element should be translated or not
+        [<Extension>]
+        static member translate(this: #HtmlGARenderRetC0Builder<_>, value: Global.``translate``) =
+            this.OnEval(fun x -> x.node.setAttribute("translate", value.ToString()))
         
 
         // Events
@@ -1739,15 +2288,35 @@ type HtmlGARenderValCnBuilderExtensions =
         static member contenteditable(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("contenteditable", value))
         
+        /// Specifies whether the content of an element is editable or not
+        [<Extension>]
+        static member contenteditable(this: #HtmlGARenderValCnBuilder<_,_>, value: Global.``contenteditable``) =
+            this.OnEval(fun x -> x.node.setAttribute("contenteditable", value.ToString()))
+        
         /// Specifies the text direction for the content in an element
         [<Extension>]
         static member dir(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("dir", value))
         
+        /// Specifies the text direction for the content in an element
+        [<Extension>]
+        static member dir(this: #HtmlGARenderValCnBuilder<_,_>, value: Global.``dir``) =
+            this.OnEval(fun x -> x.node.setAttribute("dir", value.ToString()))
+        
         /// Specifies whether an element is draggable or not
         [<Extension>]
         static member draggable(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("draggable", value))
+        
+        /// Specifies whether an element is draggable or not
+        [<Extension>]
+        static member draggable(this: #HtmlGARenderValCnBuilder<_,_>, value: Global.``draggable``) =
+            this.OnEval(fun x -> x.node.setAttribute("draggable", value.ToString()))
+        
+        /// Specifies that an element is not yet, or is no longer, relevant
+        [<Extension>]
+        static member hidden(this: #HtmlGARenderValCnBuilder<_,_>, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("hidden", if value then "true" else "false" ))
         
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
@@ -1769,6 +2338,11 @@ type HtmlGARenderValCnBuilderExtensions =
         static member spellcheck(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("spellcheck", value))
         
+        /// Specifies whether the element is to have its spelling and grammar checked or not
+        [<Extension>]
+        static member spellcheck(this: #HtmlGARenderValCnBuilder<_,_>, value: Global.``spellcheck``) =
+            this.OnEval(fun x -> x.node.setAttribute("spellcheck", value.ToString()))
+        
         /// Specifies an inline CSS style for an element
         [<Extension>]
         static member style(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
@@ -1788,6 +2362,11 @@ type HtmlGARenderValCnBuilderExtensions =
         [<Extension>]
         static member translate(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("translate", value))
+        
+        /// Specifies whether the content of an element should be translated or not
+        [<Extension>]
+        static member translate(this: #HtmlGARenderValCnBuilder<_,_>, value: Global.``translate``) =
+            this.OnEval(fun x -> x.node.setAttribute("translate", value.ToString()))
         
 
         // Events
@@ -2408,15 +2987,35 @@ type HtmlGARenderRetCnBuilderExtensions =
         static member contenteditable(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("contenteditable", value))
         
+        /// Specifies whether the content of an element is editable or not
+        [<Extension>]
+        static member contenteditable(this: #HtmlGARenderRetCnBuilder<_>, value: Global.``contenteditable``) =
+            this.OnEval(fun x -> x.node.setAttribute("contenteditable", value.ToString()))
+        
         /// Specifies the text direction for the content in an element
         [<Extension>]
         static member dir(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("dir", value))
         
+        /// Specifies the text direction for the content in an element
+        [<Extension>]
+        static member dir(this: #HtmlGARenderRetCnBuilder<_>, value: Global.``dir``) =
+            this.OnEval(fun x -> x.node.setAttribute("dir", value.ToString()))
+        
         /// Specifies whether an element is draggable or not
         [<Extension>]
         static member draggable(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("draggable", value))
+        
+        /// Specifies whether an element is draggable or not
+        [<Extension>]
+        static member draggable(this: #HtmlGARenderRetCnBuilder<_>, value: Global.``draggable``) =
+            this.OnEval(fun x -> x.node.setAttribute("draggable", value.ToString()))
+        
+        /// Specifies that an element is not yet, or is no longer, relevant
+        [<Extension>]
+        static member hidden(this: #HtmlGARenderRetCnBuilder<_>, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("hidden", if value then "true" else "false" ))
         
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
@@ -2438,6 +3037,11 @@ type HtmlGARenderRetCnBuilderExtensions =
         static member spellcheck(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("spellcheck", value))
         
+        /// Specifies whether the element is to have its spelling and grammar checked or not
+        [<Extension>]
+        static member spellcheck(this: #HtmlGARenderRetCnBuilder<_>, value: Global.``spellcheck``) =
+            this.OnEval(fun x -> x.node.setAttribute("spellcheck", value.ToString()))
+        
         /// Specifies an inline CSS style for an element
         [<Extension>]
         static member style(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
@@ -2457,6 +3061,11 @@ type HtmlGARenderRetCnBuilderExtensions =
         [<Extension>]
         static member translate(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("translate", value))
+        
+        /// Specifies whether the content of an element should be translated or not
+        [<Extension>]
+        static member translate(this: #HtmlGARenderRetCnBuilder<_>, value: Global.``translate``) =
+            this.OnEval(fun x -> x.node.setAttribute("translate", value.ToString()))
         
 
         // Events
@@ -3082,6 +3691,11 @@ type aExtensions =
         static member media(this: #a, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("media", value))
         
+        /// Specifies what media/device the linked document is optimized for
+        [<Extension>]
+        static member media(this: #a, value: a.``media``) =
+            this.OnEval(fun x -> x.node.setAttribute("media", value.ToString()))
+        
         /// Specifies a space-separated list of URLs to which, when the link is followed, post requests with the body ping will be sent by the browser (in the background). Typically used for tracking.
         [<Extension>]
         static member ping(this: #a, value: string) =
@@ -3092,15 +3706,30 @@ type aExtensions =
         static member referrerpolicy(this: #a, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("referrerpolicy", value))
         
+        /// Specifies which referrer information to send with the link
+        [<Extension>]
+        static member referrerpolicy(this: #a, value: a.``referrerpolicy``) =
+            this.OnEval(fun x -> x.node.setAttribute("referrerpolicy", value.ToString()))
+        
         /// Specifies the relationship between the current document and the linked document
         [<Extension>]
         static member rel(this: #a, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("rel", value))
         
+        /// Specifies the relationship between the current document and the linked document
+        [<Extension>]
+        static member rel(this: #a, value: a.``rel``) =
+            this.OnEval(fun x -> x.node.setAttribute("rel", value.ToString()))
+        
         /// Specifies where to open the linked document
         [<Extension>]
         static member target(this: #a, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("target", value))
+        
+        /// Specifies where to open the linked document
+        [<Extension>]
+        static member target(this: #a, value: a.``target``) =
+            this.OnEval(fun x -> x.node.setAttribute("target", value.ToString()))
         
         /// Specifies the media type of the linked document
         [<Extension>]
@@ -3147,6 +3776,11 @@ type areaExtensions =
         static member coords(this: #area, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("coords", value))
         
+        /// Specifies the coordinates of the area
+        [<Extension>]
+        static member coords(this: #area, value: area.``coords``) =
+            this.OnEval(fun x -> x.node.setAttribute("coords", value.ToString()))
+        
         /// Specifies that the target will be downloaded when a user clicks on the hyperlink
         [<Extension>]
         static member download(this: #area, value: string) =
@@ -3167,25 +3801,50 @@ type areaExtensions =
         static member media(this: #area, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("media", value))
         
+        /// Specifies what media/device the target URL is optimized for
+        [<Extension>]
+        static member media(this: #area, value: area.``media``) =
+            this.OnEval(fun x -> x.node.setAttribute("media", value.ToString()))
+        
         /// Specifies which referrer information to send with the link
         [<Extension>]
         static member referrerpolicy(this: #area, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("referrerpolicy", value))
+        
+        /// Specifies which referrer information to send with the link
+        [<Extension>]
+        static member referrerpolicy(this: #area, value: area.``referrerpolicy``) =
+            this.OnEval(fun x -> x.node.setAttribute("referrerpolicy", value.ToString()))
         
         /// Specifies the relationship between the current document and the target URL
         [<Extension>]
         static member rel(this: #area, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("rel", value))
         
+        /// Specifies the relationship between the current document and the target URL
+        [<Extension>]
+        static member rel(this: #area, value: area.``rel``) =
+            this.OnEval(fun x -> x.node.setAttribute("rel", value.ToString()))
+        
         /// Specifies the shape of the area
         [<Extension>]
         static member shape(this: #area, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("shape", value))
         
+        /// Specifies the shape of the area
+        [<Extension>]
+        static member shape(this: #area, value: area.``shape``) =
+            this.OnEval(fun x -> x.node.setAttribute("shape", value.ToString()))
+        
         /// Specifies where to open the target URL
         [<Extension>]
         static member target(this: #area, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("target", value))
+        
+        /// Specifies where to open the target URL
+        [<Extension>]
+        static member target(this: #area, value: area.``target``) =
+            this.OnEval(fun x -> x.node.setAttribute("target", value.ToString()))
         
         /// Specifies the media type of the target URL
         [<Extension>]
@@ -3224,8 +3883,18 @@ type audioExtensions =
         
         /// Specifies that the audio will start playing as soon as it is ready
         [<Extension>]
+        static member autoplay(this: #audio, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("autoplay", if value then "true" else "false" ))
+        
+        /// Specifies that the audio will start playing as soon as it is ready
+        [<Extension>]
         static member autoplay(this: #audio, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("autoplay", value))
+        
+        /// Specifies that audio controls should be displayed (such as a play/pause button etc)
+        [<Extension>]
+        static member controls(this: #audio, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("controls", if value then "true" else "false" ))
         
         /// Specifies that audio controls should be displayed (such as a play/pause button etc)
         [<Extension>]
@@ -3234,8 +3903,18 @@ type audioExtensions =
         
         /// Specifies that the audio will start over again, every time it is finished
         [<Extension>]
+        static member loop(this: #audio, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("loop", if value then "true" else "false" ))
+        
+        /// Specifies that the audio will start over again, every time it is finished
+        [<Extension>]
         static member loop(this: #audio, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("loop", value))
+        
+        /// Specifies that the audio output should be muted
+        [<Extension>]
+        static member muted(this: #audio, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("muted", if value then "true" else "false" ))
         
         /// Specifies that the audio output should be muted
         [<Extension>]
@@ -3246,6 +3925,11 @@ type audioExtensions =
         [<Extension>]
         static member preload(this: #audio, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("preload", value))
+        
+        /// Specifies if and how the author thinks the audio should be loaded when the page loads
+        [<Extension>]
+        static member preload(this: #audio, value: audio.``preload``) =
+            this.OnEval(fun x -> x.node.setAttribute("preload", value.ToString()))
         
         /// Specifies the URL of the audio file
         [<Extension>]
@@ -3282,6 +3966,11 @@ type base'Extensions =
         static member target(this: #base', value: string) =
             this.OnEval(fun x -> x.node.setAttribute("target", value))
         
+        /// Specifies the default target for all hyperlinks and forms in the page
+        [<Extension>]
+        static member target(this: #base', value: base'.``target``) =
+            this.OnEval(fun x -> x.node.setAttribute("target", value.ToString()))
+        
 
         // Events
         
@@ -3306,6 +3995,11 @@ type bdoExtensions =
         [<Extension>]
         static member dir(this: #bdo, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("dir", value))
+        
+        /// Required. Specifies the text direction of the text inside the <bdo> element
+        [<Extension>]
+        static member dir(this: #bdo, value: bdo.``dir``) =
+            this.OnEval(fun x -> x.node.setAttribute("dir", value.ToString()))
         
 
         // Events
@@ -3354,8 +4048,18 @@ type buttonExtensions =
         
         /// Specifies that a button should automatically get focus when the page loads
         [<Extension>]
+        static member autofocus(this: #button, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("autofocus", if value then "true" else "false" ))
+        
+        /// Specifies that a button should automatically get focus when the page loads
+        [<Extension>]
         static member autofocus(this: #button, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("autofocus", value))
+        
+        /// Specifies that a button should be disabled
+        [<Extension>]
+        static member disabled(this: #button, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("disabled", if value then "true" else "false" ))
         
         /// Specifies that a button should be disabled
         [<Extension>]
@@ -3377,10 +4081,25 @@ type buttonExtensions =
         static member formenctype(this: #button, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("formenctype", value))
         
+        /// Specifies how form-data should be encoded before sending it to a server. Only for type="submit"
+        [<Extension>]
+        static member formenctype(this: #button, value: button.``formenctype``) =
+            this.OnEval(fun x -> x.node.setAttribute("formenctype", value.ToString()))
+        
         /// Specifies how to send the form-data (which HTTP method to use). Only for type="submit"
         [<Extension>]
         static member formmethod(this: #button, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("formmethod", value))
+        
+        /// Specifies how to send the form-data (which HTTP method to use). Only for type="submit"
+        [<Extension>]
+        static member formmethod(this: #button, value: button.``formmethod``) =
+            this.OnEval(fun x -> x.node.setAttribute("formmethod", value.ToString()))
+        
+        /// Specifies that the form-data should not be validated on submission. Only for type="submit"
+        [<Extension>]
+        static member formnovalidate(this: #button, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("formnovalidate", if value then "true" else "false" ))
         
         /// Specifies that the form-data should not be validated on submission. Only for type="submit"
         [<Extension>]
@@ -3392,6 +4111,11 @@ type buttonExtensions =
         static member formtarget(this: #button, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("formtarget", value))
         
+        /// Specifies where to display the response after submitting the form. Only for type="submit"
+        [<Extension>]
+        static member formtarget(this: #button, value: button.``formtarget``) =
+            this.OnEval(fun x -> x.node.setAttribute("formtarget", value.ToString()))
+        
         /// Specifies a name for the button
         [<Extension>]
         static member name(this: #button, value: string) =
@@ -3401,6 +4125,11 @@ type buttonExtensions =
         [<Extension>]
         static member type'(this: #button, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("type", value))
+        
+        /// Specifies the type of button
+        [<Extension>]
+        static member type'(this: #button, value: button.``type``) =
+            this.OnEval(fun x -> x.node.setAttribute("type", value.ToString()))
         
         /// Specifies an initial value for the button
         [<Extension>]
@@ -3554,6 +4283,11 @@ type detailsExtensions =
         
         /// Specifies that the details should be visible (open) to the user
         [<Extension>]
+        static member open'(this: #details, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("open", if value then "true" else "false" ))
+        
+        /// Specifies that the details should be visible (open) to the user
+        [<Extension>]
         static member open'(this: #details, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("open", value))
         
@@ -3576,6 +4310,11 @@ type dfnExtensions =
 type dialogExtensions =
     class
         // Attributes
+        
+        /// Specifies that the dialog element is active and that the user can interact with it
+        [<Extension>]
+        static member open'(this: #dialog, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("open", if value then "true" else "false" ))
         
         /// Specifies that the dialog element is active and that the user can interact with it
         [<Extension>]
@@ -3664,6 +4403,11 @@ type fieldsetExtensions =
         
         /// Specifies that a group of related form elements should be disabled
         [<Extension>]
+        static member disabled(this: #fieldset, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("disabled", if value then "true" else "false" ))
+        
+        /// Specifies that a group of related form elements should be disabled
+        [<Extension>]
         static member disabled(this: #fieldset, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("disabled", value))
         
@@ -3732,20 +4476,40 @@ type formExtensions =
         static member autocomplete(this: #form, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("autocomplete", value))
         
+        /// Specifies whether a form should have autocomplete on or off
+        [<Extension>]
+        static member autocomplete(this: #form, value: form.``autocomplete``) =
+            this.OnEval(fun x -> x.node.setAttribute("autocomplete", value.ToString()))
+        
         /// Specifies how the form-data should be encoded when submitting it to the server (only for method="post")
         [<Extension>]
         static member enctype(this: #form, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("enctype", value))
+        
+        /// Specifies how the form-data should be encoded when submitting it to the server (only for method="post")
+        [<Extension>]
+        static member enctype(this: #form, value: form.``enctype``) =
+            this.OnEval(fun x -> x.node.setAttribute("enctype", value.ToString()))
         
         /// Specifies the HTTP method to use when sending form-data
         [<Extension>]
         static member method(this: #form, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("method", value))
         
+        /// Specifies the HTTP method to use when sending form-data
+        [<Extension>]
+        static member method(this: #form, value: form.``method``) =
+            this.OnEval(fun x -> x.node.setAttribute("method", value.ToString()))
+        
         /// Specifies the name of a form
         [<Extension>]
         static member name(this: #form, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("name", value))
+        
+        /// Specifies that the form should not be validated when submitted
+        [<Extension>]
+        static member novalidate(this: #form, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("novalidate", if value then "true" else "false" ))
         
         /// Specifies that the form should not be validated when submitted
         [<Extension>]
@@ -3757,10 +4521,20 @@ type formExtensions =
         static member rel(this: #form, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("rel", value))
         
+        /// Specifies the relationship between a linked resource and the current document
+        [<Extension>]
+        static member rel(this: #form, value: form.``rel``) =
+            this.OnEval(fun x -> x.node.setAttribute("rel", value.ToString()))
+        
         /// Specifies where to display the response that is received after submitting the form
         [<Extension>]
         static member target(this: #form, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("target", value))
+        
+        /// Specifies where to display the response that is received after submitting the form
+        [<Extension>]
+        static member target(this: #form, value: form.``target``) =
+            this.OnEval(fun x -> x.node.setAttribute("target", value.ToString()))
         
 
         // Events
@@ -3922,10 +4696,20 @@ type iframeExtensions =
         static member referrerpolicy(this: #iframe, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("referrerpolicy", value))
         
+        /// Specifies which referrer information to send when fetching the iframe 
+        [<Extension>]
+        static member referrerpolicy(this: #iframe, value: iframe.``referrerpolicy``) =
+            this.OnEval(fun x -> x.node.setAttribute("referrerpolicy", value.ToString()))
+        
         /// Enables an extra set of restrictions for the content in an <iframe>
         [<Extension>]
         static member sandbox(this: #iframe, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("sandbox", value))
+        
+        /// Enables an extra set of restrictions for the content in an <iframe>
+        [<Extension>]
+        static member sandbox(this: #iframe, value: iframe.``sandbox``) =
+            this.OnEval(fun x -> x.node.setAttribute("sandbox", value.ToString()))
         
         /// Specifies the address of the document to embed in the <iframe>
         [<Extension>]
@@ -3969,6 +4753,11 @@ type imgExtensions =
         
         /// Specifies an image as a server-side image map
         [<Extension>]
+        static member ismap(this: #img, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("ismap", if value then "true" else "false" ))
+        
+        /// Specifies an image as a server-side image map
+        [<Extension>]
         static member ismap(this: #img, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("ismap", value))
         
@@ -3976,6 +4765,11 @@ type imgExtensions =
         [<Extension>]
         static member loading(this: #img, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("loading", value))
+        
+        /// Specifies whether a browser should load an image immediately or to defer loading of images until some conditions are met
+        [<Extension>]
+        static member loading(this: #img, value: img.``loading``) =
+            this.OnEval(fun x -> x.node.setAttribute("loading", value.ToString()))
         
         /// Specifies a URL to a detailed description of an image
         [<Extension>]
@@ -3986,6 +4780,11 @@ type imgExtensions =
         [<Extension>]
         static member referrerpolicy(this: #img, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("referrerpolicy", value))
+        
+        /// Specifies which referrer information to use when fetching an image
+        [<Extension>]
+        static member referrerpolicy(this: #img, value: img.``referrerpolicy``) =
+            this.OnEval(fun x -> x.node.setAttribute("referrerpolicy", value.ToString()))
         
         /// Specifies image sizes for different page layouts
         [<Extension>]
@@ -4027,6 +4826,11 @@ type inputExtensions =
         static member accept(this: #input, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("accept", value))
         
+        /// Specifies a filter for what file types the user can pick from the file input dialog box (only for type="file")
+        [<Extension>]
+        static member accept(this: #input, value: input.``accept``) =
+            this.OnEval(fun x -> x.node.setAttribute("accept", value.ToString()))
+        
         /// Specifies an alternate text for images (only for type="image")
         [<Extension>]
         static member alt(this: #input, value: string) =
@@ -4037,10 +4841,25 @@ type inputExtensions =
         static member autocomplete(this: #input, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("autocomplete", value))
         
+        /// Specifies whether an <input> element should have autocomplete enabled
+        [<Extension>]
+        static member autocomplete(this: #input, value: input.``autocomplete``) =
+            this.OnEval(fun x -> x.node.setAttribute("autocomplete", value.ToString()))
+        
+        /// Specifies that an <input> element should automatically get focus when the page loads
+        [<Extension>]
+        static member autofocus(this: #input, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("autofocus", if value then "true" else "false" ))
+        
         /// Specifies that an <input> element should automatically get focus when the page loads
         [<Extension>]
         static member autofocus(this: #input, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("autofocus", value))
+        
+        /// Specifies that an <input> element should be pre-selected when the page loads (for type="checkbox" or type="radio")
+        [<Extension>]
+        static member checked'(this: #input, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("checked", if value then "true" else "false" ))
         
         /// Specifies that an <input> element should be pre-selected when the page loads (for type="checkbox" or type="radio")
         [<Extension>]
@@ -4051,6 +4870,11 @@ type inputExtensions =
         [<Extension>]
         static member dirname(this: #input, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("dirname", value))
+        
+        /// Specifies that an <input> element should be disabled
+        [<Extension>]
+        static member disabled(this: #input, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("disabled", if value then "true" else "false" ))
         
         /// Specifies that an <input> element should be disabled
         [<Extension>]
@@ -4072,10 +4896,25 @@ type inputExtensions =
         static member formenctype(this: #input, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("formenctype", value))
         
+        /// Specifies how the form-data should be encoded when submitting it to the server (for type="submit" and type="image")
+        [<Extension>]
+        static member formenctype(this: #input, value: input.``formenctype``) =
+            this.OnEval(fun x -> x.node.setAttribute("formenctype", value.ToString()))
+        
         /// Defines the HTTP method for sending data to the action URL (for type="submit" and type="image")
         [<Extension>]
         static member formmethod(this: #input, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("formmethod", value))
+        
+        /// Defines the HTTP method for sending data to the action URL (for type="submit" and type="image")
+        [<Extension>]
+        static member formmethod(this: #input, value: input.``formmethod``) =
+            this.OnEval(fun x -> x.node.setAttribute("formmethod", value.ToString()))
+        
+        /// Defines that form elements should not be validated when submitted
+        [<Extension>]
+        static member formnovalidate(this: #input, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("formnovalidate", if value then "true" else "false" ))
         
         /// Defines that form elements should not be validated when submitted
         [<Extension>]
@@ -4086,6 +4925,11 @@ type inputExtensions =
         [<Extension>]
         static member formtarget(this: #input, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("formtarget", value))
+        
+        /// Specifies where to display the response that is received after submitting the form (for type="submit" and type="image")
+        [<Extension>]
+        static member formtarget(this: #input, value: input.``formtarget``) =
+            this.OnEval(fun x -> x.node.setAttribute("formtarget", value.ToString()))
         
         /// Specifies the height of an <input> element (only for type="image")
         [<Extension>]
@@ -4102,6 +4946,11 @@ type inputExtensions =
         static member max(this: #input, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("max", value))
         
+        /// Specifies the maximum value for an <input> element
+        [<Extension>]
+        static member max(this: #input, value: input.``max``) =
+            this.OnEval(fun x -> x.node.setAttribute("max", value.ToString()))
+        
         /// Specifies the maximum number of characters allowed in an <input> element
         [<Extension>]
         static member maxlength(this: #input, value: string) =
@@ -4112,10 +4961,20 @@ type inputExtensions =
         static member min(this: #input, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("min", value))
         
+        /// Specifies a minimum value for an <input> element
+        [<Extension>]
+        static member min(this: #input, value: input.``min``) =
+            this.OnEval(fun x -> x.node.setAttribute("min", value.ToString()))
+        
         /// Specifies the minimum number of characters required in an <input> element
         [<Extension>]
         static member minlength(this: #input, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("minlength", value))
+        
+        /// Specifies that a user can enter more than one value in an <input> element
+        [<Extension>]
+        static member multiple(this: #input, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("multiple", if value then "true" else "false" ))
         
         /// Specifies that a user can enter more than one value in an <input> element
         [<Extension>]
@@ -4139,8 +4998,18 @@ type inputExtensions =
         
         /// Specifies that an input field is read-only
         [<Extension>]
+        static member readonly(this: #input, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("readonly", if value then "true" else "false" ))
+        
+        /// Specifies that an input field is read-only
+        [<Extension>]
         static member readonly(this: #input, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("readonly", value))
+        
+        /// Specifies that an input field must be filled out before submitting the form
+        [<Extension>]
+        static member required(this: #input, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("required", if value then "true" else "false" ))
         
         /// Specifies that an input field must be filled out before submitting the form
         [<Extension>]
@@ -4162,16 +5031,26 @@ type inputExtensions =
         static member step(this: #input, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("step", value))
         
+        /// Specifies the interval between legal numbers in an input field
+        [<Extension>]
+        static member step(this: #input, value: input.``step``) =
+            this.OnEval(fun x -> x.node.setAttribute("step", value.ToString()))
+        
         /// Specifies the type <input> element to display
         [<Extension>]
         static member type'(this: #input, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("type", value))
         
+        /// Specifies the type <input> element to display
+        [<Extension>]
+        static member type'(this: #input, value: input.``type``) =
+            this.OnEval(fun x -> x.node.setAttribute("type", value.ToString()))
+        
         /// Specifies the value of an <input> element
         ///  
         [<Extension>]
         static member value(this: #input, value: string) =
-            this.OnEval(fun x -> x.node.setAttribute("value", value))
+            this.OnEval(fun x -> x.node.value <- value)
         
         /// Specifies the width of an <input> element (only for type="image")
         [<Extension>]
@@ -4283,20 +5162,40 @@ type linkExtensions =
         static member media(this: #link, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("media", value))
         
+        /// Specifies on what device the linked document will be displayed
+        [<Extension>]
+        static member media(this: #link, value: link.``media``) =
+            this.OnEval(fun x -> x.node.setAttribute("media", value.ToString()))
+        
         /// Specifies which referrer to use when fetching the resource
         [<Extension>]
         static member referrerpolicy(this: #link, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("referrerpolicy", value))
+        
+        /// Specifies which referrer to use when fetching the resource
+        [<Extension>]
+        static member referrerpolicy(this: #link, value: link.``referrerpolicy``) =
+            this.OnEval(fun x -> x.node.setAttribute("referrerpolicy", value.ToString()))
         
         /// Required. Specifies the relationship between the current document and the linked document
         [<Extension>]
         static member rel(this: #link, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("rel", value))
         
+        /// Required. Specifies the relationship between the current document and the linked document
+        [<Extension>]
+        static member rel(this: #link, value: link.``rel``) =
+            this.OnEval(fun x -> x.node.setAttribute("rel", value.ToString()))
+        
         /// Specifies the size of the linked resource. Only for rel="icon"
         [<Extension>]
         static member sizes(this: #link, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("sizes", value))
+        
+        /// Specifies the size of the linked resource. Only for rel="icon"
+        [<Extension>]
+        static member sizes(this: #link, value: link.``sizes``) =
+            this.OnEval(fun x -> x.node.setAttribute("sizes", value.ToString()))
         
         /// Defines a preferred or an alternate stylesheet
         [<Extension>]
@@ -4368,10 +5267,20 @@ type metaExtensions =
         static member httpEquiv(this: #meta, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("http-equiv", value))
         
+        /// Provides an HTTP header for the information/value of the content attribute
+        [<Extension>]
+        static member httpEquiv(this: #meta, value: meta.``http-equiv``) =
+            this.OnEval(fun x -> x.node.setAttribute("http-equiv", value.ToString()))
+        
         /// Specifies a name for the metadata
         [<Extension>]
         static member name(this: #meta, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("name", value))
+        
+        /// Specifies a name for the metadata
+        [<Extension>]
+        static member name(this: #meta, value: meta.``name``) =
+            this.OnEval(fun x -> x.node.setAttribute("name", value.ToString()))
         
 
         // Events
@@ -4500,6 +5409,11 @@ type olExtensions =
         
         /// Specifies that the list order should be reversed (9,8,7...)
         [<Extension>]
+        static member reversed(this: #ol, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("reversed", if value then "true" else "false" ))
+        
+        /// Specifies that the list order should be reversed (9,8,7...)
+        [<Extension>]
         static member reversed(this: #ol, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("reversed", value))
         
@@ -4513,6 +5427,11 @@ type olExtensions =
         static member type'(this: #ol, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("type", value))
         
+        /// Specifies the kind of marker to use in the list
+        [<Extension>]
+        static member type'(this: #ol, value: ol.``type``) =
+            this.OnEval(fun x -> x.node.setAttribute("type", value.ToString()))
+        
 
         // Events
         
@@ -4522,6 +5441,11 @@ type olExtensions =
 type optgroupExtensions =
     class
         // Attributes
+        
+        /// Specifies that an option-group should be disabled
+        [<Extension>]
+        static member disabled(this: #optgroup, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("disabled", if value then "true" else "false" ))
         
         /// Specifies that an option-group should be disabled
         [<Extension>]
@@ -4545,6 +5469,11 @@ type optionExtensions =
         
         /// Specifies that an option should be disabled
         [<Extension>]
+        static member disabled(this: #option, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("disabled", if value then "true" else "false" ))
+        
+        /// Specifies that an option should be disabled
+        [<Extension>]
         static member disabled(this: #option, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("disabled", value))
         
@@ -4552,6 +5481,11 @@ type optionExtensions =
         [<Extension>]
         static member label(this: #option, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("label", value))
+        
+        /// Specifies that an option should be pre-selected when the page loads
+        [<Extension>]
+        static member selected(this: #option, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("selected", if value then "true" else "false" ))
         
         /// Specifies that an option should be pre-selected when the page loads
         [<Extension>]
@@ -4735,6 +5669,11 @@ type scriptExtensions =
         
         /// Specifies that the script is downloaded in parallel to parsing the page, and executed as soon as it is available (before parsing completes) (only for external scripts)
         [<Extension>]
+        static member async(this: #script, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("async", if value then "true" else "false" ))
+        
+        /// Specifies that the script is downloaded in parallel to parsing the page, and executed as soon as it is available (before parsing completes) (only for external scripts)
+        [<Extension>]
         static member async(this: #script, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("async", value))
         
@@ -4742,6 +5681,11 @@ type scriptExtensions =
         [<Extension>]
         static member crossorigin(this: #script, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("crossorigin", value))
+        
+        /// Specifies that the script is downloaded in parallel to parsing the page, and executed after the page has finished parsing (only for external scripts)
+        [<Extension>]
+        static member defer(this: #script, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("defer", if value then "true" else "false" ))
         
         /// Specifies that the script is downloaded in parallel to parsing the page, and executed after the page has finished parsing (only for external scripts)
         [<Extension>]
@@ -4762,6 +5706,11 @@ type scriptExtensions =
         [<Extension>]
         static member referrerpolicy(this: #script, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("referrerpolicy", value))
+        
+        /// Specifies which referrer information to send when fetching a script
+        [<Extension>]
+        static member referrerpolicy(this: #script, value: script.``referrerpolicy``) =
+            this.OnEval(fun x -> x.node.setAttribute("referrerpolicy", value.ToString()))
         
         /// Specifies the URL of an external script file
         [<Extension>]
@@ -4795,8 +5744,18 @@ type selectExtensions =
         
         /// Specifies that the drop-down list should automatically get focus when the page loads
         [<Extension>]
+        static member autofocus(this: #select, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("autofocus", if value then "true" else "false" ))
+        
+        /// Specifies that the drop-down list should automatically get focus when the page loads
+        [<Extension>]
         static member autofocus(this: #select, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("autofocus", value))
+        
+        /// Specifies that a drop-down list should be disabled
+        [<Extension>]
+        static member disabled(this: #select, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("disabled", if value then "true" else "false" ))
         
         /// Specifies that a drop-down list should be disabled
         [<Extension>]
@@ -4810,6 +5769,11 @@ type selectExtensions =
         
         /// Specifies that multiple options can be selected at once
         [<Extension>]
+        static member multiple(this: #select, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("multiple", if value then "true" else "false" ))
+        
+        /// Specifies that multiple options can be selected at once
+        [<Extension>]
         static member multiple(this: #select, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("multiple", value))
         
@@ -4817,6 +5781,11 @@ type selectExtensions =
         [<Extension>]
         static member name(this: #select, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("name", value))
+        
+        /// Specifies that the user is required to select a value before submitting the form
+        [<Extension>]
+        static member required(this: #select, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("required", if value then "true" else "false" ))
         
         /// Specifies that the user is required to select a value before submitting the form
         [<Extension>]
@@ -4852,6 +5821,11 @@ type sourceExtensions =
         [<Extension>]
         static member media(this: #source, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("media", value))
+        
+        /// Accepts any valid media query that would normally be defined in a CSS 
+        [<Extension>]
+        static member media(this: #source, value: source.``media``) =
+            this.OnEval(fun x -> x.node.setAttribute("media", value.ToString()))
         
         /// Specifies image sizes for different page layouts
         [<Extension>]
@@ -4907,6 +5881,11 @@ type styleExtensions =
         [<Extension>]
         static member media(this: #style, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("media", value))
+        
+        /// Specifies what media/device the media resource is optimized for
+        [<Extension>]
+        static member media(this: #style, value: style.``media``) =
+            this.OnEval(fun x -> x.node.setAttribute("media", value.ToString()))
         
         /// Specifies the media type of the <style> tag
         [<Extension>]
@@ -5010,6 +5989,11 @@ type textareaExtensions =
         
         /// Specifies that a text area should automatically get focus when the page loads
         [<Extension>]
+        static member autofocus(this: #textarea, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("autofocus", if value then "true" else "false" ))
+        
+        /// Specifies that a text area should automatically get focus when the page loads
+        [<Extension>]
         static member autofocus(this: #textarea, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("autofocus", value))
         
@@ -5022,6 +6006,11 @@ type textareaExtensions =
         [<Extension>]
         static member dirname(this: #textarea, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("dirname", value))
+        
+        /// Specifies that a text area should be disabled
+        [<Extension>]
+        static member disabled(this: #textarea, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("disabled", if value then "true" else "false" ))
         
         /// Specifies that a text area should be disabled
         [<Extension>]
@@ -5050,8 +6039,18 @@ type textareaExtensions =
         
         /// Specifies that a text area should be read-only
         [<Extension>]
+        static member readonly(this: #textarea, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("readonly", if value then "true" else "false" ))
+        
+        /// Specifies that a text area should be read-only
+        [<Extension>]
         static member readonly(this: #textarea, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("readonly", value))
+        
+        /// Specifies that a text area is required/must be filled out
+        [<Extension>]
+        static member required(this: #textarea, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("required", if value then "true" else "false" ))
         
         /// Specifies that a text area is required/must be filled out
         [<Extension>]
@@ -5067,6 +6066,11 @@ type textareaExtensions =
         [<Extension>]
         static member wrap(this: #textarea, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("wrap", value))
+        
+        /// Specifies how the text in a text area is to be wrapped when submitted in a form
+        [<Extension>]
+        static member wrap(this: #textarea, value: textarea.``wrap``) =
+            this.OnEval(fun x -> x.node.setAttribute("wrap", value.ToString()))
         
 
         // Events
@@ -5112,6 +6116,11 @@ type thExtensions =
         [<Extension>]
         static member scope(this: #th, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("scope", value))
+        
+        /// Specifies whether a header cell is a header for a column, row, or group of columns or rows 
+        [<Extension>]
+        static member scope(this: #th, value: th.``scope``) =
+            this.OnEval(fun x -> x.node.setAttribute("scope", value.ToString()))
         
 
         // Events
@@ -5170,6 +6179,11 @@ type trackExtensions =
         
         /// Specifies that the track is to be enabled if the user's preferences do not indicate that another track would be more appropriate
         [<Extension>]
+        static member default'(this: #track, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("default", if value then "true" else "false" ))
+        
+        /// Specifies that the track is to be enabled if the user's preferences do not indicate that another track would be more appropriate
+        [<Extension>]
         static member default'(this: #track, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("default", value))
         
@@ -5177,6 +6191,11 @@ type trackExtensions =
         [<Extension>]
         static member kind(this: #track, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("kind", value))
+        
+        /// Specifies the kind of text track
+        [<Extension>]
+        static member kind(this: #track, value: track.``kind``) =
+            this.OnEval(fun x -> x.node.setAttribute("kind", value.ToString()))
         
         /// Specifies the title of the text track
         [<Extension>]
@@ -5235,8 +6254,18 @@ type videoExtensions =
         
         /// Specifies that the video will start playing as soon as it is ready
         [<Extension>]
+        static member autoplay(this: #video, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("autoplay", if value then "true" else "false" ))
+        
+        /// Specifies that the video will start playing as soon as it is ready
+        [<Extension>]
         static member autoplay(this: #video, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("autoplay", value))
+        
+        /// Specifies that video controls should be displayed (such as a play/pause button etc).
+        [<Extension>]
+        static member controls(this: #video, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("controls", if value then "true" else "false" ))
         
         /// Specifies that video controls should be displayed (such as a play/pause button etc).
         [<Extension>]
@@ -5250,8 +6279,18 @@ type videoExtensions =
         
         /// Specifies that the video will start over again, every time it is finished
         [<Extension>]
+        static member loop(this: #video, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("loop", if value then "true" else "false" ))
+        
+        /// Specifies that the video will start over again, every time it is finished
+        [<Extension>]
         static member loop(this: #video, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("loop", value))
+        
+        /// Specifies that the audio output of the video should be muted
+        [<Extension>]
+        static member muted(this: #video, value: bool) =
+            this.OnEval(fun x -> x.node.setAttribute("muted", if value then "true" else "false" ))
         
         /// Specifies that the audio output of the video should be muted
         [<Extension>]
@@ -5267,6 +6306,11 @@ type videoExtensions =
         [<Extension>]
         static member preload(this: #video, value: string) =
             this.OnEval(fun x -> x.node.setAttribute("preload", value))
+        
+        /// Specifies if and how the author thinks the video should be loaded when the page loads
+        [<Extension>]
+        static member preload(this: #video, value: video.``preload``) =
+            this.OnEval(fun x -> x.node.setAttribute("preload", value.ToString()))
         
         /// Specifies the URL of the video file
         [<Extension>]
@@ -5363,7 +6407,7 @@ type Html =
     static member inline data = HtmlElementBuilders.data()
     
     /// Specifies a list of pre-defined options for input controls
-    static member inline datalist = HtmlElementBuilders.datalist().oninput()
+    static member inline datalist = HtmlElementBuilders.datalist()
     
     /// Defines a description/value of a term in a description list
     static member inline dd = HtmlElementBuilders.dd()
@@ -5450,7 +6494,7 @@ type Html =
     static member inline img = HtmlElementBuilders.img()
     
     /// Defines an input control
-    static member inline input = HtmlElementBuilders.input().oninput()
+    static member inline input = HtmlElementBuilders.input()
     
     /// Defines a text that has been inserted into a document
     static member inline ins = HtmlElementBuilders.ins()
@@ -5501,10 +6545,10 @@ type Html =
     static member inline optgroup = HtmlElementBuilders.optgroup()
     
     /// Defines an option in a drop-down list
-    static member inline option = HtmlElementBuilders.option().oninput()
+    static member inline option = HtmlElementBuilders.option()
     
     /// Defines the result of a calculation
-    static member inline output = HtmlElementBuilders.output().oninput()
+    static member inline output = HtmlElementBuilders.output()
     
     /// Defines a paragraph
     static member inline p = HtmlElementBuilders.p()
@@ -5546,7 +6590,7 @@ type Html =
     static member inline section = HtmlElementBuilders.section()
     
     /// Defines a drop-down list
-    static member inline select = HtmlElementBuilders.select().oninput()
+    static member inline select = HtmlElementBuilders.select()
     
     /// Defines smaller text
     static member inline small = HtmlElementBuilders.small()
@@ -5585,7 +6629,7 @@ type Html =
     static member inline template = HtmlElementBuilders.template()
     
     /// Defines a multiline input control (text area)
-    static member inline textarea = HtmlElementBuilders.textarea().oninput()
+    static member inline textarea = HtmlElementBuilders.textarea()
     
     /// Groups the footer content in a table
     static member inline tfoot = HtmlElementBuilders.tfoot()

@@ -19,6 +19,7 @@ let cacheDir = Path.Combine(__SOURCE_DIRECTORY__, ".cache/w3sCache")
 type Label = 
     { 
         name: string
+        fsharpName: string
         desc: string 
     }
 
@@ -28,12 +29,17 @@ type AttrTyp =
     | Text
     | Enum of Label list
 
+type AttrSetMode =
+    | SetAttribute
+    | DomPropertySetter
+
 type Attr =
     {
         name: string
         fsharpName: string
         desc: string
         types: AttrTyp list
+        setMode: AttrSetMode
         link: string option
     }
 
@@ -188,6 +194,11 @@ let elementExcludes =
         "h1 to h6"
         "svg"
         //
+    ]
+
+let domPropertySetter =
+    [
+        "input", "value"
     ]
 
 let additionalElements =
@@ -425,7 +436,7 @@ let generate () =
         |> Option.map snd
         |> Option.defaultValue name
 
-    let scrapeAttrs (elementPage: HtmlNode) =
+    let scrapeAttrs (elemTagName: string option) (elementPage: HtmlNode) =
         let attrRows = elementPage |> tryFindTable "Attribute"|> Option.defaultValue []
         [ for attrTr in attrRows do
             let attrTds = attrTr.CssSelect("td")
@@ -451,7 +462,16 @@ let generate () =
                                         |> Option.map (fun a -> a.InnerText())
                                         |> Option.defaultWith (tds[0].InnerText)
                                     let labelDesc = tds[1].InnerText()
-                                    { Label.name = labelName; desc = labelDesc }
+                                    {
+                                        Label.name = labelName
+                                        fsharpName = 
+                                            labelName
+                                                .Replace("/", "_")
+                                                .Replace("*", "_")
+                                                .Replace(".", "_")
+                                                // TODO: That's crap :)
+                                        desc = labelDesc 
+                                    }
                                 ]
                                 |> AttrTyp.Enum
                         [
@@ -460,12 +480,19 @@ let generate () =
                             attrType
                         ]
                         |> List.distinct
+                let setMode =
+                    if 
+                        domPropertySetter 
+                        |> List.exists (fun (e,a) -> Some e = elemTagName && a = attrName)
+                    then DomPropertySetter
+                    else SetAttribute
                 let finalAttr =
                     {
                         Attr.name = attrName
                         fsharpName = correctName attrNameCorrections attrName
                         desc = attrDesc
                         types = attrTypes
+                        setMode = setMode
                         link = attrLink
                     }
                 finalAttr
@@ -495,7 +522,7 @@ let generate () =
                     let includeGlobalEvents =
                         elementPage.CssSelect("a")
                         |> List.exists (fun a -> getHRef a = "ref_eventattributes.asp")
-                    let attrs = scrapeAttrs elementPage
+                    let attrs = scrapeAttrs (Some elemTagName) elementPage
                     let element =
                         {
                             Element.tagName = elemTagName
@@ -521,7 +548,7 @@ let generate () =
     {| 
         elements = elements
         globalEvents = globalEvents
-        globalAttrs = loadPage "ref_standardattributes.asp" |> scrapeAttrs
+        globalAttrs = loadPage "ref_standardattributes.asp" |> scrapeAttrs None
     |}
 
 

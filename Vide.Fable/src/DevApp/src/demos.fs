@@ -309,6 +309,8 @@ module Advanced =
     let directAccessToHtmlElementViaComputation =
         vide {
             let x = div {
+                // TODO: This (specifying gen arg + internal cast) is not what I want...
+
                 let! htmlDivElement = Vide.node<HTMLDivElement>
                 $"...we can now access HTML element: {htmlDivElement.nodeName}"
             }
@@ -337,7 +339,7 @@ module Advanced =
 
 
 module TodoList =
-    type TodoItem = { name: string; isDone: bool }
+    type TodoItem = { name: string; mutable isDone: bool }
     type TodoList = { items: TodoItem list }
     
     let view = vide {
@@ -348,14 +350,18 @@ module TodoList =
             let! itemName = Vide.ofMutable ""
 
             p {
-                input.type'("text").onchange(fun x -> itemName.Value <- x.node.value)
+                input
+                    .type'("text")
+                    .value(itemName.Value)
+                    .oninput(fun x -> itemName.Value <- x.node.value)
             }
     
             p {
                 let addItem _ =
                     let newItem = { name = itemName.Value; isDone = false }
-                    do todoList.Value <- { todoList.Value with items = newItem :: todoList.Value.items }
-                    do itemName.Reset()
+                    do
+                        todoList.Value <- { todoList.Value with items = newItem :: todoList.Value.items }
+                        itemName.Reset()
                 
                 button.onclick(addItem) { "Add Item" }
             }
@@ -364,6 +370,10 @@ module TodoList =
             for item in todoList.Value.items do
                 div {
                     p { item.name }
+                    input
+                        .type'("checkbox")
+                        .checked'(item.isDone)
+                        .oninput(fun x -> item.isDone <- x.node.``checked``)
                 }
         }
     }

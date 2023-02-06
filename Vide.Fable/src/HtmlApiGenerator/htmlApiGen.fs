@@ -17,6 +17,17 @@ open Browser.Types
 open Vide
 open Vide.HtmlApiPreparation
 
+[<AutoOpen>]
+module HtmlEnumAttributeTypes =
+    {{for enum in enumElements}}
+    module {{enum.elemName}} =
+        {{for enumType in enum.types}}
+        [<RequireQualifiedAccess>]
+        type ``{{enumType.name}}`` = {{for enumLabel in enumType.labels}}
+        | ``{{enumLabel.name}}`` {{end}}
+        {{end}}
+    {{end}}
+
 module HtmlElementBuilders =
     type HtmlGARenderValC0Builder<'v,'n when 'n :> HTMLElement>(tagName, resultSelector) =
         inherit RenderValC0Builder<'v,'n>(BuilderBricks.createNode tagName, BuilderBricks.checkOrUpdateNode tagName, resultSelector)
@@ -43,7 +54,7 @@ type {{ext.builderName}}Extensions =
 {{attr.xmlDoc}}
         [<Extension>]
         static member {{attr.memberName}}(this: {{ext.builderParamTypeAnnotation}}, value: {{attr.typ}}) =
-            this.OnEval(fun x -> x.node.setAttribute("{{attr.name}}", value{{attr.toString}}))
+            this.OnEval({{attr.setterCode}})
         {{end}}
 
         // Events
@@ -71,8 +82,10 @@ type Html =
 
 type Api = Template<HtmlApiTemplate>
 
-
 let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Evt list) =
+
+    let makeEnumTypeName (attrName: string) = $"{attrName}"
+
     let makeCodeDoc (desc: string) indent =
         desc.Split('\n')
         |> Array.map (fun s ->
@@ -118,8 +131,8 @@ let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Ev
     type {elem.fsharpName}() =
         inherit HtmlGARenderRetCnBuilder<{elem.domInterfaceName}>("{elem.tagName}")
                     """
-
-            let pipedConfig = if elem.returnsValue then ".oninput()" else ""
+            
+            let pipedConfig = "" //if elem.returnsValue then ".oninput()" else ""
 
             Api.builder(
                 builderDefinition,
@@ -128,50 +141,80 @@ let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Ev
                 makeCodeDoc elem.desc 1
             )
         ]
+
+    let enumTypes =
+        let allAttrs = 
+            [ for elem in elements do 
+                elem.fsharpName, elem.attrs 
+              "Global", globalAttrs
+            ]
+        [ for elemName,attrs in allAttrs do
+            let enumType =
+                [ for attr in attrs do
+                    for attrType in attr.types do
+                        match attrType with
+                        | AttrTyp.Enum labels -> Some (makeEnumTypeName attr.name, labels)
+                        | _ -> None
+                ]
+                |> List.choose id
+                |> List.map (fun (name,labels) ->
+                    let enumLabels = labels |> List.map (fun l -> Api.enumLabel(l.fsharpName))
+                    Api.enumType(enumLabels, name))
+            Api.enum(elemName, enumType)
+        ]
+        |> List.filter (fun x -> x.types.Length > 0)
     
     let builderExtensions =
-        let makeAttrs (attrs: Attr list) =
+        let makeAttrs (elemName: string) (attrs: Attr list) =
             [ for attr in attrs do
-                let typ,toString = "string", ""
-                    // TODO
-                    //match attr.types with
-                    //| AttrTyp.Text -> "string", ""
-                    //| AttrTyp.Boolean -> "bool", ".ToString()"
-                    //| AttrTyp.Enum labels -> "string", ""
-                Api.attr(
-                    attr.fsharpName, 
-                    attr.name, 
-                    toString, 
-                    typ,
-                    makeCodeDoc attr.desc 2
-                )
+                for attrType in attr.types do
+                    let typ,valueAsString =
+                        match attrType with
+                        | AttrTyp.Text -> "string", "value"
+                        | AttrTyp.Boolean -> "bool", """if value then "true" else "false" """
+                        | AttrTyp.Enum _ -> $"{elemName}.``{makeEnumTypeName attr.name}``", "value.ToString()"
+                    let setterCode =
+                        match attr.setMode with
+                        | SetAttribute ->
+                            $"""fun x -> x.node.setAttribute("{attr.name}", {valueAsString})"""
+                        | DomPropertySetter ->
+                            $"""fun x -> x.node.{attr.name} <- value"""
+                    Api.attr(
+                        attr.fsharpName, 
+                        setterCode,
+                        typ,
+                        makeCodeDoc attr.desc 2
+                    )
             ]
+
         let makeEvts (evts: Evt list) =
             [ for evt in evts do
                 Api.evt(evt.name, evt.name, makeCodeDoc evt.desc 2)
             ]
 
         [
+            let globalElementPseudoName = "Global"
+
             Api.ext(
-                makeAttrs globalAttrs,
+                makeAttrs globalElementPseudoName globalAttrs,
                 "HtmlGARenderValC0Builder",
                 "#HtmlGARenderValC0Builder<_,_>",
                 makeEvts globalEvents
             )
             Api.ext(
-                makeAttrs globalAttrs,
+                makeAttrs globalElementPseudoName globalAttrs,
                 "HtmlGARenderRetC0Builder",
                 "#HtmlGARenderRetC0Builder<_>",
                 makeEvts globalEvents
             )
             Api.ext(
-                makeAttrs globalAttrs,
+                makeAttrs globalElementPseudoName globalAttrs,
                 "HtmlGARenderValCnBuilder",
                 "#HtmlGARenderValCnBuilder<_,_>",
                 makeEvts globalEvents
             )
             Api.ext(
-                makeAttrs globalAttrs,
+                makeAttrs globalElementPseudoName globalAttrs,
                 "HtmlGARenderRetCnBuilder",
                 "#HtmlGARenderRetCnBuilder<_>",
                 makeEvts globalEvents
@@ -179,13 +222,13 @@ let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Ev
 
             for elem in elements do
                 Api.ext(
-                    makeAttrs elem.attrs, 
+                    makeAttrs elem.fsharpName elem.attrs, 
                     elem.fsharpName, 
                     $"#{elem.fsharpName}", 
                     []
                 )
         ]
 
-    let root = Api.Root(builderExtensions, builders)
+    let root = Api.Root(builderExtensions, builders, enumTypes)
 
     Api.Render(root)
