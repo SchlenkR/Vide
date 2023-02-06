@@ -25,17 +25,24 @@ module MutableValue =
                 do state <- value
                 do evalManager.RequestEvaluation()
         member this.Reset() = this.Set(initial)
+        member inline this.Update(op, value) =
+            this.Value <- op this.Value value
         member this.Value
             with get() = state
             and set(value) = this.Set(value)
+        
+        // Operators
+        static member inline ( + ) (this: MutableValue<'v>, v: 'v) = this.Value + v
+        static member inline ( - ) (this: MutableValue<'v>, v: 'v) = this.Value - v
+        static member inline ( / ) (this: MutableValue<'v>, v: 'v) = this.Value / v
+        static member inline ( * ) (this: MutableValue<'v>, v: 'v) = this.Value * v
+        static member inline ( % ) (this: MutableValue<'v>, v: 'v) = this.Value % v
     
     // TODO: Do I really want this / AutoOpen and the ops at all?
-    let inline change op (mutVal: MutableValue<_>) x =
-        mutVal.Value <- op mutVal.Value x
-    let inline ( += ) mutVal x = change (+) mutVal x
-    let inline ( -= ) mutVal x = change (-) mutVal x
-    let inline ( *= ) mutVal x = change (*) mutVal x
-    let inline ( /= ) mutVal x = change (/) mutVal x
+    let inline ( += ) (mutVal: MutableValue<_>) x = mutVal.Update((+), x)
+    let inline ( -= ) (mutVal: MutableValue<_>) x = mutVal.Update((-), x)
+    let inline ( *= ) (mutVal: MutableValue<_>) x = mutVal.Update((*), x)
+    let inline ( /= ) (mutVal: MutableValue<_>) x = mutVal.Update((/), x)
     let inline ( := ) (mutVal: MutableValue<_>) x = mutVal.Value <- x
     
     // TODO: override arithmetic ops
