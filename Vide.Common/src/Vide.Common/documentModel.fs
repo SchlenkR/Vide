@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module Vide.Web
+module Vide.DocumentModel
 
 open System
 open System.Runtime.CompilerServices
@@ -62,15 +62,15 @@ type NodeContext<'n when 'n: equality>
 type BuilderOperations = | Clear
 
 type NodeBuilderState<'n,'s> = option<'n> * option<'s>
-type ChildAction = 
-    | Keep
-    | DiscardAndCreateNew
+
+type ChildAction = Keep | DiscardAndCreateNew
 
 type NodeModifierContext<'n,'c> =
     {
         node: 'n
         context: 'c
     }
+
 type NodeModifier<'n,'c> = NodeModifierContext<'n,'c> -> unit
 
 type ModifierContext<'n,'c>
