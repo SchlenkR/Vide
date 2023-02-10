@@ -12,27 +12,14 @@ type TextNode<'n> =
         setText: string -> unit
     }
 
-type WebDocument<'n>
-    (
-        appendChildToParent, 
-        removeChildFromParent,
-        createElementByName,
-        createText,
-        getChildNodes,
-        clearParentContent
-    ) =
-    member _.CreateElementByName(name: string) : 'n =
-        createElementByName(name)
-    member _.CreateText(text: string) : TextNode<'n> =
-        createText(text)
-    member _.AppendChildToParent(parent: 'n, child: 'n) : unit =
-        appendChildToParent(parent, child)
-    member _.RemoveChildFromParent(parent: 'n, child: 'n) : unit =
-        removeChildFromParent(parent, child)
-    member _.GetChildNodes(parent: 'n) : 'n list =
-        getChildNodes(parent)
-    member _.ClearContent(parent: 'n) : unit =
-        clearParentContent(parent)
+[<AbstractClass>]
+type WebDocument<'n>() =
+    abstract member CreateElementByName : tagName:string -> 'n
+    abstract member CreateText : text:string -> TextNode<'n>
+    abstract member AppendChildToParent : parent:'n * child:'n -> unit
+    abstract member RemoveChildFromParent : parent:'n * child:'n -> unit
+    abstract member GetChildNodes : parent:'n -> 'n list
+    abstract member ClearContent : parent:'n -> unit
 
 [<AbstractClass>]
 type NodeContext<'n when 'n: equality>
