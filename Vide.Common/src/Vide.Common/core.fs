@@ -179,7 +179,7 @@ module BuilderBricks =
             let fv,fs = f fs ctx
             fv, Some (ms,fs)
 
-    let return'
+    let return'<'v,'c>
         (x: 'v)
         : Vide<'v,unit,'c> 
         =

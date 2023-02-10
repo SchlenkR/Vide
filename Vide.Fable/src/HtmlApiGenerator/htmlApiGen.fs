@@ -62,12 +62,12 @@ type {{ext.builderName}}Extensions =
 {{evt.xmlDoc}}
         [<Extension>]
         static member {{evt.memberName}}(this: {{ext.builderParamTypeAnnotation}}, handler) =
-            this.OnEval(fun x -> x.node.{{evt.name}} <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.{{evt.name}} <- Event.handle (x.node :> Node) x.context handler)
 
 {{evt.xmlDoc}}
         [<Extension>]
         static member {{evt.memberName}}(this: {{ext.builderParamTypeAnnotation}}, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.{{evt.name}} <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.{{evt.name}} <- Event.handle (x.node :> Node) x.context (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         {{end}}
     end

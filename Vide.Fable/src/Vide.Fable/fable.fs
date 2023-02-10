@@ -144,9 +144,9 @@ module ModifierContext =
             let state = Some (Some node, cs)
             result,state
 
-type ComponentRetCnBuilder() =
+type ComponentRetCnBuilder<'c>() =
     inherit VideBaseBuilder()
-    member _.Return(x) = BuilderBricks.return'(x)
+    member _.Return(x: 'v) = BuilderBricks.return'<'v,'c>(x)
 
 [<AbstractClass>]
 type RenderBaseBuilder<'n,'c>(createNode, checkOrUpdateNode) =
@@ -176,7 +176,7 @@ type NodeBuilderExtensions =
         this
 
 module BuilderBricks =
-    let createNode elemName (ctx: NodeContext<_>) =
+    let createNode elemName (ctx: #NodeContext<_>) =
         ctx.AddElement<'n>(elemName)
     
     let checkOrUpdateNode expectedNodeName (actualNodeName: string) =
@@ -186,8 +186,8 @@ module BuilderBricks =
             // TODO: if/else detection? Expected node name: {expectedNodeName}, but was: {actualNodeName}"
             DiscardAndCreateNew
     
-    let inline yieldText(value: string) =
-        Vide <| fun s (ctx: NodeContext<_>) ->
+    let inline yieldText<'n,'c when 'c :> NodeContext<'n>>(value: string) =
+        Vide <| fun s (ctx: 'c) ->
             let textNode = s |> Option.defaultWith (fun () -> ctx.AddText(value))
             do
                 if textNode.getText() <> value then
@@ -199,14 +199,34 @@ module BuilderBricks =
         v
     
     let inline yieldBuilderOp(op: BuilderOperations) =
-        Vide <| fun s (ctx: NodeContext<_>) ->
+        Vide <| fun s (ctx: #NodeContext<_>) ->
             match op with
             | Clear -> ctx.ClearContent()
             (),None
 
-
-
-
+module Event =
+    type FableEventArgs<'evt,'n,'c> =
+        {
+            node: 'n
+            evt: 'evt
+            ctx: 'c
+            mutable requestEvaluation: bool
+        }
+    
+    let inline handle<'n,'nc,'c,'evt when 'c :> NodeContext<'nc>>
+        (node: 'n) 
+        (ctx: 'c) 
+        (callback: FableEventArgs<'evt,'n,'c> -> unit)
+        =
+        fun evt ->
+            let args = { node = node; evt = evt; ctx = ctx; requestEvaluation = true }
+            try
+                do ctx.EvaluationManager.Suspend()
+                do callback args
+                if args.requestEvaluation then
+                    ctx.EvaluationManager.RequestEvaluation()
+            finally
+                do ctx.EvaluationManager.Resume()
 
 
 
@@ -290,17 +310,17 @@ type RenderRetCnBuilder<'n when 'n :> Node> with
     member _.Yield(b: RenderValC0Builder<_,_>) = b {()}
     member _.Yield(b: RenderRetC0Builder<_>) = b {()}
     member _.Yield(b: RenderRetCnBuilder<_>) = b {()}
-    member _.Yield(b: ComponentRetCnBuilder) = b {()}
-    member _.Yield(s) = BuilderBricks.yieldText s
+    member _.Yield(b: ComponentRetCnBuilder<_>) = b {()}
+    member _.Yield(s) = BuilderBricks.yieldText<Node,FableContext> s
     member _.Yield(v) = BuilderBricks.yieldVide(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp op
 
-type ComponentRetCnBuilder with
+type ComponentRetCnBuilder<'c> with
     member _.Yield(b: RenderValC0Builder<_,_>) = b {()}
     member _.Yield(b: RenderRetC0Builder<_>) = b {()}
     member _.Yield(b: RenderRetCnBuilder<_>) = b {()}
-    member _.Yield(b: ComponentRetCnBuilder) = b {()}
-    member _.Yield(s) = BuilderBricks.yieldText s
+    member _.Yield(b: ComponentRetCnBuilder<_>) = b {()}
+    member _.Yield(s) = BuilderBricks.yieldText<Node,FableContext> s
     member _.Yield(v) = BuilderBricks.yieldVide(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp op
 
@@ -312,33 +332,13 @@ type RenderRetCnBuilder<'n when 'n :> Node> with
     member _.Bind(m: RenderValC0Builder<_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetC0Builder<_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetCnBuilder<_>, f) = BuilderBricks.bind(m {()}, f)
-    member _.Bind(m: ComponentRetCnBuilder, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: ComponentRetCnBuilder<_>, f) = BuilderBricks.bind(m {()}, f)
 
-type ComponentRetCnBuilder with
+type ComponentRetCnBuilder<'c> with
     member _.Bind(m: RenderValC0Builder<_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetC0Builder<_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetCnBuilder<_>, f) = BuilderBricks.bind(m {()}, f)
-    member _.Bind(m: ComponentRetCnBuilder, f) = BuilderBricks.bind(m {()}, f)
-
-module Event =
-    type FableEventArgs<'evt,'n when 'n :> Node> =
-        {
-            node: 'n
-            evt: 'evt
-            ctx: FableContext
-            mutable requestEvaluation: bool
-        }
-    
-    let inline handle node (ctx: FableContext) callback =
-        fun evt ->
-            let args = { node = node; evt = evt; ctx = ctx; requestEvaluation = true }
-            try
-                do ctx.EvaluationManager.Suspend()
-                do callback args
-                if args.requestEvaluation then
-                    ctx.EvaluationManager.RequestEvaluation()
-            finally
-                do ctx.EvaluationManager.Resume()
+    member _.Bind(m: ComponentRetCnBuilder<_>, f) = BuilderBricks.bind(m {()}, f)
 
 module Vide =
 
@@ -347,7 +347,7 @@ module Vide =
         Vide <| fun s ctx -> ctx,None
 
     [<GeneralizableValue>]
-    let node<'n when 'n :> Node> : Vide<'n, unit, FableContext> =
+    let node<'n when 'n :> Node> : Vide<'n,unit,FableContext> =
         Vide <| fun s ctx ->
             // TODO: OUCH!!! Was ist da los - wieso bekomme ich das nicht besser hin?
             ctx.Parent :?> 'n,None
@@ -364,4 +364,4 @@ module VideApp =
     let createFableWithObjState host content onEvaluated =
         doCreate VideApp.createWithUntypedState host content onEvaluated
 
-let vide = ComponentRetCnBuilder()
+let vide = ComponentRetCnBuilder<FableContext>()
