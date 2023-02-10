@@ -15,10 +15,11 @@
   
   <ItemGroup>
     <None Include="..\..\..\README.md" Pack="true" PackagePath="\" />
+    <Content Include="*.fsproj; *.fs; *.js;" Exclude="**\*.fs.js" PackagePath="fable\" />
     <Compile Include="web.fs" />
-    <Compile Include="fable.fs" />
-    <Compile Include="htmlApiPreparation.fs" />
-    <Compile Include="htmlApi.fs" />
+    <Compile Include="fable\fable.fs" />
+    <Compile Include="fable\htmlApiPreparation.fs" />
+    <Compile Include="fable\htmlApi.fs" />
   </ItemGroup>
   
   <ItemGroup>
