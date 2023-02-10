@@ -246,18 +246,32 @@ module BuilderBricks =
             input: seq<'a>,
             body: 'a -> Vide<'v,'s,'c>
         ) 
-        : Vide<'v list, list<'s option>, 'c>
+        : Vide<'v list, Map<'a, 's option>,'c>
         = 
         Vide <| fun s ctx ->
-            let lastStates = s |> Option.defaultValue []
+            Debug.print 0 "FOR"
+            let mutable currMap = s |> Option.defaultValue Map.empty
             let resValues,resStates =
-                [ for i,x in input |> Seq.indexed do
-                    let matchingState = lastStates |> List.tryItem i |> Option.flatten
+                [ for x in input do
+                    let matchingState = currMap |> Map.tryFind x |> Option.flatten
                     let v,s = let (Vide v) = body x in v matchingState ctx
-                    v,s
+                    do currMap <- currMap |> Map.remove x
+                    v, (x,s)
                 ]
                 |> List.unzip
-            resValues, Some resStates
+            resValues, Some (resStates |> Map.ofList)
+        //: Vide<'v list, list<'s option>, 'c>
+        //= 
+        //Vide <| fun s ctx ->
+        //    let lastStates = s |> Option.defaultValue []
+        //    let resValues,resStates =
+        //        [ for i,x in input |> Seq.indexed do
+        //            let matchingState = lastStates |> List.tryItem i |> Option.flatten
+        //            let v,s = let (Vide v) = body x in v matchingState ctx
+        //            v,s
+        //        ]
+        //        |> List.unzip
+        //    resValues, Some resStates
 
     // ---------------------
     // ASYNC
