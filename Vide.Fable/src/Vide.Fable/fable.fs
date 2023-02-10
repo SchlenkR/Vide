@@ -5,17 +5,25 @@ open System
 open System.Runtime.CompilerServices
 open Vide
 
+type TextNode<'n> =
+    {
+        node: 'n
+        getText: unit -> string
+        setText: string -> unit
+    }
+
 type WebDocument<'n>
     (
         appendChildToParent, 
         removeChildFromParent,
         createElementByName,
         createText,
-        getChildNodes
+        getChildNodes,
+        clearParentContent
     ) =
     member _.CreateElementByName(name: string) : 'n =
         createElementByName(name)
-    member _.CreateText(text: string) : 'n =
+    member _.CreateText(text: string) : TextNode<'n> =
         createText(text)
     member _.AppendChildToParent(parent: 'n, child: 'n) : unit =
         appendChildToParent(parent, child)
@@ -23,6 +31,8 @@ type WebDocument<'n>
         removeChildFromParent(parent, child)
     member _.GetChildNodes(parent: 'n) : 'n list =
         getChildNodes(parent)
+    member _.ClearContent(parent: 'n) : unit =
+        clearParentContent(parent)
 
 [<AbstractClass>]
 type NodeContext<'n when 'n: equality>
@@ -42,16 +52,16 @@ type NodeContext<'n when 'n: equality>
     member _.EvaluationManager = evaluationManager
     member _.Parent = parent
     member _.AddElement<'e>(tagName: string) : 'e =
-        let elem = document.CreateElementByName(tagName)
-        do elem |> keepChild 
-        do elem |> appendToParent 
+        let n = document.CreateElementByName(tagName)
+        do n |> keepChild 
+        do n |> appendToParent 
         // TODO: why unsafe cast?
-        (box elem) :?> 'e
+        (box n) :?> 'e
     member _.AddText(text: string) =
-        let elem = document.CreateText(text)
-        do elem |> keepChild
-        do elem |> appendToParent
-        elem
+        let t = document.CreateText(text)
+        do t.node |> keepChild
+        do t.node |> appendToParent
+        t
     member _.KeepChild(child) =
         child |> keepChild
     member _.RemoveChild(child) =
@@ -59,6 +69,8 @@ type NodeContext<'n when 'n: equality>
     member _.GetObsoleteChildren() =
         let childNodes = document.GetChildNodes(parent)
         childNodes |> List.except keptChildren
+    member _.ClearContent() =
+        document.ClearContent(parent)
 
 type BuilderOperations = | Clear
 
@@ -132,6 +144,73 @@ module ModifierContext =
             let state = Some (Some node, cs)
             result,state
 
+type ComponentRetCnBuilder() =
+    inherit VideBaseBuilder()
+    member _.Return(x) = BuilderBricks.return'(x)
+
+[<AbstractClass>]
+type RenderBaseBuilder<'n,'c>(createNode, checkOrUpdateNode) =
+    inherit VideBaseBuilder()
+    let modifierContext = ModifierContext<'n,'c>(createNode, checkOrUpdateNode)
+    member _.ModifierContext = modifierContext
+
+[<Extension>]
+type NodeBuilderExtensions =
+    
+    /// Called once on initialization.
+    [<Extension>]
+    static member OnInit(this: #RenderBaseBuilder<_,_>, m: NodeModifier<_,_>) =
+        do this.ModifierContext.InitModifiers.Add(m)
+        this
+    
+    /// Called on every Vide evaluatiopn cycle.
+    [<Extension>]
+    static member OnEval(this: #RenderBaseBuilder<_,_>, m: NodeModifier<_,_>) =
+        do this.ModifierContext.EvalModifiers.Add(m)
+        this
+    
+    /// Called after every Vide evaluatiopn cycle.
+    [<Extension>]
+    static member OnAfterEval(this: #RenderBaseBuilder<_,_>, m: NodeModifier<_,_>) =
+        do this.ModifierContext.AfterEvalModifiers.Add(m)
+        this
+
+module BuilderBricks =
+    let createNode elemName (ctx: NodeContext<_>) =
+        ctx.AddElement<'n>(elemName)
+    
+    let checkOrUpdateNode expectedNodeName (actualNodeName: string) =
+        match actualNodeName.Equals(expectedNodeName, StringComparison.OrdinalIgnoreCase) with
+        | true -> Keep
+        | false ->
+            // TODO: if/else detection? Expected node name: {expectedNodeName}, but was: {actualNodeName}"
+            DiscardAndCreateNew
+    
+    let inline yieldText(value: string) =
+        Vide <| fun s (ctx: NodeContext<_>) ->
+            let textNode = s |> Option.defaultWith (fun () -> ctx.AddText(value))
+            do
+                if textNode.getText() <> value then
+                    textNode.setText(value)
+                ctx.KeepChild(textNode.node)
+            (), Some textNode
+    
+    let inline yieldVide(v: Vide<_,_,_>) =
+        v
+    
+    let inline yieldBuilderOp(op: BuilderOperations) =
+        Vide <| fun s (ctx: NodeContext<_>) ->
+            match op with
+            | Clear -> ctx.ClearContent()
+            (),None
+
+
+
+
+
+
+
+
 open Browser
 open Browser.Types
 
@@ -148,57 +227,31 @@ type FableContext
                 (fun (parent,child) -> parent.appendChild(child) |> ignore),
                 (fun (parent,child) -> parent.removeChild(child) |> ignore),
                 (fun tagName -> document.createElement tagName),
-                (fun text -> document.createTextNode(text)),
+                (fun text ->
+                    let tn = document.createTextNode(text)
+                    let textNode =
+                        {
+                            node = tn :> Node
+                            getText = fun () -> tn.textContent
+                            setText = fun value -> tn.textContent <- value
+                        }
+                    textNode
+                ),
                 (fun parent -> 
                     let nodes = parent.childNodes
                     [ for i in 0 .. nodes.length-1 do nodes.Item i ]
-                )
+                ),
+                (fun parent -> parent.textContent <- "")
             )
         )
     // SRTP resolved
     member _.CreateChildCtx(parent) = FableContext(parent, evaluationManager)
-
-module BuilderBricks =
-    let createNode elemName (ctx: NodeContext<_>) =
-        ctx.AddElement<'n>(elemName)
-    
-    let checkOrUpdateNode elemName (node: #Node) =
-        match node.nodeName.Equals(elemName, StringComparison.OrdinalIgnoreCase) with
-        | true -> Keep
-        | false ->
-            // TODO:
-            console.log($"TODO: if/else detection? Expected node name: {elemName}, but was: {node.nodeName}")
-            DiscardAndCreateNew
-    
-    let inline yieldText(value: string) =
-        Vide <| fun s (ctx: FableContext) ->
-            let node = s |> Option.defaultWith (fun () -> ctx.AddText(value))
-            do
-                if node.textContent <> value then
-                    node.textContent <- value
-                ctx.KeepChild(node)
-            (), Some node
-    
-    let inline yieldVide(v: Vide<_,_,_>) =
-        v
-    
-    let inline yieldBuilderOp(op: BuilderOperations) =
-        Vide <| fun s (ctx: FableContext) ->
-            match op with
-            | Clear -> ctx.Parent.textContent <- ""
-            (),None
 
 // ---------------------------------------------------------------------------------
 // The four (+1 base) basic builders for renderers (used for HTML elements like
 //    div, p, etc.) in their forms (with content, with returns, specific
 //    result value like for "input"), and the vide component builder.
 // ---------------------------------------------------------------------------------
-
-[<AbstractClass>]
-type RenderBaseBuilder<'n,'c>(createNode, checkOrUpdateNode) =
-    inherit VideBaseBuilder()
-    let modifierContext = ModifierContext<'n,'c>(createNode, checkOrUpdateNode)
-    member _.ModifierContext = modifierContext
 
 // -------------------------------------------------------------------
 // Builder definitions
@@ -225,10 +278,6 @@ type RenderValCnBuilder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, cr
 type RenderRetCnBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
     inherit RenderBaseBuilder<'n, FableContext>(createNode, checkOrUpdateNode)
     member this.Run(v) = this.ModifierContext |> ModifierContext.apply v (fun n v -> v)
-    member _.Return(x) = BuilderBricks.return'(x)
-
-type ComponentRetCnBuilder() =
-    inherit VideBaseBuilder()
     member _.Return(x) = BuilderBricks.return'(x)
 
 // -------------------------------------------------------------------
@@ -270,27 +319,6 @@ type ComponentRetCnBuilder with
     member _.Bind(m: RenderRetC0Builder<_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetCnBuilder<_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: ComponentRetCnBuilder, f) = BuilderBricks.bind(m {()}, f)
-
-[<Extension>]
-type NodeBuilderExtensions =
-    
-    /// Called once on initialization.
-    [<Extension>]
-    static member OnInit(this: #RenderBaseBuilder<_,_>, m: NodeModifier<_,_>) =
-        do this.ModifierContext.InitModifiers.Add(m)
-        this
-    
-    /// Called on every Vide evaluatiopn cycle.
-    [<Extension>]
-    static member OnEval(this: #RenderBaseBuilder<_,_>, m: NodeModifier<_,_>) =
-        do this.ModifierContext.EvalModifiers.Add(m)
-        this
-    
-    /// Called after every Vide evaluatiopn cycle.
-    [<Extension>]
-    static member OnAfterEval(this: #RenderBaseBuilder<_,_>, m: NodeModifier<_,_>) =
-        do this.ModifierContext.AfterEvalModifiers.Add(m)
-        this
 
 module Event =
     type FableEventArgs<'evt,'n when 'n :> Node> =

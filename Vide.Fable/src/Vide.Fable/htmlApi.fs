@@ -503,16 +503,16 @@ module HtmlEnumAttributeTypes =
 
 module HtmlElementBuilders =
     type HtmlGARenderValC0Builder<'v,'n when 'n :> HTMLElement and 'n: equality>(tagName, resultSelector) =
-        inherit RenderValC0Builder<'v,'n>(BuilderBricks.createNode tagName, BuilderBricks.checkOrUpdateNode tagName, resultSelector)
+        inherit RenderValC0Builder<'v,'n>(BuilderBricks.createNode tagName, (fun node -> BuilderBricks.checkOrUpdateNode tagName node.nodeName), resultSelector)
 
     type HtmlGARenderRetC0Builder<'n when 'n :> HTMLElement and 'n: equality>(tagName) =
-        inherit RenderRetC0Builder<'n>(BuilderBricks.createNode tagName, BuilderBricks.checkOrUpdateNode tagName)
+        inherit RenderRetC0Builder<'n>(BuilderBricks.createNode tagName, (fun node -> BuilderBricks.checkOrUpdateNode tagName node.nodeName))
 
     type HtmlGARenderValCnBuilder<'v,'n when 'n :> HTMLElement and 'n: equality>(tagName, resultSelector) =
-        inherit RenderValCnBuilder<'v,'n>(BuilderBricks.createNode tagName, BuilderBricks.checkOrUpdateNode tagName, resultSelector)
+        inherit RenderValCnBuilder<'v,'n>(BuilderBricks.createNode tagName, (fun node -> BuilderBricks.checkOrUpdateNode tagName node.nodeName), resultSelector)
 
     type HtmlGARenderRetCnBuilder<'n when 'n :> HTMLElement and 'n: equality>(tagName) =
-        inherit RenderRetCnBuilder<'n>(BuilderBricks.createNode tagName, BuilderBricks.checkOrUpdateNode tagName)
+        inherit RenderRetCnBuilder<'n>(BuilderBricks.createNode tagName, (fun node -> BuilderBricks.checkOrUpdateNode tagName node.nodeName))
 
     
     type a() =
