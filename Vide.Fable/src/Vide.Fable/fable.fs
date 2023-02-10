@@ -3,49 +3,69 @@ module Vide.Fable
 
 open System
 open System.Runtime.CompilerServices
-open Browser
-open Browser.Types
 open Vide
 
-type FableContext
+type WebDocument<'n>
     (
-        parent: Node, 
-        evaluationManager: IEvaluationManager
+        appendChildToParent, 
+        removeChildFromParent,
+        createElementByName,
+        createText,
+        getChildNodes
+    ) =
+    member _.CreateElementByName(name: string) : 'n =
+        createElementByName(name)
+    member _.CreateText(text: string) : 'n =
+        createText(text)
+    member _.AppendChildToParent(parent: 'n, child: 'n) : unit =
+        appendChildToParent(parent, child)
+    member _.RemoveChildFromParent(parent: 'n, child: 'n) : unit =
+        removeChildFromParent(parent, child)
+    member _.GetChildNodes(parent: 'n) : 'n list =
+        getChildNodes(parent)
+
+[<AbstractClass>]
+type NodeContext<'n when 'n: equality>
+    (
+        parent: 'n, 
+        evaluationManager: IEvaluationManager,
+        document: WebDocument<'n>
     ) =
     let mutable keptChildren = []
 
-    let keepChild child = keptChildren <- (child :> Node) :: keptChildren
-    let appendToParent child = parent.appendChild(child) |> ignore
-    let removeFromParent child = parent.removeChild(child) |> ignore
+    let keepChild child = keptChildren <- child :: keptChildren
+    let appendToParent child = document.AppendChildToParent(parent, child)
+    let removeFromParent child = document.RemoveChildFromParent(parent, child)
 
     interface IVideContext with
         member _.EvaluationManager = evaluationManager
     member _.EvaluationManager = evaluationManager
     member _.Parent = parent
-    member _.AddElement<'n when 'n :> HTMLElement>(tagName: string) =
-        let elem = document.createElement tagName 
+    member _.AddElement<'e>(tagName: string) : 'e =
+        let elem = document.CreateElementByName(tagName)
         do elem |> keepChild 
         do elem |> appendToParent 
-        elem :?> 'n
+        // TODO: why unsafe cast?
+        (box elem) :?> 'e
     member _.AddText(text: string) =
-        let elem = document.createTextNode text 
+        let elem = document.CreateText(text)
         do elem |> keepChild
         do elem |> appendToParent
         elem
-    member _.KeepChild(child: Node) =
-        child |> keepChild |> ignore
-    member _.RemoveChild(child: Node) =
-        removeFromParent child
+    member _.KeepChild(child) =
+        child |> keepChild
+    member _.RemoveChild(child) =
+        removeFromParent(child)
     member _.GetObsoleteChildren() =
-        let childNodes =
-            let nodes = parent.childNodes
-            [ for i in 0 .. nodes.length-1 do nodes.Item i ]
+        let childNodes = document.GetChildNodes(parent)
         childNodes |> List.except keptChildren
 
 type BuilderOperations = | Clear
 
 type NodeBuilderState<'n,'s> = option<'n> * option<'s>
-type ChildAction = Keep | DiscardAndCreateNew
+type ChildAction = 
+    | Keep
+    | DiscardAndCreateNew
 
 type NodeModifierContext<'n,'c> =
     {
@@ -68,13 +88,17 @@ type ModifierContext<'n,'c>
     member val AfterEvalModifiers: ResizeArray<NodeModifier<'n,'c>> = ResizeArray() with get
 
 module ModifierContext =
-    let apply
-        (Vide childVide: Vide<'v1,'fs,FableContext>)
-        createResultVal
-        (modifierCtx: ModifierContext<'n,FableContext>)
-        : Vide<'v2, NodeBuilderState<'n,'fs>, FableContext>
+    let inline apply<^v1, ^v2, ^fs, ^n, ^nc, ^c
+                        when ^nc: equality
+                        and ^c :> NodeContext<^nc>
+                        and ^c: (member CreateChildCtx: ^nc -> ^c)
+                        >
+        (Vide childVide: Vide<^v1,^fs,^c>)
+        (createResultVal: ^n -> ^v1 -> ^v2)
+        (modifierCtx: ModifierContext<^n,^c>)
+        : Vide<'v2, NodeBuilderState<^n,^fs>, ^c>
         =
-        Vide <| fun s (ctx: FableContext) ->
+        Vide <| fun s (ctx: ^c) ->
             Debug.print 0 "RUN:NodeBuilder"
             let inline runModifiers modifiers node =
                 for m in modifiers do
@@ -88,18 +112,18 @@ module ModifierContext =
                 // But: See comment in definition of: Vide.Core.Vide
                 match s with
                 | None ->
-                    let newNode,s = modifierCtx.CreateNode ctx,cs
+                    let newNode,s = modifierCtx.CreateNode(ctx), cs
                     do runModifiers modifierCtx.InitModifiers newNode
                     newNode,s
                 | Some node ->
-                    match modifierCtx.CheckOrUpdateNode node with
+                    match modifierCtx.CheckOrUpdateNode(node) with
                     | Keep ->
-                        ctx.KeepChild(node)
+                        ctx.KeepChild((box node) :?> ^nc)
                         node,cs
                     | DiscardAndCreateNew ->
                         modifierCtx.CreateNode ctx,None
             do runModifiers modifierCtx.EvalModifiers node
-            let childCtx = FableContext(node, ctx.EvaluationManager)
+            let childCtx = ctx.CreateChildCtx((box node) :?> ^nc)
             let cv,cs = childVide cs childCtx
             for x in childCtx.GetObsoleteChildren() do
                 childCtx.RemoveChild(x)
@@ -108,11 +132,34 @@ module ModifierContext =
             let state = Some (Some node, cs)
             result,state
 
-type IRenderBuilder<'n,'c> =
-    abstract member ModifierContext: ModifierContext<'n,'c> with get
+open Browser
+open Browser.Types
+
+type FableContext
+    (
+        parent: Node, 
+        evaluationManager: IEvaluationManager
+    ) =
+    inherit NodeContext<Node>
+        (
+            parent,
+            evaluationManager,
+            WebDocument(
+                (fun (parent,child) -> parent.appendChild(child) |> ignore),
+                (fun (parent,child) -> parent.removeChild(child) |> ignore),
+                (fun tagName -> document.createElement tagName),
+                (fun text -> document.createTextNode(text)),
+                (fun parent -> 
+                    let nodes = parent.childNodes
+                    [ for i in 0 .. nodes.length-1 do nodes.Item i ]
+                )
+            )
+        )
+    // SRTP resolved
+    member _.CreateChildCtx(parent) = FableContext(parent, evaluationManager)
 
 module BuilderBricks =
-    let createNode elemName (ctx: FableContext) =
+    let createNode elemName (ctx: NodeContext<_>) =
         ctx.AddElement<'n>(elemName)
     
     let checkOrUpdateNode elemName (node: #Node) =
@@ -148,11 +195,9 @@ module BuilderBricks =
 // ---------------------------------------------------------------------------------
 
 [<AbstractClass>]
-type RenderBaseBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
+type RenderBaseBuilder<'n,'c>(createNode, checkOrUpdateNode) =
     inherit VideBaseBuilder()
-    let modifierContext = ModifierContext(createNode, checkOrUpdateNode)
-    interface IRenderBuilder<'n, FableContext> with
-        member _.ModifierContext = modifierContext
+    let modifierContext = ModifierContext<'n,'c>(createNode, checkOrUpdateNode)
     member _.ModifierContext = modifierContext
 
 // -------------------------------------------------------------------
@@ -163,21 +208,22 @@ type RenderBaseBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
 //     - standard yields
 // -------------------------------------------------------------------
 
-type RenderValC0Builder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, createResultVal: 'n -> 'v) =
-    inherit RenderBaseBuilder<'n>(createNode, checkOrUpdateNode)
-    member this.Run(v) = this.ModifierContext |> ModifierContext.apply v (fun n v -> createResultVal n)
+type RenderValC0Builder<'v,'n when 'n :> Node and 'n: equality>(createNode, checkOrUpdateNode, createResultVal: 'n -> 'v) =
+    inherit RenderBaseBuilder<'n, FableContext>(createNode, checkOrUpdateNode)
+    member this.Run<'v1,'fs>(v) =
+        this.ModifierContext |> ModifierContext.apply<'v1,'v,'fs,'n,Node,FableContext> v (fun n v -> createResultVal n)
 
 type RenderRetC0Builder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
-    inherit RenderBaseBuilder<'n>(createNode, checkOrUpdateNode)
+    inherit RenderBaseBuilder<'n, FableContext>(createNode, checkOrUpdateNode)
     member this.Run(v) = this.ModifierContext |> ModifierContext.apply v (fun n v -> v)
     member _.Return(x) = BuilderBricks.return'(x)
 
 type RenderValCnBuilder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, createResultVal: 'n -> 'v) =
-    inherit RenderBaseBuilder<'n>(createNode, checkOrUpdateNode)
+    inherit RenderBaseBuilder<'n, FableContext>(createNode, checkOrUpdateNode)
     member this.Run(v) = this.ModifierContext |> ModifierContext.apply v (fun n v -> createResultVal n)
 
 type RenderRetCnBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
-    inherit RenderBaseBuilder<'n>(createNode, checkOrUpdateNode)
+    inherit RenderBaseBuilder<'n, FableContext>(createNode, checkOrUpdateNode)
     member this.Run(v) = this.ModifierContext |> ModifierContext.apply v (fun n v -> v)
     member _.Return(x) = BuilderBricks.return'(x)
 
@@ -230,19 +276,19 @@ type NodeBuilderExtensions =
     
     /// Called once on initialization.
     [<Extension>]
-    static member OnInit(this: #IRenderBuilder<_,_>, m: NodeModifier<_,_>) =
+    static member OnInit(this: #RenderBaseBuilder<_,_>, m: NodeModifier<_,_>) =
         do this.ModifierContext.InitModifiers.Add(m)
         this
     
     /// Called on every Vide evaluatiopn cycle.
     [<Extension>]
-    static member OnEval(this: #IRenderBuilder<_,_>, m: NodeModifier<_,_>) =
+    static member OnEval(this: #RenderBaseBuilder<_,_>, m: NodeModifier<_,_>) =
         do this.ModifierContext.EvalModifiers.Add(m)
         this
     
     /// Called after every Vide evaluatiopn cycle.
     [<Extension>]
-    static member OnAfterEval(this: #IRenderBuilder<_,_>, m: NodeModifier<_,_>) =
+    static member OnAfterEval(this: #RenderBaseBuilder<_,_>, m: NodeModifier<_,_>) =
         do this.ModifierContext.AfterEvalModifiers.Add(m)
         this
 
