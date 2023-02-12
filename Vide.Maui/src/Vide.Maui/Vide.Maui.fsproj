@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net7.0</TargetFrameworks>
+		<RootNamespace>Vide.Maui</RootNamespace>
+		<UseMaui>true</UseMaui>
+    <IsPackable>true</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FSharp.Core" Version="7.0.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'android'">
+		<AndroidResource Include="$(MonoAndroidResourcePrefix)/*/*" />
+		<AndroidResource Remove="$(MonoAndroidResourcePrefix)/raw/.*" />
+		<AndroidResource Update="$(MonoAndroidResourcePrefix)/raw/*" />
+		<AndroidAsset Include="$(MonoAndroidAssetsPrefix)/**/*" Exclude="$(MonoAndroidAssetsPrefix)/**/.*/**" />
+		<AndroidManifest Include="$(AndroidProjectFolder)AndroidManifest.xml" />
+		<Compile Include="$(AndroidProjectFolder)MainActivity.fs" />
+		<Compile Include="$(AndroidProjectFolder)MainApplication.fs" />
+
+		<PackageReference Include="FSharp.Android.Resource" Version="1.0.4" />
+	</ItemGroup>
+
+	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'ios'">
+		<None Include="$(iOSProjectFolder)Info.plist" LogicalName="Info.plist" />
+		<Compile Include="$(iOSProjectFolder)AppDelegate.fs" />
+		<Compile Include="$(iOSProjectFolder)Program.fs" />
+	</ItemGroup>
+
+	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'maccatalyst'">
+		<None Include="$(MacCatalystProjectFolder)Info.plist" LogicalName="Info.plist" />
+		<Compile Include="$(MacCatalystProjectFolder)AppDelegate.fs" />
+		<Compile Include="$(MacCatalystProjectFolder)Program.fs" />
+	</ItemGroup>
+
+	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'windows'">
+		<Manifest Include="$(WindowsProjectFolder)app.manifest" />
+		<AppxManifest Include="$(WindowsProjectFolder)Package.appxmanifest" />
+		<ApplicationDefinition Include="$(WindowsProjectFolder)App.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		</ApplicationDefinition>
+		<Compile Include="$(WindowsProjectFolder)App.xaml.fs">
+			<DependentUpon>$(WindowsProjectFolder)App.xaml</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'tizen'">
+		<TizenManifestFile Include="$(TizenProjectFolder)tizen-manifest.xml" />
+		<Compile Include="$(TizenProjectFolder)Main.fs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="MainActivity.fs" />
+	  <Compile Remove="MainApplication.fs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\Vide.Common\src\Vide.Common\Vide.Common.fsproj" />
+	</ItemGroup>
+
+</Project>
