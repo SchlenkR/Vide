@@ -12,6 +12,12 @@ type TextNodeProxy<'n> =
         setText: string -> unit
     }
 
+// The INodeDocument is actually a node(!) document, which 
+// means that there's no discinction between taking only
+// 1 node or many. We lose a little safety because this
+// might cause runtime errors due to casting etc., but
+// this can be healed by a correct API implementation that
+// takes this fact into consideration.
 type INodeDocument<'n> =
     abstract member CreateNodeByName : tagName: string -> 'n
     abstract member CreateTextNode : text: string -> TextNodeProxy<'n>
