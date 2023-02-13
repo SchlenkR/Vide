@@ -4,6 +4,7 @@ open Browser.Dom
 open Browser.Types
 open Fable.Core.JS
 open Vide
+open DevApp
 
 do Debug.enabledDebugChannels <- 
     [

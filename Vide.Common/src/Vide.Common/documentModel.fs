@@ -5,7 +5,7 @@ open System
 open System.Runtime.CompilerServices
 open Vide
 
-type TextNode<'n> =
+type TextNodeProxy<'n> =
     {
         node: 'n
         getText: unit -> string
@@ -13,8 +13,8 @@ type TextNode<'n> =
     }
 
 type INodeDocument<'n> =
-    abstract member CreateElementByName : tagName:string -> 'n
-    abstract member CreateText : text:string -> TextNode<'n>
+    abstract member CreateNodeByName : tagName:string -> 'n
+    abstract member CreateText : text:string -> TextNodeProxy<'n>
     abstract member AppendChild : parent:'n * child:'n -> unit
     abstract member RemoveChild : parent:'n * child:'n -> unit
     abstract member GetChildNodes : parent:'n -> 'n list
@@ -38,7 +38,7 @@ type NodeContext<'n when 'n: equality>
     member _.EvaluationManager = evaluationManager
     member _.Parent = parent
     member _.AddElement<'e>(tagName: string) : 'e =
-        let n = document.CreateElementByName(tagName)
+        let n = document.CreateNodeByName(tagName)
         do n |> keepChild 
         do n |> appendToParent 
         // TODO: why unsafe cast?

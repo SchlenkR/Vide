@@ -7,7 +7,7 @@ open Browser.Types
 
 type FableDocument() =
     interface INodeDocument<Node> with
-        member _.CreateElementByName(tagName) =
+        member _.CreateNodeByName(tagName) =
             document.createElement tagName
         member _.CreateText(text) =
             let tn = document.createTextNode(text)
