@@ -12,12 +12,11 @@ type TextNode<'n> =
         setText: string -> unit
     }
 
-[<AbstractClass>]
-type WebDocument<'n>() =
+type INodeDocument<'n> =
     abstract member CreateElementByName : tagName:string -> 'n
     abstract member CreateText : text:string -> TextNode<'n>
-    abstract member AppendChildToParent : parent:'n * child:'n -> unit
-    abstract member RemoveChildFromParent : parent:'n * child:'n -> unit
+    abstract member AppendChild : parent:'n * child:'n -> unit
+    abstract member RemoveChild : parent:'n * child:'n -> unit
     abstract member GetChildNodes : parent:'n -> 'n list
     abstract member ClearContent : parent:'n -> unit
 
@@ -26,13 +25,13 @@ type NodeContext<'n when 'n: equality>
     (
         parent: 'n, 
         evaluationManager: IEvaluationManager,
-        document: WebDocument<'n>
+        document: INodeDocument<'n>
     ) =
     let mutable keptChildren = []
 
     let keepChild child = keptChildren <- child :: keptChildren
-    let appendToParent child = document.AppendChildToParent(parent, child)
-    let removeFromParent child = document.RemoveChildFromParent(parent, child)
+    let appendToParent child = document.AppendChild(parent, child)
+    let removeFromParent child = document.RemoveChild(parent, child)
 
     interface IVideContext with
         member _.EvaluationManager = evaluationManager

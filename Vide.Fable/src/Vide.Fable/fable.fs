@@ -6,27 +6,27 @@ open Browser
 open Browser.Types
 
 type FableDocument() =
-    inherit WebDocument<Node>()
-    override _.CreateElementByName(tagName) =
-        document.createElement tagName
-    override _.CreateText(text) =
-        let tn = document.createTextNode(text)
-        let textNode =
-            {
-                node = tn :> Node
-                getText = fun () -> tn.textContent
-                setText = fun value -> tn.textContent <- value
-            }
-        textNode
-    override _.AppendChildToParent(parent, child) =
-        parent.appendChild(child) |> ignore
-    override _.RemoveChildFromParent(parent, child) =
-        parent.removeChild(child) |> ignore
-    override _.GetChildNodes(parent) =
-        let nodes = parent.childNodes
-        [ for i in 0 .. nodes.length-1 do nodes.Item i ]
-    override _.ClearContent(parent) =
-        parent.textContent <- ""
+    interface INodeDocument<Node> with
+        member _.CreateElementByName(tagName) =
+            document.createElement tagName
+        member _.CreateText(text) =
+            let tn = document.createTextNode(text)
+            let textNode =
+                {
+                    node = tn :> Node
+                    getText = fun () -> tn.textContent
+                    setText = fun value -> tn.textContent <- value
+                }
+            textNode
+        member _.AppendChild(parent, child) =
+            parent.appendChild(child) |> ignore
+        member _.RemoveChild(parent, child) =
+            parent.removeChild(child) |> ignore
+        member _.GetChildNodes(parent) =
+            let nodes = parent.childNodes
+            [ for i in 0 .. nodes.length-1 do nodes.Item i ]
+        member _.ClearContent(parent) =
+            parent.textContent <- ""
 
 type FableContext(parent, evaluationManager) =
     inherit NodeContext<Node>(parent, evaluationManager, FableDocument())
