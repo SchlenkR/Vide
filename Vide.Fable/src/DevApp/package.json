@@ -2,8 +2,8 @@
   "private": true,
   "scripts": {
     "postinstall": "dotnet tool restore",
-    "start": "dotnet tool restore && dotnet fable watch src/Vide.Fable.DevApp.fsproj -s -o build --noCache --run vite",
-    "build": "dotnet tool restore && dotnet fable src/Vide.Fable.DevApp.fsproj -o build --noCache --run vite build"
+    "start": "dotnet tool restore && dotnet fable watch src/DevApp.fsproj -s -o build --noCache --run vite",
+    "build": "dotnet tool restore && dotnet fable src/DevApp.fsproj -o build --noCache --run vite build"
   },
   "devDependencies": {
     "vite": "^2.9.13"
