@@ -45,7 +45,7 @@ and [<AbstractClass>] NodeContext<'n when 'n: equality>
         member _.EvaluationManager = evaluationManager
     member _.EvaluationManager = evaluationManager
     member _.Parent = parent
-    member _.AddNode<'e>(tagName: string) : 'e =
+    member _.AddNodeOfName<'e>(tagName: string) : 'e =
         let n = document.CreateNodeByName(tagName)
         do n |> keepChild
         do n |> appendToParent 
@@ -142,7 +142,7 @@ module ModifierContext =
 
 module BuilderBricks =
     let createNode elemName (ctx: #NodeContext<_>) =
-        ctx.AddNode<'n>(elemName)
+        ctx.AddNodeOfName<'n>(elemName)
     
     let checkOrUpdateNode expectedNodeName (actualNodeName: string) =
         match actualNodeName.Equals(expectedNodeName, StringComparison.OrdinalIgnoreCase) with
