@@ -1,4 +1,4 @@
-module App
+module DevApp
 
 open Browser.Dom
 open Browser.Types

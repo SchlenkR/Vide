@@ -1,4 +1,4 @@
-module Demos
+module DevApp.Demos
 
 open System
 open Browser.Types

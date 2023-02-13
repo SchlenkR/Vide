@@ -7,10 +7,6 @@
     <IsPackable>true</IsPackable>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="FSharp.Core" Version="7.0.0" />
-	</ItemGroup>
-
 	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'android'">
 		<AndroidResource Include="$(MonoAndroidResourcePrefix)/*/*" />
 		<AndroidResource Remove="$(MonoAndroidResourcePrefix)/raw/.*" />
@@ -55,6 +51,10 @@
 	<ItemGroup>
 	  <Compile Remove="MainActivity.fs" />
 	  <Compile Remove="MainApplication.fs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Include="maui.fs" />
 	</ItemGroup>
 
 	<ItemGroup>

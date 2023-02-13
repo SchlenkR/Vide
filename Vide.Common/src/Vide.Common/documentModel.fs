@@ -87,15 +87,15 @@ type ModifierContext<'n,'c>
     member val AfterEvalModifiers: ResizeArray<NodeModifier<'n,'c>> = ResizeArray() with get
 
 module ModifierContext =
-    let inline apply<^v1, ^v2, ^fs, ^n, ^nc, ^c
-                        when ^nc: equality
-                        and ^c :> NodeContext<^nc>
-                        and ^c: (member CreateChildCtx: ^nc -> ^c)
+    let inline apply<'v1,'v2,'fs,'n,'nc,^c
+                        when 'nc: equality
+                        and ^c :> NodeContext<'nc>
+                        and ^c: (member CreateChildCtx: 'nc -> ^c)
                         >
-        (Vide childVide: Vide<^v1,^fs,^c>)
-        (createResultVal: ^n -> ^v1 -> ^v2)
-        (modifierCtx: ModifierContext<^n,^c>)
-        : Vide<'v2, NodeBuilderState<^n,^fs>, ^c>
+        (Vide childVide: Vide<'v1,'fs,^c>)
+        (createResultVal: 'n -> 'v1 -> 'v2)
+        (modifierCtx: ModifierContext<'n,^c>)
+        : Vide<'v2, NodeBuilderState<'n,'fs>, ^c>
         =
         Vide <| fun s (ctx: ^c) ->
             Debug.print 0 "RUN:NodeBuilder"
@@ -117,12 +117,12 @@ module ModifierContext =
                 | Some node ->
                     match modifierCtx.CheckOrUpdateNode(node) with
                     | Keep ->
-                        ctx.KeepChild((box node) :?> ^nc)
+                        ctx.KeepChild((box node) :?> 'nc)
                         node,cs
                     | DiscardAndCreateNew ->
                         modifierCtx.CreateNode ctx,None
             do runModifiers modifierCtx.EvalModifiers node
-            let childCtx = ctx.CreateChildCtx((box node) :?> ^nc)
+            let childCtx = ctx.CreateChildCtx((box node) :?> 'nc)
             let cv,cs = childVide cs childCtx
             for x in childCtx.GetObsoleteChildren() do
                 childCtx.RemoveChild(x)
@@ -192,7 +192,7 @@ module BuilderBricks =
             (),None
 
 module Event =
-    type FableEventArgs<'evt,'n,'c> =
+    type NodeEventArgs<'evt,'n,'c> =
         {
             node: 'n
             evt: 'evt
@@ -203,7 +203,7 @@ module Event =
     let inline handle<'n,'nc,'c,'evt when 'c :> NodeContext<'nc>>
         (node: 'n) 
         (ctx: 'c) 
-        (callback: FableEventArgs<'evt,'n,'c> -> unit)
+        (callback: NodeEventArgs<'evt,'n,'c> -> unit)
         =
         fun evt ->
             let args = { node = node; evt = evt; ctx = ctx; requestEvaluation = true }
