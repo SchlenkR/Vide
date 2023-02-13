@@ -20,10 +20,7 @@ type INodeDocument<'n> =
     abstract member GetChildNodes : parent: 'n -> 'n list
     abstract member ClearContent : parent: 'n -> unit
 
-type INodeContextFactory<'c,'nc 
-        when 'nc: equality
-        and 'c :> NodeContext<'nc> 
-    > =
+type INodeContextFactory<'nc,'c when 'nc: equality and 'c :> NodeContext<'nc>> =
     abstract member CreateChildCtx : 'nc -> 'c
 
 and [<AbstractClass>] NodeContext<'n when 'n: equality>
@@ -94,7 +91,7 @@ module ModifierContext =
     let inline apply<'v1,'v2,'s,'n,'nc,'c
             when 'nc: equality
             and 'c :> NodeContext<'nc>
-            and 'c :> INodeContextFactory<'c,'nc>
+            and 'c :> INodeContextFactory<'nc,'c>
         >
         (Vide childVide: Vide<'v1,'s,'c>)
         (createResultVal: 'n -> 'v1 -> 'v2)
@@ -179,6 +176,7 @@ module BuilderBricks =
 //   + Return
 //     - every Content builder should bind every other builder)
 //     - standard yields
+//   + Combine,For,Delay
 // -------------------------------------------------------------------
 
 type ComponentRetCnBuilder<'nc,'c when 'c :> NodeContext<'nc> and 'nc : equality>() =
@@ -197,7 +195,7 @@ type RenderBaseBuilder<'n,'c>(createNode, checkOrUpdateNode) =
 type RenderValC0BaseBuilder<'v,'c,'n,'nc
         when 'nc: equality
         and 'c :> NodeContext<'nc>
-        and 'c :> INodeContextFactory<'c,'nc>
+        and 'c :> INodeContextFactory<'nc,'c>
     >
     (createNode, checkOrUpdateNode, createResultVal: 'n -> 'v) 
     =
@@ -208,7 +206,7 @@ type RenderValC0BaseBuilder<'v,'c,'n,'nc
 type RenderRetC0BaseBuilder<'c,'n,'nc
             when 'nc: equality
             and 'c :> NodeContext<'nc>
-            and 'c :> INodeContextFactory<'c,'nc>
+            and 'c :> INodeContextFactory<'nc,'c>
     >
     (createNode, checkOrUpdateNode) 
     =
@@ -220,7 +218,7 @@ type RenderRetC0BaseBuilder<'c,'n,'nc
 type RenderValC1BaseBuilder<'v,'c,'n,'nc
             when 'nc: equality
             and 'c :> NodeContext<'nc>
-            and 'c :> INodeContextFactory<'c,'nc>
+            and 'c :> INodeContextFactory<'nc,'c>
     >
     (createNode, checkOrUpdateNode, createResultVal: 'n -> 'v) 
     =
@@ -231,7 +229,7 @@ type RenderValC1BaseBuilder<'v,'c,'n,'nc
 type RenderRetC1BaseBuilder<'c,'n,'nc
             when 'nc: equality
             and 'c :> NodeContext<'nc>
-            and 'c :> INodeContextFactory<'c,'nc>
+            and 'c :> INodeContextFactory<'nc,'c>
     >
     (createNode, checkOrUpdateNode) 
     =
@@ -243,7 +241,7 @@ type RenderRetC1BaseBuilder<'c,'n,'nc
 type RenderValCnBaseBuilder<'v,'c,'n,'nc
             when 'nc: equality
             and 'c :> NodeContext<'nc>
-            and 'c :> INodeContextFactory<'c,'nc>
+            and 'c :> INodeContextFactory<'nc,'c>
     >
     (createNode, checkOrUpdateNode, createResultVal: 'n -> 'v) 
     =
@@ -256,7 +254,7 @@ type RenderValCnBaseBuilder<'v,'c,'n,'nc
 type RenderRetCnBaseBuilder<'c,'n,'nc
             when 'nc: equality
             and 'c :> NodeContext<'nc>
-            and 'c :> INodeContextFactory<'c,'nc>
+            and 'c :> INodeContextFactory<'nc,'c>
     >
     (createNode, checkOrUpdateNode) 
     =
@@ -277,7 +275,7 @@ type RenderRetCnBaseBuilder<'c,'n,'nc
 type RenderRetC1BaseBuilder<'c,'n,'nc
         when 'nc: equality
         and 'c :> NodeContext<'nc>
-        and 'c :> INodeContextFactory<'c,'nc>
+        and 'c :> INodeContextFactory<'nc,'c>
     > with
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
@@ -290,7 +288,7 @@ type RenderRetC1BaseBuilder<'c,'n,'nc
 type RenderRetCnBaseBuilder<'c,'n,'nc
         when 'nc: equality
         and 'c :> NodeContext<'nc>
-        and 'c :> INodeContextFactory<'c,'nc>
+        and 'c :> INodeContextFactory<'nc,'c>
     > with
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
@@ -319,7 +317,7 @@ type ComponentRetCnBuilder<'nc,'c
 type RenderRetC1BaseBuilder<'c,'n,'nc
         when 'nc: equality
         and 'c :> NodeContext<'nc>
-        and 'c :> INodeContextFactory<'c,'nc>
+        and 'c :> INodeContextFactory<'nc,'c>
     > with
     member _.Bind(m: RenderValC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
@@ -329,7 +327,7 @@ type RenderRetC1BaseBuilder<'c,'n,'nc
 type RenderRetCnBaseBuilder<'c,'n,'nc
         when 'nc: equality
         and 'c :> NodeContext<'nc>
-        and 'c :> INodeContextFactory<'c,'nc>
+        and 'c :> INodeContextFactory<'nc,'c>
     > with
     member _.Bind(m: RenderValC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)

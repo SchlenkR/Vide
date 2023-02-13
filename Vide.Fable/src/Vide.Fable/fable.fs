@@ -30,7 +30,7 @@ type FableDocument() =
 
 type FableContext(parent, evaluationManager) =
     inherit NodeContext<Node>(parent, evaluationManager, FableDocument())
-    interface INodeContextFactory<FableContext,Node> with
+    interface INodeContextFactory<Node,FableContext> with
         member _.CreateChildCtx(parent) = FableContext(parent, evaluationManager)
 
 type RenderValC0Builder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, createResultVal) =
