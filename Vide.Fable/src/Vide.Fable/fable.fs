@@ -9,7 +9,7 @@ type FableDocument() =
     interface INodeDocument<Node> with
         member _.CreateNodeByName(tagName) =
             document.createElement tagName
-        member _.CreateText(text) =
+        member _.CreateTextNode(text) =
             let tn = document.createTextNode(text)
             let textNode =
                 {
@@ -30,8 +30,8 @@ type FableDocument() =
 
 type FableContext(parent, evaluationManager) =
     inherit NodeContext<Node>(parent, evaluationManager, FableDocument())
-    // SRTP resolved
-    member _.CreateChildCtx(parent) = FableContext(parent, evaluationManager)
+    interface INodeContextFactory<FableContext,Node> with
+        member _.CreateChildCtx(parent) = FableContext(parent, evaluationManager)
 
 // ---------------------------------------------------------------------------------
 // The four (+1 base) basic builders for renderers (used for HTML elements like
@@ -47,24 +47,17 @@ type FableContext(parent, evaluationManager) =
 //     - standard yields
 // -------------------------------------------------------------------
 
-type RenderValC0Builder<'v,'n when 'n :> Node and 'n: equality>(createNode, checkOrUpdateNode, createResultVal: 'n -> 'v) =
-    inherit RenderBaseBuilder<'n, FableContext>(createNode, checkOrUpdateNode)
-    member this.Run<'v1,'fs>(v) =
-        this.ModifierContext |> ModifierContext.apply<'v1,'v,'fs,'n,Node,FableContext> v (fun n v -> createResultVal n)
+type RenderValC0Builder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, createResultVal) =
+    inherit RenderValC0BaseBuilder<'v, FableContext,'n,Node>(createNode, checkOrUpdateNode, createResultVal)
 
 type RenderRetC0Builder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
-    inherit RenderBaseBuilder<'n, FableContext>(createNode, checkOrUpdateNode)
-    member this.Run(v) = this.ModifierContext |> ModifierContext.apply v (fun n v -> v)
-    member _.Return(x) = BuilderBricks.return'(x)
+    inherit RenderRetC0BaseBuilder<FableContext,'n,Node>(createNode, checkOrUpdateNode)
 
-type RenderValCnBuilder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, createResultVal: 'n -> 'v) =
-    inherit RenderBaseBuilder<'n, FableContext>(createNode, checkOrUpdateNode)
-    member this.Run(v) = this.ModifierContext |> ModifierContext.apply v (fun n v -> createResultVal n)
+type RenderValCnBuilder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, createResultVal) =
+    inherit RenderValCnBaseBuilder<'v,FableContext,'n,Node>(createNode, checkOrUpdateNode, createResultVal)
 
 type RenderRetCnBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
-    inherit RenderBaseBuilder<'n, FableContext>(createNode, checkOrUpdateNode)
-    member this.Run(v) = this.ModifierContext |> ModifierContext.apply v (fun n v -> v)
-    member _.Return(x) = BuilderBricks.return'(x)
+    inherit RenderRetCnBaseBuilder<FableContext,'n,Node>(createNode, checkOrUpdateNode)
 
 // -------------------------------------------------------------------
 // "Yielsd"s 

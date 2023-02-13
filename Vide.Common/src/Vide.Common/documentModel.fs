@@ -13,15 +13,20 @@ type TextNodeProxy<'n> =
     }
 
 type INodeDocument<'n> =
-    abstract member CreateNodeByName : tagName:string -> 'n
-    abstract member CreateText : text:string -> TextNodeProxy<'n>
-    abstract member AppendChild : parent:'n * child:'n -> unit
-    abstract member RemoveChild : parent:'n * child:'n -> unit
-    abstract member GetChildNodes : parent:'n -> 'n list
-    abstract member ClearContent : parent:'n -> unit
+    abstract member CreateNodeByName : tagName: string -> 'n
+    abstract member CreateTextNode : text: string -> TextNodeProxy<'n>
+    abstract member AppendChild : parent: 'n * child: 'n -> unit
+    abstract member RemoveChild : parent: 'n * child: 'n -> unit
+    abstract member GetChildNodes : parent: 'n -> 'n list
+    abstract member ClearContent : parent: 'n -> unit
 
-[<AbstractClass>]
-type NodeContext<'n when 'n: equality>
+type INodeContextFactory<'c,'nc 
+        when 'nc: equality
+        and 'c :> NodeContext<'nc> 
+    > =
+    abstract member CreateChildCtx : 'nc -> 'c
+
+and [<AbstractClass>] NodeContext<'n when 'n: equality>
     (
         parent: 'n, 
         evaluationManager: IEvaluationManager,
@@ -37,14 +42,14 @@ type NodeContext<'n when 'n: equality>
         member _.EvaluationManager = evaluationManager
     member _.EvaluationManager = evaluationManager
     member _.Parent = parent
-    member _.AddElement<'e>(tagName: string) : 'e =
+    member _.AddNode<'e>(tagName: string) : 'e =
         let n = document.CreateNodeByName(tagName)
-        do n |> keepChild 
+        do n |> keepChild
         do n |> appendToParent 
-        // TODO: why unsafe cast?
+        // TODO: Can we get rid of the unsafe cast?
         (box n) :?> 'e
-    member _.AddText(text: string) =
-        let t = document.CreateText(text)
+    member _.AddTextNode(text: string) =
+        let t = document.CreateTextNode(text)
         do t.node |> keepChild
         do t.node |> appendToParent
         t
@@ -86,17 +91,17 @@ type ModifierContext<'n,'c>
     member val AfterEvalModifiers: ResizeArray<NodeModifier<'n,'c>> = ResizeArray() with get
 
 module ModifierContext =
-    let inline apply<'v1,'v2,'fs,'n,'nc,^c
-                        when 'nc: equality
-                        and ^c :> NodeContext<'nc>
-                        and ^c: (member CreateChildCtx: 'nc -> ^c)
-                        >
-        (Vide childVide: Vide<'v1,'fs,^c>)
+    let inline apply<'v1,'v2,'s,'n,'nc,'c
+            when 'nc: equality
+            and 'c :> NodeContext<'nc>
+            and 'c :> INodeContextFactory<'c,'nc>
+        >
+        (Vide childVide: Vide<'v1,'s,'c>)
         (createResultVal: 'n -> 'v1 -> 'v2)
-        (modifierCtx: ModifierContext<'n,^c>)
-        : Vide<'v2, NodeBuilderState<'n,'fs>, ^c>
+        (modifierCtx: ModifierContext<'n,'c>)
+        : Vide<'v2, NodeBuilderState<'n,'s>, 'c>
         =
-        Vide <| fun s (ctx: ^c) ->
+        Vide <| fun s (ctx: 'c) ->
             Debug.print 0 "RUN:NodeBuilder"
             let inline runModifiers modifiers node =
                 for m in modifiers do
@@ -121,7 +126,9 @@ module ModifierContext =
                     | DiscardAndCreateNew ->
                         modifierCtx.CreateNode ctx,None
             do runModifiers modifierCtx.EvalModifiers node
-            let childCtx = ctx.CreateChildCtx((box node) :?> 'nc)
+            let childCtx =
+                // TODO: Why the unsafe cast everywhere in this function?
+                ctx.CreateChildCtx((box node) :?> 'nc)
             let cv,cs = childVide cs childCtx
             for x in childCtx.GetObsoleteChildren() do
                 childCtx.RemoveChild(x)
@@ -133,12 +140,60 @@ module ModifierContext =
 type ComponentRetCnBuilder<'c>() =
     inherit VideBaseBuilder()
     member _.Return(x: 'v) = BuilderBricks.return'<'v,'c>(x)
+    member _.Delay(f) = BuilderBricks.delay(f)
+    member _.Combine(a, b) = BuilderBricks.combine(a, b)
+    member _.For(seq, body) = BuilderBricks.for'(seq, body)
 
 [<AbstractClass>]
 type RenderBaseBuilder<'n,'c>(createNode, checkOrUpdateNode) =
     inherit VideBaseBuilder()
     let modifierContext = ModifierContext<'n,'c>(createNode, checkOrUpdateNode)
     member _.ModifierContext = modifierContext
+
+type RenderValC0BaseBuilder<'v,'c,'n,'nc
+            when 'nc: equality
+            and 'c :> NodeContext<'nc>
+            and 'c :> INodeContextFactory<'c,'nc>
+        >
+        (createNode, checkOrUpdateNode, createResultVal: 'n -> 'v) =
+    inherit RenderBaseBuilder<'n,'c>(createNode, checkOrUpdateNode)
+    member this.Run<'v1,'s>(v: Vide<'v1,'s,'c>) =
+        this.ModifierContext |> ModifierContext.apply v (fun n v -> createResultVal n)
+
+type RenderRetC0BaseBuilder<'c,'n,'nc
+            when 'nc: equality
+            and 'c :> NodeContext<'nc>
+            and 'c :> INodeContextFactory<'c,'nc>
+        >
+        (createNode, checkOrUpdateNode) =
+    inherit RenderBaseBuilder<'n,'c>(createNode, checkOrUpdateNode)
+    member _.Return(x) = BuilderBricks.return'(x)
+    member this.Run(v) =
+        this.ModifierContext |> ModifierContext.apply v (fun n v -> v)
+
+type RenderValCnBaseBuilder<'v,'c,'n,'nc
+            when 'nc: equality
+            and 'c :> NodeContext<'nc>
+            and 'c :> INodeContextFactory<'c,'nc>
+        >
+        (createNode, checkOrUpdateNode, createResultVal: 'n -> 'v) =
+    inherit RenderBaseBuilder<'n,'c>(createNode, checkOrUpdateNode)
+    member _.Combine(a, b) = BuilderBricks.combine(a, b)
+    member _.For(seq, body) = BuilderBricks.for'(seq, body)
+    member this.Run(v) =
+        this.ModifierContext |> ModifierContext.apply v (fun n v -> createResultVal n)
+
+type RenderRetCnBaseBuilder<'c,'n,'nc
+            when 'nc: equality
+            and 'c :> NodeContext<'nc>
+            and 'c :> INodeContextFactory<'c,'nc>
+        >
+        (createNode, checkOrUpdateNode) =
+    inherit RenderBaseBuilder<'n,'c>(createNode, checkOrUpdateNode)
+    member _.Combine(a, b) = BuilderBricks.combine(a, b)
+    member _.For(seq, body) = BuilderBricks.for'(seq, body)
+    member this.Run(v) = this.ModifierContext |> ModifierContext.apply v (fun n v -> v)
+    member _.Return(x) = BuilderBricks.return'(x)
 
 [<Extension>]
 type NodeBuilderExtensions =
@@ -163,7 +218,7 @@ type NodeBuilderExtensions =
 
 module BuilderBricks =
     let createNode elemName (ctx: #NodeContext<_>) =
-        ctx.AddElement<'n>(elemName)
+        ctx.AddNode<'n>(elemName)
     
     let checkOrUpdateNode expectedNodeName (actualNodeName: string) =
         match actualNodeName.Equals(expectedNodeName, StringComparison.OrdinalIgnoreCase) with
@@ -174,7 +229,7 @@ module BuilderBricks =
     
     let inline yieldText<'n,'c when 'c :> NodeContext<'n>>(value: string) =
         Vide <| fun s (ctx: 'c) ->
-            let textNode = s |> Option.defaultWith (fun () -> ctx.AddText(value))
+            let textNode = s |> Option.defaultWith (fun () -> ctx.AddTextNode(value))
             do
                 if textNode.getText() <> value then
                     textNode.setText(value)

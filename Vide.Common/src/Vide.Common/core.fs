@@ -338,11 +338,11 @@ type VideBaseBuilder() =
     member _.Bind(m, f) = BuilderBricks.bind(m, f)
     member _.Zero() = BuilderBricks.zero()
     member _.Delay(f) = BuilderBricks.delay(f)
-    member _.Combine(a, b) = BuilderBricks.combine(a, b)
-    member _.For(seq, body) = BuilderBricks.for'(seq, body)
+
     // ---------------------
     // ASYNC
     // ---------------------
     member _.Bind(m, f) = BuilderBricks.Async.bind(m, f)
     member _.Delay(f) = BuilderBricks.Async.delay(f)
     member _.Combine(a, b) = BuilderBricks.Async.combine(a, b)
+    // TODO: async for
