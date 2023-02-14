@@ -34,31 +34,56 @@ type FableContext(parent, evaluationManager) =
     interface INodeContextFactory<Node,FableContext> with
         member _.CreateChildCtx(parent) = FableContext(parent, evaluationManager)
 
+// --------------------------------------------------
+// Specialized builder definitions
+// --------------------------------------------------
+
 type ComponentRetCnBuilder() =
     inherit ComponentRetCnBaseBuilder<Node,FableContext>()
-    member _.Yield(s) = BuilderBricks.yieldText<Node,FableContext> s
 
 type RenderValC0Builder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, createResultVal) =
     inherit RenderValC0BaseBuilder<'v, FableContext,'n,Node>(createNode, checkOrUpdateNode, createResultVal)
 
 type RenderRetC0Builder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
-    inherit RenderRetC0BaseBuilder<FableContext,'n,Node>(createNode, checkOrUpdateNode)
+    inherit RenderRetC0BaseBuilder<'n,Node,FableContext>(createNode, checkOrUpdateNode)
 
 type RenderValC1Builder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, createResultVal) =
     inherit RenderValC1BaseBuilder<'v, FableContext,'n,Node>(createNode, checkOrUpdateNode, createResultVal)
-    member _.Yield(s) = BuilderBricks.yieldText<Node,FableContext> s
 
 type RenderRetC1Builder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
-    inherit RenderRetC1BaseBuilder<FableContext,'n,Node>(createNode, checkOrUpdateNode)
-    member _.Yield(s) = BuilderBricks.yieldText<Node,FableContext> s
+    inherit RenderRetC1BaseBuilder<'n,Node,FableContext>(createNode, checkOrUpdateNode)
 
 type RenderValCnBuilder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, createResultVal) =
     inherit RenderValCnBaseBuilder<'v,FableContext,'n,Node>(createNode, checkOrUpdateNode, createResultVal)
-    member _.Yield(s) = BuilderBricks.yieldText<Node,FableContext> s
 
 type RenderRetCnBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
-    inherit RenderRetCnBaseBuilder<FableContext,'n,Node>(createNode, checkOrUpdateNode)
+    inherit RenderRetCnBaseBuilder<'n,Node,FableContext>(createNode, checkOrUpdateNode)
+
+
+// --------------------------------------------------
+// Yields - We have to is here because of 
+//          some value restriction issues
+// --------------------------------------------------
+
+type ComponentRetCnBuilder with
     member _.Yield(s) = BuilderBricks.yieldText<Node,FableContext> s
+
+type RenderValC1Builder<'v,'n when 'n :> Node> with
+    member _.Yield(s) = BuilderBricks.yieldText s
+
+type RenderRetC1Builder<'n when 'n :> Node> with
+    member _.Yield(s) = BuilderBricks.yieldText s
+
+type RenderValCnBuilder<'v,'n when 'n :> Node> with
+    member _.Yield(s) = BuilderBricks.yieldText s
+
+type RenderRetCnBuilder<'n when 'n :> Node> with
+    member _.Yield(s) = BuilderBricks.yieldText s
+
+
+// --------------------------------------------------
+// Specialized vide functions
+// --------------------------------------------------
 
 module Vide =
 
