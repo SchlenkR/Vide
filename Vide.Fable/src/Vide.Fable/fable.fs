@@ -1,13 +1,23 @@
 [<AutoOpen>]
 module Vide.Fable
 
-open Vide
 open Browser
 open Browser.Types
+open Vide
 
 type FableDocument() =
     interface INodeDocument<Node> with
-        member _.CreateNodeByName(tagName) =
+        member _.AppendChild(parent, child) =
+            parent.appendChild(child) |> ignore
+        member _.RemoveChild(parent, child) =
+            parent.removeChild(child) |> ignore
+        member _.GetChildNodes(parent) =
+            let nodes = parent.childNodes
+            [ for i in 0 .. nodes.length-1 do nodes.Item i ]
+        member _.ClearContent(parent) =
+            parent.textContent <- ""
+    interface IWebDocument<Node> with
+        member _.CreateNodeOfName(tagName) =
             document.createElement tagName
         member _.CreateTextNode(text) =
             let tn = document.createTextNode(text)
@@ -18,20 +28,15 @@ type FableDocument() =
                     setText = fun value -> tn.textContent <- value
                 }
             textNode
-        member _.AppendChild(parent, child) =
-            parent.appendChild(child) |> ignore
-        member _.RemoveChild(parent, child) =
-            parent.removeChild(child) |> ignore
-        member _.GetChildNodes(parent) =
-            let nodes = parent.childNodes
-            [ for i in 0 .. nodes.length-1 do nodes.Item i ]
-        member _.ClearContent(parent) =
-            parent.textContent <- ""
 
 type FableContext(parent, evaluationManager) =
-    inherit NodeContext<Node>(parent, evaluationManager, FableDocument())
+    inherit WebContext<Node>(parent, evaluationManager, FableDocument())
     interface INodeContextFactory<Node,FableContext> with
         member _.CreateChildCtx(parent) = FableContext(parent, evaluationManager)
+
+type ComponentRetCnBuilder() =
+    inherit ComponentRetCnBaseBuilder<Node,FableContext>()
+    member _.Yield(s) = BuilderBricks.yieldText<Node,FableContext> s
 
 type RenderValC0Builder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, createResultVal) =
     inherit RenderValC0BaseBuilder<'v, FableContext,'n,Node>(createNode, checkOrUpdateNode, createResultVal)
@@ -39,11 +44,21 @@ type RenderValC0Builder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, cr
 type RenderRetC0Builder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
     inherit RenderRetC0BaseBuilder<FableContext,'n,Node>(createNode, checkOrUpdateNode)
 
+type RenderValC1Builder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, createResultVal) =
+    inherit RenderValC1BaseBuilder<'v, FableContext,'n,Node>(createNode, checkOrUpdateNode, createResultVal)
+    member _.Yield(s) = BuilderBricks.yieldText<Node,FableContext> s
+
+type RenderRetC1Builder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
+    inherit RenderRetC1BaseBuilder<FableContext,'n,Node>(createNode, checkOrUpdateNode)
+    member _.Yield(s) = BuilderBricks.yieldText<Node,FableContext> s
+
 type RenderValCnBuilder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, createResultVal) =
     inherit RenderValCnBaseBuilder<'v,FableContext,'n,Node>(createNode, checkOrUpdateNode, createResultVal)
+    member _.Yield(s) = BuilderBricks.yieldText<Node,FableContext> s
 
 type RenderRetCnBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
     inherit RenderRetCnBaseBuilder<FableContext,'n,Node>(createNode, checkOrUpdateNode)
+    member _.Yield(s) = BuilderBricks.yieldText<Node,FableContext> s
 
 module Vide =
 
@@ -69,4 +84,4 @@ module VideApp =
     let createFableWithObjState host content onEvaluated =
         doCreate VideApp.createWithUntypedState host content onEvaluated
 
-let vide = ComponentRetCnBuilder<Node,FableContext>()
+let vide = ComponentRetCnBuilder()

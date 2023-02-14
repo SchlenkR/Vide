@@ -1,35 +1,17 @@
 [<AutoOpen>]
-module Vide.DocumentModel
+module Vide.NodeModel
 
-open System
 open System.Runtime.CompilerServices
 open Vide
 
-type TextNodeProxy<'n> =
-    {
-        node: 'n
-        getText: unit -> string
-        setText: string -> unit
-    }
-
-// The INodeDocument is actually a node(!) document, which 
-// means that there's no discinction between taking only
-// 1 node or many. We lose a little safety because this
-// might cause runtime errors due to casting etc., but
-// this can be healed by a correct API implementation that
-// takes this fact into consideration.
 type INodeDocument<'n> =
-    abstract member CreateNodeByName : tagName: string -> 'n
-    abstract member CreateTextNode : text: string -> TextNodeProxy<'n>
     abstract member AppendChild : parent: 'n * child: 'n -> unit
     abstract member RemoveChild : parent: 'n * child: 'n -> unit
     abstract member GetChildNodes : parent: 'n -> 'n list
     abstract member ClearContent : parent: 'n -> unit
 
-type INodeContextFactory<'nc,'c when 'nc: equality and 'c :> NodeContext<'nc>> =
-    abstract member CreateChildCtx : 'nc -> 'c
-
-and [<AbstractClass>] NodeContext<'n when 'n: equality>
+[<AbstractClass>] 
+type NodeContext<'n when 'n: equality>
     (
         parent: 'n, 
         evaluationManager: IEvaluationManager,
@@ -37,34 +19,22 @@ and [<AbstractClass>] NodeContext<'n when 'n: equality>
     ) =
     let mutable keptChildren = []
 
-    let keepChild child = keptChildren <- child :: keptChildren
-    let appendToParent child = document.AppendChild(parent, child)
-    let removeFromParent child = document.RemoveChild(parent, child)
-
     interface IVideContext with
         member _.EvaluationManager = evaluationManager
     member _.EvaluationManager = evaluationManager
     member _.Parent = parent
-    member _.AddNodeOfName<'e>(tagName: string) : 'e =
-        let n = document.CreateNodeByName(tagName)
-        do n |> keepChild
-        do n |> appendToParent 
-        // TODO: Can we get rid of the unsafe cast?
-        (box n) :?> 'e
-    member _.AddTextNode(text: string) =
-        let t = document.CreateTextNode(text)
-        do t.node |> keepChild
-        do t.node |> appendToParent
-        t
     member _.KeepChild(child) =
-        child |> keepChild
-    member _.RemoveChild(child) =
-        removeFromParent(child)
-    member _.GetObsoleteChildren() =
+        keptChildren <- child :: keptChildren
+    member _.RemoveObsoleteChildren() =
         let childNodes = document.GetChildNodes(parent)
-        childNodes |> List.except keptChildren
+        let obsoleteChildren = childNodes |> List.except keptChildren
+        for child in obsoleteChildren do
+            document.RemoveChild(parent, child)
     member _.ClearContent() =
         document.ClearContent(parent)
+
+type INodeContextFactory<'nc,'c when 'nc: equality and 'c :> NodeContext<'nc>> =
+    abstract member CreateChildCtx : 'nc -> 'c
 
 type BuilderOperations = | Clear
 
@@ -133,33 +103,14 @@ module ModifierContext =
                 // TODO: Why the unsafe cast everywhere in this function?
                 ctx.CreateChildCtx((box node) :?> 'nc)
             let cv,cs = childVide cs childCtx
-            for x in childCtx.GetObsoleteChildren() do
-                childCtx.RemoveChild(x)
+            do childCtx.RemoveObsoleteChildren()
             do runModifiers modifierCtx.AfterEvalModifiers node
             let result = createResultVal node cv
             let state = Some (Some node, cs)
             result,state
 
 module BuilderBricks =
-    let createNode elemName (ctx: #NodeContext<_>) =
-        ctx.AddNodeOfName<'n>(elemName)
-    
-    let checkOrUpdateNode expectedNodeName (actualNodeName: string) =
-        match actualNodeName.Equals(expectedNodeName, StringComparison.OrdinalIgnoreCase) with
-        | true -> Keep
-        | false ->
-            // TODO: if/else detection? Expected node name: {expectedNodeName}, but was: {actualNodeName}"
-            DiscardAndCreateNew
-    
-    let inline yieldText<'nc,'c when 'c :> NodeContext<'nc>>(value: string) =
-        Vide <| fun s (ctx: 'c) ->
-            let textNode = s |> Option.defaultWith (fun () -> ctx.AddTextNode(value))
-            do
-                if textNode.getText() <> value then
-                    textNode.setText(value)
-                ctx.KeepChild(textNode.node)
-            (), Some textNode
-    
+   
     let inline yieldVide(v: Vide<_,_,_>) =
         v
     
@@ -185,7 +136,7 @@ module BuilderBricks =
 //   + Combine,For,Delay
 // -------------------------------------------------------------------
 
-type ComponentRetCnBuilder<'nc,'c when 'c :> NodeContext<'nc> and 'nc : equality>() =
+type ComponentRetCnBaseBuilder<'nc,'c when 'c :> NodeContext<'nc> and 'nc : equality>() =
     inherit VideBaseBuilder()
     member _.Return(x: 'v) = BuilderBricks.return'<'v,'c>(x)
     member _.Delay(f) = BuilderBricks.delay(f)
@@ -286,8 +237,7 @@ type RenderRetC1BaseBuilder<'c,'n,'nc
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: ComponentRetCnBuilder<_,_>) = b {()}
-    member _.Yield(s) = BuilderBricks.yieldText s
+    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp op
 
@@ -299,20 +249,18 @@ type RenderRetCnBaseBuilder<'c,'n,'nc
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: ComponentRetCnBuilder<_,_>) = b {()}
-    member _.Yield(s) = BuilderBricks.yieldText s
+    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp op
 
-type ComponentRetCnBuilder<'nc,'c
+type ComponentRetCnBaseBuilder<'nc,'c
         when 'c :> NodeContext<'nc> 
         and 'nc : equality
     > with
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: ComponentRetCnBuilder<_,_>) = b {()}
-    member _.Yield(s) = BuilderBricks.yieldText<'nc,'c> s
+    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp op
 
@@ -328,7 +276,7 @@ type RenderRetC1BaseBuilder<'c,'n,'nc
     member _.Bind(m: RenderValC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetCnBaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
-    member _.Bind(m: ComponentRetCnBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: ComponentRetCnBaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
 
 type RenderRetCnBaseBuilder<'c,'n,'nc
         when 'nc: equality
@@ -338,16 +286,16 @@ type RenderRetCnBaseBuilder<'c,'n,'nc
     member _.Bind(m: RenderValC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetCnBaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
-    member _.Bind(m: ComponentRetCnBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: ComponentRetCnBaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
 
-type ComponentRetCnBuilder<'nc,'c
+type ComponentRetCnBaseBuilder<'nc,'c
         when 'c :> NodeContext<'nc> 
         and 'nc : equality
     > with
     member _.Bind(m: RenderValC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetCnBaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
-    member _.Bind(m: ComponentRetCnBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: ComponentRetCnBaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
 
 [<Extension>]
 type NodeBuilderExtensions =

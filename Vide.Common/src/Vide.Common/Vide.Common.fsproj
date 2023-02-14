@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
@@ -13,7 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="core.fs" />
-    <Compile Include="documentModel.fs" />
+    <Compile Include="Core.fs" />
+    <Compile Include="NodeModel.fs" />
+    <Compile Include="WebModel.fs" />
   </ItemGroup>
 </Project>

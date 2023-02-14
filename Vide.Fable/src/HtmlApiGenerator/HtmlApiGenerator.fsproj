@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="w3schoolScrape.fsx" />
+    <Compile Include="W3schoolScrape.fsx" />
     <None Include="scrapeFiddle.fsx" />
-    <Compile Include="htmlApiGen.fs" />
+    <Compile Include="HtmlApiGen.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
