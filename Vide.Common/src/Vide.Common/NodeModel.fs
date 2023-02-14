@@ -149,7 +149,7 @@ type RenderBaseBuilder<'n,'c>(createNode, checkOrUpdateNode) =
     let modifierContext = ModifierContext<'n,'c>(createNode, checkOrUpdateNode)
     member _.ModifierContext = modifierContext
 
-type RenderValC0BaseBuilder<'v,'c,'n,'nc
+type RenderValC0BaseBuilder<'v,'n,'nc,'c
         when 'nc: equality
         and 'c :> NodeContext<'nc>
         and 'c :> INodeContextFactory<'nc,'c>
@@ -161,9 +161,9 @@ type RenderValC0BaseBuilder<'v,'c,'n,'nc
         this.ModifierContext |> ModifierContext.apply v (fun n v -> createResultVal n)
 
 type RenderRetC0BaseBuilder<'n,'nc,'c
-            when 'nc: equality
-            and 'c :> NodeContext<'nc>
-            and 'c :> INodeContextFactory<'nc,'c>
+        when 'nc: equality
+        and 'c :> NodeContext<'nc>
+        and 'c :> INodeContextFactory<'nc,'c>
     >
     (createNode, checkOrUpdateNode) 
     =
@@ -172,10 +172,10 @@ type RenderRetC0BaseBuilder<'n,'nc,'c
     member this.Run(v) =
         this.ModifierContext |> ModifierContext.apply v (fun n v -> v)
 
-type RenderValC1BaseBuilder<'v,'c,'n,'nc
-            when 'nc: equality
-            and 'c :> NodeContext<'nc>
-            and 'c :> INodeContextFactory<'nc,'c>
+type RenderValC1BaseBuilder<'v,'n,'nc,'c
+        when 'nc: equality
+        and 'c :> NodeContext<'nc>
+        and 'c :> INodeContextFactory<'nc,'c>
     >
     (createNode, checkOrUpdateNode, createResultVal: 'n -> 'v) 
     =
@@ -184,9 +184,9 @@ type RenderValC1BaseBuilder<'v,'c,'n,'nc
         this.ModifierContext |> ModifierContext.apply v (fun n v -> createResultVal n)
 
 type RenderRetC1BaseBuilder<'n,'nc,'c
-            when 'nc: equality
-            and 'c :> NodeContext<'nc>
-            and 'c :> INodeContextFactory<'nc,'c>
+        when 'nc: equality
+        and 'c :> NodeContext<'nc>
+        and 'c :> INodeContextFactory<'nc,'c>
     >
     (createNode, checkOrUpdateNode) 
     =
@@ -195,10 +195,10 @@ type RenderRetC1BaseBuilder<'n,'nc,'c
     member this.Run(v) =
         this.ModifierContext |> ModifierContext.apply v (fun n v -> v)
 
-type RenderValCnBaseBuilder<'v,'c,'n,'nc
-            when 'nc: equality
-            and 'c :> NodeContext<'nc>
-            and 'c :> INodeContextFactory<'nc,'c>
+type RenderValCnBaseBuilder<'v,'n,'nc,'c
+        when 'nc: equality
+        and 'c :> NodeContext<'nc>
+        and 'c :> INodeContextFactory<'nc,'c>
     >
     (createNode, checkOrUpdateNode, createResultVal: 'n -> 'v) 
     =
@@ -209,9 +209,9 @@ type RenderValCnBaseBuilder<'v,'c,'n,'nc
         this.ModifierContext |> ModifierContext.apply v (fun n v -> createResultVal n)
 
 type RenderRetCnBaseBuilder<'n,'nc,'c
-            when 'nc: equality
-            and 'c :> NodeContext<'nc>
-            and 'c :> INodeContextFactory<'nc,'c>
+        when 'nc: equality
+        and 'c :> NodeContext<'nc>
+        and 'c :> INodeContextFactory<'nc,'c>
     >
     (createNode, checkOrUpdateNode) 
     =

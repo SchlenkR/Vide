@@ -5,8 +5,8 @@ open Microsoft.Maui
 open Microsoft.Maui.Controls
 open Vide
 
-type MauiDocument() =
-    interface INodeDocument<obj> with
+type MauiDocument(x: Microsoft.Maui.) =
+    interface INodeDocument<IElement> with
         member _.AppendChild(parent, child) =
             parent.appendChild(child) |> ignore
         member _.RemoveChild(parent, child) =
@@ -16,20 +16,8 @@ type MauiDocument() =
             [ for i in 0 .. nodes.length-1 do nodes.Item i ]
         member _.ClearContent(parent) =
             parent.textContent <- ""
-    interface IWebDocument<Node> with
-        member _.CreateNodeOfName(tagName) =
-            document.createElement tagName
-        member _.CreateTextNode(text) =
-            let tn = document.createTextNode(text)
-            let textNode =
-                {
-                    node = tn :> Node
-                    getText = fun () -> tn.textContent
-                    setText = fun value -> tn.textContent <- value
-                }
-            textNode
 
-type FableContext(parent, evaluationManager) =
+type MauiContext(parent, evaluationManager) =
     inherit WebContext<Node>(parent, evaluationManager, FableDocument())
     interface INodeContextFactory<Node,FableContext> with
         member _.CreateChildCtx(parent) = FableContext(parent, evaluationManager)
