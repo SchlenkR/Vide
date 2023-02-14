@@ -54,7 +54,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Include="maui.fs" />
+	  <Compile Include="Maui.fs" />
 	</ItemGroup>
 
 	<ItemGroup>
