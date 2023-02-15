@@ -10,6 +10,7 @@ namespace Vide
 open System.Runtime.CompilerServices
 open Browser.Types
 open Vide
+open Vide.WebModel
 open Vide.HtmlApiPreparation
 
 [<AutoOpen>]
@@ -503,16 +504,16 @@ module HtmlEnumAttributeTypes =
 
 module HtmlElementBuilders =
     type HtmlGARenderValC0Builder<'v,'n when 'n :> HTMLElement and 'n: equality>(tagName, resultSelector) =
-        inherit RenderValC0Builder<'v,'n>(BuilderBricks.createNode tagName, (fun node -> BuilderBricks.checkOrUpdateNode tagName node.nodeName), resultSelector)
+        inherit RenderValC0Builder<'v,'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName), resultSelector)
 
     type HtmlGARenderRetC0Builder<'n when 'n :> HTMLElement and 'n: equality>(tagName) =
-        inherit RenderRetC0Builder<'n>(BuilderBricks.createNode tagName, (fun node -> BuilderBricks.checkOrUpdateNode tagName node.nodeName))
+        inherit RenderRetC0Builder<'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName))
 
     type HtmlGARenderValCnBuilder<'v,'n when 'n :> HTMLElement and 'n: equality>(tagName, resultSelector) =
-        inherit RenderValCnBuilder<'v,'n>(BuilderBricks.createNode tagName, (fun node -> BuilderBricks.checkOrUpdateNode tagName node.nodeName), resultSelector)
+        inherit RenderValCnBuilder<'v,'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName), resultSelector)
 
     type HtmlGARenderRetCnBuilder<'n when 'n :> HTMLElement and 'n: equality>(tagName) =
-        inherit RenderRetCnBuilder<'n>(BuilderBricks.createNode tagName, (fun node -> BuilderBricks.checkOrUpdateNode tagName node.nodeName))
+        inherit RenderRetCnBuilder<'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName))
 
     
     type a() =

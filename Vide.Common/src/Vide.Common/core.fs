@@ -63,7 +63,7 @@ type VideApp<'v,'s,'c when 'c :> IVideContext>
     (
         content: Vide<'v,'s,'c>,
         ctxCtor: IEvaluationManager -> 'c,
-        onEvaluated: 'v -> 's option -> unit
+        onEvaluated: VideApp<'v,'s,'c> -> 'v -> 's option -> unit
     ) as this 
     =
     let mutable currValue = None
@@ -76,7 +76,7 @@ type VideApp<'v,'s,'c when 'c :> IVideContext>
     let ctx = ctxCtor(this)
 
     interface IEvaluationManager with
-        member _.RequestEvaluation() =
+        member this.RequestEvaluation() =
             if suspendEvaluation then
                 hasPendingEvaluationRequests <- true
             else
@@ -93,8 +93,7 @@ type VideApp<'v,'s,'c when 'c :> IVideContext>
                         currentState <- newState
                         isEvaluating <- false
                         evaluationCount <- evaluationCount + 1uL
-                    do onEvaluated value currentState
-                    Debug.print 10 $"Evaluation done ({evaluationCount})"
+                    do onEvaluated this value currentState
                     if hasPendingEvaluationRequests then
                         eval ()
                 do

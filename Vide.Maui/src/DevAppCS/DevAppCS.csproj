@@ -53,6 +53,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\DevApp.Demos\DevApp.Demos.fsproj" />
 	  <ProjectReference Include="..\Vide.Maui\Vide.Maui.fsproj" />
 	</ItemGroup>
 

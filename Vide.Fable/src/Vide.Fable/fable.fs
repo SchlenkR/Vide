@@ -4,6 +4,7 @@ module Vide.Fable
 open Browser
 open Browser.Types
 open Vide
+open Vide.WebModel
 
 type FableDocument() =
     interface INodeDocument<Node> with
@@ -16,11 +17,9 @@ type FableDocument() =
             [ for i in 0 .. nodes.length-1 do nodes.Item i ]
         member _.ClearContent(parent) =
             parent.textContent <- ""
-    interface IWebDocument<Node> with
-        member _.CreateNodeOfName(tagName) =
-            document.createElement tagName
         member _.CreateTextNode(text) =
             let tn = document.createTextNode(text)
+            do tn.textContent <- text
             let textNode =
                 {
                     node = tn :> Node
@@ -28,6 +27,9 @@ type FableDocument() =
                     setText = fun value -> tn.textContent <- value
                 }
             textNode
+    interface IWebDocument<Node> with
+        member _.CreateNodeOfName(tagName) =
+            document.createElement tagName
 
 type FableContext(parent, evaluationManager) =
     inherit WebContext<Node>(parent, evaluationManager, FableDocument())
@@ -41,23 +43,23 @@ type FableContext(parent, evaluationManager) =
 type ComponentRetCnBuilder() =
     inherit ComponentRetCnBaseBuilder<Node,FableContext>()
 
-type RenderValC0Builder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, createResultVal) =
-    inherit RenderValC0BaseBuilder<'v,'n,Node,FableContext>(createNode, checkOrUpdateNode, createResultVal)
+type RenderValC0Builder<'v,'n when 'n :> Node>(createNode, checkNode, createResultVal) =
+    inherit RenderValC0BaseBuilder<'v,'n,Node,FableContext>(createNode, checkNode, createResultVal)
 
-type RenderRetC0Builder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
-    inherit RenderRetC0BaseBuilder<'n,Node,FableContext>(createNode, checkOrUpdateNode)
+type RenderRetC0Builder<'n when 'n :> Node>(createNode, checkNode) =
+    inherit RenderRetC0BaseBuilder<'n,Node,FableContext>(createNode, checkNode)
 
-type RenderValC1Builder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, createResultVal) =
-    inherit RenderValC1BaseBuilder<'v,'n,Node,FableContext>(createNode, checkOrUpdateNode, createResultVal)
+type RenderValC1Builder<'v,'n when 'n :> Node>(createNode, checkNode, createResultVal) =
+    inherit RenderValC1BaseBuilder<'v,'n,Node,FableContext>(createNode, checkNode, createResultVal)
 
-type RenderRetC1Builder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
-    inherit RenderRetC1BaseBuilder<'n,Node,FableContext>(createNode, checkOrUpdateNode)
+type RenderRetC1Builder<'n when 'n :> Node>(createNode, checkNode) =
+    inherit RenderRetC1BaseBuilder<'n,Node,FableContext>(createNode, checkNode)
 
-type RenderValCnBuilder<'v,'n when 'n :> Node>(createNode, checkOrUpdateNode, createResultVal) =
-    inherit RenderValCnBaseBuilder<'v,'n,Node,FableContext>(createNode, checkOrUpdateNode, createResultVal)
+type RenderValCnBuilder<'v,'n when 'n :> Node>(createNode, checkNode, createResultVal) =
+    inherit RenderValCnBaseBuilder<'v,'n,Node,FableContext>(createNode, checkNode, createResultVal)
 
-type RenderRetCnBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
-    inherit RenderRetCnBaseBuilder<'n,Node,FableContext>(createNode, checkOrUpdateNode)
+type RenderRetCnBuilder<'n when 'n :> Node>(createNode, checkNode) =
+    inherit RenderRetCnBaseBuilder<'n,Node,FableContext>(createNode, checkNode)
 
 
 // --------------------------------------------------
@@ -65,20 +67,23 @@ type RenderRetCnBuilder<'n when 'n :> Node>(createNode, checkOrUpdateNode) =
 //          some value restriction issues
 // --------------------------------------------------
 
+module BuilderBricks =
+    let yieldFableText s = BuilderBricks.yieldText<Node, FableContext> s
+
 type ComponentRetCnBuilder with
-    member _.Yield(s) = BuilderBricks.yieldText<Node,FableContext> s
+    member _.Yield(s) = BuilderBricks.yieldFableText s
 
 type RenderValC1Builder<'v,'n when 'n :> Node> with
-    member _.Yield(s) = BuilderBricks.yieldText s
+    member _.Yield(s) = BuilderBricks.yieldFableText s
 
 type RenderRetC1Builder<'n when 'n :> Node> with
-    member _.Yield(s) = BuilderBricks.yieldText s
+    member _.Yield(s) = BuilderBricks.yieldFableText s
 
 type RenderValCnBuilder<'v,'n when 'n :> Node> with
-    member _.Yield(s) = BuilderBricks.yieldText s
+    member _.Yield(s) = BuilderBricks.yieldFableText s
 
 type RenderRetCnBuilder<'n when 'n :> Node> with
-    member _.Yield(s) = BuilderBricks.yieldText s
+    member _.Yield(s) = BuilderBricks.yieldFableText s
 
 
 // --------------------------------------------------

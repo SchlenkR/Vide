@@ -4,11 +4,19 @@ module Vide.NodeModel
 open System.Runtime.CompilerServices
 open Vide
 
+type TextNodeProxy<'n> =
+    {
+        node: 'n
+        getText: unit -> string
+        setText: string -> unit
+    }
+
 type INodeDocument<'n> =
     abstract member AppendChild : parent: 'n * child: 'n -> unit
     abstract member RemoveChild : parent: 'n * child: 'n -> unit
     abstract member GetChildNodes : parent: 'n -> 'n list
     abstract member ClearContent : parent: 'n -> unit
+    abstract member CreateTextNode : text: string -> TextNodeProxy<'n>
 
 [<AbstractClass>] 
 type NodeContext<'n when 'n: equality>
@@ -32,6 +40,11 @@ type NodeContext<'n when 'n: equality>
             |> List.iter (fun child -> document.RemoveChild(parent, child))
     member _.ClearContent() =
         do document.ClearContent(parent)
+    member this.AddTextNode(text: string) =
+        let t = document.CreateTextNode(text)
+        do this.KeepChild(t.node)
+        do document.AppendChild(parent, t.node)
+        t
 
 type INodeContextFactory<'nc,'c when 'nc: equality and 'c :> NodeContext<'nc>> =
     abstract member CreateChildCtx : 'nc -> 'c
@@ -53,11 +66,11 @@ type NodeModifier<'n,'c> = NodeModifierContext<'n,'c> -> unit
 type ModifierContext<'n,'c>
     (
         createNode: 'c -> 'n,
-        checkOrUpdateNode: 'n -> ChildAction
+        checkNode: 'n -> ChildAction
     ) =
 
     member _.CreateNode = createNode
-    member _.CheckOrUpdateNode = checkOrUpdateNode
+    member _.CheckOrUpdateNode = checkNode
 
     member val InitModifiers: ResizeArray<NodeModifier<'n,'c>> = ResizeArray() with get
     member val EvalModifiers: ResizeArray<NodeModifier<'n,'c>> = ResizeArray() with get
@@ -119,6 +132,16 @@ module BuilderBricks =
             match op with
             | Clear -> ctx.ClearContent()
             (),None
+    
+    let inline yieldText<'nc,'c when 'c :> NodeContext<'nc>>(value: string) =
+        Vide <| fun s (ctx: 'c) ->
+            let textNode = s |> Option.defaultWith (fun () -> ctx.AddTextNode(value))
+            do
+                if textNode.getText() <> value then
+                    textNode.setText(value)
+                ctx.KeepChild(textNode.node)
+            (), Some textNode
+
 
 // ---------------------------------------------------------------------------------
 // The four (+1 base) basic builders for "vide { .. }" and renderers
@@ -136,7 +159,10 @@ module BuilderBricks =
 //   + Combine,For,Delay
 // -------------------------------------------------------------------
 
-type ComponentRetCnBaseBuilder<'nc,'c when 'c :> NodeContext<'nc> and 'nc : equality>() =
+type ComponentRetCnBaseBuilder<'nc,'c
+        when 'nc : equality
+        and 'c :> NodeContext<'nc> 
+    > () =
     inherit VideBaseBuilder()
     member _.Return(x: 'v) = BuilderBricks.return'<'v,'c>(x)
     member _.Delay(f) = BuilderBricks.delay(f)
@@ -144,9 +170,9 @@ type ComponentRetCnBaseBuilder<'nc,'c when 'c :> NodeContext<'nc> and 'nc : equa
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
 
 [<AbstractClass>]
-type RenderBaseBuilder<'n,'c>(createNode, checkOrUpdateNode) =
+type RenderBaseBuilder<'n,'c>(createNode, checkNode) =
     inherit VideBaseBuilder()
-    let modifierContext = ModifierContext<'n,'c>(createNode, checkOrUpdateNode)
+    let modifierContext = ModifierContext<'n,'c>(createNode, checkNode)
     member _.ModifierContext = modifierContext
 
 type RenderValC0BaseBuilder<'v,'n,'nc,'c
@@ -154,9 +180,9 @@ type RenderValC0BaseBuilder<'v,'n,'nc,'c
         and 'c :> NodeContext<'nc>
         and 'c :> INodeContextFactory<'nc,'c>
     >
-    (createNode, checkOrUpdateNode, createResultVal: 'n -> 'v) 
+    (createNode, checkNode, createResultVal: 'n -> 'v) 
     =
-    inherit RenderBaseBuilder<'n,'c>(createNode, checkOrUpdateNode)
+    inherit RenderBaseBuilder<'n,'c>(createNode, checkNode)
     member this.Run<'v1,'s>(v: Vide<'v1,'s,'c>) =
         this.ModifierContext |> ModifierContext.apply v (fun n v -> createResultVal n)
 
@@ -165,9 +191,9 @@ type RenderRetC0BaseBuilder<'n,'nc,'c
         and 'c :> NodeContext<'nc>
         and 'c :> INodeContextFactory<'nc,'c>
     >
-    (createNode, checkOrUpdateNode) 
+    (createNode, checkNode) 
     =
-    inherit RenderBaseBuilder<'n,'c>(createNode, checkOrUpdateNode)
+    inherit RenderBaseBuilder<'n,'c>(createNode, checkNode)
     member _.Return(x) = BuilderBricks.return'(x)
     member this.Run(v) =
         this.ModifierContext |> ModifierContext.apply v (fun n v -> v)
@@ -177,9 +203,9 @@ type RenderValC1BaseBuilder<'v,'n,'nc,'c
         and 'c :> NodeContext<'nc>
         and 'c :> INodeContextFactory<'nc,'c>
     >
-    (createNode, checkOrUpdateNode, createResultVal: 'n -> 'v) 
+    (createNode, checkNode, createResultVal: 'n -> 'v) 
     =
-    inherit RenderBaseBuilder<'n,'c>(createNode, checkOrUpdateNode)
+    inherit RenderBaseBuilder<'n,'c>(createNode, checkNode)
     member this.Run<'v1,'s>(v: Vide<'v1,'s,'c>) =
         this.ModifierContext |> ModifierContext.apply v (fun n v -> createResultVal n)
 
@@ -188,9 +214,9 @@ type RenderRetC1BaseBuilder<'n,'nc,'c
         and 'c :> NodeContext<'nc>
         and 'c :> INodeContextFactory<'nc,'c>
     >
-    (createNode, checkOrUpdateNode) 
+    (createNode, checkNode) 
     =
-    inherit RenderBaseBuilder<'n,'c>(createNode, checkOrUpdateNode)
+    inherit RenderBaseBuilder<'n,'c>(createNode, checkNode)
     member _.Return(x) = BuilderBricks.return'(x)
     member this.Run(v) =
         this.ModifierContext |> ModifierContext.apply v (fun n v -> v)
@@ -200,9 +226,9 @@ type RenderValCnBaseBuilder<'v,'n,'nc,'c
         and 'c :> NodeContext<'nc>
         and 'c :> INodeContextFactory<'nc,'c>
     >
-    (createNode, checkOrUpdateNode, createResultVal: 'n -> 'v) 
+    (createNode, checkNode, createResultVal: 'n -> 'v) 
     =
-    inherit RenderBaseBuilder<'n,'c>(createNode, checkOrUpdateNode)
+    inherit RenderBaseBuilder<'n,'c>(createNode, checkNode)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
     member this.Run(v) =
@@ -213,9 +239,9 @@ type RenderRetCnBaseBuilder<'n,'nc,'c
         and 'c :> NodeContext<'nc>
         and 'c :> INodeContextFactory<'nc,'c>
     >
-    (createNode, checkOrUpdateNode) 
+    (createNode, checkNode) 
     =
-    inherit RenderBaseBuilder<'n,'c>(createNode, checkOrUpdateNode)
+    inherit RenderBaseBuilder<'n,'c>(createNode, checkNode)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
     member this.Run(v) = this.ModifierContext |> ModifierContext.apply v (fun n v -> v)

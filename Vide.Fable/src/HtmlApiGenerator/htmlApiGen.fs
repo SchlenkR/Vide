@@ -15,6 +15,7 @@ namespace Vide
 open System.Runtime.CompilerServices
 open Browser.Types
 open Vide
+open Vide.WebModel
 open Vide.HtmlApiPreparation
 
 [<AutoOpen>]
@@ -30,16 +31,16 @@ module HtmlEnumAttributeTypes =
 
 module HtmlElementBuilders =
     type HtmlGARenderValC0Builder<'v,'n when 'n :> HTMLElement and 'n: equality>(tagName, resultSelector) =
-        inherit RenderValC0Builder<'v,'n>(BuilderBricks.createNode tagName, (fun node -> BuilderBricks.checkOrUpdateNode tagName node.nodeName), resultSelector)
+        inherit RenderValC0Builder<'v,'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName), resultSelector)
 
     type HtmlGARenderRetC0Builder<'n when 'n :> HTMLElement and 'n: equality>(tagName) =
-        inherit RenderRetC0Builder<'n>(BuilderBricks.createNode tagName, (fun node -> BuilderBricks.checkOrUpdateNode tagName node.nodeName))
+        inherit RenderRetC0Builder<'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName))
 
     type HtmlGARenderValCnBuilder<'v,'n when 'n :> HTMLElement and 'n: equality>(tagName, resultSelector) =
-        inherit RenderValCnBuilder<'v,'n>(BuilderBricks.createNode tagName, (fun node -> BuilderBricks.checkOrUpdateNode tagName node.nodeName), resultSelector)
+        inherit RenderValCnBuilder<'v,'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName), resultSelector)
 
     type HtmlGARenderRetCnBuilder<'n when 'n :> HTMLElement and 'n: equality>(tagName) =
-        inherit RenderRetCnBuilder<'n>(BuilderBricks.createNode tagName, (fun node -> BuilderBricks.checkOrUpdateNode tagName node.nodeName))
+        inherit RenderRetCnBuilder<'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName))
 
     {{for builder in builders}}{{builder.definition}}{{end}}
 
@@ -62,12 +63,12 @@ type {{ext.builderName}}Extensions =
 {{evt.xmlDoc}}
         [<Extension>]
         static member {{evt.memberName}}(this: {{ext.builderParamTypeAnnotation}}, handler) =
-            this.OnEval(fun x -> x.node.{{evt.name}} <- Event.handle (x.node :> Node) x.context handler)
+            this.OnEval(fun x -> x.node.{{evt.name}} <- Event.handle x.node x.context handler)
 
 {{evt.xmlDoc}}
         [<Extension>]
         static member {{evt.memberName}}(this: {{ext.builderParamTypeAnnotation}}, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.{{evt.name}} <- Event.handle (x.node :> Node) x.context (fun args ->
+            this.OnEval(fun x -> x.node.{{evt.name}} <- Event.handle x.node x.context (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         {{end}}
     end
