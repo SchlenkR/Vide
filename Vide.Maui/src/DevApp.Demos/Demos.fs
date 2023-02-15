@@ -17,12 +17,23 @@ let noVideDemo () =
 let simpleVideDemo () =
     vide {
         P<StackLayout>(fun sl ->
-            sl.Orientation <- StackOrientation.Horizontal) {
-            V<Label>(fun l -> l.Text <- "Label 1")
-            V<Label>(fun l -> l.Text <- "Label 2")
-            V<Label>(fun l -> l.Text <- "Label 3")
-            V<Button>(fun b -> b.Text <- "Label 3")
-        }
+            sl.HorizontalOptions <- LayoutOptions.Center
+            sl.VerticalOptions <- LayoutOptions.Center) {
+                let! count = Vide.ofMutable 0
+
+                P<StackLayout>(fun sl ->
+                    sl.Orientation <- StackOrientation.Horizontal) {
+                        V<Label>(fun l -> l.Text <- "Click count: ")
+                        V<Label>(fun l -> 
+                            l.Text <- count.Value.ToString()
+                            l.FontAttributes <- FontAttributes.Bold)
+                }
+                
+                V<Button>(fun b -> 
+                    b.Text <- "Click me!"
+                    b.Margin <- Microsoft.Maui.Thickness(0, 5))
+                    .OnInit(fun x -> x.node.Clicked.Add(fun _ -> count.Value <- count.Value + 1))
+            }
     }
 
 let start demo = 
