@@ -5,6 +5,7 @@
 
   <PropertyGroup>
     <PackageId>Vide.Common</PackageId>
+    <DefineConstants>USE_MUTABLE_OPERATORS</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

@@ -30,7 +30,8 @@ module MutableValue =
         member this.Value
             with get() = state
             and set(value) = this.Set(value)
-        
+
+#if USE_MUTABLE_OPERATORS
         // Operators
         static member inline ( + ) (this: MutableValue<'v>, v: 'v) = this.Value + v
         static member inline ( - ) (this: MutableValue<'v>, v: 'v) = this.Value - v
@@ -46,6 +47,7 @@ module MutableValue =
     let inline ( := ) (mutVal: MutableValue<_>) x = mutVal.Value <- x
     
     // TODO: override arithmetic ops
+#endif
 
 type IVideContext =
     abstract member EvaluationManager: IEvaluationManager

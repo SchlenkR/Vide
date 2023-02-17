@@ -1,16 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Vide\WebSharper.fs" />
-    <Compile Include="Vide\HtmlApiPreparation.fs" />
-    <Compile Include="Vide\HtmlApi.fs" />
-    <Compile Include="Client.fs" />
-    <Compile Include="Startup.fs" />
-    <None Include="wsconfig.json" />
+    <Compile Include="..\..\..\Vide.Common\src\Vide.Common\core.fs" Link="Vide.Common\core.fs" />
+    <Compile Include="..\..\..\Vide.Common\src\Vide.Common\NodeModel.fs" Link="Vide.Common\NodeModel.fs" />
+    <Compile Include="..\..\..\Vide.Common\src\Vide.Common\WebModel.fs" Link="Vide.Common\WebModel.fs" />
+    <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="WebSharper.fs" />
+    <Compile Include="HtmlApiPreparation.fs" />
+    <Compile Include="HtmlApi.fs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Vide.Common\src\Vide.Common\Vide.Common.fsproj" />
+    <Folder Include="Vide.Common\" />
   </ItemGroup>
 
 </Project>

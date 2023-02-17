@@ -4,7 +4,6 @@ open Microsoft.Extensions.Hosting
 open Microsoft.AspNetCore.Http
 open Microsoft.Extensions.DependencyInjection
 open WebSharper.AspNetCore
-open Vide.WebSharper
 
 [<EntryPoint>]
 let main args =
