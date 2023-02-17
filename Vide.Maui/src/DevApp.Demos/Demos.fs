@@ -43,7 +43,7 @@ let simpleVideDemo () =
 let start demo = 
     let host = ContentView()
     let app =
-        VideApp.create
+        VideApp.createMaui
             host 
             demo 
             (fun app v s -> printfn $"Evaluated {app.EvaluationManager.EvaluationCount} times.")
