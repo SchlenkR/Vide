@@ -9,7 +9,7 @@
 
   <ItemGroup>
 	  <Compile Include="Maui.fs" />
-	  <Compile Include="GenericApiTest.fs" />
+	  <Compile Include="GenericMauiApi.fs" />
 	</ItemGroup>
 
 	<ItemGroup>
