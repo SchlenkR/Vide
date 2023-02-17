@@ -21,6 +21,11 @@ let simpleVideDemo () =
             sl.VerticalOptions <- LayoutOptions.Center) {
                 let! count = Vide.ofMutable 0
 
+                P<StackLayout>() {
+                    for x in 0..5 do
+                        V<Label>(fun l -> l.Text <- $"For loop at index {x}")
+                }
+
                 P<StackLayout>(fun sl ->
                     sl.Orientation <- StackOrientation.Horizontal) {
                         V<Label>(fun l -> l.Text <- "Click count: ")

@@ -104,7 +104,9 @@ module Vide =
 
 module VideApp =
     let inline doCreate appCtor (host: #Node) (content: Vide<'v,'s,FableContext>) onEvaluated =
-        let content = RenderRetC1Builder((fun _ -> host), fun _ -> Keep) { content }
+        let content = 
+            // TODO: Really a ContentBuilder? Why?
+            RenderRetCnBuilder((fun _ -> host), fun _ -> Keep) { content }
         let ctxCtor = fun eval -> FableContext(host, eval)
         appCtor content ctxCtor onEvaluated
     let createFable host content onEvaluated =
