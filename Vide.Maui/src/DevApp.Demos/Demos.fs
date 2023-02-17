@@ -2,8 +2,7 @@
 
 open Microsoft.Maui.Controls
 open Vide
-open Vide.Maui
-open Vide.Maui.GenericApiTest
+open Vide.GenericMauiApi
 
 let noVideDemo () =
     let cp = ContentPage()
@@ -44,7 +43,7 @@ let simpleVideDemo () =
 let start demo = 
     let host = ContentView()
     let app =
-        VideApp.createMaui
+        VideApp.create
             host 
             demo 
             (fun app v s -> printfn $"Evaluated {app.EvaluationManager.EvaluationCount} times.")

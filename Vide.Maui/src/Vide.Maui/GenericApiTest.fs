@@ -1,4 +1,4 @@
-﻿namespace Vide.Maui.GenericApiTest
+﻿namespace Vide.GenericMauiApi
 
 open System
 open System.Collections.Generic
@@ -6,7 +6,6 @@ open Microsoft.Maui
 open Microsoft.Maui.Controls
 open Vide
 open Vide.WpfishModel
-open Vide.Maui
 
 module Helper =
     let registerCtor (this: RenderBaseBuilder<_,_>) onEval = 

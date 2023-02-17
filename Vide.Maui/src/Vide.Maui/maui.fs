@@ -1,4 +1,5 @@
-﻿namespace Vide.Maui
+﻿[<AutoOpen>]
+module Vide.Maui
 
 open System
 open System.Collections.Generic
@@ -92,30 +93,6 @@ type RenderRetCnBuilder<'n when 'n :> IView>(createNode, checkNode) =
 
 
 // --------------------------------------------------
-// Yields - We have to is here because of 
-//          some value restriction issues
-// --------------------------------------------------
-
-module BuilderBricks =
-    let yieldMauiText s = BuilderBricks.yieldText<IView,MauiContext> s
-
-type ComponentRetCnBuilder with
-    member _.Yield(s) = BuilderBricks.yieldMauiText s
-
-type RenderValC1Builder<'v,'n when 'n :> IView> with
-    member _.Yield(s) = BuilderBricks.yieldMauiText s
-
-type RenderRetC1Builder<'n when 'n :> IView> with
-    member _.Yield(s) = BuilderBricks.yieldMauiText s
-
-type RenderValCnBuilder<'v,'n when 'n :> IView> with
-    member _.Yield(s) = BuilderBricks.yieldMauiText s
-
-type RenderRetCnBuilder<'n when 'n :> IView> with
-    member _.Yield(s) = BuilderBricks.yieldMauiText s
-
-
-// --------------------------------------------------
 // Specialized vide functions
 // --------------------------------------------------
 
@@ -143,6 +120,4 @@ module VideApp =
     let createMauiWithObjState host content onEvaluated =
         doCreate VideApp.createWithUntypedState host content onEvaluated
 
-[<AutoOpen>]
-module Defaults =
-    let vide = ComponentRetCnBuilder()
+let vide = ComponentRetCnBuilder()

@@ -63,30 +63,6 @@ type RenderRetCnBuilder<'n when 'n :> Node>(createNode, checkNode) =
 
 
 // --------------------------------------------------
-// Yields - We have to is here because of 
-//          some value restriction issues
-// --------------------------------------------------
-
-module BuilderBricks =
-    let yieldFableText s = BuilderBricks.yieldText<Node, FableContext> s
-
-type ComponentRetCnBuilder with
-    member _.Yield(s) = BuilderBricks.yieldFableText s
-
-type RenderValC1Builder<'v,'n when 'n :> Node> with
-    member _.Yield(s) = BuilderBricks.yieldFableText s
-
-type RenderRetC1Builder<'n when 'n :> Node> with
-    member _.Yield(s) = BuilderBricks.yieldFableText s
-
-type RenderValCnBuilder<'v,'n when 'n :> Node> with
-    member _.Yield(s) = BuilderBricks.yieldFableText s
-
-type RenderRetCnBuilder<'n when 'n :> Node> with
-    member _.Yield(s) = BuilderBricks.yieldFableText s
-
-
-// --------------------------------------------------
 // Specialized vide functions
 // --------------------------------------------------
 

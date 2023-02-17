@@ -127,8 +127,8 @@ module BuilderBricks =
     let inline yieldVide(v: Vide<_,_,_>) =
         v
     
-    let inline yieldBuilderOp(op: BuilderOperations) =
-        Vide <| fun s (ctx: #NodeContext<_>) ->
+    let inline yieldBuilderOp<'nc,'c when 'c :> NodeContext<'nc>>(op: BuilderOperations) =
+        Vide <| fun s (ctx: 'c) ->
             match op with
             | Clear -> ctx.ClearContent()
             (),None
@@ -248,12 +248,23 @@ type RenderRetCnBaseBuilder<'n,'nc,'c
     member _.Return(x) = BuilderBricks.return'(x)
 
 
-
 // -------------------------------------------------------------------
 // "Yielsd"s 
 //     - every Content builder should bind every other builder)
 //     - standard yields
 // -------------------------------------------------------------------
+
+type ComponentRetCnBaseBuilder<'nc,'c
+        when 'c :> NodeContext<'nc> 
+        and 'nc : equality
+    > with
+    member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
+    member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
+    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
+    member _.Yield(v) = BuilderBricks.yieldVide(v)
+    member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
+    member _.Yield(op) = BuilderBricks.yieldText<'nc,'c>(op)
 
 type RenderRetC1BaseBuilder<'n,'nc,'c
         when 'nc: equality
@@ -264,8 +275,22 @@ type RenderRetC1BaseBuilder<'n,'nc,'c
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
+    member _.Yield(v) = BuilderBricks.yieldVide v
+    member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
+    member _.Yield(op) = BuilderBricks.yieldText<'nc,'c>(op)
+    
+type RenderValC1BaseBuilder<'v,'n,'nc,'c
+        when 'nc: equality
+        and 'c :> NodeContext<'nc>
+        and 'c :> INodeContextFactory<'nc,'c>
+    > with
+    member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
+    member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
+    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
-    member _.Yield(op) = BuilderBricks.yieldBuilderOp op
+    member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
+    member _.Yield(op) = BuilderBricks.yieldText<'nc,'c>(op)
 
 type RenderRetCnBaseBuilder<'n,'nc,'c
         when 'nc: equality
@@ -277,19 +302,23 @@ type RenderRetCnBaseBuilder<'n,'nc,'c
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
-    member _.Yield(op) = BuilderBricks.yieldBuilderOp op
+    member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
+    member _.Yield(op) = BuilderBricks.yieldText<'nc,'c>(op)
 
-type ComponentRetCnBaseBuilder<'nc,'c
-        when 'c :> NodeContext<'nc> 
-        and 'nc : equality
+type RenderValCnBaseBuilder<'v,'n,'nc,'c
+        when 'nc: equality
+        and 'c :> NodeContext<'nc>
+        and 'c :> INodeContextFactory<'nc,'c>
     > with
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
-    member _.Yield(op) = BuilderBricks.yieldBuilderOp op
+    member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
+    member _.Yield(op) = BuilderBricks.yieldText<'nc,'c>(op)
 
+    
 // ----------------------------------------------------------------------------
 // "Bind"s (every Content builder can bind every builder that returns values)
 // ----------------------------------------------------------------------------
