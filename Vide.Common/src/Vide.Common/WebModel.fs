@@ -29,7 +29,7 @@ module BuilderHelper =
         ctx.AddNodeOfName<'n>(elemName)
     
     let checkNode expectedNodeName (actualNodeName: string) =
-        match actualNodeName.Equals(expectedNodeName, StringComparison.OrdinalIgnoreCase) with
+        match actualNodeName = expectedNodeName with
         | true -> Keep
         | false ->
             // TODO: if/else detection? Expected node name: {expectedNodeName}, but was: {actualNodeName}"

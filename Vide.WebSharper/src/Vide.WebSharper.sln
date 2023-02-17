@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Common", "..\..\Vide.Common\src\Vide.Common\Vide.Common.fsproj", "{6968D15F-8038-475E-B5CB-D63DF4E90331}"
-EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.WebSharper", "Vide.WebSharper\Vide.WebSharper.fsproj", "{FB12E11D-84DF-46B2-AFBB-6A02AA3DB412}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Fable", "Fable", "{CA5C7B7E-51B8-4C07-BFD7-210C41731216}"
@@ -26,10 +24,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6968D15F-8038-475E-B5CB-D63DF4E90331}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6968D15F-8038-475E-B5CB-D63DF4E90331}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6968D15F-8038-475E-B5CB-D63DF4E90331}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6968D15F-8038-475E-B5CB-D63DF4E90331}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FB12E11D-84DF-46B2-AFBB-6A02AA3DB412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FB12E11D-84DF-46B2-AFBB-6A02AA3DB412}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB12E11D-84DF-46B2-AFBB-6A02AA3DB412}.Release|Any CPU.ActiveCfg = Release|Any CPU

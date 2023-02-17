@@ -14,10 +14,24 @@ do Debug.enabledDebugChannels <-
 
 let mutable currentApp = None
 
+//module VideApp =
+//    let inline doCreate appCtor (host: #Node) (content: Vide<'v,'s,WebSharperContext>) onEvaluated =
+//        let content = RenderRetC1Builder((fun _ -> host), fun _ -> Keep) { content }
+//        let ctxCtor = fun eval -> WebSharperContext(host, eval)
+//        appCtor content ctxCtor onEvaluated
+//    let createWebSharper host content onEvaluated =
+//        doCreate VideApp.create host content onEvaluated
+//    let createWebSharperWithObjState host content onEvaluated =
+//        doCreate VideApp.createWithUntypedState host content onEvaluated
+
+
 let demos = 
     let inline start content host =
         let content = content |> Vide.map ignore
-        let app = VideApp.createWebSharperWithObjState host content (fun _ _ _ -> ())
+        let app =
+            let content = RenderRetC1Builder((fun _ -> host), fun _ -> Keep) { content }
+            let ctxCtor = fun eval -> WebSharperContext(host, eval)
+            VideApp.createWithUntypedState content ctxCtor (fun _ _ _ -> ())
         do currentApp <- Some app
         do app.EvaluationManager.RequestEvaluation()
     let demos =

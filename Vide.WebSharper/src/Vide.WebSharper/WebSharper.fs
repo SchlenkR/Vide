@@ -120,14 +120,15 @@ module Vide =
             // TODO: OUCH!!! Was ist da los - wieso bekomme ich das nicht besser hin?
             ctx.Parent :?> 'n,None
 
-module VideApp =
-    let inline doCreate appCtor (host: #Node) (content: Vide<'v,'s,WebSharperContext>) onEvaluated =
-        let content = RenderRetC1Builder((fun _ -> host), fun _ -> Keep) { content }
-        let ctxCtor = fun eval -> WebSharperContext(host, eval)
-        appCtor content ctxCtor onEvaluated
-    let createWebSharper host content onEvaluated =
-        doCreate VideApp.create host content onEvaluated
-    let createWebSharperWithObjState host content onEvaluated =
-        doCreate VideApp.createWithUntypedState host content onEvaluated
+// TODO: Doesn't compile in WebSharper
+//module VideApp =
+//    let inline doCreate appCtor (host: #Node) (content: Vide<'v,'s,WebSharperContext>) onEvaluated =
+//        let content = RenderRetC1Builder((fun _ -> host), fun _ -> Keep) { content }
+//        let ctxCtor = fun eval -> WebSharperContext(host, eval)
+//        appCtor content ctxCtor onEvaluated
+//    let createWebSharper host content onEvaluated =
+//        doCreate VideApp.create host content onEvaluated
+//    let createWebSharperWithObjState host content onEvaluated =
+//        doCreate VideApp.createWithUntypedState host content onEvaluated
 
 let vide = ComponentRetCnBuilder()

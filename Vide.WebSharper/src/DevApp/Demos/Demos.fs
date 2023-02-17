@@ -16,15 +16,15 @@ module GettingStarted =
             let! count = Vide.ofMutable 0
 
             div { $"Count = {count.Value}" }
-            button.onclick(fun _ -> count -= 1) { "dec" }
-            button.onclick(fun _ -> count += 1) { "inc" }
+            button.onclick(fun _ -> count.Value <- count.Value - 1) { "dec" }
+            button.onclick(fun _ -> count.Value <- count.Value + 1) { "inc" }
         }
 
     let conditionalAttributes =
         vide {
             let! count = Vide.ofMutable 0
 
-            button.onclick(fun _ -> count += 1) {
+            button.onclick(fun _ -> count.Value <- count.Value + 1) {
                 $"Hit me! Count = {count.Value}"
             }
             div.class'("the-message") {
@@ -38,7 +38,7 @@ module GettingStarted =
         vide {
             let! count = Vide.ofMutable 0
 
-            button.onclick(fun _ -> count += 1) {
+            button.onclick(fun _ -> count.Value <- count.Value + 1) {
                 $"Hit me! Count = {count.Value}"
             }
 
@@ -68,7 +68,7 @@ module GettingStarted =
         vide {
             let! count = Vide.ofMutable 0
 
-            button.onclick(fun _ -> count += 1) {
+            button.onclick(fun _ -> count.Value <- count.Value + 1) {
                 $"Hit me! Count = {count.Value}"
             }
 
@@ -94,9 +94,9 @@ module GettingStarted =
         let nextNum() = System.Random().Next(10000)
         vide {
             let! items = Vide.ofMutable []
-            let add1 _ = items := items.Value @ [nextNum()]
-            let add100 _ = items := items.Value @ [ for _ in 0..100 do nextNum() ]
-            let removeAll _ = items :=  []
+            let add1 _ = items.Value <- items.Value @ [nextNum()]
+            let add100 _ = items.Value <- items.Value @ [ for _ in 0..100 do nextNum() ]
+            let removeAll _ = items.Value <-  []
 
             button.onclick(add1) { "Add One" }
             button.onclick(add100) { "Add 100" }
@@ -104,7 +104,7 @@ module GettingStarted =
         
             for x in items.Value do
                 div.class'("card") {
-                    let removeMe _ = items := items.Value |> List.except [x]
+                    let removeMe _ = items.Value <- items.Value |> List.except [x]
                     button.onclick(removeMe) { $"Remove {x}" }
             }
         }
@@ -113,9 +113,9 @@ module GettingStarted =
         let nextNum() = System.Random().Next(10000)
         vide {
             let! items = Vide.ofMutable []
-            let add1 _ = items := items.Value @ [nextNum()]
-            let add100 _ = items := items.Value @ [ for _ in 0..100 do nextNum() ]
-            let removeAll _ = items := []
+            let add1 _ = items.Value <- items.Value @ [nextNum()]
+            let add100 _ = items.Value <- items.Value @ [ for _ in 0..100 do nextNum() ]
+            let removeAll _ = items.Value <- []
 
             button.onclick(add1) { "Add One" }
             button.onclick(add100) { "Add 100" }
@@ -123,13 +123,13 @@ module GettingStarted =
         
             for x in items.Value do
                 div.class'("card") {
-                    let removeMe _ = items := items.Value |> List.except [x]
+                    let removeMe _ = items.Value <- items.Value |> List.except [x]
                     button.onclick(removeMe) { $"Remove {x}" }
 
                     let! count = Vide.ofMutable 0
-                    button.onclick(fun _ -> count -= 1) { "dec" }
+                    button.onclick(fun _ -> count.Value <- count.Value - 1) { "dec" }
                     $"{count.Value}  "
-                    button.onclick(fun _ -> count += 1) { "inc" }
+                    button.onclick(fun _ -> count.Value <- count.Value + 1) { "inc" }
             }
         }
 
@@ -175,8 +175,8 @@ module Components =
             vide {
                 let! count = Vide.ofMutable 0
 
-                button.onclick(fun _ -> count -= 1) { "dec" }
-                button.onclick(fun _ -> count += 1) { "inc" }
+                button.onclick(fun _ -> count.Value <- count.Value - 1) { "dec" }
+                button.onclick(fun _ -> count.Value <- count.Value + 1) { "inc" }
 
                 return count.Value
             }
@@ -287,7 +287,7 @@ module Async =
             }
         
             let! componentResult = myAsyncComponent
-            currRes := componentResult
+            currRes.Value <- componentResult
         }
 
 
