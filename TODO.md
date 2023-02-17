@@ -1,36 +1,18 @@
 
-* "Resetting" views
-* Optimize "EvaluateView"
-* Events: Immer auch den Context mitgeben
-* Perf
-  * inline (if lambda)
-  * diffing
-  * instead of storing attr and events in the builder, they should have a direct effect on the underlying HTMLElement
-* Samples
-    * Conditional Attributes
-    * Conditional Elements
-    * Elements list + Remove from within element
-    * State-Verschachtelungen (z.B. div in div mit jeweils State) oder State-In-List
-* RawSpan
-* All HTML API
-* inputs
-* Docu: Das geht so nicht - Trigger erklären!
-        let! currentItems = Mutable.ofValue (ResizeArray())
-        let addItem item = currentItems.value.Add(item)
-        let removeItem item = currentItems.value.Remove(item) |> ignore
-* Docu: Operators (+=, :=,. etc)        
-* start: resolve issue "eventRemovalWorkaround with mutableLists example"
-* Input, checkbox, etc.
-* Vide as no single case DU -> inlineIfLambda
-* Module / NS restructuring
-* Access HTMLElement from builder wirh let! or via map/iter
-* SVG API
-
-
-----------------------------
+New Ideas / Brainstorm
+---
 
 * onRender (direct html element access), onMount, onUnmount
 * timer / Observables
+* SVG API
+* Vide als .fsx file und dann einen C# SourceGen
+
+
+Useful (already discovered)
+---
+
+* "Resetting" views
+* RawSpan / Way of emitting HTML (not only text)
 * async
     * Restart- und Retrigger-Verhalten
     * CancellationToken
@@ -42,8 +24,7 @@
     * UseCase: See AsyncWithSubsequentCalls
         // TODO: Interesting use case for component result
         // handling and ordering / evaluation
-
-Components
+* Components
     * reset component / state from outside
     * Templates / slots
     * Provide an "element" function
@@ -56,6 +37,50 @@ Components
         * RenderComponents (die die direkt auf ctx zugreuif)
     * Gutes Beispiel: Aus "input" eine "checkbox"-Komponente machen
     * Components with events
+
+
+
+Performance / Optimizations / Robustheit
+---
+
+* Optimize "EvaluateView"
+* Perf
+  * inline (if lambda)
+  * diffing
+  * instead of storing attr and events in the builder, they should have a direct effect on the underlying HTMLElement
+* MemLeaks bei evt reg?
+
+
+Samples
+---
+* Conditional Attributes
+* Conditional Elements
+* Elements list + Remove from within element
+* State-Verschachtelungen (z.B. div in div mit jeweils State) oder State-In-List
+
+
+Docu
+---
+
+* Operators (+=, :=,. etc)        
+* Docu: Das geht so nicht - Trigger erklären!
+        let! currentItems = Mutable.ofValue (ResizeArray())
+        let addItem item = currentItems.value.Add(item)
+        let removeItem item = currentItems.value.Remove(item) |> ignore
+* Access HTMLElement from builder wirh let! or via map/iter
+
+
+
+Propably not
+---
+* Vide as no single case DU -> inlineIfLambda
+
+
+
+
+----------------------------
+
+
 
 * HTML Api
     * globals as base class
@@ -79,27 +104,15 @@ Components
     * input: checked / radio / etc.
     * form elements
 
-* MemLeaks bei evt reg?
-
-* Way of emitting HTML (not only text)
 * "Placeholder": A box that can be used later to place elements into
 
---------
 
-Docu: We need "nothing" (that's F#)
-    div.className("the-message") {
-        nothing
-    }
-
-
------
-
-# HTML Api Gen
+HTML Api Gen
+---
 
 * Don't call just ToString for attr values
 * Enum types
 * Choice types
-* boolean enums ("hidden")
 * events not as hardcoded list
 * type and member docu
 * elem.attrs.attrs |> List.distinctBy (fun a -> a.name)
@@ -107,9 +120,4 @@ Docu: We need "nothing" (that's F#)
     let x1 = X()config..myProp()
     let x2 = X(myProp = 12).attrs.myProp()
     let x2 = X(myProp = 12).attrs.myProp()
-
-# Ideen
-
-* Vide als .fsx file und dann einen C# SourceGen
-
 
