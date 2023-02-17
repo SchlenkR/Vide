@@ -28,8 +28,10 @@ module BuilderHelper =
     let createNode elemName (ctx: #WebContext<_>) =
         ctx.AddNodeOfName<'n>(elemName)
     
-    let checkNode expectedNodeName (actualNodeName: string) =
-        match actualNodeName = expectedNodeName with
+    let checkNode (expectedNodeName: string) (actualNodeName: string) =
+        // WebSharper has no Equals(.., StrComp) available, so we use this
+        // which is enough for HTML element tags.
+        match actualNodeName.ToUpper() = expectedNodeName.ToUpper() with
         | true -> Keep
         | false ->
             // TODO: if/else detection? Expected node name: {expectedNodeName}, but was: {actualNodeName}"
