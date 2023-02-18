@@ -1,5 +1,7 @@
 module DevApp.App
 
+()
+(*
 open Browser.Dom
 open Browser.Types
 open Fable.Core.JS
@@ -199,3 +201,4 @@ document.getElementById("evaluate").onclick <- fun _ ->
 
 document.getElementById("logState").onclick <- fun _ ->
     currentApp |> Option.iter (fun app -> console.log(app))
+*)

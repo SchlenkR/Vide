@@ -977,595 +977,595 @@ type HtmlGARenderValC0BuilderExtensions =
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onblur <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onblur <- Event.handle x.node x.services handler)
 
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onblur <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onblur <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onchange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onchange <- Event.handle x.node x.services handler)
 
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onchange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onchange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.oncontextmenu <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncontextmenu <- Event.handle x.node x.services handler)
 
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncontextmenu <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncontextmenu <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onfocus <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onfocus <- Event.handle x.node x.services handler)
 
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onfocus <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onfocus <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.oninput <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oninput <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oninput <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oninput <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onreset <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onreset <- Event.handle x.node x.services handler)
 
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onreset <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onreset <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onselect <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onselect <- Event.handle x.node x.services handler)
 
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onselect <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onselect <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onsubmit <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onsubmit <- Event.handle x.node x.services handler)
 
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onsubmit <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onsubmit <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onkeydown <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onkeydown <- Event.handle x.node x.services handler)
 
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onkeydown <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onkeydown <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onkeypress <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onkeypress <- Event.handle x.node x.services handler)
 
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onkeypress <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onkeypress <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onkeyup <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onkeyup <- Event.handle x.node x.services handler)
 
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onkeyup <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onkeyup <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onclick <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onclick <- Event.handle x.node x.services handler)
 
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onclick <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onclick <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ondblclick <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondblclick <- Event.handle x.node x.services handler)
 
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondblclick <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondblclick <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onmousedown <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmousedown <- Event.handle x.node x.services handler)
 
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmousedown <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmousedown <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onmousemove <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmousemove <- Event.handle x.node x.services handler)
 
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmousemove <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmousemove <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onmouseout <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmouseout <- Event.handle x.node x.services handler)
 
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmouseout <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmouseout <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onmouseover <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmouseover <- Event.handle x.node x.services handler)
 
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmouseover <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmouseover <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onmouseup <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmouseup <- Event.handle x.node x.services handler)
 
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmouseup <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmouseup <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onmousewheel <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmousewheel <- Event.handle x.node x.services handler)
 
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmousewheel <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmousewheel <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onwheel <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onwheel <- Event.handle x.node x.services handler)
 
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onwheel <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onwheel <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ondrag <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondrag <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondrag <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondrag <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ondragend <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragend <- Event.handle x.node x.services handler)
 
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragend <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragend <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ondragenter <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragenter <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragenter <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragenter <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ondragleave <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragleave <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragleave <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragleave <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ondragover <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragover <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragover <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragover <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ondragstart <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragstart <- Event.handle x.node x.services handler)
 
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragstart <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragstart <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ondrop <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondrop <- Event.handle x.node x.services handler)
 
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondrop <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondrop <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onscroll <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onscroll <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onscroll <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onscroll <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.oncopy <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncopy <- Event.handle x.node x.services handler)
 
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncopy <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncopy <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.oncut <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncut <- Event.handle x.node x.services handler)
 
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncut <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncut <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onpaste <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onpaste <- Event.handle x.node x.services handler)
 
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onpaste <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onpaste <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onabort <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onabort <- Event.handle x.node x.services handler)
 
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onabort <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onabort <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.oncanplay <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncanplay <- Event.handle x.node x.services handler)
 
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncanplay <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncanplay <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.oncanplaythrough <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncanplaythrough <- Event.handle x.node x.services handler)
 
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncanplaythrough <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncanplaythrough <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.oncuechange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncuechange <- Event.handle x.node x.services handler)
 
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncuechange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncuechange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ondurationchange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondurationchange <- Event.handle x.node x.services handler)
 
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondurationchange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondurationchange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onemptied <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onemptied <- Event.handle x.node x.services handler)
 
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onemptied <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onemptied <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onended <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onended <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onended <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onended <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onerror <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onerror <- Event.handle x.node x.services handler)
 
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onerror <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onerror <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onloadeddata <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onloadeddata <- Event.handle x.node x.services handler)
 
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onloadeddata <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onloadeddata <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onloadedmetadata <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onloadedmetadata <- Event.handle x.node x.services handler)
 
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onloadedmetadata <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onloadedmetadata <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onloadstart <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onloadstart <- Event.handle x.node x.services handler)
 
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onloadstart <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onloadstart <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onpause <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onpause <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onpause <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onpause <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onplay <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onplay <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onplay <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onplay <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onplaying <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onplaying <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onplaying <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onplaying <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onprogress <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onprogress <- Event.handle x.node x.services handler)
 
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onprogress <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onprogress <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onratechange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onratechange <- Event.handle x.node x.services handler)
 
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onratechange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onratechange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onseeked <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onseeked <- Event.handle x.node x.services handler)
 
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onseeked <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onseeked <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onseeking <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onseeking <- Event.handle x.node x.services handler)
 
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onseeking <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onseeking <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onstalled <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onstalled <- Event.handle x.node x.services handler)
 
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onstalled <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onstalled <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onsuspend <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onsuspend <- Event.handle x.node x.services handler)
 
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onsuspend <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onsuspend <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ontimeupdate <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ontimeupdate <- Event.handle x.node x.services handler)
 
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ontimeupdate <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ontimeupdate <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onvolumechange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onvolumechange <- Event.handle x.node x.services handler)
 
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onvolumechange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onvolumechange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onwaiting <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onwaiting <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onwaiting <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onwaiting <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
     end
@@ -1676,595 +1676,595 @@ type HtmlGARenderRetC0BuilderExtensions =
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onblur <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onblur <- Event.handle x.node x.services handler)
 
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onblur <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onblur <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onchange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onchange <- Event.handle x.node x.services handler)
 
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onchange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onchange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.oncontextmenu <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncontextmenu <- Event.handle x.node x.services handler)
 
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncontextmenu <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncontextmenu <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onfocus <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onfocus <- Event.handle x.node x.services handler)
 
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onfocus <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onfocus <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.oninput <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oninput <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oninput <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oninput <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onreset <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onreset <- Event.handle x.node x.services handler)
 
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onreset <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onreset <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onselect <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onselect <- Event.handle x.node x.services handler)
 
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onselect <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onselect <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onsubmit <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onsubmit <- Event.handle x.node x.services handler)
 
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onsubmit <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onsubmit <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onkeydown <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onkeydown <- Event.handle x.node x.services handler)
 
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onkeydown <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onkeydown <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onkeypress <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onkeypress <- Event.handle x.node x.services handler)
 
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onkeypress <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onkeypress <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onkeyup <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onkeyup <- Event.handle x.node x.services handler)
 
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onkeyup <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onkeyup <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onclick <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onclick <- Event.handle x.node x.services handler)
 
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onclick <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onclick <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.ondblclick <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondblclick <- Event.handle x.node x.services handler)
 
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondblclick <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondblclick <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onmousedown <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmousedown <- Event.handle x.node x.services handler)
 
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmousedown <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmousedown <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onmousemove <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmousemove <- Event.handle x.node x.services handler)
 
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmousemove <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmousemove <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onmouseout <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmouseout <- Event.handle x.node x.services handler)
 
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmouseout <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmouseout <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onmouseover <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmouseover <- Event.handle x.node x.services handler)
 
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmouseover <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmouseover <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onmouseup <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmouseup <- Event.handle x.node x.services handler)
 
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmouseup <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmouseup <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onmousewheel <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmousewheel <- Event.handle x.node x.services handler)
 
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmousewheel <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmousewheel <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onwheel <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onwheel <- Event.handle x.node x.services handler)
 
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onwheel <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onwheel <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.ondrag <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondrag <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondrag <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondrag <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.ondragend <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragend <- Event.handle x.node x.services handler)
 
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragend <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragend <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.ondragenter <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragenter <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragenter <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragenter <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.ondragleave <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragleave <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragleave <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragleave <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.ondragover <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragover <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragover <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragover <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.ondragstart <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragstart <- Event.handle x.node x.services handler)
 
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragstart <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragstart <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.ondrop <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondrop <- Event.handle x.node x.services handler)
 
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondrop <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondrop <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onscroll <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onscroll <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onscroll <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onscroll <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.oncopy <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncopy <- Event.handle x.node x.services handler)
 
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncopy <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncopy <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.oncut <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncut <- Event.handle x.node x.services handler)
 
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncut <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncut <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onpaste <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onpaste <- Event.handle x.node x.services handler)
 
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onpaste <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onpaste <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onabort <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onabort <- Event.handle x.node x.services handler)
 
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onabort <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onabort <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.oncanplay <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncanplay <- Event.handle x.node x.services handler)
 
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncanplay <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncanplay <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.oncanplaythrough <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncanplaythrough <- Event.handle x.node x.services handler)
 
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncanplaythrough <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncanplaythrough <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.oncuechange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncuechange <- Event.handle x.node x.services handler)
 
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncuechange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncuechange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.ondurationchange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondurationchange <- Event.handle x.node x.services handler)
 
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondurationchange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondurationchange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onemptied <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onemptied <- Event.handle x.node x.services handler)
 
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onemptied <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onemptied <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onended <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onended <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onended <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onended <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onerror <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onerror <- Event.handle x.node x.services handler)
 
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onerror <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onerror <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onloadeddata <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onloadeddata <- Event.handle x.node x.services handler)
 
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onloadeddata <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onloadeddata <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onloadedmetadata <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onloadedmetadata <- Event.handle x.node x.services handler)
 
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onloadedmetadata <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onloadedmetadata <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onloadstart <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onloadstart <- Event.handle x.node x.services handler)
 
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onloadstart <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onloadstart <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onpause <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onpause <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onpause <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onpause <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onplay <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onplay <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onplay <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onplay <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onplaying <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onplaying <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onplaying <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onplaying <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onprogress <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onprogress <- Event.handle x.node x.services handler)
 
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onprogress <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onprogress <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onratechange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onratechange <- Event.handle x.node x.services handler)
 
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onratechange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onratechange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onseeked <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onseeked <- Event.handle x.node x.services handler)
 
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onseeked <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onseeked <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onseeking <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onseeking <- Event.handle x.node x.services handler)
 
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onseeking <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onseeking <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onstalled <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onstalled <- Event.handle x.node x.services handler)
 
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onstalled <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onstalled <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onsuspend <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onsuspend <- Event.handle x.node x.services handler)
 
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onsuspend <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onsuspend <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.ontimeupdate <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ontimeupdate <- Event.handle x.node x.services handler)
 
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ontimeupdate <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ontimeupdate <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onvolumechange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onvolumechange <- Event.handle x.node x.services handler)
 
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onvolumechange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onvolumechange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.node.onwaiting <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onwaiting <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onwaiting <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onwaiting <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
     end
@@ -2375,595 +2375,595 @@ type HtmlGARenderValCnBuilderExtensions =
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onblur <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onblur <- Event.handle x.node x.services handler)
 
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onblur <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onblur <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onchange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onchange <- Event.handle x.node x.services handler)
 
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onchange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onchange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.oncontextmenu <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncontextmenu <- Event.handle x.node x.services handler)
 
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncontextmenu <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncontextmenu <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onfocus <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onfocus <- Event.handle x.node x.services handler)
 
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onfocus <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onfocus <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.oninput <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oninput <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oninput <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oninput <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onreset <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onreset <- Event.handle x.node x.services handler)
 
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onreset <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onreset <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onselect <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onselect <- Event.handle x.node x.services handler)
 
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onselect <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onselect <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onsubmit <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onsubmit <- Event.handle x.node x.services handler)
 
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onsubmit <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onsubmit <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onkeydown <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onkeydown <- Event.handle x.node x.services handler)
 
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onkeydown <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onkeydown <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onkeypress <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onkeypress <- Event.handle x.node x.services handler)
 
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onkeypress <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onkeypress <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onkeyup <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onkeyup <- Event.handle x.node x.services handler)
 
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onkeyup <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onkeyup <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onclick <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onclick <- Event.handle x.node x.services handler)
 
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onclick <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onclick <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ondblclick <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondblclick <- Event.handle x.node x.services handler)
 
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondblclick <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondblclick <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onmousedown <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmousedown <- Event.handle x.node x.services handler)
 
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmousedown <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmousedown <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onmousemove <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmousemove <- Event.handle x.node x.services handler)
 
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmousemove <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmousemove <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onmouseout <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmouseout <- Event.handle x.node x.services handler)
 
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmouseout <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmouseout <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onmouseover <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmouseover <- Event.handle x.node x.services handler)
 
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmouseover <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmouseover <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onmouseup <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmouseup <- Event.handle x.node x.services handler)
 
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmouseup <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmouseup <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onmousewheel <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmousewheel <- Event.handle x.node x.services handler)
 
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmousewheel <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmousewheel <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onwheel <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onwheel <- Event.handle x.node x.services handler)
 
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onwheel <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onwheel <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ondrag <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondrag <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondrag <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondrag <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ondragend <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragend <- Event.handle x.node x.services handler)
 
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragend <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragend <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ondragenter <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragenter <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragenter <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragenter <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ondragleave <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragleave <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragleave <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragleave <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ondragover <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragover <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragover <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragover <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ondragstart <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragstart <- Event.handle x.node x.services handler)
 
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragstart <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragstart <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ondrop <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondrop <- Event.handle x.node x.services handler)
 
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondrop <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondrop <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onscroll <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onscroll <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onscroll <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onscroll <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.oncopy <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncopy <- Event.handle x.node x.services handler)
 
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncopy <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncopy <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.oncut <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncut <- Event.handle x.node x.services handler)
 
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncut <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncut <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onpaste <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onpaste <- Event.handle x.node x.services handler)
 
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onpaste <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onpaste <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onabort <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onabort <- Event.handle x.node x.services handler)
 
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onabort <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onabort <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.oncanplay <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncanplay <- Event.handle x.node x.services handler)
 
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncanplay <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncanplay <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.oncanplaythrough <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncanplaythrough <- Event.handle x.node x.services handler)
 
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncanplaythrough <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncanplaythrough <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.oncuechange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncuechange <- Event.handle x.node x.services handler)
 
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncuechange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncuechange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ondurationchange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondurationchange <- Event.handle x.node x.services handler)
 
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondurationchange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondurationchange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onemptied <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onemptied <- Event.handle x.node x.services handler)
 
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onemptied <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onemptied <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onended <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onended <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onended <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onended <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onerror <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onerror <- Event.handle x.node x.services handler)
 
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onerror <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onerror <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onloadeddata <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onloadeddata <- Event.handle x.node x.services handler)
 
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onloadeddata <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onloadeddata <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onloadedmetadata <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onloadedmetadata <- Event.handle x.node x.services handler)
 
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onloadedmetadata <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onloadedmetadata <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onloadstart <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onloadstart <- Event.handle x.node x.services handler)
 
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onloadstart <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onloadstart <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onpause <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onpause <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onpause <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onpause <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onplay <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onplay <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onplay <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onplay <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onplaying <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onplaying <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onplaying <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onplaying <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onprogress <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onprogress <- Event.handle x.node x.services handler)
 
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onprogress <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onprogress <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onratechange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onratechange <- Event.handle x.node x.services handler)
 
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onratechange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onratechange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onseeked <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onseeked <- Event.handle x.node x.services handler)
 
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onseeked <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onseeked <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onseeking <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onseeking <- Event.handle x.node x.services handler)
 
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onseeking <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onseeking <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onstalled <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onstalled <- Event.handle x.node x.services handler)
 
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onstalled <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onstalled <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onsuspend <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onsuspend <- Event.handle x.node x.services handler)
 
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onsuspend <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onsuspend <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.ontimeupdate <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ontimeupdate <- Event.handle x.node x.services handler)
 
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ontimeupdate <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ontimeupdate <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onvolumechange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onvolumechange <- Event.handle x.node x.services handler)
 
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onvolumechange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onvolumechange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.node.onwaiting <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onwaiting <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onwaiting <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onwaiting <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
     end
@@ -3074,595 +3074,595 @@ type HtmlGARenderRetCnBuilderExtensions =
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onblur <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onblur <- Event.handle x.node x.services handler)
 
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onblur <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onblur <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onchange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onchange <- Event.handle x.node x.services handler)
 
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onchange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onchange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.oncontextmenu <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncontextmenu <- Event.handle x.node x.services handler)
 
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncontextmenu <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncontextmenu <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onfocus <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onfocus <- Event.handle x.node x.services handler)
 
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onfocus <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onfocus <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.oninput <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oninput <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oninput <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oninput <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onreset <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onreset <- Event.handle x.node x.services handler)
 
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onreset <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onreset <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onselect <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onselect <- Event.handle x.node x.services handler)
 
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onselect <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onselect <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onsubmit <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onsubmit <- Event.handle x.node x.services handler)
 
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onsubmit <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onsubmit <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onkeydown <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onkeydown <- Event.handle x.node x.services handler)
 
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onkeydown <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onkeydown <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onkeypress <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onkeypress <- Event.handle x.node x.services handler)
 
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onkeypress <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onkeypress <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onkeyup <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onkeyup <- Event.handle x.node x.services handler)
 
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onkeyup <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onkeyup <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onclick <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onclick <- Event.handle x.node x.services handler)
 
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onclick <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onclick <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.ondblclick <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondblclick <- Event.handle x.node x.services handler)
 
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondblclick <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondblclick <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onmousedown <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmousedown <- Event.handle x.node x.services handler)
 
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmousedown <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmousedown <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onmousemove <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmousemove <- Event.handle x.node x.services handler)
 
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmousemove <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmousemove <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onmouseout <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmouseout <- Event.handle x.node x.services handler)
 
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmouseout <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmouseout <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onmouseover <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmouseover <- Event.handle x.node x.services handler)
 
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmouseover <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmouseover <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onmouseup <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmouseup <- Event.handle x.node x.services handler)
 
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmouseup <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmouseup <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onmousewheel <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onmousewheel <- Event.handle x.node x.services handler)
 
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onmousewheel <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onmousewheel <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onwheel <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onwheel <- Event.handle x.node x.services handler)
 
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onwheel <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onwheel <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.ondrag <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondrag <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondrag <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondrag <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.ondragend <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragend <- Event.handle x.node x.services handler)
 
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragend <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragend <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.ondragenter <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragenter <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragenter <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragenter <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.ondragleave <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragleave <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragleave <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragleave <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.ondragover <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragover <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragover <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragover <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.ondragstart <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondragstart <- Event.handle x.node x.services handler)
 
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondragstart <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondragstart <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.ondrop <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondrop <- Event.handle x.node x.services handler)
 
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondrop <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondrop <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onscroll <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onscroll <- Event.handle x.node x.services handler)
 
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onscroll <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onscroll <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.oncopy <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncopy <- Event.handle x.node x.services handler)
 
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncopy <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncopy <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.oncut <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncut <- Event.handle x.node x.services handler)
 
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncut <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncut <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onpaste <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onpaste <- Event.handle x.node x.services handler)
 
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onpaste <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onpaste <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onabort <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onabort <- Event.handle x.node x.services handler)
 
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onabort <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onabort <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.oncanplay <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncanplay <- Event.handle x.node x.services handler)
 
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncanplay <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncanplay <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.oncanplaythrough <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncanplaythrough <- Event.handle x.node x.services handler)
 
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncanplaythrough <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncanplaythrough <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.oncuechange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.oncuechange <- Event.handle x.node x.services handler)
 
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.oncuechange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.oncuechange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.ondurationchange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ondurationchange <- Event.handle x.node x.services handler)
 
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ondurationchange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ondurationchange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onemptied <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onemptied <- Event.handle x.node x.services handler)
 
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onemptied <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onemptied <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onended <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onended <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onended <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onended <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onerror <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onerror <- Event.handle x.node x.services handler)
 
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onerror <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onerror <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onloadeddata <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onloadeddata <- Event.handle x.node x.services handler)
 
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onloadeddata <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onloadeddata <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onloadedmetadata <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onloadedmetadata <- Event.handle x.node x.services handler)
 
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onloadedmetadata <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onloadedmetadata <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onloadstart <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onloadstart <- Event.handle x.node x.services handler)
 
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onloadstart <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onloadstart <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onpause <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onpause <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onpause <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onpause <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onplay <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onplay <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onplay <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onplay <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onplaying <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onplaying <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onplaying <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onplaying <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onprogress <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onprogress <- Event.handle x.node x.services handler)
 
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onprogress <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onprogress <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onratechange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onratechange <- Event.handle x.node x.services handler)
 
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onratechange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onratechange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onseeked <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onseeked <- Event.handle x.node x.services handler)
 
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onseeked <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onseeked <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onseeking <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onseeking <- Event.handle x.node x.services handler)
 
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onseeking <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onseeking <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onstalled <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onstalled <- Event.handle x.node x.services handler)
 
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onstalled <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onstalled <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onsuspend <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onsuspend <- Event.handle x.node x.services handler)
 
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onsuspend <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onsuspend <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.ontimeupdate <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.ontimeupdate <- Event.handle x.node x.services handler)
 
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.ontimeupdate <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.ontimeupdate <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onvolumechange <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onvolumechange <- Event.handle x.node x.services handler)
 
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onvolumechange <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onvolumechange <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.node.onwaiting <- Event.handle x.node x.context handler)
+            this.OnEval(fun x -> x.node.onwaiting <- Event.handle x.node x.services handler)
 
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.onwaiting <- Event.handle x.node x.context (fun args ->
+            this.OnEval(fun x -> x.node.onwaiting <- Event.handle x.node x.services (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
     end

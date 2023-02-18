@@ -7,6 +7,12 @@ open type Vide.Html
 
 // TODO: demo for async + clear
 
+let x =
+    vide {
+        h1 
+    }
+
+(*
 module GettingStarted =
     let helloWorld =
         vide { "Hello World" }
@@ -397,3 +403,4 @@ module TodoList =
 //            }
 //        }
 
+*)

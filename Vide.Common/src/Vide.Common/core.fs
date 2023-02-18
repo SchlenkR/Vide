@@ -49,8 +49,10 @@ module MutableValue =
     // TODO: override arithmetic ops
 #endif
 
+type VideServices = { evaluationManager: IEvaluationManager }
+
 type IVideContext =
-    abstract member EvaluationManager: IEvaluationManager
+    abstract member Services : VideServices
 
 type AsyncState<'v> =
     {
@@ -159,7 +161,7 @@ module Vide =
 
     let ofMutable x =
         Vide <| fun s (c: #IVideContext) ->
-            let s = s |> Option.defaultWith (fun () -> MutableValue(x, c.EvaluationManager))
+            let s = s |> Option.defaultWith (fun () -> MutableValue(x, c.Services.evaluationManager))
             s, Some s
 
 module BuilderBricks =
@@ -316,7 +318,7 @@ module BuilderBricks =
                             let onsuccess res =
                                 Debug.print 1 $"awaited result: {res}"
                                 do result.Value <- Some res
-                                do ctx.EvaluationManager.RequestEvaluation()
+                                do ctx.Services.evaluationManager.RequestEvaluation()
                             // TODO: global cancellation handler / ex / cancellation, etc.
                             let onexception ex = ()
                             let oncancel ex = ()
