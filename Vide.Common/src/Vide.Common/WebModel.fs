@@ -16,7 +16,7 @@ type WebContext<'n when 'n: equality>
         document: IWebDocument<'n>
     ) =
     inherit NodeContext<'n>(parent, document)
-    member this.AddNodeOfName<'e>(tagName: string) : 'e =
+    member this.AppendNodeOfName<'e>(tagName: string) : 'e =
         let n = document.CreateNodeOfName(tagName)
         do this.KeepChild(n)
         do document.AppendChild(parent, n)
@@ -25,7 +25,7 @@ type WebContext<'n when 'n: equality>
 
 module BuilderHelper =
     let createNode elemName (ctx: #WebContext<_>) =
-        ctx.AddNodeOfName<'n>(elemName)
+        ctx.AppendNodeOfName<'n>(elemName)
     
     let checkNode (expectedNodeName: string) (actualNodeName: string) =
         // WebSharper has no Equals(.., StrComp) available, so we use this
