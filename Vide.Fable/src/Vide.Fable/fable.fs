@@ -33,33 +33,34 @@ type FableDocument() =
 
 type FableContext(parent) =
     inherit WebContext<Node>(parent, FableDocument())
-    interface INodeContextFactory<Node,FableContext> with
-        member _.CreateChildCtx(parent) = FableContext(parent)
 
 // --------------------------------------------------
 // Specialized builder definitions
 // --------------------------------------------------
 
+module FableContext =
+    let create<'n when 'n :> Node> (thisNode: 'n) = FableContext(thisNode :> Node)
+
 type ComponentRetCnBuilder() =
     inherit ComponentRetCnBaseBuilder<Node,FableContext>()
 
 type RenderValC0Builder<'v,'n when 'n :> Node>(createNode, checkNode, createResultVal) =
-    inherit RenderValC0BaseBuilder<'v,'n,Node,FableContext>(createNode, checkNode, createResultVal)
+    inherit RenderValC0BaseBuilder<'v,'n,Node,FableContext>(createNode, FableContext.create, checkNode, createResultVal)
 
 type RenderRetC0Builder<'n when 'n :> Node>(createNode, checkNode) =
-    inherit RenderRetC0BaseBuilder<'n,Node,FableContext>(createNode, checkNode)
+    inherit RenderRetC0BaseBuilder<'n,Node,FableContext>(createNode, FableContext.create, checkNode)
 
 type RenderValC1Builder<'v,'n when 'n :> Node>(createNode, checkNode, createResultVal) =
-    inherit RenderValC1BaseBuilder<'v,'n,Node,FableContext>(createNode, checkNode, createResultVal)
+    inherit RenderValC1BaseBuilder<'v,'n,Node,FableContext>(createNode, FableContext.create, checkNode, createResultVal)
 
 type RenderRetC1Builder<'n when 'n :> Node>(createNode, checkNode) =
-    inherit RenderRetC1BaseBuilder<'n,Node,FableContext>(createNode, checkNode)
+    inherit RenderRetC1BaseBuilder<'n,Node,FableContext>(createNode, FableContext.create, checkNode)
 
 type RenderValCnBuilder<'v,'n when 'n :> Node>(createNode, checkNode, createResultVal) =
-    inherit RenderValCnBaseBuilder<'v,'n,Node,FableContext>(createNode, checkNode, createResultVal)
+    inherit RenderValCnBaseBuilder<'v,'n,Node,FableContext>(createNode, FableContext.create, checkNode, createResultVal)
 
 type RenderRetCnBuilder<'n when 'n :> Node>(createNode, checkNode) =
-    inherit RenderRetCnBaseBuilder<'n,Node,FableContext>(createNode, checkNode)
+    inherit RenderRetCnBaseBuilder<'n,Node,FableContext>(createNode, FableContext.create, checkNode)
 
 
 // --------------------------------------------------
@@ -79,7 +80,7 @@ module Vide =
             ctx.Parent :?> 'n,None
 
 module VideApp =
-    let inline doCreate appCtor (host: #Node) (content: Vide<'v,'s,FableContext>) onEvaluated =
+    let inline doCreate appCtor host (content: Vide<'v,'s,FableContext>) onEvaluated =
         let content = RenderRetC1Builder((fun _ -> host), fun _ -> Keep) { content }
         let ctxCtor = fun () -> FableContext(host)
         appCtor content ctxCtor onEvaluated
