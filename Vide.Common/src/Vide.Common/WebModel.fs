@@ -13,10 +13,9 @@ type IWebDocument<'n> =
 type WebContext<'n when 'n: equality>
     (
         parent: 'n, 
-        evaluationManager: IEvaluationManager,
         document: IWebDocument<'n>
     ) =
-    inherit NodeContext<'n>(parent, evaluationManager, document)
+    inherit NodeContext<'n>(parent, document)
     member this.AddNodeOfName<'e>(tagName: string) : 'e =
         let n = document.CreateNodeOfName(tagName)
         do this.KeepChild(n)

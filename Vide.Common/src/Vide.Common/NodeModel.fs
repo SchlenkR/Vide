@@ -22,14 +22,9 @@ type INodeDocument<'n> =
 type NodeContext<'n when 'n: equality>
     (
         parent: 'n, 
-        evaluationManager: IEvaluationManager,
         document: INodeDocument<'n>
     ) =
     let mutable keptChildren = []
-
-    interface IVideContext with
-        member _.EvaluationManager = evaluationManager
-    member _.EvaluationManager = evaluationManager
     member _.Parent = parent
     member _.KeepChild(child) =
         do keptChildren <- child :: keptChildren
@@ -55,13 +50,13 @@ type NodeBuilderState<'n,'s> = option<'n> * option<'s>
 
 type ChildAction = Keep | DiscardAndCreateNew
 
-type NodeModifierContext<'n,'c> =
+type NodeModifierContext<'n> =
     {
         node: 'n
-        context: 'c
+        globalContext: GlobalContext
     }
 
-type NodeModifier<'n,'c> = NodeModifierContext<'n,'c> -> unit
+type NodeModifier<'n> = NodeModifierContext<'n> -> unit
 
 type ModifierContext<'n,'c>
     (
@@ -72,9 +67,9 @@ type ModifierContext<'n,'c>
     member _.CreateNode = createNode
     member _.CheckOrUpdateNode = checkNode
 
-    member val InitModifiers: ResizeArray<NodeModifier<'n,'c>> = ResizeArray() with get
-    member val EvalModifiers: ResizeArray<NodeModifier<'n,'c>> = ResizeArray() with get
-    member val AfterEvalModifiers: ResizeArray<NodeModifier<'n,'c>> = ResizeArray() with get
+    member val InitModifiers: ResizeArray<NodeModifier<'n>> = ResizeArray() with get
+    member val EvalModifiers: ResizeArray<NodeModifier<'n>> = ResizeArray() with get
+    member val AfterEvalModifiers: ResizeArray<NodeModifier<'n>> = ResizeArray() with get
 
 module ModifierContext =
     let inline apply<'v1,'v2,'s,'n,'nc,'c
@@ -87,11 +82,11 @@ module ModifierContext =
         (modifierCtx: ModifierContext<'n,'c>)
         : Vide<'v2, NodeBuilderState<'n,'s>, 'c>
         =
-        Vide <| fun s (ctx: 'c) ->
+        Vide <| fun s gc (ctx: 'c) ->
             Debug.print 0 "RUN:NodeBuilder"
             let inline runModifiers modifiers node =
                 for m in modifiers do
-                    m { node = node; context = ctx }
+                    m { node = node; globalContext = gc }
             let s,cs =
                 match s with
                 | None -> None,None
@@ -115,7 +110,7 @@ module ModifierContext =
             let childCtx =
                 // TODO: Why the unsafe cast everywhere in this function?
                 ctx.CreateChildCtx((box node) :?> 'nc)
-            let cv,cs = childVide cs childCtx
+            let cv,cs = childVide cs gc childCtx
             do childCtx.RemoveObsoleteChildren()
             do runModifiers modifierCtx.AfterEvalModifiers node
             let result = createResultVal node cv
@@ -128,13 +123,13 @@ module BuilderBricks =
         v
     
     let inline yieldBuilderOp<'nc,'c when 'c :> NodeContext<'nc>>(op: BuilderOperations) =
-        Vide <| fun s (ctx: 'c) ->
+        Vide <| fun s gc (ctx: 'c) ->
             match op with
             | Clear -> ctx.ClearContent()
             (),None
     
     let inline yieldText<'nc,'c when 'c :> NodeContext<'nc>>(value: string) =
-        Vide <| fun s (ctx: 'c) ->
+        Vide <| fun s gc (ctx: 'c) ->
             let textNode = s |> Option.defaultWith (fun () -> ctx.AddTextNode(value))
             do
                 if textNode.getText() <> value then
@@ -357,42 +352,42 @@ type NodeBuilderExtensions =
     
     /// Called once on initialization.
     [<Extension>]
-    static member OnInit(this: #RenderBaseBuilder<_,_>, m: NodeModifier<_,_>) =
+    static member OnInit(this: #RenderBaseBuilder<_,_>, m: NodeModifier<_>) =
         do this.ModifierContext.InitModifiers.Add(m)
         this
     
     /// Called on every Vide evaluatiopn cycle.
     [<Extension>]
-    static member OnEval(this: #RenderBaseBuilder<_,_>, m: NodeModifier<_,_>) =
+    static member OnEval(this: #RenderBaseBuilder<_,_>, m: NodeModifier<_>) =
         do this.ModifierContext.EvalModifiers.Add(m)
         this
     
     /// Called after every Vide evaluatiopn cycle.
     [<Extension>]
-    static member OnAfterEval(this: #RenderBaseBuilder<_,_>, m: NodeModifier<_,_>) =
+    static member OnAfterEval(this: #RenderBaseBuilder<_,_>, m: NodeModifier<_>) =
         do this.ModifierContext.AfterEvalModifiers.Add(m)
         this
 
 module Event =
-    type NodeEventArgs<'evt,'n,'c> =
+    type NodeEventArgs<'evt,'n> =
         {
             node: 'n
             evt: 'evt
-            ctx: 'c
+            gc: GlobalContext
             mutable requestEvaluation: bool
         }
     
     let inline handle<'n,'nc,'c,'evt when 'c :> NodeContext<'nc>>
         (node: 'n) 
-        (ctx: 'c) 
-        (callback: NodeEventArgs<'evt,'n,'c> -> unit)
+        (gc: GlobalContext) 
+        (callback: NodeEventArgs<'evt,'n> -> unit)
         =
         fun evt ->
-            let args = { node = node; evt = evt; ctx = ctx; requestEvaluation = true }
+            let args = { node = node; evt = evt; gc = gc; requestEvaluation = true }
             try
-                do ctx.EvaluationManager.Suspend()
+                do gc.evaluationManager.Suspend()
                 do callback args
                 if args.requestEvaluation then
-                    ctx.EvaluationManager.RequestEvaluation()
+                    gc.evaluationManager.RequestEvaluation()
             finally
-                do ctx.EvaluationManager.Resume()
+                do gc.evaluationManager.Resume()

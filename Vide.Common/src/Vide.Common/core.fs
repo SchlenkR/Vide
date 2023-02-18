@@ -1,12 +1,5 @@
 namespace Vide
 
-// why we return 's option(!!) -> Because of else branch / zero
-type Vide<'v,'s,'c> = Vide of ('s option -> 'c -> 'v * 's option)
-
-module Debug =
-    let mutable enabledDebugChannels : int list = []
-    let print channel s = if enabledDebugChannels |> List.contains channel then printfn "%s" s
-
 type IEvaluationManager =
     abstract member RequestEvaluation: unit -> unit
     abstract member Suspend: unit -> unit
@@ -14,6 +7,15 @@ type IEvaluationManager =
     abstract member IsEvaluating: bool
     abstract member HasPendingEvaluationRequests: bool
     abstract member EvaluationCount: uint64
+
+type GlobalContext = { evaluationManager: IEvaluationManager }
+
+// why we return 's option(!!) -> Because of else branch / zero
+type Vide<'v,'s,'c> = Vide of ('s option -> GlobalContext -> 'c -> 'v * 's option)
+
+module Debug =
+    let mutable enabledDebugChannels : int list = []
+    let print channel s = if enabledDebugChannels |> List.contains channel then printfn "%s" s
 
 [<AutoOpen>]
 module MutableValue =
@@ -49,9 +51,6 @@ module MutableValue =
     // TODO: override arithmetic ops
 #endif
 
-type IVideContext =
-    abstract member EvaluationManager: IEvaluationManager
-
 type AsyncState<'v> =
     {
         startedWorker: Async<'v>
@@ -61,10 +60,10 @@ type AsyncState<'v> =
 type AsyncBindResult<'v1,'v2> = 
     AsyncBindResult of comp: Async<'v1> * cont: ('v1 -> 'v2)
 
-type VideApp<'v,'s,'c when 'c :> IVideContext>
+type VideApp<'v,'s,'c>
     (
         content: Vide<'v,'s,'c>,
-        ctxCtor: IEvaluationManager -> 'c,
+        ctxCtor: unit -> 'c,
         onEvaluated: VideApp<'v,'s,'c> -> 'v -> 's option -> unit
     ) as this 
     =
@@ -75,7 +74,7 @@ type VideApp<'v,'s,'c when 'c :> IVideContext>
     let mutable evaluationCount = 0uL
     let mutable suspendEvaluation = false
         
-    let ctx = ctxCtor(this)
+    let ctx = ctxCtor()
 
     interface IEvaluationManager with
         member this.RequestEvaluation() =
@@ -89,7 +88,9 @@ type VideApp<'v,'s,'c when 'c :> IVideContext>
                     do 
                         hasPendingEvaluationRequests <- false
                         isEvaluating <- true
-                    let value,newState = content currentState this.RootContext
+                    let value,newState = 
+                        let gc = { evaluationManager = this.EvaluationManager } 
+                        content currentState gc this.RootContext
                     do
                         currValue <- Some value
                         currentState <- newState
@@ -121,10 +122,10 @@ module VideApp =
         VideApp(content, ctxCtor, onEvaluated)
     let createWithUntypedState content ctxCtor onEvaluated =
         let content =
-            Vide <| fun (s: obj option) ctx ->
+            Vide <| fun (s: obj option) gc ctx ->
                 let (Vide content) = content
                 let typedS = s |> Option.map (fun s -> s :?> 's)
-                let v,s = content typedS ctx
+                let v,s = content typedS gc ctx
                 let untypedS = s |> Option.map (fun s -> s :> obj)
                 v,untypedS
         create content ctxCtor onEvaluated
@@ -133,33 +134,33 @@ module Vide =
 
     // Preserves the first value given and discards subsequent values.
     let preserveValue x =
-        Vide <| fun s ctx ->
+        Vide <| fun s gc ctx ->
             let s = s |> Option.defaultValue x
             s, Some s
     
     let preserveWith x =
-        Vide <| fun s ctx ->
+        Vide <| fun s gc ctx ->
             let s = s |> Option.defaultWith x
             s, Some s
     
     // TODO: Think about which function is "global" and module-bound
     let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
-        Vide <| fun s ctx ->
-            let v,s = v s ctx
+        Vide <| fun s gc ctx ->
+            let v,s = v s gc ctx
             proj v, s
     
     // why 's and not unit? -> see comment in "VideBuilder.Zero"
     [<GeneralizableValue>]
     let zero<'s,'c> : Vide<unit,'s,'c> =
-        Vide <| fun s ctx -> (),None
+        Vide <| fun s gc ctx -> (),None
     
     [<GeneralizableValue>]
     let context<'c> : Vide<'c,unit,'c> =
-        Vide <| fun s ctx -> ctx,None
+        Vide <| fun s gc ctx -> ctx,None
 
     let ofMutable x =
-        Vide <| fun s (c: #IVideContext) ->
-            let s = s |> Option.defaultWith (fun () -> MutableValue(x, c.EvaluationManager))
+        Vide <| fun s gc ctx ->
+            let s = s |> Option.defaultWith (fun () -> MutableValue(x, gc.evaluationManager))
             s, Some s
 
 module BuilderBricks =
@@ -170,21 +171,21 @@ module BuilderBricks =
         ) 
         : Vide<'v2,'s1 option * 's2 option,'c>
         =
-        Vide <| fun s ctx ->
+        Vide <| fun s gc ctx ->
             let ms,fs =
                 match s with
                 | None -> None,None
                 | Some (ms,fs) -> ms,fs
-            let mv,ms = m ms ctx
+            let mv,ms = m ms gc ctx
             let (Vide f) = f mv
-            let fv,fs = f fs ctx
+            let fv,fs = f fs gc ctx
             fv, Some (ms,fs)
 
     let return'<'v,'c>
         (x: 'v)
         : Vide<'v,unit,'c> 
         =
-        Vide <| fun s ctx -> x,None
+        Vide <| fun s gc ctx -> x,None
 
     let yield'<'v,'s,'c>
         (v: Vide<'v,'s,'c>)
@@ -233,13 +234,13 @@ module BuilderBricks =
         )
         : Vide<'v2,'s1 option * 's2 option,'c>
         =
-        Vide <| fun s ctx ->
+        Vide <| fun s gc ctx ->
             let sa,sb =
                 match s with
                 | None -> None,None
                 | Some (ms,fs) -> ms,fs
-            let va,sa = a sa ctx
-            let vb,sb = b sb ctx
+            let va,sa = a sa gc ctx
+            let vb,sb = b sb gc ctx
             vb, Some (sa,sb)
 
     let for'
@@ -249,13 +250,13 @@ module BuilderBricks =
         ) 
         : Vide<'v list, Map<'a, 's option>,'c>
         = 
-        Vide <| fun s ctx ->
+        Vide <| fun s gc ctx ->
             Debug.print 0 "FOR"
             let mutable currMap = s |> Option.defaultValue Map.empty
             let resValues,resStates =
                 [ for x in input do
                     let matchingState = currMap |> Map.tryFind x |> Option.flatten
-                    let v,s = let (Vide v) = body x in v matchingState ctx
+                    let v,s = let (Vide v) = body x in v matchingState gc ctx
                     do currMap <- currMap |> Map.remove x
                     v, (x,s)
                 ]
@@ -293,20 +294,20 @@ module BuilderBricks =
             =
             f()
     
-        let combine<'v,'x,'s1,'s2,'c when 'c :> IVideContext>
+        let combine<'v,'x,'s1,'s2,'c>
             (
                 Vide a: Vide<'v,'s1,'c>,
                 b: AsyncBindResult<'x, Vide<'v,'s2,'c>>
             )
             : Vide<'v, 's1 option * AsyncState<_> option * 's2 option, 'c>
             =
-            Vide <| fun s ctx ->
+            Vide <| fun s gc ctx ->
                 let sa,comp,sb =
                     match s with
                     | None -> None,None,None
                     | Some (sa,comp,sb) -> sa,comp,sb
                 // TODO: Really reevaluate here at this place?
-                let va,sa = a sa ctx
+                let va,sa = a sa gc ctx
                 let v,comp,sb =
                     match comp with
                     | None ->
@@ -316,7 +317,7 @@ module BuilderBricks =
                             let onsuccess res =
                                 Debug.print 1 $"awaited result: {res}"
                                 do result.Value <- Some res
-                                do ctx.EvaluationManager.RequestEvaluation()
+                                do gc.evaluationManager.RequestEvaluation()
                             // TODO: global cancellation handler / ex / cancellation, etc.
                             let onexception ex = ()
                             let oncancel ex = ()
@@ -328,7 +329,7 @@ module BuilderBricks =
                         | Some v ->
                             let (AsyncBindResult (_,f)) = b
                             let (Vide b) = f v
-                            let vb,sb = b sb ctx
+                            let vb,sb = b sb gc ctx
                             vb,comp,sb
                         | None ->
                             va,comp,sb

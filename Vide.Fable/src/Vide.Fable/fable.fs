@@ -31,10 +31,10 @@ type FableDocument() =
         member _.CreateNodeOfName(tagName) =
             document.createElement tagName
 
-type FableContext(parent, evaluationManager) =
-    inherit WebContext<Node>(parent, evaluationManager, FableDocument())
+type FableContext(parent) =
+    inherit WebContext<Node>(parent, FableDocument())
     interface INodeContextFactory<Node,FableContext> with
-        member _.CreateChildCtx(parent) = FableContext(parent, evaluationManager)
+        member _.CreateChildCtx(parent) = FableContext(parent)
 
 // --------------------------------------------------
 // Specialized builder definitions
@@ -70,18 +70,18 @@ module Vide =
 
     [<GeneralizableValue>]
     let fableContext : Vide<FableContext,unit,FableContext> =
-        Vide <| fun s ctx -> ctx,None
+        Vide <| fun s gc ctx -> ctx,None
 
     [<GeneralizableValue>]
     let node<'n when 'n :> Node> : Vide<'n,unit,FableContext> =
-        Vide <| fun s ctx ->
+        Vide <| fun s gc ctx ->
             // TODO: OUCH!!! Was ist da los - wieso bekomme ich das nicht besser hin?
             ctx.Parent :?> 'n,None
 
 module VideApp =
     let inline doCreate appCtor (host: #Node) (content: Vide<'v,'s,FableContext>) onEvaluated =
         let content = RenderRetC1Builder((fun _ -> host), fun _ -> Keep) { content }
-        let ctxCtor = fun eval -> FableContext(host, eval)
+        let ctxCtor = fun () -> FableContext(host)
         appCtor content ctxCtor onEvaluated
     let createFable host content onEvaluated =
         doCreate VideApp.create host content onEvaluated
