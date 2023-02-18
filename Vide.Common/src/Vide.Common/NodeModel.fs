@@ -60,14 +60,14 @@ type NodeBuilder<'n,'c>
     (
         createNode: 'c -> 'n,
         createContext: 'n -> 'c,
-        checkNode: 'n -> ChildAction
+        checkChildNode: 'n -> ChildAction
     ) =
     
     inherit VideBaseBuilder()
 
     member _.CreateNode = createNode
     member _.CreateContext = createContext
-    member _.CheckOrUpdateNode = checkNode
+    member _.CheckChildNode = checkChildNode
 
     member val InitModifiers: ResizeArray<NodeModifier<'n>> = ResizeArray() with get
     member val EvalModifiers: ResizeArray<NodeModifier<'n>> = ResizeArray() with get
@@ -101,7 +101,7 @@ module ModifierContext =
                     do runModifiers nodeBuilder.InitModifiers newNode
                     newNode,s
                 | Some node ->
-                    match nodeBuilder.CheckOrUpdateNode(node) with
+                    match nodeBuilder.CheckChildNode(node) with
                     | Keep ->
                         ctx.KeepChild((box node) :?> 'nc)
                         node,cs
@@ -168,18 +168,18 @@ type RenderValC0BaseBuilder<'v,'n,'nc,'c
         when 'nc: equality
         and 'c :> NodeContext<'nc>
     >
-    (createNode, createContext, checkNode, createResultVal: 'n -> 'v) 
+    (createNode, createContext, checkChildNode, createResultVal: 'n -> 'v) 
     =
-    inherit NodeBuilder<'n,'c>(createNode, createContext, checkNode)
+    inherit NodeBuilder<'n,'c>(createNode, createContext, checkChildNode)
     member this.Run(v) = this |> ModifierContext.apply v (fun n v -> createResultVal n)
 
 type RenderRetC0BaseBuilder<'n,'nc,'c
         when 'nc: equality
         and 'c :> NodeContext<'nc>
     >
-    (createNode, createContext, checkNode) 
+    (createNode, createContext, checkChildNode) 
     =
-    inherit NodeBuilder<'n,'c>(createNode, createContext, checkNode)
+    inherit NodeBuilder<'n,'c>(createNode, createContext, checkChildNode)
     member _.Return(x) = BuilderBricks.return'(x)
     member this.Run(v) = this |> ModifierContext.apply v (fun n v -> v)
 
@@ -187,18 +187,18 @@ type RenderValC1BaseBuilder<'v,'n,'nc,'c
         when 'nc: equality
         and 'c :> NodeContext<'nc>
     >
-    (createNode, createContext, checkNode, createResultVal: 'n -> 'v) 
+    (createNode, createContext, checkChildNode, createResultVal: 'n -> 'v) 
     =
-    inherit NodeBuilder<'n,'c>(createNode, createContext, checkNode)
+    inherit NodeBuilder<'n,'c>(createNode, createContext, checkChildNode)
     member this.Run(v) = this |> ModifierContext.apply v (fun n v -> createResultVal n)
 
 type RenderRetC1BaseBuilder<'n,'nc,'c
         when 'nc: equality
         and 'c :> NodeContext<'nc>
     >
-    (createNode, createContext, checkNode) 
+    (createNode, createContext, checkChildNode) 
     =
-    inherit NodeBuilder<'n,'c>(createNode, createContext, checkNode)
+    inherit NodeBuilder<'n,'c>(createNode, createContext, checkChildNode)
     member _.Return(x) = BuilderBricks.return'(x)
     member this.Run(v) = this |> ModifierContext.apply v (fun n v -> v)
 
@@ -206,9 +206,9 @@ type RenderValCnBaseBuilder<'v,'n,'nc,'c
         when 'nc: equality
         and 'c :> NodeContext<'nc>
     >
-    (createNode, createContext, checkNode, createResultVal: 'n -> 'v) 
+    (createNode, createContext, checkChildNode, createResultVal: 'n -> 'v) 
     =
-    inherit NodeBuilder<'n,'c>(createNode, createContext, checkNode)
+    inherit NodeBuilder<'n,'c>(createNode, createContext, checkChildNode)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
     member this.Run(v) = this |> ModifierContext.apply v (fun n v -> createResultVal n)
@@ -217,9 +217,9 @@ type RenderRetCnBaseBuilder<'n,'nc,'c
         when 'nc: equality
         and 'c :> NodeContext<'nc>
     >
-    (createNode, createContext, checkNode) 
+    (createNode, createContext, checkChildNode) 
     =
-    inherit NodeBuilder<'n,'c>(createNode, createContext, checkNode)
+    inherit NodeBuilder<'n,'c>(createNode, createContext, checkChildNode)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
     member this.Run(v) = this |> ModifierContext.apply v (fun n v -> v)
