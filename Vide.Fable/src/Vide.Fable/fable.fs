@@ -45,22 +45,22 @@ type ComponentRetCnBuilder() =
     inherit ComponentRetCnBaseBuilder<Node,FableContext>()
 
 type RenderValC0Builder<'v,'n when 'n :> Node>(createThisNode, checkChildNode, createResultVal) =
-    inherit RenderValC0BaseBuilder<'v,'n,Node,FableContext>(createThisNode, FableContext.create, checkChildNode, createResultVal)
+    inherit RenderValC0BaseBuilder<'v,'n,Node,FableContext>(FableContext.create, createThisNode, checkChildNode, createResultVal)
 
 type RenderRetC0Builder<'n when 'n :> Node>(createThisNode, checkChildNode) =
-    inherit RenderRetC0BaseBuilder<'n,Node,FableContext>(createThisNode, FableContext.create, checkChildNode)
+    inherit RenderRetC0BaseBuilder<'n,Node,FableContext>(FableContext.create, createThisNode, checkChildNode)
 
 type RenderValC1Builder<'v,'n when 'n :> Node>(createThisNode, checkChildNode, createResultVal) =
-    inherit RenderValC1BaseBuilder<'v,'n,Node,FableContext>(createThisNode, FableContext.create, checkChildNode, createResultVal)
+    inherit RenderValC1BaseBuilder<'v,'n,Node,FableContext>(FableContext.create, createThisNode, checkChildNode, createResultVal)
 
 type RenderRetC1Builder<'n when 'n :> Node>(createThisNode, checkChildNode) =
-    inherit RenderRetC1BaseBuilder<'n,Node,FableContext>(createThisNode, FableContext.create, checkChildNode)
+    inherit RenderRetC1BaseBuilder<'n,Node,FableContext>(FableContext.create, createThisNode, checkChildNode)
 
 type RenderValCnBuilder<'v,'n when 'n :> Node>(createThisNode, checkChildNode, createResultVal) =
-    inherit RenderValCnBaseBuilder<'v,'n,Node,FableContext>(createThisNode, FableContext.create, checkChildNode, createResultVal)
+    inherit RenderValCnBaseBuilder<'v,'n,Node,FableContext>(FableContext.create, createThisNode, checkChildNode, createResultVal)
 
 type RenderRetCnBuilder<'n when 'n :> Node>(createThisNode, checkChildNode) =
-    inherit RenderRetCnBaseBuilder<'n,Node,FableContext>(createThisNode, FableContext.create, checkChildNode)
+    inherit RenderRetCnBaseBuilder<'n,Node,FableContext>(FableContext.create, createThisNode, checkChildNode)
 
 
 // --------------------------------------------------
