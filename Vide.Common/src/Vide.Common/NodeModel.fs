@@ -58,11 +58,14 @@ type NodeModifierContext<'n> =
 
 type NodeModifier<'n> = NodeModifierContext<'n> -> unit
 
-type ModifierContext<'n,'c>
+[<AbstractClass>]
+type NodeBuilder<'n,'c>
     (
         createNode: 'c -> 'n,
         checkNode: 'n -> ChildAction
     ) =
+    
+    inherit VideBaseBuilder()
 
     member _.CreateNode = createNode
     member _.CheckOrUpdateNode = checkNode
@@ -79,7 +82,7 @@ module ModifierContext =
         >
         (Vide childVide: Vide<'v1,'s,'c>)
         (createResultVal: 'n -> 'v1 -> 'v2)
-        (modifierCtx: ModifierContext<'n,'c>)
+        (nodeBuilder: NodeBuilder<'n,'c>)
         : Vide<'v2, NodeBuilderState<'n,'s>, 'c>
         =
         Vide <| fun s gc (ctx: 'c) ->
@@ -96,29 +99,28 @@ module ModifierContext =
                 // But: See comment in definition of: Vide.Core.Vide
                 match s with
                 | None ->
-                    let newNode,s = modifierCtx.CreateNode(ctx), cs
-                    do runModifiers modifierCtx.InitModifiers newNode
+                    let newNode,s = nodeBuilder.CreateNode(ctx), cs
+                    do runModifiers nodeBuilder.InitModifiers newNode
                     newNode,s
                 | Some node ->
-                    match modifierCtx.CheckOrUpdateNode(node) with
+                    match nodeBuilder.CheckOrUpdateNode(node) with
                     | Keep ->
                         ctx.KeepChild((box node) :?> 'nc)
                         node,cs
                     | DiscardAndCreateNew ->
-                        modifierCtx.CreateNode ctx,None
-            do runModifiers modifierCtx.EvalModifiers node
+                        nodeBuilder.CreateNode ctx,None
+            do runModifiers nodeBuilder.EvalModifiers node
             let childCtx =
                 // TODO: Why the unsafe cast everywhere in this function?
                 ctx.CreateChildCtx((box node) :?> 'nc)
             let cv,cs = childVide cs gc childCtx
             do childCtx.RemoveObsoleteChildren()
-            do runModifiers modifierCtx.AfterEvalModifiers node
+            do runModifiers nodeBuilder.AfterEvalModifiers node
             let result = createResultVal node cv
             let state = Some (Some node, cs)
             result,state
 
 module BuilderBricks =
-   
     let inline yieldVide(v: Vide<_,_,_>) =
         v
     
@@ -164,12 +166,6 @@ type ComponentRetCnBaseBuilder<'nc,'c
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
 
-[<AbstractClass>]
-type RenderBaseBuilder<'n,'c>(createNode, checkNode) =
-    inherit VideBaseBuilder()
-    let modifierContext = ModifierContext<'n,'c>(createNode, checkNode)
-    member _.ModifierContext = modifierContext
-
 type RenderValC0BaseBuilder<'v,'n,'nc,'c
         when 'nc: equality
         and 'c :> NodeContext<'nc>
@@ -177,9 +173,8 @@ type RenderValC0BaseBuilder<'v,'n,'nc,'c
     >
     (createNode, checkNode, createResultVal: 'n -> 'v) 
     =
-    inherit RenderBaseBuilder<'n,'c>(createNode, checkNode)
-    member this.Run<'v1,'s>(v: Vide<'v1,'s,'c>) =
-        this.ModifierContext |> ModifierContext.apply v (fun n v -> createResultVal n)
+    inherit NodeBuilder<'n,'c>(createNode, checkNode)
+    member this.Run(v) = this |> ModifierContext.apply v (fun n v -> createResultVal n)
 
 type RenderRetC0BaseBuilder<'n,'nc,'c
         when 'nc: equality
@@ -188,10 +183,9 @@ type RenderRetC0BaseBuilder<'n,'nc,'c
     >
     (createNode, checkNode) 
     =
-    inherit RenderBaseBuilder<'n,'c>(createNode, checkNode)
+    inherit NodeBuilder<'n,'c>(createNode, checkNode)
     member _.Return(x) = BuilderBricks.return'(x)
-    member this.Run(v) =
-        this.ModifierContext |> ModifierContext.apply v (fun n v -> v)
+    member this.Run(v) = this |> ModifierContext.apply v (fun n v -> v)
 
 type RenderValC1BaseBuilder<'v,'n,'nc,'c
         when 'nc: equality
@@ -200,9 +194,9 @@ type RenderValC1BaseBuilder<'v,'n,'nc,'c
     >
     (createNode, checkNode, createResultVal: 'n -> 'v) 
     =
-    inherit RenderBaseBuilder<'n,'c>(createNode, checkNode)
+    inherit NodeBuilder<'n,'c>(createNode, checkNode)
     member this.Run<'v1,'s>(v: Vide<'v1,'s,'c>) =
-        this.ModifierContext |> ModifierContext.apply v (fun n v -> createResultVal n)
+        this |> ModifierContext.apply v (fun n v -> createResultVal n)
 
 type RenderRetC1BaseBuilder<'n,'nc,'c
         when 'nc: equality
@@ -211,10 +205,9 @@ type RenderRetC1BaseBuilder<'n,'nc,'c
     >
     (createNode, checkNode) 
     =
-    inherit RenderBaseBuilder<'n,'c>(createNode, checkNode)
+    inherit NodeBuilder<'n,'c>(createNode, checkNode)
     member _.Return(x) = BuilderBricks.return'(x)
-    member this.Run(v) =
-        this.ModifierContext |> ModifierContext.apply v (fun n v -> v)
+    member this.Run(v) = this |> ModifierContext.apply v (fun n v -> v)
 
 type RenderValCnBaseBuilder<'v,'n,'nc,'c
         when 'nc: equality
@@ -223,11 +216,10 @@ type RenderValCnBaseBuilder<'v,'n,'nc,'c
     >
     (createNode, checkNode, createResultVal: 'n -> 'v) 
     =
-    inherit RenderBaseBuilder<'n,'c>(createNode, checkNode)
+    inherit NodeBuilder<'n,'c>(createNode, checkNode)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
-    member this.Run(v) =
-        this.ModifierContext |> ModifierContext.apply v (fun n v -> createResultVal n)
+    member this.Run(v) = this |> ModifierContext.apply v (fun n v -> createResultVal n)
 
 type RenderRetCnBaseBuilder<'n,'nc,'c
         when 'nc: equality
@@ -236,10 +228,10 @@ type RenderRetCnBaseBuilder<'n,'nc,'c
     >
     (createNode, checkNode) 
     =
-    inherit RenderBaseBuilder<'n,'c>(createNode, checkNode)
+    inherit NodeBuilder<'n,'c>(createNode, checkNode)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
-    member this.Run(v) = this.ModifierContext |> ModifierContext.apply v (fun n v -> v)
+    member this.Run(v) = this |> ModifierContext.apply v (fun n v -> v)
     member _.Return(x) = BuilderBricks.return'(x)
 
 
@@ -352,20 +344,20 @@ type NodeBuilderExtensions =
     
     /// Called once on initialization.
     [<Extension>]
-    static member OnInit(this: #RenderBaseBuilder<_,_>, m: NodeModifier<_>) =
-        do this.ModifierContext.InitModifiers.Add(m)
+    static member OnInit(this: #NodeBuilder<_,_>, m: NodeModifier<_>) =
+        do this.InitModifiers.Add(m)
         this
     
     /// Called on every Vide evaluatiopn cycle.
     [<Extension>]
-    static member OnEval(this: #RenderBaseBuilder<_,_>, m: NodeModifier<_>) =
-        do this.ModifierContext.EvalModifiers.Add(m)
+    static member OnEval(this: #NodeBuilder<_,_>, m: NodeModifier<_>) =
+        do this.EvalModifiers.Add(m)
         this
     
     /// Called after every Vide evaluatiopn cycle.
     [<Extension>]
-    static member OnAfterEval(this: #RenderBaseBuilder<_,_>, m: NodeModifier<_>) =
-        do this.ModifierContext.AfterEvalModifiers.Add(m)
+    static member OnAfterEval(this: #NodeBuilder<_,_>, m: NodeModifier<_>) =
+        do this.AfterEvalModifiers.Add(m)
         this
 
 module Event =
