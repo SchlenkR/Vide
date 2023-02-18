@@ -25,7 +25,6 @@ type NodeContext<'n when 'n: equality>
         document: INodeDocument<'n>
     ) =
     let mutable keptChildren = []
-    member _.Parent = parent
     member _.KeepChild(child) =
         do keptChildren <- child :: keptChildren
     member _.RemoveObsoleteChildren() =
@@ -35,7 +34,7 @@ type NodeContext<'n when 'n: equality>
             |> List.iter (fun child -> document.RemoveChild(parent, child))
     member _.ClearContent() =
         do document.ClearContent(parent)
-    member this.AddTextNode(text: string) =
+    member this.AppendTextNode(text: string) =
         let t = document.CreateTextNode(text)
         do this.KeepChild(t.node)
         do document.AppendChild(parent, t.node)
@@ -74,6 +73,8 @@ type NodeBuilder<'n,'c>
     member val AfterEvalModifiers: ResizeArray<NodeModifier<'n>> = ResizeArray() with get
 
 module ModifierContext =
+    // TODO: This is really, really weired. I think it's necessary to distinguish
+    // between 'nthis and 'nchild on a general level (see branch of 2023-02-18)
     let inline apply<'v1,'v2,'s,'n,'nc,'c
             when 'nc: equality
             and 'c :> NodeContext<'nc>
@@ -130,7 +131,7 @@ module BuilderBricks =
     
     let inline yieldText<'nc,'c when 'c :> NodeContext<'nc>>(value: string) =
         Vide <| fun s gc (ctx: 'c) ->
-            let textNode = s |> Option.defaultWith (fun () -> ctx.AddTextNode(value))
+            let textNode = s |> Option.defaultWith (fun () -> ctx.AppendTextNode(value))
             do
                 if textNode.getText() <> value then
                     textNode.setText(value)

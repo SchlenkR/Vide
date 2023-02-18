@@ -303,16 +303,16 @@ module Advanced =
             }
         }
 
-    let directAccessToHtmlElementViaComputation =
-        vide {
-            let x = div {
-                // TODO: This (specifying gen arg + internal cast) is not what I want...
+    //let directAccessToHtmlElementViaComputation =
+    //    vide {
+    //        let x = div {
+    //            // TODO: This (specifying gen arg + internal cast) is not what I want...
 
-                let! htmlDivElement = Vide.node<HTMLDivElement>
-                $"...we can now access HTML element: {htmlDivElement.nodeName}"
-            }
-            x
-        }
+    //            let! htmlDivElement = Vide.node<HTMLDivElement>
+    //            $"...we can now access HTML element: {htmlDivElement.nodeName}"
+    //        }
+    //        x
+    //    }
 
     let shouldCompile1 =
         // Both void and content builders should be able to yield

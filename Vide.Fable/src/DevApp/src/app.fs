@@ -150,11 +150,11 @@ let demos =
                         "TODO",
                         start Demos.Advanced.directAccessToHtmlElementViaInitAndEval
                     )
-                    (
-                        "Direct access to HTMLElement (via computation)",
-                        "TODO",
-                        start Demos.Advanced.directAccessToHtmlElementViaComputation
-                    )
+                    //(
+                    //    "Direct access to HTMLElement (via computation)",
+                    //    "TODO",
+                    //    start Demos.Advanced.directAccessToHtmlElementViaComputation
+                    //)
                 ]
             |}
 
