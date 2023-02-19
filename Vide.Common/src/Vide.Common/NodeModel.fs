@@ -82,10 +82,10 @@ module ModifierContext =
         >
         (Vide childVide: Vide<'v1,'s,'c>)
         (createResultVal: 'n -> 'v1 -> 'v2)
-        (nodeBuilder: NodeBuilder<'n,'c>)
+        (this: NodeBuilder<'n,'c>)
         : Vide<'v2, NodeBuilderState<'n,'s>, 'c>
         =
-        Vide <| fun s gc (ctx: 'c) ->
+        Vide <| fun s gc (parentCtx: 'c) ->
             Debug.print 0 "RUN:NodeBuilder"
             let inline runModifiers modifiers node =
                 for m in modifiers do
@@ -99,23 +99,23 @@ module ModifierContext =
                 // But: See comment in definition of: Vide.Core.Vide
                 match s with
                 | None ->
-                    let newNode,s = nodeBuilder.CreateThisNode(ctx), cs
-                    do runModifiers nodeBuilder.InitModifiers newNode
+                    let newNode,s = this.CreateThisNode(parentCtx), cs
+                    do runModifiers this.InitModifiers newNode
                     newNode,s
                 | Some node ->
-                    match nodeBuilder.CheckChildNode(node) with
+                    match this.CheckChildNode(node) with
                     | Keep ->
-                        ctx.KeepChild((box node) :?> 'nc)
+                        parentCtx.KeepChild((box node) :?> 'nc)
                         node,cs
                     | DiscardAndCreateNew ->
-                        nodeBuilder.CreateThisNode(ctx), None
-            do runModifiers nodeBuilder.EvalModifiers node
+                        this.CreateThisNode(parentCtx), None
+            do runModifiers this.EvalModifiers node
             let childCtx =
                 // TODO: Why the unsafe cast everywhere in this function?
-                nodeBuilder.CreateContext node
+                this.CreateContext node
             let cv,cs = childVide cs gc childCtx
             do childCtx.RemoveObsoleteChildren()
-            do runModifiers nodeBuilder.AfterEvalModifiers node
+            do runModifiers this.AfterEvalModifiers node
             let result = createResultVal node cv
             let state = Some (Some node, cs)
             result,state
