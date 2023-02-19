@@ -12,10 +12,10 @@ type FableDocument() =
             parent.appendChild(child) |> ignore
         member _.RemoveChild(parent, child) =
             parent.removeChild(child) |> ignore
-        member _.GetChildNodes(parent) =
+        member _.GetChildren(parent) =
             let nodes = parent.childNodes
             [ for i in 0 .. nodes.length-1 do nodes.Item i ]
-        member _.ClearContent(parent) =
+        member _.ClearChildren(parent) =
             parent.textContent <- ""
         member _.CreateTextNode(text) =
             let tn = document.createTextNode(text)

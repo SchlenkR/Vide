@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="WpfishModel.fs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="Core.fs" />
     <Compile Include="NodeModel.fs" />
     <Compile Include="WebModel.fs" />

@@ -16,16 +16,14 @@ type WebContext<'n when 'n: equality>
         document: IWebDocument<'n>
     ) =
     inherit NodeContext<'n>(parent, document)
-    member this.AppendNodeOfName<'e>(tagName: string) : 'e =
-        let n = document.CreateNodeOfName(tagName)
-        do this.KeepChild(n)
-        do document.AppendChild(parent, n)
-        // TODO: Can we get rid of the unsafe cast?
-        (box n) :?> 'e
+    member _.WebDocument = document
 
 module BuilderHelper =
-    let createNode elemName (ctx: #WebContext<_>) =
-        ctx.AppendNodeOfName<'n>(elemName)
+    let createNode<'e,'n when 'n: equality> tagName (ctx: WebContext<'n>) =
+        let n = ctx.WebDocument.CreateNodeOfName(tagName)
+        do ctx.AppendChild(n)
+        // TODO: Can we get rid of the unsafe cast?
+        (box n) :?> 'e
     
     let checkNode (expectedNodeName: string) (actualNodeName: string) =
         // WebSharper has no Equals(.., StrComp) available, so we use this

@@ -14,8 +14,10 @@ type TextNodeProxy<'n> =
 type INodeDocument<'n> =
     abstract member AppendChild : parent: 'n * child: 'n -> unit
     abstract member RemoveChild : parent: 'n * child: 'n -> unit
-    abstract member GetChildNodes : parent: 'n -> 'n list
-    abstract member ClearContent : parent: 'n -> unit
+    abstract member GetChildren : parent: 'n -> 'n list
+    abstract member ClearChildren : parent: 'n -> unit
+    // This seems to be so common and useful for all type of backends
+    // that we will leave it here (for now)
     abstract member CreateTextNode : text: string -> TextNodeProxy<'n>
 
 [<AbstractClass>] 
@@ -25,20 +27,19 @@ type NodeContext<'n when 'n: equality>
         document: INodeDocument<'n>
     ) =
     let mutable keptChildren = []
+    member _.NodeDocument = document
     member _.KeepChild(child) =
         do keptChildren <- child :: keptChildren
+    member this.AppendChild(child) =
+        do this.KeepChild(child)
+        do document.AppendChild(parent, child)
     member _.RemoveObsoleteChildren() =
         do 
-            document.GetChildNodes(parent)
+            document.GetChildren(parent)
             |> List.except keptChildren
             |> List.iter (fun child -> document.RemoveChild(parent, child))
     member _.ClearContent() =
-        do document.ClearContent(parent)
-    member this.AppendTextNode(text: string) =
-        let t = document.CreateTextNode(text)
-        do this.KeepChild(t.node)
-        do document.AppendChild(parent, t.node)
-        t
+        do document.ClearChildren(parent)
 
 type BuilderOperations = | Clear
 
@@ -128,16 +129,20 @@ module BuilderBricks =
             match op with
             | Clear -> ctx.ClearContent()
             (),None
-    
+
     let inline yieldText<'nc,'c when 'c :> NodeContext<'nc>>(value: string) =
         Vide <| fun s gc (ctx: 'c) ->
-            let textNode = s |> Option.defaultWith (fun () -> ctx.AppendTextNode(value))
+            let textNode =
+                s |> Option.defaultWith (fun () ->
+                    let textNode = ctx.NodeDocument.CreateTextNode(value)
+                    do ctx.AppendChild(textNode.node)
+                    textNode
+                )
             do
                 if textNode.getText() <> value then
                     textNode.setText(value)
                 ctx.KeepChild(textNode.node)
             (), Some textNode
-
 
 // ---------------------------------------------------------------------------------
 // The four (+1 base) basic builders for "vide { .. }" and renderers
@@ -234,8 +239,8 @@ type RenderRetCnBaseBuilder<'n,'nc,'c
 // -------------------------------------------------------------------
 
 type ComponentRetCnBaseBuilder<'nc,'c
-        when 'c :> NodeContext<'nc> 
-        and 'nc : equality
+        when 'nc : equality
+        and 'c :> NodeContext<'nc> 
     > with
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
