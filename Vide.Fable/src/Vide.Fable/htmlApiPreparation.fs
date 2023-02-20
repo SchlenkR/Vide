@@ -1,6 +1,11 @@
-namespace Vide.HtmlApiPreparation
+namespace Vide.Fable.HtmlApiPreparation
 
+open Browser
 open Browser.Types
+
+module HTMLElement =
+    let create<'e when 'e :> HTMLElement> tagName =
+        fun () -> document.createElement(tagName) :?> 'e
 
 type VoidResult = unit
 

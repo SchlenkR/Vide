@@ -10,13 +10,14 @@ let [<Literal>] HtmlApiTemplate = """
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Vide
+namespace Vide.Fable
 
 open System.Runtime.CompilerServices
 open Browser.Types
 open Vide
+open Vide.Fable
 open Vide.WebModel
-open Vide.HtmlApiPreparation
+open Vide.Fable.HtmlApiPreparation
 
 [<AutoOpen>]
 module HtmlEnumAttributeTypes =
@@ -30,17 +31,17 @@ module HtmlEnumAttributeTypes =
     {{end}}
 
 module HtmlElementBuilders =
-    type HtmlGARenderValC0Builder<'v,'n when 'n :> HTMLElement and 'n: equality>(tagName, resultSelector) =
-        inherit RenderValC0Builder<'v,'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName), resultSelector)
+    type HtmlGARenderValC0Builder<'v,'e when 'e :> HTMLElement>(tagName, resultSelector) =
+        inherit RenderValC0Builder<'v,'e>(HTMLElement.create<'e> tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName), resultSelector)
 
-    type HtmlGARenderRetC0Builder<'n when 'n :> HTMLElement and 'n: equality>(tagName) =
-        inherit RenderRetC0Builder<'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName))
+    type HtmlGARenderRetC0Builder<'e when 'e :> HTMLElement>(tagName) =
+        inherit RenderRetC0Builder<'e>(HTMLElement.create<'e> tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName))
 
-    type HtmlGARenderValCnBuilder<'v,'n when 'n :> HTMLElement and 'n: equality>(tagName, resultSelector) =
-        inherit RenderValCnBuilder<'v,'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName), resultSelector)
+    type HtmlGARenderValCnBuilder<'v,'e when 'e :> HTMLElement>(tagName, resultSelector) =
+        inherit RenderValCnBuilder<'v,'e>(HTMLElement.create<'e> tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName), resultSelector)
 
-    type HtmlGARenderRetCnBuilder<'n when 'n :> HTMLElement and 'n: equality>(tagName) =
-        inherit RenderRetCnBuilder<'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName))
+    type HtmlGARenderRetCnBuilder<'e when 'e :> HTMLElement>(tagName) =
+        inherit RenderRetCnBuilder<'e>(HTMLElement.create<'e> tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName))
 
     {{for builder in builders}}{{builder.definition}}{{end}}
 
@@ -63,12 +64,12 @@ type {{ext.builderName}}Extensions =
 {{evt.xmlDoc}}
         [<Extension>]
         static member {{evt.memberName}}(this: {{ext.builderParamTypeAnnotation}}, handler) =
-            this.OnEval(fun x -> x.node.{{evt.name}} <- Event.handle x.node x.globalContext handler)
+            this.OnEval(fun x -> x.document.Node.{{evt.name}} <- Event.handle x.document.Node x.globalContext handler)
 
 {{evt.xmlDoc}}
         [<Extension>]
         static member {{evt.memberName}}(this: {{ext.builderParamTypeAnnotation}}, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.node.{{evt.name}} <- Event.handle x.node x.globalContext (fun args ->
+            this.OnEval(fun x -> x.document.Node.{{evt.name}} <- Event.handle x.document.Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         {{end}}
     end
@@ -98,6 +99,7 @@ let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Ev
         [ for elem in elements do
             let builderDefinition =
                 let valueTypeName = $"{elem.tagName}Value"
+                let createResultValueText = $"fun document -> {valueTypeName}(document.Node)"
                 match elem.returnsValue, elem.elementType with
                 | true,Void ->
                     $"""
@@ -105,7 +107,7 @@ let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Ev
         inherit HtmlGARenderValC0Builder<{valueTypeName}, {elem.domInterfaceName}>
             (
                 "{elem.tagName}",
-                fun node -> {valueTypeName}(node)
+                {createResultValueText}
             )
                     """
 
@@ -121,7 +123,7 @@ let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Ev
         inherit HtmlGARenderValC0Builder<{valueTypeName}, {elem.domInterfaceName}>
             (
                 "{elem.tagName}",
-                fun node -> {valueTypeName}(node)
+                {createResultValueText}
             )
                     """
 
@@ -179,20 +181,20 @@ let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Ev
                         match attr.setMode with
                         | SetAttribute ->
                             let setAttrString valueAsString =
-                                $"""fun x -> x.node.setAttribute("{attr.name}", %s{valueAsString})"""
+                                $"""fun x -> x.document.Node.setAttribute("{attr.name}", %s{valueAsString})"""
                             let body =
                                 match attrType with
                                 | AttrTyp.Text -> 
                                     setAttrString "value"
                                 | AttrTyp.Boolean Present ->
-                                    $"""fun x -> if value then x.node.setAttribute("{attr.name}", null) else x.node.removeAttribute("{attr.name}") """
+                                    $"""fun x -> if value then x.document.Node.setAttribute("{attr.name}", null) else x.document.Node.removeAttribute("{attr.name}") """
                                 | AttrTyp.Boolean TrueFalse ->
                                     setAttrString """if value then "true" else "false" """
                                 | AttrTyp.Enum _ ->
                                     setAttrString "value.ToString()"
                             body
                         | DomPropertySetter ->
-                            $"""fun x -> x.node.{attr.name} <- value"""
+                            $"""fun x -> x.document.Node.{attr.name} <- value"""
                     Api.attr(
                         attr.fsharpName, 
                         setterCode,

@@ -4,6 +4,7 @@ open Browser.Dom
 open Browser.Types
 open Fable.Core.JS
 open Vide
+open Vide.Fable
 open DevApp
 
 do Debug.enabledDebugChannels <- 
@@ -18,7 +19,7 @@ let mutable currentApp = None
 let demos = 
     let inline start content host =
         let content = content |> Vide.map ignore
-        let app = VideApp.createFableWithObjState host content (fun _ _ _ -> ())
+        let app = FableApp.createWithObjState host content (fun _ _ _ -> ())
         do currentApp <- Some app
         do app.EvaluationManager.RequestEvaluation()
     let demos =

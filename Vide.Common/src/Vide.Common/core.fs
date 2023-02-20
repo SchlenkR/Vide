@@ -133,38 +133,38 @@ module VideApp =
 module Vide =
 
     // Preserves the first value given and discards subsequent values.
-    let preserveValue x =
-        Vide <| fun s gc ctx ->
+    let preserveValue<'c> x =
+        Vide <| fun s gc (ctx: 'c) ->
             let s = s |> Option.defaultValue x
             s, Some s
     
-    let preserveWith x =
-        Vide <| fun s gc ctx ->
+    let preserveWith<'c> x =
+        Vide <| fun s gc (ctx: 'c) ->
             let s = s |> Option.defaultWith x
             s, Some s
     
     // TODO: Think about which function is "global" and module-bound
-    let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
-        Vide <| fun s gc ctx ->
+    let map<'v1,'v2,'s,'c> (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
+        Vide <| fun s gc (ctx: 'c) ->
             let v,s = v s gc ctx
             proj v, s
     
     // why 's and not unit? -> see comment in "VideBuilder.Zero"
     [<GeneralizableValue>]
     let zero<'s,'c> : Vide<unit,'s,'c> =
-        Vide <| fun s gc ctx -> (),None
+        Vide <| fun s gc (ctx: 'c) -> (),None
     
     [<GeneralizableValue>]
     let context<'c> : Vide<'c,unit,'c> =
         Vide <| fun s gc ctx -> ctx,None
 
-    let ofMutable x =
-        Vide <| fun s gc ctx ->
+    let ofMutable<'c,'v when 'v : equality> (x: 'v) =
+        Vide <| fun s gc (ctx: 'c) ->
             let s = s |> Option.defaultWith (fun () -> MutableValue(x, gc.evaluationManager))
             s, Some s
 
 module BuilderBricks =
-    let bind
+    let bind<'v1,'v2,'s1,'s2,'c>
         (
             Vide m: Vide<'v1,'s1,'c>,
             f: 'v1 -> Vide<'v2,'s2,'c>
@@ -197,12 +197,12 @@ module BuilderBricks =
     // Another zero (with 's as state) is required for "if"s without an "else".
     // Unfortunately, we cannot have both. For that reason, "if"s without "else"
     // must use "else elseZero".
-    let zero
+    let zero<'c>
         ()
         : Vide<unit,unit,'c>
         = Vide.zero<unit,'c>
 
-    let delay
+    let delay<'v,'s,'c>
         (f: unit -> Vide<'v,'s,'c>)
         : Vide<'v,'s,'c>
         =
@@ -227,7 +227,7 @@ module BuilderBricks =
     //    : Vide<'v,'s1 option * 's2 option,'c>
     //    =
     //    combine a b fst
-    let combine
+    let combine<'v1,'s1,'v2,'s2,'c>
         (
             Vide a: Vide<'v1,'s1,'c>,
             Vide b: Vide<'v2,'s2,'c>
@@ -243,7 +243,7 @@ module BuilderBricks =
             let vb,sb = b sb gc ctx
             vb, Some (sa,sb)
 
-    let for'
+    let for'<'a,'v,'s,'c when 'a : comparison>
         (
             input: seq<'a>,
             body: 'a -> Vide<'v,'s,'c>
@@ -288,7 +288,7 @@ module BuilderBricks =
             =
             AsyncBindResult(m, f)
     
-        let delay
+        let delay<'v1,'v2>
             (f: unit -> AsyncBindResult<'v1,'v2>)
             : AsyncBindResult<'v1,'v2>
             =
@@ -335,16 +335,17 @@ module BuilderBricks =
                             va,comp,sb
                 v, Some (sa, Some comp, sb)
 
-[<AbstractClass>]
-type VideBaseBuilder() =
-    member _.Bind(m, f) = BuilderBricks.bind(m, f)
-    member _.Zero() = BuilderBricks.zero()
-    member _.Delay(f) = BuilderBricks.delay(f)
+// we cannot have this due to value restrictions
+//[<AbstractClass>]
+//type VideBaseBuilder() =
+//    member _.Bind(m, f) = BuilderBricks.bind(m, f)
+//    member _.Zero() = BuilderBricks.zero()
+//    member _.Delay(f) = BuilderBricks.delay(f)
 
-    // ---------------------
-    // ASYNC
-    // ---------------------
-    member _.Bind(m, f) = BuilderBricks.Async.bind(m, f)
-    member _.Delay(f) = BuilderBricks.Async.delay(f)
-    member _.Combine(a, b) = BuilderBricks.Async.combine(a, b)
-    // TODO: async for
+//    // ---------------------
+//    // ASYNC
+//    // ---------------------
+//    member _.Bind(m, f) = BuilderBricks.Async.bind(m, f)
+//    member _.Delay(f) = BuilderBricks.Async.delay(f)
+//    member _.Combine(a, b) = BuilderBricks.Async.combine(a, b)
+//    // TODO: async for

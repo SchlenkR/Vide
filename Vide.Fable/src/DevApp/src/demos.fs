@@ -3,7 +3,8 @@ module DevApp.Demos
 open System
 open Browser.Types
 open Vide
-open type Vide.Html
+open Vide.Fable
+open type Vide.Fable.Html
 
 // TODO: demo for async + clear
 
@@ -20,7 +21,7 @@ module GettingStarted =
             button.onclick(fun _ -> count += 1) { "inc" }
         }
 
-    let conditionalAttributes =
+    let conditionalAttributes  =
         vide {
             let! count = Vide.ofMutable 0
 
@@ -294,11 +295,11 @@ module Async =
 module Advanced =
     let directAccessToHtmlElementViaInitAndEval =
         vide {
-            div.OnEval(fun x -> x.node.className <- "bam")  {
+            div.OnEval(fun x -> x.document.Node.className <- "bam")  {
                 "I'm the OnEval div"
             }
 
-            div.OnInit(fun x -> x.node.className <- "bam2") {
+            div.OnInit(fun x -> x.document.Node.className <- "bam2") {
                 "I'm the OnInit div"
             }
         }
@@ -384,7 +385,18 @@ module TodoList =
     }
     
 
-//module Playground =
+module Playground =
+    // must compile
+    let compTest1 =
+        vide {
+            div {
+                p { "" }
+
+                let! count = Vide.ofMutable 0
+                button.onclick(fun _ -> count -= 1) { "dec" }
+            }
+        }
+
 
 //    let bindTest =
 //        vide {
