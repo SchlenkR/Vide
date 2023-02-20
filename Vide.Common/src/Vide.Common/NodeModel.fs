@@ -11,23 +11,28 @@ type TextNodeProxy<'n> =
         setText: string -> unit
     }
 
-type INodeDocument<'n> =
-    abstract member AppendChild : parent: 'n * child: 'n -> unit
-    abstract member RemoveChild : parent: 'n * child: 'n -> unit
-    abstract member GetChildren : parent: 'n -> 'n list
-    abstract member ClearChildren : parent: 'n -> unit
+type NodeCheckResult = Keep | DiscardAndCreateNew
+
+type INodeDocument<'np,'nc> =
+    abstract member AppendChild : parent:'np * child:'nc -> unit
+    abstract member RemoveChild : parent:'np * child:'nc -> unit
+    abstract member GetChildren : parent:'np -> 'nc list
+    abstract member ClearChildren : parent:'np -> unit
     // This seems to be so common and useful for all type of backends
     // that we will leave it here (for now)
-    abstract member CreateTextNode : text: string -> TextNodeProxy<'n>
+    abstract member CreateTextNode : text:string -> TextNodeProxy<'nc>
 
-[<AbstractClass>] 
-type NodeContext<'n when 'n: equality>
+type NodeContext<'np,'nc,'d
+        when 'np: equality 
+        and 'nc: equality  
+        and 'd :> INodeDocument<'np,'nc>
+    >
     (
-        parent: 'n, 
-        document: INodeDocument<'n>
+        parent: 'np, 
+        document: 'd
     ) =
-    let mutable keptChildren = []
-    member _.NodeDocument = document
+    let mutable keptChildren : 'nc list = []
+    member _.Document = document
     member _.KeepChild(child) =
         do keptChildren <- child :: keptChildren
     member this.AppendChild(child) =
@@ -38,14 +43,14 @@ type NodeContext<'n when 'n: equality>
             document.GetChildren(parent)
             |> List.except keptChildren
             |> List.iter (fun child -> document.RemoveChild(parent, child))
+    member _.CreateTextNode(value) =
+        document.CreateTextNode(value)
     member _.ClearContent() =
         do document.ClearChildren(parent)
 
 type BuilderOperations = | Clear
 
 type NodeBuilderState<'n,'s> = option<'n> * option<'s>
-
-type ChildAction = Keep | DiscardAndCreateNew
 
 type NodeModifierContext<'n> =
     {
@@ -56,36 +61,31 @@ type NodeModifierContext<'n> =
 type NodeModifier<'n> = NodeModifierContext<'n> -> unit
 
 [<AbstractClass>]
-type NodeBuilder<'n,'c>
+type NodeBuilder<'np,'nc,'d 
+        when 'np : equality 
+        and 'nc : equality 
+        and 'd :> INodeDocument<'np,'nc>
+    >
     (
-        createContext: 'n -> 'c,
-        createThisNode: 'c -> 'n,
-        checkChildNode: 'n -> ChildAction
+        createContext: 'np -> NodeContext<'np,'nc,'d>,
+        createThisNode: unit -> 'np,
+        checkThisNode: 'np -> NodeCheckResult
     ) =
     
     inherit VideBaseBuilder()
 
-    member _.CreateContext = createContext
-    member _.CreateThisNode = createThisNode
-    member _.CheckChildNode = checkChildNode
+    member val InitModifiers: ResizeArray<NodeModifier<'np>> = ResizeArray() with get
+    member val EvalModifiers: ResizeArray<NodeModifier<'np>> = ResizeArray() with get
+    member val AfterEvalModifiers: ResizeArray<NodeModifier<'np>> = ResizeArray() with get
 
-    member val InitModifiers: ResizeArray<NodeModifier<'n>> = ResizeArray() with get
-    member val EvalModifiers: ResizeArray<NodeModifier<'n>> = ResizeArray() with get
-    member val AfterEvalModifiers: ResizeArray<NodeModifier<'n>> = ResizeArray() with get
-
-module ModifierContext =
-    // TODO: This is really, really weired. I think it's necessary to distinguish
-    // between 'nthis and 'nchild on a general level (see branch of 2023-02-18)
-    let inline apply<'v1,'v2,'s,'n,'nc,'c
-            when 'nc: equality
-            and 'c :> NodeContext<'nc>
-        >
-        (Vide childVide: Vide<'v1,'s,'c>)
-        (createResultVal: 'n -> 'v1 -> 'v2)
-        (this: NodeBuilder<'n,'c>)
-        : Vide<'v2, NodeBuilderState<'n,'s>, 'c>
+    member this.Apply
+        (
+            Vide childVide: Vide<'v,'s,NodeContext<'np,'nc,_>>,
+            createResultVal: 'np -> 'v -> 'vres
+        )
+        : Vide<'vres,NodeBuilderState<'np,'s>,_>
         =
-        Vide <| fun s gc (parentCtx: 'c) ->
+        Vide <| fun s gc (parentCtx: NodeContext<'npp,'np,_>) ->
             Debug.print 0 "RUN:NodeBuilder"
             let inline runModifiers modifiers node =
                 for m in modifiers do
@@ -94,47 +94,49 @@ module ModifierContext =
                 match s with
                 | None -> None,None
                 | Some (ms,fs) -> ms,fs
-            let node,cs =
+            let thisNode,cs =
+                let createThisNode () =
+                    let newNode = createThisNode ()
+                    parentCtx.AppendChild(newNode)
+                    newNode
                 // Can it happen that s is Some and cs is None? I don't think so.
                 // But: See comment in definition of: Vide.Core.Vide
                 match s with
                 | None ->
-                    let newNode,s = this.CreateThisNode(parentCtx), cs
+                    let newNode,s = createThisNode(), cs
                     do runModifiers this.InitModifiers newNode
                     newNode,s
                 | Some node ->
-                    match this.CheckChildNode(node) with
+                    match checkThisNode(node) with
                     | Keep ->
-                        parentCtx.KeepChild((box node) :?> 'nc)
+                        parentCtx.KeepChild(node)
                         node,cs
                     | DiscardAndCreateNew ->
-                        this.CreateThisNode(parentCtx), None
-            do runModifiers this.EvalModifiers node
-            let childCtx =
-                // TODO: Why the unsafe cast everywhere in this function?
-                this.CreateContext node
-            let cv,cs = childVide cs gc childCtx
-            do childCtx.RemoveObsoleteChildren()
-            do runModifiers this.AfterEvalModifiers node
-            let result = createResultVal node cv
-            let state = Some (Some node, cs)
+                        createThisNode(), None
+            do runModifiers this.EvalModifiers thisNode
+            let thisCtx = createContext(thisNode)
+            let cv,cs = childVide cs gc thisCtx
+            do thisCtx.RemoveObsoleteChildren()
+            do runModifiers this.AfterEvalModifiers thisNode
+            let result = createResultVal thisNode cv
+            let state = Some (Some thisNode, cs)
             result,state
 
 module BuilderBricks =
     let inline yieldVide(v: Vide<_,_,_>) =
         v
     
-    let inline yieldBuilderOp<'nc,'c when 'c :> NodeContext<'nc>>(op: BuilderOperations) =
-        Vide <| fun s gc (ctx: 'c) ->
+    let inline yieldBuilderOp (op: BuilderOperations) =
+        Vide <| fun s gc (ctx: NodeContext<_,_,_>) ->
             match op with
             | Clear -> ctx.ClearContent()
             (),None
 
-    let inline yieldText<'nc,'c when 'c :> NodeContext<'nc>>(value: string) =
-        Vide <| fun s gc (ctx: 'c) ->
+    let inline yieldText (value: string) =
+        Vide <| fun s gc (ctx: NodeContext<_,_,_>) ->
             let textNode =
                 s |> Option.defaultWith (fun () ->
-                    let textNode = ctx.NodeDocument.CreateTextNode(value)
+                    let textNode = ctx.CreateTextNode(value)
                     do ctx.AppendChild(textNode.node)
                     textNode
                 )
@@ -160,75 +162,98 @@ module BuilderBricks =
 //   + Combine,For,Delay
 // -------------------------------------------------------------------
 
-type ComponentRetCnBaseBuilder<'nc,'c
-        when 'nc : equality
-        and 'c :> NodeContext<'nc> 
+//let combineNodes
+//    (
+//        Vide a: Vide<'v1,'s1,NodeContext<_>,
+//        Vide b: Vide<'v2,'s2,'c>
+//    )
+//    : Vide<'v2,'s1 option * 's2 option,'c>
+//    =
+//    Vide <| fun s gc ctx ->
+//        let sa,sb =
+//            match s with
+//            | None -> None,None
+//            | Some (ms,fs) -> ms,fs
+//        let va,sa = a sa gc ctx
+//        let vb,sb = b sb gc ctx
+//        vb, Some (sa,sb)
+
+type ComponentRetCnBaseBuilder<'np,'nc,'d 
+        when 'np : equality 
+        and 'nc : equality 
+        and 'd :> INodeDocument<'np,'nc>
     > () =
     inherit VideBaseBuilder()
-    member _.Return(x: 'v) = BuilderBricks.return'<'v,'c>(x)
+    member _.Return(x) = BuilderBricks.return'(x)
     member _.Delay(f) = BuilderBricks.delay(f)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
 
-type RenderValC0BaseBuilder<'v,'n,'nc,'c
-        when 'nc: equality
-        and 'c :> NodeContext<'nc>
+type RenderValC0BaseBuilder<'v,'np,'nc,'d 
+        when 'np : equality 
+        and 'nc : equality 
+        and 'd :> INodeDocument<'np,'nc>
     >
-    (createContext, createThisNode, checkChildNode, createResultVal: 'n -> 'v) 
+    (createContext, createThisNode, checkThisNode, createResultVal: 'np -> 'v) 
     =
-    inherit NodeBuilder<'n,'c>(createContext, createThisNode, checkChildNode)
-    member this.Run(v) = this |> ModifierContext.apply v (fun n v -> createResultVal n)
+    inherit NodeBuilder<'np,'nc,'d>(createContext, createThisNode, checkThisNode)
+    member this.Run(v) = this.Apply(v, (fun n v -> createResultVal n))
 
-type RenderRetC0BaseBuilder<'n,'nc,'c
-        when 'nc: equality
-        and 'c :> NodeContext<'nc>
+type RenderRetC0BaseBuilder<'np,'nc,'d 
+        when 'np : equality 
+        and 'nc : equality 
+        and 'd :> INodeDocument<'np,'nc>
     >
-    (createContext, createThisNode, checkChildNode) 
+    (createContext, createThisNode, checkThisNode)
     =
-    inherit NodeBuilder<'n,'c>(createContext, createThisNode, checkChildNode)
+    inherit NodeBuilder<'np,'nc,'d>(createContext, createThisNode, checkThisNode)
     member _.Return(x) = BuilderBricks.return'(x)
-    member this.Run(v) = this |> ModifierContext.apply v (fun n v -> v)
+    member this.Run(v) = this.Apply(v, (fun n v -> v))
 
-type RenderValC1BaseBuilder<'v,'n,'nc,'c
-        when 'nc: equality
-        and 'c :> NodeContext<'nc>
+type RenderValC1BaseBuilder<'v,'np,'nc,'d 
+        when 'np : equality 
+        and 'nc : equality 
+        and 'd :> INodeDocument<'np,'nc>
     >
-    (createContext, createThisNode, checkChildNode, createResultVal: 'n -> 'v) 
+    (createContext, createThisNode, checkThisNode, createResultVal: 'np -> 'v) 
     =
-    inherit NodeBuilder<'n,'c>(createContext, createThisNode, checkChildNode)
-    member this.Run(v) = this |> ModifierContext.apply v (fun n v -> createResultVal n)
+    inherit NodeBuilder<'np,'nc,'d>(createContext, createThisNode, checkThisNode)
+    member this.Run(v) = this.Apply(v, (fun n v -> createResultVal n))
 
-type RenderRetC1BaseBuilder<'n,'nc,'c
-        when 'nc: equality
-        and 'c :> NodeContext<'nc>
+type RenderRetC1BaseBuilder<'np,'nc,'d 
+        when 'np : equality 
+        and 'nc : equality 
+        and 'd :> INodeDocument<'np,'nc>
     >
-    (createContext, createThisNode, checkChildNode) 
+    (createContext, createThisNode, checkThisNode)
     =
-    inherit NodeBuilder<'n,'c>(createContext, createThisNode, checkChildNode)
+    inherit NodeBuilder<'np,'nc,'d>(createContext, createThisNode, checkThisNode)
     member _.Return(x) = BuilderBricks.return'(x)
-    member this.Run(v) = this |> ModifierContext.apply v (fun n v -> v)
+    member this.Run(v) = this.Apply(v, (fun n v -> v))
 
-type RenderValCnBaseBuilder<'v,'n,'nc,'c
-        when 'nc: equality
-        and 'c :> NodeContext<'nc>
+type RenderValCnBaseBuilder<'v,'np,'nc,'d 
+        when 'np : equality 
+        and 'nc : equality 
+        and 'd :> INodeDocument<'np,'nc>
     >
-    (createContext, createThisNode, checkChildNode, createResultVal: 'n -> 'v) 
+    (createContext, createThisNode, checkThisNode, createResultVal: 'np -> 'v) 
     =
-    inherit NodeBuilder<'n,'c>(createContext, createThisNode, checkChildNode)
+    inherit NodeBuilder<'np,'nc,'d>(createContext, createThisNode, checkThisNode)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
-    member this.Run(v) = this |> ModifierContext.apply v (fun n v -> createResultVal n)
+    member this.Run(v) = this.Apply(v, (fun n v -> createResultVal n))
 
-type RenderRetCnBaseBuilder<'n,'nc,'c
-        when 'nc: equality
-        and 'c :> NodeContext<'nc>
+type RenderRetCnBaseBuilder<'np,'nc,'d 
+        when 'np : equality 
+        and 'nc : equality 
+        and 'd :> INodeDocument<'np,'nc>
     >
-    (createContext, createThisNode, checkChildNode) 
+    (createContext, createThisNode, checkThisNode)
     =
-    inherit NodeBuilder<'n,'c>(createContext, createThisNode, checkChildNode)
+    inherit NodeBuilder<'np,'nc,'d>(createContext, createThisNode, checkThisNode)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
-    member this.Run(v) = this |> ModifierContext.apply v (fun n v -> v)
+    member this.Run(v) = this.Apply(v, (fun n v -> v))
     member _.Return(x) = BuilderBricks.return'(x)
 
 
@@ -238,116 +263,124 @@ type RenderRetCnBaseBuilder<'n,'nc,'c
 //     - standard yields
 // -------------------------------------------------------------------
 
-type ComponentRetCnBaseBuilder<'nc,'c
-        when 'nc : equality
-        and 'c :> NodeContext<'nc> 
+type ComponentRetCnBaseBuilder<'np,'nc,'d 
+        when 'np : equality 
+        and 'nc : equality 
+        and 'd :> INodeDocument<'np,'nc>
     > with
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
+    member _.Yield(b: ComponentRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
-    member _.Yield(op) = BuilderBricks.yieldText<'nc,'c>(op)
+    member _.Yield(op) = BuilderBricks.yieldText(op)
 
-type RenderRetC1BaseBuilder<'n,'nc,'c
-        when 'nc: equality
-        and 'c :> NodeContext<'nc>
+type RenderRetC1BaseBuilder<'np,'nc,'d 
+        when 'np : equality 
+        and 'nc : equality 
+        and 'd :> INodeDocument<'np,'nc>
     > with
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
+    member _.Yield(b: ComponentRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide v
     member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
-    member _.Yield(op) = BuilderBricks.yieldText<'nc,'c>(op)
+    member _.Yield(op) = BuilderBricks.yieldText(op)
     
-type RenderValC1BaseBuilder<'v,'n,'nc,'c
-        when 'nc: equality
-        and 'c :> NodeContext<'nc>
+type RenderValC1BaseBuilder<'v,'np,'nc,'d 
+        when 'np : equality 
+        and 'nc : equality 
+        and 'd :> INodeDocument<'np,'nc>
     > with
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
+    member _.Yield(b: ComponentRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
-    member _.Yield(op) = BuilderBricks.yieldText<'nc,'c>(op)
+    member _.Yield(op) = BuilderBricks.yieldText(op)
 
-type RenderRetCnBaseBuilder<'n,'nc,'c
-        when 'nc: equality
-        and 'c :> NodeContext<'nc>
+type RenderRetCnBaseBuilder<'np,'nc,'d 
+        when 'np : equality 
+        and 'nc : equality 
+        and 'd :> INodeDocument<'np,'nc>
     > with
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
+    member _.Yield(b: ComponentRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
-    member _.Yield(op) = BuilderBricks.yieldText<'nc,'c>(op)
+    member _.Yield(op) = BuilderBricks.yieldText(op)
 
-type RenderValCnBaseBuilder<'v,'n,'nc,'c
-        when 'nc: equality
-        and 'c :> NodeContext<'nc>
+type RenderValCnBaseBuilder<'v,'np,'nc,'d 
+        when 'np : equality 
+        and 'nc : equality 
+        and 'd :> INodeDocument<'np,'nc>
     > with
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
+    member _.Yield(b: ComponentRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
-    member _.Yield(op) = BuilderBricks.yieldText<'nc,'c>(op)
+    member _.Yield(op) = BuilderBricks.yieldText(op)
 
     
 // ----------------------------------------------------------------------------
 // "Bind"s (every Content builder can bind every builder that returns values)
 // ----------------------------------------------------------------------------
 
-type RenderRetC1BaseBuilder<'n,'nc,'c
-        when 'nc: equality
-        and 'c :> NodeContext<'nc>
+type RenderRetC1BaseBuilder<'np,'nc,'d 
+        when 'np : equality 
+        and 'nc : equality 
+        and 'd :> INodeDocument<'np,'nc>
     > with
     member _.Bind(m: RenderValC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetCnBaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
-    member _.Bind(m: ComponentRetCnBaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: ComponentRetCnBaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
 
-type RenderRetCnBaseBuilder<'n,'nc,'c
-        when 'nc: equality
-        and 'c :> NodeContext<'nc>
+type RenderRetCnBaseBuilder<'np,'nc,'d 
+        when 'np : equality 
+        and 'nc : equality 
+        and 'd :> INodeDocument<'np,'nc>
     > with
     member _.Bind(m: RenderValC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetCnBaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
-    member _.Bind(m: ComponentRetCnBaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: ComponentRetCnBaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
 
-type ComponentRetCnBaseBuilder<'nc,'c
-        when 'c :> NodeContext<'nc> 
-        and 'nc : equality
+type ComponentRetCnBaseBuilder<'np,'nc,'d 
+        when 'np : equality 
+        and 'nc : equality 
+        and 'd :> INodeDocument<'np,'nc>
     > with
     member _.Bind(m: RenderValC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetCnBaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
-    member _.Bind(m: ComponentRetCnBaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: ComponentRetCnBaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
 
 [<Extension>]
 type NodeBuilderExtensions =
     
     /// Called once on initialization.
     [<Extension>]
-    static member OnInit(this: #NodeBuilder<_,_>, m: NodeModifier<_>) =
+    static member OnInit(this: #NodeBuilder<_,_,_>, m: NodeModifier<_>) =
         do this.InitModifiers.Add(m)
         this
     
     /// Called on every Vide evaluatiopn cycle.
     [<Extension>]
-    static member OnEval(this: #NodeBuilder<_,_>, m: NodeModifier<_>) =
+    static member OnEval(this: #NodeBuilder<_,_,_>, m: NodeModifier<_>) =
         do this.EvalModifiers.Add(m)
         this
     
     /// Called after every Vide evaluatiopn cycle.
     [<Extension>]
-    static member OnAfterEval(this: #NodeBuilder<_,_>, m: NodeModifier<_>) =
+    static member OnAfterEval(this: #NodeBuilder<_,_,_>, m: NodeModifier<_>) =
         do this.AfterEvalModifiers.Add(m)
         this
 
@@ -360,11 +393,7 @@ module Event =
             mutable requestEvaluation: bool
         }
     
-    let inline handle<'n,'nc,'c,'evt when 'c :> NodeContext<'nc>>
-        (node: 'n) 
-        (gc: GlobalContext) 
-        (callback: NodeEventArgs<'evt,'n> -> unit)
-        =
+    let inline handle node gc (callback: NodeEventArgs<'evt,'n> -> unit) =
         fun evt ->
             let args = { node = node; evt = evt; gc = gc; requestEvaluation = true }
             try

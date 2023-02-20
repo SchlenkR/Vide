@@ -10,7 +10,7 @@ namespace Vide
 open System.Runtime.CompilerServices
 open Browser.Types
 open Vide
-open Vide.WebModel
+open Vide.Fable
 open Vide.HtmlApiPreparation
 
 [<AutoOpen>]

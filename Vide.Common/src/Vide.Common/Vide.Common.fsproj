@@ -16,7 +16,6 @@
   <ItemGroup>
     <Compile Include="Core.fs" />
     <Compile Include="NodeModel.fs" />
-    <Compile Include="WebModel.fs" />
     <Compile Include="WpfishModel.fs" />
   </ItemGroup>
 </Project>
