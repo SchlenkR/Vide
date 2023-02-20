@@ -99,28 +99,28 @@ let demos =
                 ]
             |}
 
-            {|
-                category = "Async"
-                elements = [
-                    (
-                        "Async (hello world)",
-                        "TODO",
-                        start Demos.Async.asyncHelloWorld
-                    )
+            //{|
+            //    category = "Async"
+            //    elements = [
+            //        (
+            //            "Async (hello world)",
+            //            "TODO",
+            //            start Demos.Async.asyncHelloWorld
+            //        )
 
-                    (
-                        "Async (inside elements)",
-                        "TODO",
-                        start Demos.Async.asyncInsideHtmlElements
-                    )
+            //        (
+            //            "Async (inside elements)",
+            //            "TODO",
+            //            start Demos.Async.asyncInsideHtmlElements
+            //        )
 
-                    (
-                        "Async (with return values)",
-                        "TODO",
-                        start Demos.Async.asyncWithSubsequentResults
-                    )
-                ]
-            |}
+            //        (
+            //            "Async (with return values)",
+            //            "TODO",
+            //            start Demos.Async.asyncWithSubsequentResults
+            //        )
+            //    ]
+            //|}
 
             {|
                 category = "Input"
