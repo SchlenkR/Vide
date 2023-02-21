@@ -46,27 +46,27 @@ type ComponentRetCnBuilder<'e when 'e :> HTMLElement>() =
     inherit ComponentRetCnBaseBuilder<Node,FableDocument<'e>>()
 
 type RenderValC0Builder<'v,'e when 'e :> HTMLElement>(createThisNode, checkChildNode, createResultVal) =
-    inherit RenderValC0BaseBuilder<'v,'e,Node,FableDocument<'e>>(
+    inherit RenderValC0BaseBuilder<'v,Node,FableDocument<'e>>(
         Helper.createNodeAndDocument<'e> createThisNode, checkChildNode, createResultVal)
 
 type RenderRetC0Builder<'e when 'e :> HTMLElement>(createThisNode, checkChildNode) =
-    inherit RenderRetC0BaseBuilder<'e,Node,FableDocument<'e>>(
+    inherit RenderRetC0BaseBuilder<Node,FableDocument<'e>>(
         Helper.createNodeAndDocument<'e> createThisNode, checkChildNode)
 
 type RenderValC1Builder<'v,'e when 'e :> HTMLElement>(createThisNode, checkChildNode, createResultVal) =
-    inherit RenderValC1BaseBuilder<'v,'e,Node,FableDocument<'e>>(
+    inherit RenderValC1BaseBuilder<'v,Node,FableDocument<'e>>(
         Helper.createNodeAndDocument<'e> createThisNode, checkChildNode, createResultVal)
 
 type RenderRetC1Builder<'e when 'e :> HTMLElement>(createThisNode, checkChildNode) =
-    inherit RenderRetC1BaseBuilder<'e,Node,FableDocument<'e>>(
+    inherit RenderRetC1BaseBuilder<Node,FableDocument<'e>>(
         Helper.createNodeAndDocument<'e> createThisNode, checkChildNode)
 
 type RenderValCnBuilder<'v,'e when 'e :> HTMLElement>(createThisNode, checkChildNode, createResultVal) =
-    inherit RenderValCnBaseBuilder<'v,'e,Node,FableDocument<'e>>(
+    inherit RenderValCnBaseBuilder<'v,Node,FableDocument<'e>>(
         Helper.createNodeAndDocument<'e> createThisNode, checkChildNode, createResultVal)
 
 type RenderRetCnBuilder<'e when 'e :> HTMLElement>(createThisNode, checkChildNode) =
-    inherit RenderRetCnBaseBuilder<'e,Node,FableDocument<'e>>(
+    inherit RenderRetCnBaseBuilder<Node,FableDocument<'e>>(
         Helper.createNodeAndDocument<'e> createThisNode, checkChildNode)
 
 

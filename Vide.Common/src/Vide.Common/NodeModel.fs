@@ -194,33 +194,33 @@ type ComponentRetCnBaseBuilder<'n,'d
     member _.Combine(a, b) = BuilderBricks.combine<_,_,_,_,NodeContext<'n,'d>> (a, b)
     member _.For(seq, body) = BuilderBricks.for'<_,_,_,NodeContext<'n,'d>> (seq, body)
 
-type RenderValC0BaseBuilder<'v,'e,'n,'d when 'n: equality and 'd :> INodeDocument<'n>>
+type RenderValC0BaseBuilder<'v,'n,'d when 'n: equality and 'd :> INodeDocument<'n>>
     (createNodeAndDocument, checkChildNode, createResultVal: 'd -> 'v)
     =
     inherit NodeBuilder<'n,'d>(createNodeAndDocument, checkChildNode)
     member this.Run(v) = this |> ModifierContext.apply v (fun d v -> createResultVal d)
 
-type RenderRetC0BaseBuilder<'e,'n,'d when 'n: equality and 'd :> INodeDocument<'n>>
+type RenderRetC0BaseBuilder<'n,'d when 'n: equality and 'd :> INodeDocument<'n>>
     (createNodeAndDocument, checkChildNode) 
     =
     inherit NodeBuilder<'n,'d>(createNodeAndDocument, checkChildNode)
     member _.Return(x) = BuilderBricks.return'<_,NodeContext<'n,'d>> (x)
     member this.Run(v) = this |> ModifierContext.apply v (fun d v -> v)
 
-type RenderValC1BaseBuilder<'v,'e,'n,'d when 'n: equality and 'd :> INodeDocument<'n>>
+type RenderValC1BaseBuilder<'v,'n,'d when 'n: equality and 'd :> INodeDocument<'n>>
     (createNodeAndDocument, checkChildNode, createResultVal: 'd -> 'v) 
     =
     inherit NodeBuilder<'n,'d>(createNodeAndDocument, checkChildNode)
     member this.Run(v) = this |> ModifierContext.apply v (fun d v -> createResultVal d)
 
-type RenderRetC1BaseBuilder<'e,'n,'d when 'n: equality and 'd :> INodeDocument<'n>>
+type RenderRetC1BaseBuilder<'n,'d when 'n: equality and 'd :> INodeDocument<'n>>
     (createNodeAndDocument, checkChildNode) 
     =
     inherit NodeBuilder<'n,'d>(createNodeAndDocument, checkChildNode)
     member _.Return(x) = BuilderBricks.return'<_,NodeContext<'n,'d>> (x)
     member this.Run(v) = this |> ModifierContext.apply v (fun d v -> v)
 
-type RenderValCnBaseBuilder<'v,'e,'n,'d when 'n: equality and 'd :> INodeDocument<'n>>
+type RenderValCnBaseBuilder<'v,'n,'d when 'n: equality and 'd :> INodeDocument<'n>>
     (createNodeAndDocument, checkChildNode, createResultVal: 'd -> 'v) 
     =
     inherit NodeBuilder<'n,'d>(createNodeAndDocument, checkChildNode)
@@ -228,7 +228,7 @@ type RenderValCnBaseBuilder<'v,'e,'n,'d when 'n: equality and 'd :> INodeDocumen
     member _.For(seq, body) = BuilderBricks.for'<_,_,_,NodeContext<'n,'d>> (seq, body)
     member this.Run(v) = this |> ModifierContext.apply v (fun d v -> createResultVal d)
 
-type RenderRetCnBaseBuilder<'e,'n,'d when 'n: equality and 'd :> INodeDocument<'n>>
+type RenderRetCnBaseBuilder<'n,'d when 'n: equality and 'd :> INodeDocument<'n>>
     (createNodeAndDocument, checkChildNode)
     =
     inherit NodeBuilder<'n,'d>(createNodeAndDocument, checkChildNode)
@@ -245,45 +245,45 @@ type RenderRetCnBaseBuilder<'e,'n,'d when 'n: equality and 'd :> INodeDocument<'
 // -------------------------------------------------------------------
 
 type ComponentRetCnBaseBuilder<'n,'d when 'n: equality and 'd :> INodeDocument<'n>> with
-    member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
+    member _.Yield(b: RenderValC0BaseBuilder<_,_,_>) = b {()}
+    member _.Yield(b: RenderRetC0BaseBuilder<_,_>) = b {()}
+    member _.Yield(b: RenderRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'d>(op)
 
-type RenderRetC0BaseBuilder<'e,'n,'d when 'n: equality and 'd :> INodeDocument<'n>> with
-    member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
+type RenderRetC0BaseBuilder<'n,'d when 'n: equality and 'd :> INodeDocument<'n>> with
+    member _.Yield(b: RenderValC0BaseBuilder<_,_,_>) = b {()}
+    member _.Yield(b: RenderRetC0BaseBuilder<_,_>) = b {()}
+    member _.Yield(b: RenderRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'d>(op)
 
-type RenderRetC1BaseBuilder<'e,'n,'d when 'n: equality and 'd :> INodeDocument<'n>> with
-    member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
+type RenderRetC1BaseBuilder<'n,'d when 'n: equality and 'd :> INodeDocument<'n>> with
+    member _.Yield(b: RenderValC0BaseBuilder<_,_,_>) = b {()}
+    member _.Yield(b: RenderRetC0BaseBuilder<_,_>) = b {()}
+    member _.Yield(b: RenderRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide v
     member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'d>(op)
 
-type RenderValCnBaseBuilder<'v,'e,'n,'d when 'n: equality and 'd :> INodeDocument<'n>> with
-    member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
+type RenderValCnBaseBuilder<'v,'n,'d when 'n: equality and 'd :> INodeDocument<'n>> with
+    member _.Yield(b: RenderValC0BaseBuilder<_,_,_>) = b {()}
+    member _.Yield(b: RenderRetC0BaseBuilder<_,_>) = b {()}
+    member _.Yield(b: RenderRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'d>(op)
 
-type RenderRetCnBaseBuilder<'e,'n,'d when 'n: equality and 'd :> INodeDocument<'n>> with
-    member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
+type RenderRetCnBaseBuilder<'n,'d when 'n: equality and 'd :> INodeDocument<'n>> with
+    member _.Yield(b: RenderValC0BaseBuilder<_,_,_>) = b {()}
+    member _.Yield(b: RenderRetC0BaseBuilder<_,_>) = b {()}
+    member _.Yield(b: RenderRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
@@ -295,21 +295,21 @@ type RenderRetCnBaseBuilder<'e,'n,'d when 'n: equality and 'd :> INodeDocument<'
 // ----------------------------------------------------------------------------
 
 type ComponentRetCnBaseBuilder<'n,'d when 'n: equality and 'd :> INodeDocument<'n>> with
-    member _.Bind(m: RenderValC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
-    member _.Bind(m: RenderRetC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
-    member _.Bind(m: RenderRetCnBaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderValC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderRetC0BaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderRetCnBaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: ComponentRetCnBaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
 
-type RenderRetC1BaseBuilder<'e,'n,'d when 'n: equality and 'd :> INodeDocument<'n>> with
-    member _.Bind(m: RenderValC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
-    member _.Bind(m: RenderRetC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
-    member _.Bind(m: RenderRetCnBaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
+type RenderRetC1BaseBuilder<'n,'d when 'n: equality and 'd :> INodeDocument<'n>> with
+    member _.Bind(m: RenderValC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderRetC0BaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderRetCnBaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: ComponentRetCnBaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
 
-type RenderRetCnBaseBuilder<'e,'n,'d when 'n: equality and 'd :> INodeDocument<'n>> with
-    member _.Bind(m: RenderValC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
-    member _.Bind(m: RenderRetC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
-    member _.Bind(m: RenderRetCnBaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
+type RenderRetCnBaseBuilder<'n,'d when 'n: equality and 'd :> INodeDocument<'n>> with
+    member _.Bind(m: RenderValC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderRetC0BaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderRetCnBaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: ComponentRetCnBaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
 
 [<Extension>]
