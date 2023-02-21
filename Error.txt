@@ -1,0 +1,57 @@
+Known type of argument: (unit -> 'a)
+
+Candidates:
+
+member VideBaseBuilder.Delay: 
+    f: (unit -> AsyncBindResult<'a2,'a3>) -> AsyncBindResult<'a2,'a3>
+
+member VideBaseBuilder.Delay: 
+    f: (unit -> Vide<'a2,'a3,NodeContext<'n,'d>>) -> Vide<'a2,'a3,NodeContext<'n,'d>>
+
+
+
+
+No overloads match for method 'Bind'.
+
+Known types of arguments: 
+    
+    Vide<MutableValue<int>,MutableValue<int>,FableBaseContext> 
+    * ('a -> Vide<unit,((Node * FableDocument<HTMLButtonElement>) option * TextNodeProxy<Node> option),NodeContext<Node,'b>>) 
+    when 'a :> MutableValue<int> and 'b :> INodeDocument<Node>
+
+
+Available overloads:
+
+    member VideBaseBuilder.Bind: 
+        m: Vide<'a2,'a3,NodeContext<'n,'d>> * 
+        f: ('a2 -> Vide<'a4,'a5,NodeContext<'n,'d>>) -> Vide<'a4,('a3 option * 'a5 option),NodeContext<'n,'d>> 
+        // Argument 'm' doesn't match
+
+    member RenderRetCnBaseBuilder.Bind:
+        m: ComponentRetCnBaseBuilder<'a3,'a4> * 
+        f: (unit -> Vide<'a5,'a6,NodeContext<'a3,'a4>>) -> Vide<'a5,(unit option * 'a6 option),NodeContext<'a3,'a4>> 
+        when 'a3: equality and 'a4 :> INodeDocument<'a3> 
+        // Argument 'm' doesn't match
+    
+    member RenderRetCnBaseBuilder.Bind: 
+        m: RenderRetC0BaseBuilder<'a3,'a4,'a5> * 
+        f: (unit -> Vide<'a6,'a7,NodeContext<'a4,'a8>>) -> Vide<'a6,((('a4 * 'a5) option * unit option) option * 'a7 option),NodeContext<'a4,'a8>> 
+        when 'a4: equality and 'a5 :> INodeDocument<'a4> and 'a8 :> INodeDocument<'a4> 
+        // Argument 'm' doesn't match
+        
+    member RenderRetCnBaseBuilder.Bind: 
+        m: RenderRetCnBaseBuilder<'a3,'a4,'a5> * 
+        f: (unit -> Vide<'a6,'a7,NodeContext<'a4,'a8>>) -> Vide<'a6,((('a4 * 'a5) option * unit option) option * 'a7 option),NodeContext<'a4,'a8>> 
+        when 'a4: equality and 'a5 :> INodeDocument<'a4> and 'a8 :> INodeDocument<'a4> 
+        // Argument 'm' doesn't match
+    
+    member RenderRetCnBaseBuilder.Bind: 
+        m: RenderValC0BaseBuilder<'a3,'a4,'a5,'a6> * 
+        f: ('a3 -> Vide<'a7,'a8,NodeContext<'a5,'a9>>) -> Vide<'a7,((('a5 * 'a6) option * unit option) option * 'a8 option),NodeContext<'a5,'a9>> 
+        when 'a5: equality and 'a6 :> INodeDocument<'a5> and 'a9 :> INodeDocument<'a5> 
+        // Argument 'm' doesn't match
+        
+    member VideBaseBuilder.Bind: 
+        m: Async<'a2> * 
+        f: ('a2 -> Vide<'a3,'a4,NodeContext<'n,'d>>) -> AsyncBindResult<'a2,Vide<'a3,'a4,NodeContext<'n,'d>>> 
+        // Argument 'm' doesn't match
