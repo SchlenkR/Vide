@@ -503,17 +503,17 @@ module HtmlEnumAttributeTypes =
     
 
 module HtmlElementBuilders =
-    type HtmlGARenderValC0Builder<'v,'n when 'n :> HTMLElement and 'n: equality>(tagName, resultSelector) =
-        inherit RenderValC0Builder<'v,'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName), resultSelector)
+    type HtmlGARenderValC0Builder<'v,'e when 'e :> HTMLElement and 'e: equality>(tagName, resultSelector) =
+        inherit RenderValC0Builder<'v,'e>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName), resultSelector)
 
-    type HtmlGARenderRetC0Builder<'n when 'n :> HTMLElement and 'n: equality>(tagName) =
-        inherit RenderRetC0Builder<'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName))
+    type HtmlGARenderRetC0Builder<'e when 'e :> HTMLElement and 'e: equality>(tagName) =
+        inherit RenderRetC0Builder<'e>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName))
 
-    type HtmlGARenderValCnBuilder<'v,'n when 'n :> HTMLElement and 'n: equality>(tagName, resultSelector) =
-        inherit RenderValCnBuilder<'v,'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName), resultSelector)
+    type HtmlGARenderValCnBuilder<'v,'e when 'e :> HTMLElement and 'e: equality>(tagName, resultSelector) =
+        inherit RenderValCnBuilder<'v,'e>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName), resultSelector)
 
-    type HtmlGARenderRetCnBuilder<'n when 'n :> HTMLElement and 'n: equality>(tagName) =
-        inherit RenderRetCnBuilder<'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName))
+    type HtmlGARenderRetCnBuilder<'e when 'e :> HTMLElement and 'e: equality>(tagName) =
+        inherit RenderRetCnBuilder<'e>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName))
 
     
     type a() =
