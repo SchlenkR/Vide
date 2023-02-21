@@ -19,6 +19,7 @@ type WebContext<'n when 'n: equality>
     member _.WebDocument = document
 
 module BuilderHelper =
+    // TODO: This should not append - should be done in "apply"
     let createNode<'e,'n when 'n: equality> tagName (ctx: WebContext<'n>) =
         let n = ctx.WebDocument.CreateNodeOfName(tagName)
         do ctx.AppendChild(n)

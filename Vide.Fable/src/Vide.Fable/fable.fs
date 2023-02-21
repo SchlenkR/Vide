@@ -39,28 +39,28 @@ type FableContext(parent) =
 // --------------------------------------------------
 
 module FableContext =
-    let create<'n when 'n :> Node> (thisNode: 'n) = FableContext(thisNode :> Node)
+    let create<'e when 'e :> Node> (thisNode: 'e) = FableContext(thisNode :> Node)
 
 type ComponentRetCnBuilder() =
     inherit ComponentRetCnBaseBuilder<Node,FableContext>()
 
-type RenderValC0Builder<'v,'n when 'n :> Node>(createThisNode, checkChildNode, createResultVal) =
-    inherit RenderValC0BaseBuilder<'v,'n,Node,FableContext>(FableContext.create, createThisNode, checkChildNode, createResultVal)
+type RenderValC0Builder<'v,'e when 'e :> Node>(createThisNode, checkChildNode, createResultVal) =
+    inherit RenderValC0BaseBuilder<'v,'e,Node,FableContext>(FableContext.create, createThisNode, checkChildNode, createResultVal)
 
-type RenderRetC0Builder<'n when 'n :> Node>(createThisNode, checkChildNode) =
-    inherit RenderRetC0BaseBuilder<'n,Node,FableContext>(FableContext.create, createThisNode, checkChildNode)
+type RenderRetC0Builder<'e when 'e :> Node>(createThisNode, checkChildNode) =
+    inherit RenderRetC0BaseBuilder<'e,Node,FableContext>(FableContext.create, createThisNode, checkChildNode)
 
-type RenderValC1Builder<'v,'n when 'n :> Node>(createThisNode, checkChildNode, createResultVal) =
-    inherit RenderValC1BaseBuilder<'v,'n,Node,FableContext>(FableContext.create, createThisNode, checkChildNode, createResultVal)
+type RenderValC1Builder<'v,'e when 'e :> Node>(createThisNode, checkChildNode, createResultVal) =
+    inherit RenderValC1BaseBuilder<'v,'e,Node,FableContext>(FableContext.create, createThisNode, checkChildNode, createResultVal)
 
-type RenderRetC1Builder<'n when 'n :> Node>(createThisNode, checkChildNode) =
-    inherit RenderRetC1BaseBuilder<'n,Node,FableContext>(FableContext.create, createThisNode, checkChildNode)
+type RenderRetC1Builder<'e when 'e :> Node>(createThisNode, checkChildNode) =
+    inherit RenderRetC1BaseBuilder<'e,Node,FableContext>(FableContext.create, createThisNode, checkChildNode)
 
-type RenderValCnBuilder<'v,'n when 'n :> Node>(createThisNode, checkChildNode, createResultVal) =
-    inherit RenderValCnBaseBuilder<'v,'n,Node,FableContext>(FableContext.create, createThisNode, checkChildNode, createResultVal)
+type RenderValCnBuilder<'v,'e when 'e :> Node>(createThisNode, checkChildNode, createResultVal) =
+    inherit RenderValCnBaseBuilder<'v,'e,Node,FableContext>(FableContext.create, createThisNode, checkChildNode, createResultVal)
 
-type RenderRetCnBuilder<'n when 'n :> Node>(createThisNode, checkChildNode) =
-    inherit RenderRetCnBaseBuilder<'n,Node,FableContext>(FableContext.create, createThisNode, checkChildNode)
+type RenderRetCnBuilder<'e when 'e :> Node>(createThisNode, checkChildNode) =
+    inherit RenderRetCnBaseBuilder<'e,Node,FableContext>(FableContext.create, createThisNode, checkChildNode)
 
 
 // --------------------------------------------------
