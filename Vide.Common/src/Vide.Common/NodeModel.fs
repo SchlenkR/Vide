@@ -360,9 +360,9 @@ module Event =
             mutable requestEvaluation: bool
         }
     
-    let inline handle<'e,'n,'c,'evt when 'c :> NodeContext<'n>>
-        (node: 'e) 
-        (gc: GlobalContext) 
+    let inline handle
+        (node: 'e)
+        (gc: GlobalContext)
         (callback: NodeEventArgs<'evt,'e> -> unit)
         =
         fun evt ->
