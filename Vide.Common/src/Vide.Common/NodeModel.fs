@@ -28,10 +28,10 @@ type NodeContext<'n when 'n: equality>
     ) =
     let mutable keptChildren = []
     member _.NodeDocument = document
-    member _.KeepChild(child) =
+    member _.KeepChildNode(child) =
         do keptChildren <- child :: keptChildren
     member this.AppendChild(child) =
-        do this.KeepChild(child)
+        do this.KeepChildNode(child)
         do document.AppendChild(parent, child)
     member _.RemoveObsoleteChildren() =
         do 
@@ -105,7 +105,7 @@ module ModifierContext =
                 | Some node ->
                     match this.CheckChildNode(node) with
                     | Keep ->
-                        parentCtx.KeepChild((box node) :?> 'n)
+                        parentCtx.KeepChildNode((box node) :?> 'n)
                         node,cs
                     | DiscardAndCreateNew ->
                         this.CreateThisNode(parentCtx), None
@@ -141,7 +141,7 @@ module BuilderBricks =
             do
                 if textNode.getText() <> value then
                     textNode.setText(value)
-                ctx.KeepChild(textNode.node)
+                ctx.KeepChildNode(textNode.node)
             (), Some textNode
 
 // ---------------------------------------------------------------------------------
