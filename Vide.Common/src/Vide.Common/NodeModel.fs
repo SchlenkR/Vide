@@ -43,24 +43,24 @@ type NodeContext<'n when 'n: equality>
 
 type BuilderOperations = | Clear
 
-type NodeBuilderState<'n,'s> = option<'n> * option<'s>
+type NodeBuilderState<'e,'s> = option<'e> * option<'s>
 
 type ChildAction = Keep | DiscardAndCreateNew
 
-type NodeModifierContext<'n> =
+type NodeModifierContext<'e> =
     {
-        node: 'n
+        node: 'e
         globalContext: GlobalContext
     }
 
 type NodeModifier<'n> = NodeModifierContext<'n> -> unit
 
 [<AbstractClass>]
-type NodeBuilder<'n,'c>
+type NodeBuilder<'e,'c>
     (
-        createContext: 'n -> 'c,
-        createThisNode: 'c -> 'n,
-        checkChildNode: 'n -> ChildAction
+        createContext: 'e -> 'c,
+        createThisNode: 'c -> 'e,
+        checkChildNode: 'e -> ChildAction
     ) =
     
     inherit VideBaseBuilder()
@@ -69,9 +69,9 @@ type NodeBuilder<'n,'c>
     member _.CreateThisNode = createThisNode
     member _.CheckChildNode = checkChildNode
 
-    member val InitModifiers: ResizeArray<NodeModifier<'n>> = ResizeArray() with get
-    member val EvalModifiers: ResizeArray<NodeModifier<'n>> = ResizeArray() with get
-    member val AfterEvalModifiers: ResizeArray<NodeModifier<'n>> = ResizeArray() with get
+    member val InitModifiers: ResizeArray<NodeModifier<'e>> = ResizeArray() with get
+    member val EvalModifiers: ResizeArray<NodeModifier<'e>> = ResizeArray() with get
+    member val AfterEvalModifiers: ResizeArray<NodeModifier<'e>> = ResizeArray() with get
 
 module ModifierContext =
     // TODO: This is really, really weired. I think it's necessary to distinguish
