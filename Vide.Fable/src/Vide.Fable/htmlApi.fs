@@ -587,7 +587,7 @@ module HtmlElementBuilders =
         inherit HtmlGARenderValC0Builder<datalistValue, HTMLDataListElement>
             (
                 "datalist",
-                fun document -> datalistValue(document.Node)
+                fun document -> datalistValue((document :?> FableDocument<_>).Node)
             )
                     
     type dd() =
@@ -678,7 +678,7 @@ module HtmlElementBuilders =
         inherit HtmlGARenderValC0Builder<inputValue, HTMLInputElement>
             (
                 "input",
-                fun document -> inputValue(document.Node)
+                fun document -> inputValue((document :?> FableDocument<_>).Node)
             )
                     
     type ins() =
@@ -733,14 +733,14 @@ module HtmlElementBuilders =
         inherit HtmlGARenderValC0Builder<optionValue, HTMLOptionElement>
             (
                 "option",
-                fun document -> optionValue(document.Node)
+                fun document -> optionValue((document :?> FableDocument<_>).Node)
             )
                     
     type output() =
         inherit HtmlGARenderValC0Builder<outputValue, HTMLElement>
             (
                 "output",
-                fun document -> outputValue(document.Node)
+                fun document -> outputValue((document :?> FableDocument<_>).Node)
             )
                     
     type p() =
@@ -786,7 +786,7 @@ module HtmlElementBuilders =
         inherit HtmlGARenderValC0Builder<selectValue, HTMLSelectElement>
             (
                 "select",
-                fun document -> selectValue(document.Node)
+                fun document -> selectValue((document :?> FableDocument<_>).Node)
             )
                     
     type small() =
@@ -829,7 +829,7 @@ module HtmlElementBuilders =
         inherit HtmlGARenderValC0Builder<textareaValue, HTMLTextAreaElement>
             (
                 "textarea",
-                fun document -> textareaValue(document.Node)
+                fun document -> textareaValue((document :?> FableDocument<_>).Node)
             )
                     
     type tfoot() =
@@ -880,97 +880,97 @@ type HtmlGARenderValC0BuilderExtensions =
         /// Specifies a shortcut key to activate/focus an element
         [<Extension>]
         static member accesskey(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("accesskey", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("accesskey", value))
         
         /// Specifies one or more classnames for an element (refers to a class in a style sheet)
         [<Extension>]
         static member class'(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("class", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("class", value))
         
         /// Specifies whether the content of an element is editable or not
         [<Extension>]
         static member contenteditable(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("contenteditable", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("contenteditable", value))
         
         /// Specifies whether the content of an element is editable or not
         [<Extension>]
         static member contenteditable(this: #HtmlGARenderValC0Builder<_,_>, value: Global.``contenteditable``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("contenteditable", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("contenteditable", value.ToString()))
         
         /// Specifies the text direction for the content in an element
         [<Extension>]
         static member dir(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("dir", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("dir", value))
         
         /// Specifies the text direction for the content in an element
         [<Extension>]
         static member dir(this: #HtmlGARenderValC0Builder<_,_>, value: Global.``dir``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("dir", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("dir", value.ToString()))
         
         /// Specifies whether an element is draggable or not
         [<Extension>]
         static member draggable(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("draggable", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("draggable", value))
         
         /// Specifies whether an element is draggable or not
         [<Extension>]
         static member draggable(this: #HtmlGARenderValC0Builder<_,_>, value: Global.``draggable``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("draggable", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("draggable", value.ToString()))
         
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
         static member hidden(this: #HtmlGARenderValC0Builder<_,_>, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("hidden", null) else x.document.Node.removeAttribute("hidden") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("hidden", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("hidden") )
         
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
         static member hidden(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("hidden", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("hidden", value))
         
         /// Specifies a unique id for an element
         [<Extension>]
         static member id(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("id", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("id", value))
         
         /// Specifies the language of the element's content
         [<Extension>]
         static member lang(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("lang", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("lang", value))
         
         /// Specifies whether the element is to have its spelling and grammar checked or not
         [<Extension>]
         static member spellcheck(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("spellcheck", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("spellcheck", value))
         
         /// Specifies whether the element is to have its spelling and grammar checked or not
         [<Extension>]
         static member spellcheck(this: #HtmlGARenderValC0Builder<_,_>, value: Global.``spellcheck``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("spellcheck", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("spellcheck", value.ToString()))
         
         /// Specifies an inline CSS style for an element
         [<Extension>]
         static member style(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("style", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("style", value))
         
         /// Specifies the tabbing order of an element
         [<Extension>]
         static member tabindex(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("tabindex", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("tabindex", value))
         
         /// Specifies extra information about an element
         [<Extension>]
         static member title(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("title", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("title", value))
         
         /// Specifies whether the content of an element should be translated or not
         [<Extension>]
         static member translate(this: #HtmlGARenderValC0Builder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("translate", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("translate", value))
         
         /// Specifies whether the content of an element should be translated or not
         [<Extension>]
         static member translate(this: #HtmlGARenderValC0Builder<_,_>, value: Global.``translate``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("translate", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("translate", value.ToString()))
         
 
         // Events
@@ -978,595 +978,595 @@ type HtmlGARenderValC0BuilderExtensions =
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onblur <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onblur <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onblur <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onblur <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onchange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onchange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onchange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onchange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncontextmenu <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncontextmenu <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncontextmenu <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncontextmenu <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onfocus <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onfocus <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onfocus <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onfocus <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oninput <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oninput <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oninput <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oninput <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onreset <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onreset <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onreset <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onreset <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onselect <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onselect <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onselect <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onselect <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onsubmit <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onsubmit <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onsubmit <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onsubmit <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onkeydown <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeydown <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onkeydown <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeydown <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onkeypress <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeypress <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onkeypress <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeypress <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onkeyup <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeyup <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onkeyup <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeyup <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onclick <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onclick <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onclick <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onclick <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondblclick <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondblclick <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondblclick <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondblclick <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmousedown <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousedown <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmousedown <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousedown <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmousemove <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousemove <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmousemove <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousemove <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmouseout <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseout <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmouseout <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseout <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmouseover <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseover <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmouseover <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseover <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmouseup <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseup <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmouseup <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseup <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmousewheel <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousewheel <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmousewheel <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousewheel <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onwheel <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onwheel <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onwheel <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onwheel <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondrag <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondrag <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondrag <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondrag <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragend <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragend <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragend <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragend <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragenter <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragenter <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragenter <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragenter <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragleave <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragleave <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragleave <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragleave <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragover <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragover <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragover <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragover <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragstart <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragstart <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragstart <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragstart <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondrop <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondrop <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondrop <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondrop <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onscroll <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onscroll <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onscroll <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onscroll <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncopy <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncopy <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncopy <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncopy <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncut <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncut <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncut <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncut <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onpaste <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onpaste <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onpaste <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onpaste <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onabort <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onabort <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onabort <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onabort <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncanplay <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncanplay <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncanplay <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncanplay <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncanplaythrough <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncanplaythrough <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncanplaythrough <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncanplaythrough <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncuechange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncuechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncuechange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncuechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondurationchange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondurationchange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondurationchange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondurationchange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onemptied <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onemptied <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onemptied <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onemptied <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onended <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onended <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onended <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onended <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onerror <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onerror <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onerror <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onerror <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onloadeddata <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadeddata <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onloadeddata <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadeddata <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onloadedmetadata <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadedmetadata <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onloadedmetadata <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadedmetadata <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onloadstart <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadstart <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onloadstart <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadstart <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onpause <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onpause <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onpause <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onpause <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onplay <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onplay <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onplay <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onplay <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onplaying <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onplaying <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onplaying <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onplaying <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onprogress <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onprogress <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onprogress <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onprogress <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onratechange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onratechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onratechange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onratechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onseeked <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onseeked <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onseeked <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onseeked <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onseeking <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onseeking <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onseeking <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onseeking <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onstalled <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onstalled <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onstalled <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onstalled <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onsuspend <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onsuspend <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onsuspend <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onsuspend <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ontimeupdate <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ontimeupdate <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ontimeupdate <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ontimeupdate <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onvolumechange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onvolumechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onvolumechange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onvolumechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HtmlGARenderValC0Builder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onwaiting <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onwaiting <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HtmlGARenderValC0Builder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onwaiting <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onwaiting <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
     end
@@ -1579,97 +1579,97 @@ type HtmlGARenderRetC0BuilderExtensions =
         /// Specifies a shortcut key to activate/focus an element
         [<Extension>]
         static member accesskey(this: #HtmlGARenderRetC0Builder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("accesskey", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("accesskey", value))
         
         /// Specifies one or more classnames for an element (refers to a class in a style sheet)
         [<Extension>]
         static member class'(this: #HtmlGARenderRetC0Builder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("class", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("class", value))
         
         /// Specifies whether the content of an element is editable or not
         [<Extension>]
         static member contenteditable(this: #HtmlGARenderRetC0Builder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("contenteditable", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("contenteditable", value))
         
         /// Specifies whether the content of an element is editable or not
         [<Extension>]
         static member contenteditable(this: #HtmlGARenderRetC0Builder<_>, value: Global.``contenteditable``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("contenteditable", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("contenteditable", value.ToString()))
         
         /// Specifies the text direction for the content in an element
         [<Extension>]
         static member dir(this: #HtmlGARenderRetC0Builder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("dir", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("dir", value))
         
         /// Specifies the text direction for the content in an element
         [<Extension>]
         static member dir(this: #HtmlGARenderRetC0Builder<_>, value: Global.``dir``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("dir", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("dir", value.ToString()))
         
         /// Specifies whether an element is draggable or not
         [<Extension>]
         static member draggable(this: #HtmlGARenderRetC0Builder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("draggable", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("draggable", value))
         
         /// Specifies whether an element is draggable or not
         [<Extension>]
         static member draggable(this: #HtmlGARenderRetC0Builder<_>, value: Global.``draggable``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("draggable", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("draggable", value.ToString()))
         
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
         static member hidden(this: #HtmlGARenderRetC0Builder<_>, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("hidden", null) else x.document.Node.removeAttribute("hidden") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("hidden", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("hidden") )
         
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
         static member hidden(this: #HtmlGARenderRetC0Builder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("hidden", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("hidden", value))
         
         /// Specifies a unique id for an element
         [<Extension>]
         static member id(this: #HtmlGARenderRetC0Builder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("id", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("id", value))
         
         /// Specifies the language of the element's content
         [<Extension>]
         static member lang(this: #HtmlGARenderRetC0Builder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("lang", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("lang", value))
         
         /// Specifies whether the element is to have its spelling and grammar checked or not
         [<Extension>]
         static member spellcheck(this: #HtmlGARenderRetC0Builder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("spellcheck", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("spellcheck", value))
         
         /// Specifies whether the element is to have its spelling and grammar checked or not
         [<Extension>]
         static member spellcheck(this: #HtmlGARenderRetC0Builder<_>, value: Global.``spellcheck``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("spellcheck", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("spellcheck", value.ToString()))
         
         /// Specifies an inline CSS style for an element
         [<Extension>]
         static member style(this: #HtmlGARenderRetC0Builder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("style", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("style", value))
         
         /// Specifies the tabbing order of an element
         [<Extension>]
         static member tabindex(this: #HtmlGARenderRetC0Builder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("tabindex", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("tabindex", value))
         
         /// Specifies extra information about an element
         [<Extension>]
         static member title(this: #HtmlGARenderRetC0Builder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("title", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("title", value))
         
         /// Specifies whether the content of an element should be translated or not
         [<Extension>]
         static member translate(this: #HtmlGARenderRetC0Builder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("translate", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("translate", value))
         
         /// Specifies whether the content of an element should be translated or not
         [<Extension>]
         static member translate(this: #HtmlGARenderRetC0Builder<_>, value: Global.``translate``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("translate", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("translate", value.ToString()))
         
 
         // Events
@@ -1677,595 +1677,595 @@ type HtmlGARenderRetC0BuilderExtensions =
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onblur <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onblur <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onblur <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onblur <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onchange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onchange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onchange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onchange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncontextmenu <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncontextmenu <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncontextmenu <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncontextmenu <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onfocus <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onfocus <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onfocus <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onfocus <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oninput <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oninput <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oninput <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oninput <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onreset <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onreset <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onreset <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onreset <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onselect <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onselect <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onselect <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onselect <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onsubmit <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onsubmit <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onsubmit <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onsubmit <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onkeydown <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeydown <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onkeydown <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeydown <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onkeypress <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeypress <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onkeypress <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeypress <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onkeyup <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeyup <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onkeyup <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeyup <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onclick <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onclick <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onclick <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onclick <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondblclick <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondblclick <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondblclick <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondblclick <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmousedown <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousedown <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmousedown <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousedown <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmousemove <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousemove <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmousemove <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousemove <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmouseout <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseout <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmouseout <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseout <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmouseover <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseover <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmouseover <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseover <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmouseup <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseup <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmouseup <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseup <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmousewheel <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousewheel <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmousewheel <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousewheel <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onwheel <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onwheel <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onwheel <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onwheel <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondrag <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondrag <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondrag <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondrag <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragend <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragend <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragend <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragend <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragenter <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragenter <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragenter <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragenter <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragleave <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragleave <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragleave <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragleave <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragover <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragover <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragover <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragover <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragstart <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragstart <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragstart <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragstart <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondrop <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondrop <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondrop <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondrop <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onscroll <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onscroll <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onscroll <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onscroll <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncopy <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncopy <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncopy <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncopy <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncut <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncut <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncut <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncut <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onpaste <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onpaste <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onpaste <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onpaste <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onabort <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onabort <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onabort <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onabort <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncanplay <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncanplay <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncanplay <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncanplay <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncanplaythrough <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncanplaythrough <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncanplaythrough <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncanplaythrough <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncuechange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncuechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncuechange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncuechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondurationchange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondurationchange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondurationchange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondurationchange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onemptied <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onemptied <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onemptied <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onemptied <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onended <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onended <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onended <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onended <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onerror <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onerror <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onerror <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onerror <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onloadeddata <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadeddata <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onloadeddata <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadeddata <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onloadedmetadata <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadedmetadata <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onloadedmetadata <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadedmetadata <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onloadstart <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadstart <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onloadstart <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadstart <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onpause <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onpause <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onpause <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onpause <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onplay <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onplay <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onplay <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onplay <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onplaying <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onplaying <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onplaying <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onplaying <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onprogress <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onprogress <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onprogress <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onprogress <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onratechange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onratechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onratechange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onratechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onseeked <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onseeked <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onseeked <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onseeked <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onseeking <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onseeking <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onseeking <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onseeking <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onstalled <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onstalled <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onstalled <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onstalled <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onsuspend <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onsuspend <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onsuspend <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onsuspend <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ontimeupdate <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ontimeupdate <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ontimeupdate <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ontimeupdate <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onvolumechange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onvolumechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onvolumechange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onvolumechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HtmlGARenderRetC0Builder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onwaiting <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onwaiting <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HtmlGARenderRetC0Builder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onwaiting <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onwaiting <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
     end
@@ -2278,97 +2278,97 @@ type HtmlGARenderValCnBuilderExtensions =
         /// Specifies a shortcut key to activate/focus an element
         [<Extension>]
         static member accesskey(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("accesskey", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("accesskey", value))
         
         /// Specifies one or more classnames for an element (refers to a class in a style sheet)
         [<Extension>]
         static member class'(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("class", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("class", value))
         
         /// Specifies whether the content of an element is editable or not
         [<Extension>]
         static member contenteditable(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("contenteditable", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("contenteditable", value))
         
         /// Specifies whether the content of an element is editable or not
         [<Extension>]
         static member contenteditable(this: #HtmlGARenderValCnBuilder<_,_>, value: Global.``contenteditable``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("contenteditable", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("contenteditable", value.ToString()))
         
         /// Specifies the text direction for the content in an element
         [<Extension>]
         static member dir(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("dir", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("dir", value))
         
         /// Specifies the text direction for the content in an element
         [<Extension>]
         static member dir(this: #HtmlGARenderValCnBuilder<_,_>, value: Global.``dir``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("dir", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("dir", value.ToString()))
         
         /// Specifies whether an element is draggable or not
         [<Extension>]
         static member draggable(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("draggable", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("draggable", value))
         
         /// Specifies whether an element is draggable or not
         [<Extension>]
         static member draggable(this: #HtmlGARenderValCnBuilder<_,_>, value: Global.``draggable``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("draggable", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("draggable", value.ToString()))
         
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
         static member hidden(this: #HtmlGARenderValCnBuilder<_,_>, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("hidden", null) else x.document.Node.removeAttribute("hidden") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("hidden", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("hidden") )
         
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
         static member hidden(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("hidden", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("hidden", value))
         
         /// Specifies a unique id for an element
         [<Extension>]
         static member id(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("id", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("id", value))
         
         /// Specifies the language of the element's content
         [<Extension>]
         static member lang(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("lang", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("lang", value))
         
         /// Specifies whether the element is to have its spelling and grammar checked or not
         [<Extension>]
         static member spellcheck(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("spellcheck", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("spellcheck", value))
         
         /// Specifies whether the element is to have its spelling and grammar checked or not
         [<Extension>]
         static member spellcheck(this: #HtmlGARenderValCnBuilder<_,_>, value: Global.``spellcheck``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("spellcheck", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("spellcheck", value.ToString()))
         
         /// Specifies an inline CSS style for an element
         [<Extension>]
         static member style(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("style", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("style", value))
         
         /// Specifies the tabbing order of an element
         [<Extension>]
         static member tabindex(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("tabindex", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("tabindex", value))
         
         /// Specifies extra information about an element
         [<Extension>]
         static member title(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("title", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("title", value))
         
         /// Specifies whether the content of an element should be translated or not
         [<Extension>]
         static member translate(this: #HtmlGARenderValCnBuilder<_,_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("translate", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("translate", value))
         
         /// Specifies whether the content of an element should be translated or not
         [<Extension>]
         static member translate(this: #HtmlGARenderValCnBuilder<_,_>, value: Global.``translate``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("translate", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("translate", value.ToString()))
         
 
         // Events
@@ -2376,595 +2376,595 @@ type HtmlGARenderValCnBuilderExtensions =
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onblur <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onblur <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onblur <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onblur <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onchange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onchange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onchange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onchange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncontextmenu <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncontextmenu <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncontextmenu <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncontextmenu <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onfocus <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onfocus <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onfocus <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onfocus <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oninput <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oninput <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oninput <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oninput <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onreset <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onreset <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onreset <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onreset <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onselect <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onselect <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onselect <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onselect <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onsubmit <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onsubmit <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onsubmit <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onsubmit <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onkeydown <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeydown <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onkeydown <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeydown <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onkeypress <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeypress <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onkeypress <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeypress <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onkeyup <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeyup <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onkeyup <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeyup <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onclick <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onclick <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onclick <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onclick <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondblclick <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondblclick <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondblclick <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondblclick <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmousedown <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousedown <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmousedown <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousedown <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmousemove <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousemove <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmousemove <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousemove <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmouseout <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseout <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmouseout <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseout <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmouseover <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseover <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmouseover <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseover <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmouseup <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseup <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmouseup <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseup <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmousewheel <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousewheel <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmousewheel <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousewheel <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onwheel <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onwheel <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onwheel <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onwheel <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondrag <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondrag <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondrag <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondrag <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragend <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragend <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragend <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragend <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragenter <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragenter <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragenter <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragenter <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragleave <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragleave <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragleave <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragleave <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragover <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragover <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragover <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragover <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragstart <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragstart <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragstart <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragstart <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondrop <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondrop <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondrop <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondrop <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onscroll <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onscroll <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onscroll <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onscroll <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncopy <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncopy <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncopy <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncopy <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncut <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncut <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncut <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncut <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onpaste <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onpaste <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onpaste <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onpaste <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onabort <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onabort <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onabort <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onabort <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncanplay <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncanplay <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncanplay <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncanplay <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncanplaythrough <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncanplaythrough <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncanplaythrough <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncanplaythrough <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncuechange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncuechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncuechange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncuechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondurationchange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondurationchange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondurationchange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondurationchange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onemptied <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onemptied <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onemptied <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onemptied <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onended <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onended <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onended <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onended <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onerror <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onerror <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onerror <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onerror <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onloadeddata <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadeddata <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onloadeddata <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadeddata <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onloadedmetadata <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadedmetadata <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onloadedmetadata <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadedmetadata <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onloadstart <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadstart <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onloadstart <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadstart <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onpause <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onpause <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onpause <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onpause <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onplay <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onplay <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onplay <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onplay <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onplaying <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onplaying <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onplaying <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onplaying <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onprogress <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onprogress <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onprogress <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onprogress <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onratechange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onratechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onratechange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onratechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onseeked <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onseeked <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onseeked <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onseeked <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onseeking <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onseeking <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onseeking <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onseeking <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onstalled <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onstalled <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onstalled <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onstalled <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onsuspend <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onsuspend <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onsuspend <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onsuspend <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ontimeupdate <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ontimeupdate <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ontimeupdate <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ontimeupdate <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onvolumechange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onvolumechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onvolumechange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onvolumechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HtmlGARenderValCnBuilder<_,_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onwaiting <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onwaiting <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HtmlGARenderValCnBuilder<_,_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onwaiting <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onwaiting <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
     end
@@ -2977,97 +2977,97 @@ type HtmlGARenderRetCnBuilderExtensions =
         /// Specifies a shortcut key to activate/focus an element
         [<Extension>]
         static member accesskey(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("accesskey", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("accesskey", value))
         
         /// Specifies one or more classnames for an element (refers to a class in a style sheet)
         [<Extension>]
         static member class'(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("class", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("class", value))
         
         /// Specifies whether the content of an element is editable or not
         [<Extension>]
         static member contenteditable(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("contenteditable", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("contenteditable", value))
         
         /// Specifies whether the content of an element is editable or not
         [<Extension>]
         static member contenteditable(this: #HtmlGARenderRetCnBuilder<_>, value: Global.``contenteditable``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("contenteditable", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("contenteditable", value.ToString()))
         
         /// Specifies the text direction for the content in an element
         [<Extension>]
         static member dir(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("dir", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("dir", value))
         
         /// Specifies the text direction for the content in an element
         [<Extension>]
         static member dir(this: #HtmlGARenderRetCnBuilder<_>, value: Global.``dir``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("dir", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("dir", value.ToString()))
         
         /// Specifies whether an element is draggable or not
         [<Extension>]
         static member draggable(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("draggable", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("draggable", value))
         
         /// Specifies whether an element is draggable or not
         [<Extension>]
         static member draggable(this: #HtmlGARenderRetCnBuilder<_>, value: Global.``draggable``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("draggable", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("draggable", value.ToString()))
         
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
         static member hidden(this: #HtmlGARenderRetCnBuilder<_>, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("hidden", null) else x.document.Node.removeAttribute("hidden") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("hidden", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("hidden") )
         
         /// Specifies that an element is not yet, or is no longer, relevant
         [<Extension>]
         static member hidden(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("hidden", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("hidden", value))
         
         /// Specifies a unique id for an element
         [<Extension>]
         static member id(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("id", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("id", value))
         
         /// Specifies the language of the element's content
         [<Extension>]
         static member lang(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("lang", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("lang", value))
         
         /// Specifies whether the element is to have its spelling and grammar checked or not
         [<Extension>]
         static member spellcheck(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("spellcheck", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("spellcheck", value))
         
         /// Specifies whether the element is to have its spelling and grammar checked or not
         [<Extension>]
         static member spellcheck(this: #HtmlGARenderRetCnBuilder<_>, value: Global.``spellcheck``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("spellcheck", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("spellcheck", value.ToString()))
         
         /// Specifies an inline CSS style for an element
         [<Extension>]
         static member style(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("style", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("style", value))
         
         /// Specifies the tabbing order of an element
         [<Extension>]
         static member tabindex(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("tabindex", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("tabindex", value))
         
         /// Specifies extra information about an element
         [<Extension>]
         static member title(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("title", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("title", value))
         
         /// Specifies whether the content of an element should be translated or not
         [<Extension>]
         static member translate(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("translate", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("translate", value))
         
         /// Specifies whether the content of an element should be translated or not
         [<Extension>]
         static member translate(this: #HtmlGARenderRetCnBuilder<_>, value: Global.``translate``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("translate", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("translate", value.ToString()))
         
 
         // Events
@@ -3075,595 +3075,595 @@ type HtmlGARenderRetCnBuilderExtensions =
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onblur <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onblur <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires the moment that the element loses focus
         [<Extension>]
         static member onblur(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onblur <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onblur <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onchange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onchange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires the moment when the value of the element is changed
         [<Extension>]
         static member onchange(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onchange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onchange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncontextmenu <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncontextmenu <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when a context menu is triggered
         [<Extension>]
         static member oncontextmenu(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncontextmenu <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncontextmenu <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onfocus <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onfocus <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires the moment when the element gets focus
         [<Extension>]
         static member onfocus(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onfocus <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onfocus <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oninput <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oninput <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element gets user input
         [<Extension>]
         static member oninput(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oninput <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oninput <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onreset <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onreset <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the Reset button in a form is clicked
         [<Extension>]
         static member onreset(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onreset <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onreset <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onselect <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onselect <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires after some text has been selected in an element
         [<Extension>]
         static member onselect(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onselect <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onselect <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onsubmit <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onsubmit <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a form is submitted
         [<Extension>]
         static member onsubmit(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onsubmit <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onsubmit <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onkeydown <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeydown <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a user is pressing a key
         [<Extension>]
         static member onkeydown(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onkeydown <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeydown <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onkeypress <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeypress <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a user presses a key
         [<Extension>]
         static member onkeypress(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onkeypress <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeypress <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onkeyup <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeyup <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a user releases a key
         [<Extension>]
         static member onkeyup(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onkeyup <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onkeyup <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onclick <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onclick <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires on a mouse click on the element
         [<Extension>]
         static member onclick(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onclick <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onclick <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondblclick <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondblclick <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires on a mouse double-click on the element
         [<Extension>]
         static member ondblclick(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondblclick <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondblclick <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmousedown <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousedown <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a mouse button is pressed down on an element
         [<Extension>]
         static member onmousedown(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmousedown <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousedown <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmousemove <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousemove <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the mouse pointer is moving while it is over an element
         [<Extension>]
         static member onmousemove(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmousemove <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousemove <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmouseout <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseout <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the mouse pointer moves out of an element
         [<Extension>]
         static member onmouseout(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmouseout <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseout <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmouseover <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseover <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the mouse pointer moves over an element
         [<Extension>]
         static member onmouseover(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmouseover <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseover <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmouseup <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseup <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when a mouse button is released over an element
         [<Extension>]
         static member onmouseup(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmouseup <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmouseup <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onmousewheel <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousewheel <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Deprecated. Use the onwheel attribute instead
         [<Extension>]
         static member onmousewheel(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onmousewheel <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onmousewheel <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onwheel <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onwheel <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the mouse wheel rolls up or down over an element
         [<Extension>]
         static member onwheel(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onwheel <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onwheel <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondrag <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondrag <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element is dragged
         [<Extension>]
         static member ondrag(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondrag <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondrag <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragend <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragend <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run at the end of a drag operation
         [<Extension>]
         static member ondragend(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragend <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragend <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragenter <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragenter <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element has been dragged to a valid drop target
         [<Extension>]
         static member ondragenter(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragenter <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragenter <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragleave <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragleave <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element leaves a valid drop target
         [<Extension>]
         static member ondragleave(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragleave <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragleave <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragover <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragover <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element is being dragged over a valid drop target
         [<Extension>]
         static member ondragover(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragover <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragover <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondragstart <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragstart <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run at the start of a drag operation
         [<Extension>]
         static member ondragstart(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondragstart <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondragstart <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondrop <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondrop <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when dragged element is being dropped
         [<Extension>]
         static member ondrop(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondrop <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondrop <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onscroll <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onscroll <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an element's scrollbar is being scrolled
         [<Extension>]
         static member onscroll(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onscroll <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onscroll <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncopy <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncopy <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the user copies the content of an element
         [<Extension>]
         static member oncopy(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncopy <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncopy <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncut <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncut <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the user cuts the content of an element
         [<Extension>]
         static member oncut(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncut <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncut <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onpaste <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onpaste <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Fires when the user pastes some content in an element
         [<Extension>]
         static member onpaste(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onpaste <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onpaste <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onabort <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onabort <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run on abort
         [<Extension>]
         static member onabort(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onabort <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onabort <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncanplay <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncanplay <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when a file is ready to start playing (when it has buffered enough to begin)
         [<Extension>]
         static member oncanplay(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncanplay <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncanplay <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncanplaythrough <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncanplaythrough <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when a file can be played all the way to the end without pausing for buffering
         [<Extension>]
         static member oncanplaythrough(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncanplaythrough <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncanplaythrough <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.oncuechange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncuechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the cue changes in a <track> element
         [<Extension>]
         static member oncuechange(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.oncuechange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.oncuechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ondurationchange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondurationchange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the length of the media changes
         [<Extension>]
         static member ondurationchange(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ondurationchange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ondurationchange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onemptied <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onemptied <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
         [<Extension>]
         static member onemptied(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onemptied <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onemptied <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onended <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onended <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media has reach the end (a useful event for messages like thanks for listening)
         [<Extension>]
         static member onended(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onended <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onended <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onerror <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onerror <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when an error occurs when the file is being loaded
         [<Extension>]
         static member onerror(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onerror <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onerror <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onloadeddata <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadeddata <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when media data is loaded
         [<Extension>]
         static member onloadeddata(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onloadeddata <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadeddata <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onloadedmetadata <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadedmetadata <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when meta data (like dimensions and duration) are loaded
         [<Extension>]
         static member onloadedmetadata(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onloadedmetadata <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadedmetadata <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onloadstart <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadstart <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run just as the file begins to load before anything is actually loaded
         [<Extension>]
         static member onloadstart(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onloadstart <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onloadstart <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onpause <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onpause <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media is paused either by the user or programmatically
         [<Extension>]
         static member onpause(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onpause <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onpause <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onplay <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onplay <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media is ready to start playing
         [<Extension>]
         static member onplay(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onplay <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onplay <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onplaying <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onplaying <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media actually has started playing
         [<Extension>]
         static member onplaying(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onplaying <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onplaying <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onprogress <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onprogress <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the browser is in the process of getting the media data
         [<Extension>]
         static member onprogress(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onprogress <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onprogress <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onratechange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onratechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
         [<Extension>]
         static member onratechange(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onratechange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onratechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onseeked <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onseeked <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the seeking attribute is set to false indicating that seeking has ended
         [<Extension>]
         static member onseeked(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onseeked <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onseeked <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onseeking <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onseeking <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the seeking attribute is set to true indicating that seeking is active
         [<Extension>]
         static member onseeking(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onseeking <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onseeking <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onstalled <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onstalled <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the browser is unable to fetch the media data for whatever reason
         [<Extension>]
         static member onstalled(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onstalled <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onstalled <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onsuspend <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onsuspend <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
         [<Extension>]
         static member onsuspend(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onsuspend <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onsuspend <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.ontimeupdate <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ontimeupdate <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
         [<Extension>]
         static member ontimeupdate(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.ontimeupdate <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.ontimeupdate <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onvolumechange <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onvolumechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run each time the volume is changed which (includes setting the volume to mute)
         [<Extension>]
         static member onvolumechange(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onvolumechange <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onvolumechange <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HtmlGARenderRetCnBuilder<_>, handler) =
-            this.OnEval(fun x -> x.document.Node.onwaiting <- Event.handle x.document.Node x.globalContext handler)
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onwaiting <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext handler)
 
         /// Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
         [<Extension>]
         static member onwaiting(this: #HtmlGARenderRetCnBuilder<_>, ?requestEvaluation: bool) =
-            this.OnEval(fun x -> x.document.Node.onwaiting <- Event.handle x.document.Node x.globalContext (fun args ->
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.onwaiting <- Event.handle (x.document :?> FableDocument<_>).Node x.globalContext (fun args ->
                 args.requestEvaluation <- defaultArg requestEvaluation true))
         
     end
@@ -3676,67 +3676,67 @@ type aExtensions =
         /// Specifies that the target will be downloaded when a user clicks on the hyperlink
         [<Extension>]
         static member download(this: #a, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("download", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("download", value))
         
         /// Specifies the URL of the page the link goes to
         [<Extension>]
         static member href(this: #a, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("href", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("href", value))
         
         /// Specifies the language of the linked document
         [<Extension>]
         static member hreflang(this: #a, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("hreflang", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("hreflang", value))
         
         /// Specifies what media/device the linked document is optimized for
         [<Extension>]
         static member media(this: #a, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("media", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("media", value))
         
         /// Specifies what media/device the linked document is optimized for
         [<Extension>]
         static member media(this: #a, value: a.``media``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("media", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("media", value.ToString()))
         
         /// Specifies a space-separated list of URLs to which, when the link is followed, post requests with the body ping will be sent by the browser (in the background). Typically used for tracking.
         [<Extension>]
         static member ping(this: #a, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("ping", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("ping", value))
         
         /// Specifies which referrer information to send with the link
         [<Extension>]
         static member referrerpolicy(this: #a, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("referrerpolicy", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("referrerpolicy", value))
         
         /// Specifies which referrer information to send with the link
         [<Extension>]
         static member referrerpolicy(this: #a, value: a.``referrerpolicy``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("referrerpolicy", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("referrerpolicy", value.ToString()))
         
         /// Specifies the relationship between the current document and the linked document
         [<Extension>]
         static member rel(this: #a, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("rel", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("rel", value))
         
         /// Specifies the relationship between the current document and the linked document
         [<Extension>]
         static member rel(this: #a, value: a.``rel``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("rel", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("rel", value.ToString()))
         
         /// Specifies where to open the linked document
         [<Extension>]
         static member target(this: #a, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("target", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("target", value))
         
         /// Specifies where to open the linked document
         [<Extension>]
         static member target(this: #a, value: a.``target``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("target", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("target", value.ToString()))
         
         /// Specifies the media type of the linked document
         [<Extension>]
         static member type'(this: #a, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("type", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("type", value))
         
 
         // Events
@@ -3771,87 +3771,87 @@ type areaExtensions =
         /// Specifies an alternate text for the area. Required if the href attribute is present
         [<Extension>]
         static member alt(this: #area, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("alt", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("alt", value))
         
         /// Specifies the coordinates of the area
         [<Extension>]
         static member coords(this: #area, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("coords", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("coords", value))
         
         /// Specifies the coordinates of the area
         [<Extension>]
         static member coords(this: #area, value: area.``coords``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("coords", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("coords", value.ToString()))
         
         /// Specifies that the target will be downloaded when a user clicks on the hyperlink
         [<Extension>]
         static member download(this: #area, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("download", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("download", value))
         
         /// Specifies the hyperlink target for the area
         [<Extension>]
         static member href(this: #area, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("href", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("href", value))
         
         /// Specifies the language of the target URL
         [<Extension>]
         static member hreflang(this: #area, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("hreflang", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("hreflang", value))
         
         /// Specifies what media/device the target URL is optimized for
         [<Extension>]
         static member media(this: #area, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("media", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("media", value))
         
         /// Specifies what media/device the target URL is optimized for
         [<Extension>]
         static member media(this: #area, value: area.``media``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("media", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("media", value.ToString()))
         
         /// Specifies which referrer information to send with the link
         [<Extension>]
         static member referrerpolicy(this: #area, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("referrerpolicy", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("referrerpolicy", value))
         
         /// Specifies which referrer information to send with the link
         [<Extension>]
         static member referrerpolicy(this: #area, value: area.``referrerpolicy``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("referrerpolicy", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("referrerpolicy", value.ToString()))
         
         /// Specifies the relationship between the current document and the target URL
         [<Extension>]
         static member rel(this: #area, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("rel", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("rel", value))
         
         /// Specifies the relationship between the current document and the target URL
         [<Extension>]
         static member rel(this: #area, value: area.``rel``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("rel", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("rel", value.ToString()))
         
         /// Specifies the shape of the area
         [<Extension>]
         static member shape(this: #area, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("shape", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("shape", value))
         
         /// Specifies the shape of the area
         [<Extension>]
         static member shape(this: #area, value: area.``shape``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("shape", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("shape", value.ToString()))
         
         /// Specifies where to open the target URL
         [<Extension>]
         static member target(this: #area, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("target", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("target", value))
         
         /// Specifies where to open the target URL
         [<Extension>]
         static member target(this: #area, value: area.``target``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("target", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("target", value.ToString()))
         
         /// Specifies the media type of the target URL
         [<Extension>]
         static member type'(this: #area, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("type", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("type", value))
         
 
         // Events
@@ -3886,57 +3886,57 @@ type audioExtensions =
         /// Specifies that the audio will start playing as soon as it is ready
         [<Extension>]
         static member autoplay(this: #audio, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("autoplay", null) else x.document.Node.removeAttribute("autoplay") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("autoplay", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("autoplay") )
         
         /// Specifies that the audio will start playing as soon as it is ready
         [<Extension>]
         static member autoplay(this: #audio, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("autoplay", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("autoplay", value))
         
         /// Specifies that audio controls should be displayed (such as a play/pause button etc)
         [<Extension>]
         static member controls(this: #audio, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("controls", null) else x.document.Node.removeAttribute("controls") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("controls", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("controls") )
         
         /// Specifies that audio controls should be displayed (such as a play/pause button etc)
         [<Extension>]
         static member controls(this: #audio, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("controls", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("controls", value))
         
         /// Specifies that the audio will start over again, every time it is finished
         [<Extension>]
         static member loop(this: #audio, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("loop", null) else x.document.Node.removeAttribute("loop") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("loop", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("loop") )
         
         /// Specifies that the audio will start over again, every time it is finished
         [<Extension>]
         static member loop(this: #audio, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("loop", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("loop", value))
         
         /// Specifies that the audio output should be muted
         [<Extension>]
         static member muted(this: #audio, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("muted", null) else x.document.Node.removeAttribute("muted") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("muted", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("muted") )
         
         /// Specifies that the audio output should be muted
         [<Extension>]
         static member muted(this: #audio, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("muted", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("muted", value))
         
         /// Specifies if and how the author thinks the audio should be loaded when the page loads
         [<Extension>]
         static member preload(this: #audio, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("preload", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("preload", value))
         
         /// Specifies if and how the author thinks the audio should be loaded when the page loads
         [<Extension>]
         static member preload(this: #audio, value: audio.``preload``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("preload", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("preload", value.ToString()))
         
         /// Specifies the URL of the audio file
         [<Extension>]
         static member src(this: #audio, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("src", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("src", value))
         
 
         // Events
@@ -3961,17 +3961,17 @@ type base'Extensions =
         /// Specifies the base URL for all relative URLs in the page
         [<Extension>]
         static member href(this: #base', value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("href", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("href", value))
         
         /// Specifies the default target for all hyperlinks and forms in the page
         [<Extension>]
         static member target(this: #base', value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("target", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("target", value))
         
         /// Specifies the default target for all hyperlinks and forms in the page
         [<Extension>]
         static member target(this: #base', value: base'.``target``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("target", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("target", value.ToString()))
         
 
         // Events
@@ -3996,12 +3996,12 @@ type bdoExtensions =
         /// Required. Specifies the text direction of the text inside the <bdo> element
         [<Extension>]
         static member dir(this: #bdo, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("dir", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("dir", value))
         
         /// Required. Specifies the text direction of the text inside the <bdo> element
         [<Extension>]
         static member dir(this: #bdo, value: bdo.``dir``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("dir", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("dir", value.ToString()))
         
 
         // Events
@@ -4016,7 +4016,7 @@ type blockquoteExtensions =
         /// Specifies the source of the quotation
         [<Extension>]
         static member cite(this: #blockquote, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("cite", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("cite", value))
         
 
         // Events
@@ -4051,92 +4051,92 @@ type buttonExtensions =
         /// Specifies that a button should automatically get focus when the page loads
         [<Extension>]
         static member autofocus(this: #button, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("autofocus", null) else x.document.Node.removeAttribute("autofocus") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("autofocus", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("autofocus") )
         
         /// Specifies that a button should automatically get focus when the page loads
         [<Extension>]
         static member autofocus(this: #button, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("autofocus", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("autofocus", value))
         
         /// Specifies that a button should be disabled
         [<Extension>]
         static member disabled(this: #button, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("disabled", null) else x.document.Node.removeAttribute("disabled") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("disabled", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("disabled") )
         
         /// Specifies that a button should be disabled
         [<Extension>]
         static member disabled(this: #button, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("disabled", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("disabled", value))
         
         /// Specifies which form the button belongs to
         [<Extension>]
         static member form(this: #button, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("form", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("form", value))
         
         /// Specifies where to send the form-data when a form is submitted. Only for type="submit"
         [<Extension>]
         static member formaction(this: #button, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("formaction", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("formaction", value))
         
         /// Specifies how form-data should be encoded before sending it to a server. Only for type="submit"
         [<Extension>]
         static member formenctype(this: #button, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("formenctype", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("formenctype", value))
         
         /// Specifies how form-data should be encoded before sending it to a server. Only for type="submit"
         [<Extension>]
         static member formenctype(this: #button, value: button.``formenctype``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("formenctype", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("formenctype", value.ToString()))
         
         /// Specifies how to send the form-data (which HTTP method to use). Only for type="submit"
         [<Extension>]
         static member formmethod(this: #button, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("formmethod", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("formmethod", value))
         
         /// Specifies how to send the form-data (which HTTP method to use). Only for type="submit"
         [<Extension>]
         static member formmethod(this: #button, value: button.``formmethod``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("formmethod", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("formmethod", value.ToString()))
         
         /// Specifies that the form-data should not be validated on submission. Only for type="submit"
         [<Extension>]
         static member formnovalidate(this: #button, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("formnovalidate", null) else x.document.Node.removeAttribute("formnovalidate") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("formnovalidate", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("formnovalidate") )
         
         /// Specifies that the form-data should not be validated on submission. Only for type="submit"
         [<Extension>]
         static member formnovalidate(this: #button, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("formnovalidate", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("formnovalidate", value))
         
         /// Specifies where to display the response after submitting the form. Only for type="submit"
         [<Extension>]
         static member formtarget(this: #button, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("formtarget", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("formtarget", value))
         
         /// Specifies where to display the response after submitting the form. Only for type="submit"
         [<Extension>]
         static member formtarget(this: #button, value: button.``formtarget``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("formtarget", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("formtarget", value.ToString()))
         
         /// Specifies a name for the button
         [<Extension>]
         static member name(this: #button, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("name", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("name", value))
         
         /// Specifies the type of button
         [<Extension>]
         static member type'(this: #button, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("type", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("type", value))
         
         /// Specifies the type of button
         [<Extension>]
         static member type'(this: #button, value: button.``type``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("type", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("type", value.ToString()))
         
         /// Specifies an initial value for the button
         [<Extension>]
         static member value(this: #button, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("value", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("value", value))
         
 
         // Events
@@ -4151,12 +4151,12 @@ type canvasExtensions =
         /// Specifies the height of the canvas. Default value is 150
         [<Extension>]
         static member height(this: #canvas, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("height", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("height", value))
         
         /// Specifies the width of the canvas Default value is 300
         [<Extension>]
         static member width(this: #canvas, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("width", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("width", value))
         
 
         // Events
@@ -4201,7 +4201,7 @@ type colExtensions =
         /// Specifies the number of columns a <col> element should span
         [<Extension>]
         static member span(this: #col, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("span", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("span", value))
         
 
         // Events
@@ -4216,7 +4216,7 @@ type colgroupExtensions =
         /// Specifies the number of columns a column group should span
         [<Extension>]
         static member span(this: #colgroup, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("span", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("span", value))
         
 
         // Events
@@ -4231,7 +4231,7 @@ type dataExtensions =
         /// Specifies the machine-readable translation of the content of the element
         [<Extension>]
         static member value(this: #data, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("value", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("value", value))
         
 
         // Events
@@ -4266,12 +4266,12 @@ type delExtensions =
         /// Specifies a URL to a document that explains the reason why the text was deleted/changed
         [<Extension>]
         static member cite(this: #del, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("cite", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("cite", value))
         
         /// Specifies the date and time of when the text was deleted/changed
         [<Extension>]
         static member datetime(this: #del, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("datetime", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("datetime", value))
         
 
         // Events
@@ -4286,12 +4286,12 @@ type detailsExtensions =
         /// Specifies that the details should be visible (open) to the user
         [<Extension>]
         static member open'(this: #details, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("open", null) else x.document.Node.removeAttribute("open") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("open", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("open") )
         
         /// Specifies that the details should be visible (open) to the user
         [<Extension>]
         static member open'(this: #details, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("open", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("open", value))
         
 
         // Events
@@ -4316,12 +4316,12 @@ type dialogExtensions =
         /// Specifies that the dialog element is active and that the user can interact with it
         [<Extension>]
         static member open'(this: #dialog, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("open", null) else x.document.Node.removeAttribute("open") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("open", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("open") )
         
         /// Specifies that the dialog element is active and that the user can interact with it
         [<Extension>]
         static member open'(this: #dialog, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("open", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("open", value))
         
 
         // Events
@@ -4376,22 +4376,22 @@ type embedExtensions =
         /// Specifies the height of the embedded content
         [<Extension>]
         static member height(this: #embed, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("height", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("height", value))
         
         /// Specifies the address of the external file to embed
         [<Extension>]
         static member src(this: #embed, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("src", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("src", value))
         
         /// Specifies the media type of the embedded content
         [<Extension>]
         static member type'(this: #embed, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("type", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("type", value))
         
         /// Specifies the width of the embedded content
         [<Extension>]
         static member width(this: #embed, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("width", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("width", value))
         
 
         // Events
@@ -4406,22 +4406,22 @@ type fieldsetExtensions =
         /// Specifies that a group of related form elements should be disabled
         [<Extension>]
         static member disabled(this: #fieldset, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("disabled", null) else x.document.Node.removeAttribute("disabled") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("disabled", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("disabled") )
         
         /// Specifies that a group of related form elements should be disabled
         [<Extension>]
         static member disabled(this: #fieldset, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("disabled", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("disabled", value))
         
         /// Specifies which form the fieldset belongs to
         [<Extension>]
         static member form(this: #fieldset, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("form", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("form", value))
         
         /// Specifies a name for the fieldset
         [<Extension>]
         static member name(this: #fieldset, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("name", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("name", value))
         
 
         // Events
@@ -4466,77 +4466,77 @@ type formExtensions =
         /// Specifies the character encodings that are to be used for the form submission
         [<Extension>]
         static member acceptCharset(this: #form, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("accept-charset", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("accept-charset", value))
         
         /// Specifies where to send the form-data when a form is submitted
         [<Extension>]
         static member action(this: #form, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("action", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("action", value))
         
         /// Specifies whether a form should have autocomplete on or off
         [<Extension>]
         static member autocomplete(this: #form, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("autocomplete", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("autocomplete", value))
         
         /// Specifies whether a form should have autocomplete on or off
         [<Extension>]
         static member autocomplete(this: #form, value: form.``autocomplete``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("autocomplete", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("autocomplete", value.ToString()))
         
         /// Specifies how the form-data should be encoded when submitting it to the server (only for method="post")
         [<Extension>]
         static member enctype(this: #form, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("enctype", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("enctype", value))
         
         /// Specifies how the form-data should be encoded when submitting it to the server (only for method="post")
         [<Extension>]
         static member enctype(this: #form, value: form.``enctype``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("enctype", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("enctype", value.ToString()))
         
         /// Specifies the HTTP method to use when sending form-data
         [<Extension>]
         static member method(this: #form, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("method", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("method", value))
         
         /// Specifies the HTTP method to use when sending form-data
         [<Extension>]
         static member method(this: #form, value: form.``method``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("method", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("method", value.ToString()))
         
         /// Specifies the name of a form
         [<Extension>]
         static member name(this: #form, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("name", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("name", value))
         
         /// Specifies that the form should not be validated when submitted
         [<Extension>]
         static member novalidate(this: #form, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("novalidate", null) else x.document.Node.removeAttribute("novalidate") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("novalidate", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("novalidate") )
         
         /// Specifies that the form should not be validated when submitted
         [<Extension>]
         static member novalidate(this: #form, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("novalidate", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("novalidate", value))
         
         /// Specifies the relationship between a linked resource and the current document
         [<Extension>]
         static member rel(this: #form, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("rel", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("rel", value))
         
         /// Specifies the relationship between a linked resource and the current document
         [<Extension>]
         static member rel(this: #form, value: form.``rel``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("rel", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("rel", value.ToString()))
         
         /// Specifies where to display the response that is received after submitting the form
         [<Extension>]
         static member target(this: #form, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("target", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("target", value))
         
         /// Specifies where to display the response that is received after submitting the form
         [<Extension>]
         static member target(this: #form, value: form.``target``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("target", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("target", value.ToString()))
         
 
         // Events
@@ -4641,7 +4641,7 @@ type htmlExtensions =
         /// Specifies the XML namespace attribute (If you need your content to conform to XHTML)
         [<Extension>]
         static member xmlns(this: #html, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("xmlns", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("xmlns", value))
         
 
         // Events
@@ -4666,67 +4666,67 @@ type iframeExtensions =
         /// Specifies a feature policy for the <iframe>
         [<Extension>]
         static member allow(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("allow", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("allow", value))
         
         /// Set to true if the <iframe> can activate fullscreen mode by calling the requestFullscreen() method
         [<Extension>]
         static member allowfullscreen(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("allowfullscreen", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("allowfullscreen", value))
         
         /// Set to true if a cross-origin <iframe> should be allowed to invoke the Payment Request API
         [<Extension>]
         static member allowpaymentrequest(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("allowpaymentrequest", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("allowpaymentrequest", value))
         
         /// Specifies the height of an <iframe>. Default height is 150 pixels
         [<Extension>]
         static member height(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("height", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("height", value))
         
         /// Specifies whether a browser should load an iframe immediately or to defer loading of iframes until some conditions are met
         [<Extension>]
         static member loading(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("loading", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("loading", value))
         
         /// Specifies the name of an <iframe>
         [<Extension>]
         static member name(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("name", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("name", value))
         
         /// Specifies which referrer information to send when fetching the iframe 
         [<Extension>]
         static member referrerpolicy(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("referrerpolicy", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("referrerpolicy", value))
         
         /// Specifies which referrer information to send when fetching the iframe 
         [<Extension>]
         static member referrerpolicy(this: #iframe, value: iframe.``referrerpolicy``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("referrerpolicy", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("referrerpolicy", value.ToString()))
         
         /// Enables an extra set of restrictions for the content in an <iframe>
         [<Extension>]
         static member sandbox(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("sandbox", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("sandbox", value))
         
         /// Enables an extra set of restrictions for the content in an <iframe>
         [<Extension>]
         static member sandbox(this: #iframe, value: iframe.``sandbox``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("sandbox", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("sandbox", value.ToString()))
         
         /// Specifies the address of the document to embed in the <iframe>
         [<Extension>]
         static member src(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("src", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("src", value))
         
         /// Specifies the HTML content of the page to show in the <iframe>
         [<Extension>]
         static member srcdoc(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("srcdoc", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("srcdoc", value))
         
         /// Specifies the width of an <iframe>. Default width is 300 pixels
         [<Extension>]
         static member width(this: #iframe, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("width", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("width", value))
         
 
         // Events
@@ -4741,77 +4741,77 @@ type imgExtensions =
         /// Specifies an alternate text for an image
         [<Extension>]
         static member alt(this: #img, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("alt", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("alt", value))
         
         /// Allow images from third-party sites that allow cross-origin access to be used with canvas
         [<Extension>]
         static member crossorigin(this: #img, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("crossorigin", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("crossorigin", value))
         
         /// Specifies the height of an image
         [<Extension>]
         static member height(this: #img, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("height", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("height", value))
         
         /// Specifies an image as a server-side image map
         [<Extension>]
         static member ismap(this: #img, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("ismap", null) else x.document.Node.removeAttribute("ismap") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("ismap", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("ismap") )
         
         /// Specifies an image as a server-side image map
         [<Extension>]
         static member ismap(this: #img, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("ismap", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("ismap", value))
         
         /// Specifies whether a browser should load an image immediately or to defer loading of images until some conditions are met
         [<Extension>]
         static member loading(this: #img, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("loading", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("loading", value))
         
         /// Specifies whether a browser should load an image immediately or to defer loading of images until some conditions are met
         [<Extension>]
         static member loading(this: #img, value: img.``loading``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("loading", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("loading", value.ToString()))
         
         /// Specifies a URL to a detailed description of an image
         [<Extension>]
         static member longdesc(this: #img, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("longdesc", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("longdesc", value))
         
         /// Specifies which referrer information to use when fetching an image
         [<Extension>]
         static member referrerpolicy(this: #img, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("referrerpolicy", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("referrerpolicy", value))
         
         /// Specifies which referrer information to use when fetching an image
         [<Extension>]
         static member referrerpolicy(this: #img, value: img.``referrerpolicy``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("referrerpolicy", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("referrerpolicy", value.ToString()))
         
         /// Specifies image sizes for different page layouts
         [<Extension>]
         static member sizes(this: #img, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("sizes", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("sizes", value))
         
         /// Specifies the path to the image
         [<Extension>]
         static member src(this: #img, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("src", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("src", value))
         
         /// Specifies a list of image files to use in different situations
         [<Extension>]
         static member srcset(this: #img, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("srcset", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("srcset", value))
         
         /// Specifies an image as a client-side image map
         [<Extension>]
         static member usemap(this: #img, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("usemap", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("usemap", value))
         
         /// Specifies the width of an image
         [<Extension>]
         static member width(this: #img, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("width", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("width", value))
         
 
         // Events
@@ -4826,238 +4826,238 @@ type inputExtensions =
         /// Specifies a filter for what file types the user can pick from the file input dialog box (only for type="file")
         [<Extension>]
         static member accept(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("accept", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("accept", value))
         
         /// Specifies a filter for what file types the user can pick from the file input dialog box (only for type="file")
         [<Extension>]
         static member accept(this: #input, value: input.``accept``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("accept", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("accept", value.ToString()))
         
         /// Specifies an alternate text for images (only for type="image")
         [<Extension>]
         static member alt(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("alt", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("alt", value))
         
         /// Specifies whether an <input> element should have autocomplete enabled
         [<Extension>]
         static member autocomplete(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("autocomplete", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("autocomplete", value))
         
         /// Specifies whether an <input> element should have autocomplete enabled
         [<Extension>]
         static member autocomplete(this: #input, value: input.``autocomplete``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("autocomplete", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("autocomplete", value.ToString()))
         
         /// Specifies that an <input> element should automatically get focus when the page loads
         [<Extension>]
         static member autofocus(this: #input, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("autofocus", null) else x.document.Node.removeAttribute("autofocus") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("autofocus", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("autofocus") )
         
         /// Specifies that an <input> element should automatically get focus when the page loads
         [<Extension>]
         static member autofocus(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("autofocus", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("autofocus", value))
         
         /// Specifies that an <input> element should be pre-selected when the page loads (for type="checkbox" or type="radio")
         [<Extension>]
         static member checked'(this: #input, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("checked", null) else x.document.Node.removeAttribute("checked") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("checked", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("checked") )
         
         /// Specifies that an <input> element should be pre-selected when the page loads (for type="checkbox" or type="radio")
         [<Extension>]
         static member checked'(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("checked", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("checked", value))
         
         /// Specifies that the text direction will be submitted
         [<Extension>]
         static member dirname(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("dirname", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("dirname", value))
         
         /// Specifies that an <input> element should be disabled
         [<Extension>]
         static member disabled(this: #input, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("disabled", null) else x.document.Node.removeAttribute("disabled") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("disabled", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("disabled") )
         
         /// Specifies that an <input> element should be disabled
         [<Extension>]
         static member disabled(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("disabled", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("disabled", value))
         
         /// Specifies the form the <input> element belongs to
         [<Extension>]
         static member form(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("form", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("form", value))
         
         /// Specifies the URL of the file that will process the input control when the form is submitted (for type="submit" and type="image")
         [<Extension>]
         static member formaction(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("formaction", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("formaction", value))
         
         /// Specifies how the form-data should be encoded when submitting it to the server (for type="submit" and type="image")
         [<Extension>]
         static member formenctype(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("formenctype", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("formenctype", value))
         
         /// Specifies how the form-data should be encoded when submitting it to the server (for type="submit" and type="image")
         [<Extension>]
         static member formenctype(this: #input, value: input.``formenctype``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("formenctype", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("formenctype", value.ToString()))
         
         /// Defines the HTTP method for sending data to the action URL (for type="submit" and type="image")
         [<Extension>]
         static member formmethod(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("formmethod", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("formmethod", value))
         
         /// Defines the HTTP method for sending data to the action URL (for type="submit" and type="image")
         [<Extension>]
         static member formmethod(this: #input, value: input.``formmethod``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("formmethod", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("formmethod", value.ToString()))
         
         /// Defines that form elements should not be validated when submitted
         [<Extension>]
         static member formnovalidate(this: #input, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("formnovalidate", null) else x.document.Node.removeAttribute("formnovalidate") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("formnovalidate", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("formnovalidate") )
         
         /// Defines that form elements should not be validated when submitted
         [<Extension>]
         static member formnovalidate(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("formnovalidate", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("formnovalidate", value))
         
         /// Specifies where to display the response that is received after submitting the form (for type="submit" and type="image")
         [<Extension>]
         static member formtarget(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("formtarget", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("formtarget", value))
         
         /// Specifies where to display the response that is received after submitting the form (for type="submit" and type="image")
         [<Extension>]
         static member formtarget(this: #input, value: input.``formtarget``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("formtarget", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("formtarget", value.ToString()))
         
         /// Specifies the height of an <input> element (only for type="image")
         [<Extension>]
         static member height(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("height", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("height", value))
         
         /// Refers to a <datalist> element that contains pre-defined options for an <input> element
         [<Extension>]
         static member list(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("list", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("list", value))
         
         /// Specifies the maximum value for an <input> element
         [<Extension>]
         static member max(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("max", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("max", value))
         
         /// Specifies the maximum value for an <input> element
         [<Extension>]
         static member max(this: #input, value: input.``max``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("max", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("max", value.ToString()))
         
         /// Specifies the maximum number of characters allowed in an <input> element
         [<Extension>]
         static member maxlength(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("maxlength", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("maxlength", value))
         
         /// Specifies a minimum value for an <input> element
         [<Extension>]
         static member min(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("min", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("min", value))
         
         /// Specifies a minimum value for an <input> element
         [<Extension>]
         static member min(this: #input, value: input.``min``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("min", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("min", value.ToString()))
         
         /// Specifies the minimum number of characters required in an <input> element
         [<Extension>]
         static member minlength(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("minlength", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("minlength", value))
         
         /// Specifies that a user can enter more than one value in an <input> element
         [<Extension>]
         static member multiple(this: #input, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("multiple", null) else x.document.Node.removeAttribute("multiple") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("multiple", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("multiple") )
         
         /// Specifies that a user can enter more than one value in an <input> element
         [<Extension>]
         static member multiple(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("multiple", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("multiple", value))
         
         /// Specifies the name of an <input> element
         [<Extension>]
         static member name(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("name", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("name", value))
         
         /// Specifies a regular expression that an <input> element's value is checked against
         [<Extension>]
         static member pattern(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("pattern", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("pattern", value))
         
         /// Specifies a short hint that describes the expected value of an <input> element
         [<Extension>]
         static member placeholder(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("placeholder", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("placeholder", value))
         
         /// Specifies that an input field is read-only
         [<Extension>]
         static member readonly(this: #input, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("readonly", null) else x.document.Node.removeAttribute("readonly") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("readonly", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("readonly") )
         
         /// Specifies that an input field is read-only
         [<Extension>]
         static member readonly(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("readonly", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("readonly", value))
         
         /// Specifies that an input field must be filled out before submitting the form
         [<Extension>]
         static member required(this: #input, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("required", null) else x.document.Node.removeAttribute("required") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("required", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("required") )
         
         /// Specifies that an input field must be filled out before submitting the form
         [<Extension>]
         static member required(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("required", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("required", value))
         
         /// Specifies the width, in characters, of an <input> element
         [<Extension>]
         static member size(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("size", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("size", value))
         
         /// Specifies the URL of the image to use as a submit button (only for type="image")
         [<Extension>]
         static member src(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("src", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("src", value))
         
         /// Specifies the interval between legal numbers in an input field
         [<Extension>]
         static member step(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("step", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("step", value))
         
         /// Specifies the interval between legal numbers in an input field
         [<Extension>]
         static member step(this: #input, value: input.``step``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("step", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("step", value.ToString()))
         
         /// Specifies the type <input> element to display
         [<Extension>]
         static member type'(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("type", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("type", value))
         
         /// Specifies the type <input> element to display
         [<Extension>]
         static member type'(this: #input, value: input.``type``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("type", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("type", value.ToString()))
         
         /// Specifies the value of an <input> element
         ///  
         [<Extension>]
         static member value(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.value <- value)
+            this.OnEval(fun x -> (x.document :?> FableDocument<HTMLInputElement>).Node.value <- value)
         
         /// Specifies the width of an <input> element (only for type="image")
         [<Extension>]
         static member width(this: #input, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("width", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("width", value))
         
 
         // Events
@@ -5072,12 +5072,12 @@ type insExtensions =
         /// Specifies a URL to a document that explains the reason why the text was inserted/changed
         [<Extension>]
         static member cite(this: #ins, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("cite", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("cite", value))
         
         /// Specifies the date and time when the text was inserted/changed
         [<Extension>]
         static member datetime(this: #ins, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("datetime", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("datetime", value))
         
 
         // Events
@@ -5102,12 +5102,12 @@ type labelExtensions =
         /// Specifies the id of the form element the label should be bound to
         [<Extension>]
         static member for'(this: #label, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("for", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("for", value))
         
         /// Specifies which form the label belongs to
         [<Extension>]
         static member form(this: #label, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("form", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("form", value))
         
 
         // Events
@@ -5132,7 +5132,7 @@ type liExtensions =
         /// Only for <ol> lists. Specifies the start value of a list item. The following list items will increment from that number
         [<Extension>]
         static member value(this: #li, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("value", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("value", value))
         
 
         // Events
@@ -5147,67 +5147,67 @@ type linkExtensions =
         /// Specifies how the element handles cross-origin requests
         [<Extension>]
         static member crossorigin(this: #link, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("crossorigin", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("crossorigin", value))
         
         /// Specifies the location of the linked document
         [<Extension>]
         static member href(this: #link, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("href", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("href", value))
         
         /// Specifies the language of the text in the linked document
         [<Extension>]
         static member hreflang(this: #link, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("hreflang", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("hreflang", value))
         
         /// Specifies on what device the linked document will be displayed
         [<Extension>]
         static member media(this: #link, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("media", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("media", value))
         
         /// Specifies on what device the linked document will be displayed
         [<Extension>]
         static member media(this: #link, value: link.``media``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("media", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("media", value.ToString()))
         
         /// Specifies which referrer to use when fetching the resource
         [<Extension>]
         static member referrerpolicy(this: #link, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("referrerpolicy", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("referrerpolicy", value))
         
         /// Specifies which referrer to use when fetching the resource
         [<Extension>]
         static member referrerpolicy(this: #link, value: link.``referrerpolicy``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("referrerpolicy", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("referrerpolicy", value.ToString()))
         
         /// Required. Specifies the relationship between the current document and the linked document
         [<Extension>]
         static member rel(this: #link, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("rel", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("rel", value))
         
         /// Required. Specifies the relationship between the current document and the linked document
         [<Extension>]
         static member rel(this: #link, value: link.``rel``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("rel", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("rel", value.ToString()))
         
         /// Specifies the size of the linked resource. Only for rel="icon"
         [<Extension>]
         static member sizes(this: #link, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("sizes", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("sizes", value))
         
         /// Specifies the size of the linked resource. Only for rel="icon"
         [<Extension>]
         static member sizes(this: #link, value: link.``sizes``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("sizes", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("sizes", value.ToString()))
         
         /// Defines a preferred or an alternate stylesheet
         [<Extension>]
         static member title(this: #link, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("title", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("title", value))
         
         /// Specifies the media type of the linked document
         [<Extension>]
         static member type'(this: #link, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("type", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("type", value))
         
 
         // Events
@@ -5232,7 +5232,7 @@ type mapExtensions =
         /// Required. Specifies the name of the image map
         [<Extension>]
         static member name(this: #map, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("name", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("name", value))
         
 
         // Events
@@ -5257,32 +5257,32 @@ type metaExtensions =
         /// Specifies the character encoding for the HTML document 
         [<Extension>]
         static member charset(this: #meta, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("charset", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("charset", value))
         
         /// Specifies the value associated with the http-equiv or name attribute
         [<Extension>]
         static member content(this: #meta, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("content", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("content", value))
         
         /// Provides an HTTP header for the information/value of the content attribute
         [<Extension>]
         static member httpEquiv(this: #meta, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("http-equiv", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("http-equiv", value))
         
         /// Provides an HTTP header for the information/value of the content attribute
         [<Extension>]
         static member httpEquiv(this: #meta, value: meta.``http-equiv``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("http-equiv", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("http-equiv", value.ToString()))
         
         /// Specifies a name for the metadata
         [<Extension>]
         static member name(this: #meta, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("name", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("name", value))
         
         /// Specifies a name for the metadata
         [<Extension>]
         static member name(this: #meta, value: meta.``name``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("name", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("name", value.ToString()))
         
 
         // Events
@@ -5297,37 +5297,37 @@ type meterExtensions =
         /// Specifies which form the <meter> element belongs to
         [<Extension>]
         static member form(this: #meter, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("form", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("form", value))
         
         /// Specifies the range that is considered to be a high value
         [<Extension>]
         static member high(this: #meter, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("high", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("high", value))
         
         /// Specifies the range that is considered to be a low value
         [<Extension>]
         static member low(this: #meter, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("low", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("low", value))
         
         /// Specifies the maximum value of the range
         [<Extension>]
         static member max(this: #meter, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("max", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("max", value))
         
         /// Specifies the minimum value of the range. Default value is 0
         [<Extension>]
         static member min(this: #meter, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("min", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("min", value))
         
         /// Specifies what value is the optimal value for the gauge
         [<Extension>]
         static member optimum(this: #meter, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("optimum", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("optimum", value))
         
         /// Required. Specifies the current value of the gauge
         [<Extension>]
         static member value(this: #meter, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("value", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("value", value))
         
 
         // Events
@@ -5362,42 +5362,42 @@ type objectExtensions =
         /// Specifies the URL of the resource to be used by the object
         [<Extension>]
         static member data(this: #object, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("data", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("data", value))
         
         /// Specifies which form the object belongs to
         [<Extension>]
         static member form(this: #object, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("form", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("form", value))
         
         /// Specifies the height of the object
         [<Extension>]
         static member height(this: #object, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("height", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("height", value))
         
         /// Specifies a name for the object
         [<Extension>]
         static member name(this: #object, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("name", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("name", value))
         
         /// Specifies the media type of data specified in the data attribute
         [<Extension>]
         static member type'(this: #object, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("type", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("type", value))
         
         /// Specifies whether the type attribute and the actual content of the resource must match to be displayed
         [<Extension>]
         static member typemustmatch(this: #object, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("typemustmatch", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("typemustmatch", value))
         
         /// Specifies the name of a client-side image map to be used with the object
         [<Extension>]
         static member usemap(this: #object, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("usemap", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("usemap", value))
         
         /// Specifies the width of the object
         [<Extension>]
         static member width(this: #object, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("width", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("width", value))
         
 
         // Events
@@ -5412,27 +5412,27 @@ type olExtensions =
         /// Specifies that the list order should be reversed (9,8,7...)
         [<Extension>]
         static member reversed(this: #ol, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("reversed", null) else x.document.Node.removeAttribute("reversed") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("reversed", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("reversed") )
         
         /// Specifies that the list order should be reversed (9,8,7...)
         [<Extension>]
         static member reversed(this: #ol, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("reversed", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("reversed", value))
         
         /// Specifies the start value of an ordered list
         [<Extension>]
         static member start(this: #ol, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("start", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("start", value))
         
         /// Specifies the kind of marker to use in the list
         [<Extension>]
         static member type'(this: #ol, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("type", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("type", value))
         
         /// Specifies the kind of marker to use in the list
         [<Extension>]
         static member type'(this: #ol, value: ol.``type``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("type", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("type", value.ToString()))
         
 
         // Events
@@ -5447,17 +5447,17 @@ type optgroupExtensions =
         /// Specifies that an option-group should be disabled
         [<Extension>]
         static member disabled(this: #optgroup, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("disabled", null) else x.document.Node.removeAttribute("disabled") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("disabled", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("disabled") )
         
         /// Specifies that an option-group should be disabled
         [<Extension>]
         static member disabled(this: #optgroup, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("disabled", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("disabled", value))
         
         /// Specifies a label for an option-group
         [<Extension>]
         static member label(this: #optgroup, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("label", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("label", value))
         
 
         // Events
@@ -5472,32 +5472,32 @@ type optionExtensions =
         /// Specifies that an option should be disabled
         [<Extension>]
         static member disabled(this: #option, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("disabled", null) else x.document.Node.removeAttribute("disabled") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("disabled", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("disabled") )
         
         /// Specifies that an option should be disabled
         [<Extension>]
         static member disabled(this: #option, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("disabled", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("disabled", value))
         
         /// Specifies a shorter label for an option
         [<Extension>]
         static member label(this: #option, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("label", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("label", value))
         
         /// Specifies that an option should be pre-selected when the page loads
         [<Extension>]
         static member selected(this: #option, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("selected", null) else x.document.Node.removeAttribute("selected") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("selected", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("selected") )
         
         /// Specifies that an option should be pre-selected when the page loads
         [<Extension>]
         static member selected(this: #option, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("selected", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("selected", value))
         
         /// Specifies the value to be sent to a server
         [<Extension>]
         static member value(this: #option, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("value", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("value", value))
         
 
         // Events
@@ -5512,17 +5512,17 @@ type outputExtensions =
         /// Specifies the relationship between the result of the calculation, and the elements used in the calculation
         [<Extension>]
         static member for'(this: #output, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("for", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("for", value))
         
         /// Specifies which form the output element belongs to
         [<Extension>]
         static member form(this: #output, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("form", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("form", value))
         
         /// Specifies a name for the output element
         [<Extension>]
         static member name(this: #output, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("name", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("name", value))
         
 
         // Events
@@ -5547,12 +5547,12 @@ type paramExtensions =
         /// Specifies the name of a parameter
         [<Extension>]
         static member name(this: #param, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("name", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("name", value))
         
         /// Specifies the value of the parameter
         [<Extension>]
         static member value(this: #param, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("value", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("value", value))
         
 
         // Events
@@ -5587,12 +5587,12 @@ type progressExtensions =
         /// Specifies how much work the task requires in total. Default value is 1
         [<Extension>]
         static member max(this: #progress, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("max", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("max", value))
         
         /// Specifies how much of the task has been completed
         [<Extension>]
         static member value(this: #progress, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("value", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("value", value))
         
 
         // Events
@@ -5607,7 +5607,7 @@ type qExtensions =
         /// Specifies the source URL of the quote
         [<Extension>]
         static member cite(this: #q, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("cite", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("cite", value))
         
 
         // Events
@@ -5672,57 +5672,57 @@ type scriptExtensions =
         /// Specifies that the script is downloaded in parallel to parsing the page, and executed as soon as it is available (before parsing completes) (only for external scripts)
         [<Extension>]
         static member async(this: #script, value: bool) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("async", if value then "true" else "false" ))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("async", if value then "true" else "false" ))
         
         /// Specifies that the script is downloaded in parallel to parsing the page, and executed as soon as it is available (before parsing completes) (only for external scripts)
         [<Extension>]
         static member async(this: #script, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("async", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("async", value))
         
         /// Sets the mode of the request to an HTTP CORS Request
         [<Extension>]
         static member crossorigin(this: #script, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("crossorigin", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("crossorigin", value))
         
         /// Specifies that the script is downloaded in parallel to parsing the page, and executed after the page has finished parsing (only for external scripts)
         [<Extension>]
         static member defer(this: #script, value: bool) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("defer", if value then "true" else "false" ))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("defer", if value then "true" else "false" ))
         
         /// Specifies that the script is downloaded in parallel to parsing the page, and executed after the page has finished parsing (only for external scripts)
         [<Extension>]
         static member defer(this: #script, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("defer", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("defer", value))
         
         /// Allows a browser to check the fetched script to ensure that the code is never loaded if the source has been manipulated
         [<Extension>]
         static member integrity(this: #script, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("integrity", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("integrity", value))
         
         /// Specifies that the script should not be executed in browsers supporting ES2015 modules 
         [<Extension>]
         static member nomodule(this: #script, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("nomodule", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("nomodule", value))
         
         /// Specifies which referrer information to send when fetching a script
         [<Extension>]
         static member referrerpolicy(this: #script, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("referrerpolicy", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("referrerpolicy", value))
         
         /// Specifies which referrer information to send when fetching a script
         [<Extension>]
         static member referrerpolicy(this: #script, value: script.``referrerpolicy``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("referrerpolicy", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("referrerpolicy", value.ToString()))
         
         /// Specifies the URL of an external script file
         [<Extension>]
         static member src(this: #script, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("src", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("src", value))
         
         /// Specifies the media type of the script
         [<Extension>]
         static member type'(this: #script, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("type", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("type", value))
         
 
         // Events
@@ -5747,57 +5747,57 @@ type selectExtensions =
         /// Specifies that the drop-down list should automatically get focus when the page loads
         [<Extension>]
         static member autofocus(this: #select, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("autofocus", null) else x.document.Node.removeAttribute("autofocus") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("autofocus", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("autofocus") )
         
         /// Specifies that the drop-down list should automatically get focus when the page loads
         [<Extension>]
         static member autofocus(this: #select, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("autofocus", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("autofocus", value))
         
         /// Specifies that a drop-down list should be disabled
         [<Extension>]
         static member disabled(this: #select, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("disabled", null) else x.document.Node.removeAttribute("disabled") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("disabled", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("disabled") )
         
         /// Specifies that a drop-down list should be disabled
         [<Extension>]
         static member disabled(this: #select, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("disabled", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("disabled", value))
         
         /// Defines which form the drop-down list belongs to
         [<Extension>]
         static member form(this: #select, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("form", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("form", value))
         
         /// Specifies that multiple options can be selected at once
         [<Extension>]
         static member multiple(this: #select, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("multiple", null) else x.document.Node.removeAttribute("multiple") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("multiple", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("multiple") )
         
         /// Specifies that multiple options can be selected at once
         [<Extension>]
         static member multiple(this: #select, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("multiple", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("multiple", value))
         
         /// Defines a name for the drop-down list
         [<Extension>]
         static member name(this: #select, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("name", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("name", value))
         
         /// Specifies that the user is required to select a value before submitting the form
         [<Extension>]
         static member required(this: #select, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("required", null) else x.document.Node.removeAttribute("required") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("required", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("required") )
         
         /// Specifies that the user is required to select a value before submitting the form
         [<Extension>]
         static member required(this: #select, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("required", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("required", value))
         
         /// Defines the number of visible options in a drop-down list
         [<Extension>]
         static member size(this: #select, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("size", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("size", value))
         
 
         // Events
@@ -5822,32 +5822,32 @@ type sourceExtensions =
         /// Accepts any valid media query that would normally be defined in a CSS 
         [<Extension>]
         static member media(this: #source, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("media", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("media", value))
         
         /// Accepts any valid media query that would normally be defined in a CSS 
         [<Extension>]
         static member media(this: #source, value: source.``media``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("media", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("media", value.ToString()))
         
         /// Specifies image sizes for different page layouts
         [<Extension>]
         static member sizes(this: #source, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("sizes", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("sizes", value))
         
         /// Required when <source> is used in <audio> and <video>. Specifies the URL of the media file
         [<Extension>]
         static member src(this: #source, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("src", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("src", value))
         
         /// Required when <source> is used in <picture>. Specifies the URL of the image to use in different situations
         [<Extension>]
         static member srcset(this: #source, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("srcset", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("srcset", value))
         
         /// Specifies the MIME-type of the resource
         [<Extension>]
         static member type'(this: #source, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("type", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("type", value))
         
 
         // Events
@@ -5882,17 +5882,17 @@ type styleExtensions =
         /// Specifies what media/device the media resource is optimized for
         [<Extension>]
         static member media(this: #style, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("media", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("media", value))
         
         /// Specifies what media/device the media resource is optimized for
         [<Extension>]
         static member media(this: #style, value: style.``media``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("media", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("media", value.ToString()))
         
         /// Specifies the media type of the <style> tag
         [<Extension>]
         static member type'(this: #style, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("type", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("type", value))
         
 
         // Events
@@ -5957,17 +5957,17 @@ type tdExtensions =
         /// Specifies the number of columns a cell should span
         [<Extension>]
         static member colspan(this: #td, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("colspan", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("colspan", value))
         
         /// Specifies one or more header cells a cell is related to
         [<Extension>]
         static member headers(this: #td, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("headers", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("headers", value))
         
         /// Sets the number of rows a cell should span
         [<Extension>]
         static member rowspan(this: #td, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("rowspan", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("rowspan", value))
         
 
         // Events
@@ -5992,87 +5992,87 @@ type textareaExtensions =
         /// Specifies that a text area should automatically get focus when the page loads
         [<Extension>]
         static member autofocus(this: #textarea, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("autofocus", null) else x.document.Node.removeAttribute("autofocus") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("autofocus", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("autofocus") )
         
         /// Specifies that a text area should automatically get focus when the page loads
         [<Extension>]
         static member autofocus(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("autofocus", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("autofocus", value))
         
         /// Specifies the visible width of a text area
         [<Extension>]
         static member cols(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("cols", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("cols", value))
         
         /// Specifies that the text direction of the textarea will be submitted
         [<Extension>]
         static member dirname(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("dirname", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("dirname", value))
         
         /// Specifies that a text area should be disabled
         [<Extension>]
         static member disabled(this: #textarea, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("disabled", null) else x.document.Node.removeAttribute("disabled") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("disabled", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("disabled") )
         
         /// Specifies that a text area should be disabled
         [<Extension>]
         static member disabled(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("disabled", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("disabled", value))
         
         /// Specifies which form the text area belongs to
         [<Extension>]
         static member form(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("form", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("form", value))
         
         /// Specifies the maximum number of characters allowed in the text area
         [<Extension>]
         static member maxlength(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("maxlength", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("maxlength", value))
         
         /// Specifies a name for a text area
         [<Extension>]
         static member name(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("name", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("name", value))
         
         /// Specifies a short hint that describes the expected value of a text area
         [<Extension>]
         static member placeholder(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("placeholder", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("placeholder", value))
         
         /// Specifies that a text area should be read-only
         [<Extension>]
         static member readonly(this: #textarea, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("readonly", null) else x.document.Node.removeAttribute("readonly") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("readonly", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("readonly") )
         
         /// Specifies that a text area should be read-only
         [<Extension>]
         static member readonly(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("readonly", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("readonly", value))
         
         /// Specifies that a text area is required/must be filled out
         [<Extension>]
         static member required(this: #textarea, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("required", null) else x.document.Node.removeAttribute("required") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("required", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("required") )
         
         /// Specifies that a text area is required/must be filled out
         [<Extension>]
         static member required(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("required", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("required", value))
         
         /// Specifies the visible number of lines in a text area
         [<Extension>]
         static member rows(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("rows", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("rows", value))
         
         /// Specifies how the text in a text area is to be wrapped when submitted in a form
         [<Extension>]
         static member wrap(this: #textarea, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("wrap", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("wrap", value))
         
         /// Specifies how the text in a text area is to be wrapped when submitted in a form
         [<Extension>]
         static member wrap(this: #textarea, value: textarea.``wrap``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("wrap", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("wrap", value.ToString()))
         
 
         // Events
@@ -6097,32 +6097,32 @@ type thExtensions =
         /// Specifies an abbreviated version of the content in a header cell
         [<Extension>]
         static member abbr(this: #th, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("abbr", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("abbr", value))
         
         /// Specifies the number of columns a header cell should span
         [<Extension>]
         static member colspan(this: #th, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("colspan", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("colspan", value))
         
         /// Specifies one or more header cells a cell is related to
         [<Extension>]
         static member headers(this: #th, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("headers", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("headers", value))
         
         /// Specifies the number of rows a header cell should span
         [<Extension>]
         static member rowspan(this: #th, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("rowspan", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("rowspan", value))
         
         /// Specifies whether a header cell is a header for a column, row, or group of columns or rows 
         [<Extension>]
         static member scope(this: #th, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("scope", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("scope", value))
         
         /// Specifies whether a header cell is a header for a column, row, or group of columns or rows 
         [<Extension>]
         static member scope(this: #th, value: th.``scope``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("scope", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("scope", value.ToString()))
         
 
         // Events
@@ -6147,7 +6147,7 @@ type timeExtensions =
         /// Represent a machine-readable format of the <time> element
         [<Extension>]
         static member datetime(this: #time, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("datetime", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("datetime", value))
         
 
         // Events
@@ -6182,37 +6182,37 @@ type trackExtensions =
         /// Specifies that the track is to be enabled if the user's preferences do not indicate that another track would be more appropriate
         [<Extension>]
         static member default'(this: #track, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("default", null) else x.document.Node.removeAttribute("default") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("default", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("default") )
         
         /// Specifies that the track is to be enabled if the user's preferences do not indicate that another track would be more appropriate
         [<Extension>]
         static member default'(this: #track, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("default", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("default", value))
         
         /// Specifies the kind of text track
         [<Extension>]
         static member kind(this: #track, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("kind", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("kind", value))
         
         /// Specifies the kind of text track
         [<Extension>]
         static member kind(this: #track, value: track.``kind``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("kind", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("kind", value.ToString()))
         
         /// Specifies the title of the text track
         [<Extension>]
         static member label(this: #track, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("label", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("label", value))
         
         /// Required. Specifies the URL of the track file
         [<Extension>]
         static member src(this: #track, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("src", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("src", value))
         
         /// Specifies the language of the track text data (required if kind="subtitles")
         [<Extension>]
         static member srclang(this: #track, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("srclang", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("srclang", value))
         
 
         // Events
@@ -6257,72 +6257,72 @@ type videoExtensions =
         /// Specifies that the video will start playing as soon as it is ready
         [<Extension>]
         static member autoplay(this: #video, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("autoplay", null) else x.document.Node.removeAttribute("autoplay") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("autoplay", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("autoplay") )
         
         /// Specifies that the video will start playing as soon as it is ready
         [<Extension>]
         static member autoplay(this: #video, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("autoplay", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("autoplay", value))
         
         /// Specifies that video controls should be displayed (such as a play/pause button etc).
         [<Extension>]
         static member controls(this: #video, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("controls", null) else x.document.Node.removeAttribute("controls") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("controls", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("controls") )
         
         /// Specifies that video controls should be displayed (such as a play/pause button etc).
         [<Extension>]
         static member controls(this: #video, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("controls", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("controls", value))
         
         /// Sets the height of the video player
         [<Extension>]
         static member height(this: #video, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("height", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("height", value))
         
         /// Specifies that the video will start over again, every time it is finished
         [<Extension>]
         static member loop(this: #video, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("loop", null) else x.document.Node.removeAttribute("loop") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("loop", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("loop") )
         
         /// Specifies that the video will start over again, every time it is finished
         [<Extension>]
         static member loop(this: #video, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("loop", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("loop", value))
         
         /// Specifies that the audio output of the video should be muted
         [<Extension>]
         static member muted(this: #video, value: bool) =
-            this.OnEval(fun x -> if value then x.document.Node.setAttribute("muted", null) else x.document.Node.removeAttribute("muted") )
+            this.OnEval(fun x -> if value then (x.document :?> FableDocument<_>).Node.setAttribute("muted", null) else (x.document :?> FableDocument<_>).Node.removeAttribute("muted") )
         
         /// Specifies that the audio output of the video should be muted
         [<Extension>]
         static member muted(this: #video, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("muted", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("muted", value))
         
         /// Specifies an image to be shown while the video is downloading, or until the user hits the play button
         [<Extension>]
         static member poster(this: #video, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("poster", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("poster", value))
         
         /// Specifies if and how the author thinks the video should be loaded when the page loads
         [<Extension>]
         static member preload(this: #video, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("preload", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("preload", value))
         
         /// Specifies if and how the author thinks the video should be loaded when the page loads
         [<Extension>]
         static member preload(this: #video, value: video.``preload``) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("preload", value.ToString()))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("preload", value.ToString()))
         
         /// Specifies the URL of the video file
         [<Extension>]
         static member src(this: #video, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("src", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("src", value))
         
         /// Sets the width of the video player
         [<Extension>]
         static member width(this: #video, value: string) =
-            this.OnEval(fun x -> x.document.Node.setAttribute("width", value))
+            this.OnEval(fun x -> (x.document :?> FableDocument<_>).Node.setAttribute("width", value))
         
 
         // Events

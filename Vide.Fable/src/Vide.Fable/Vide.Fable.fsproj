@@ -21,6 +21,7 @@
     <Compile Include="Fable.fs" />
     <Compile Include="HtmlApiPreparation.fs" />
     <Compile Include="HtmlApi.fs" />
+    <Compile Include="Temp.fs" />
   </ItemGroup>
 
   <ItemGroup>
