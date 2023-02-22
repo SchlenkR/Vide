@@ -4,7 +4,7 @@ open Browser
 open Browser.Types
 open Vide
 
-type FableDocument<'e when 'e :> Node>(thisNode: 'e) =
+type FableDocument<'e when 'e :> HTMLElement>(thisNode: 'e) =
     member _.Node = thisNode
     interface INodeDocument<Node> with
         member _.AppendChild(child) =
@@ -34,37 +34,37 @@ type FableDocument<'e when 'e :> Node>(thisNode: 'e) =
 // --------------------------------------------------
 
 module Helper =
-    let createNodeAndDocument<'e when 'e :> Node> (createThisNode: unit -> 'e) =
+    let createNodeAndDocument<'e when 'e :> HTMLElement> (createThisNode: unit -> 'e) =
         fun () ->
             let e = createThisNode ()
             let ctx = FableDocument(e)
-            e :> Node,ctx
+            e :> Node, ctx :> INodeDocument<Node>
 
-type ComponentRetCnBuilder() =
-    inherit ComponentRetCnBaseBuilder<Node,FableDocument<Node>>()
+type ComponentRetCnBuilder<'e when 'e :> HTMLElement>() =
+    inherit ComponentRetCnBaseBuilder<Node,INodeDocument<Node>>()
 
-type RenderValC0Builder<'v,'e when 'e :> Node>(createThisNode, checkChildNode, createResultVal) =
-    inherit RenderValC0BaseBuilder<'v,'e,Node,FableDocument<'e>>(
+type RenderValC0Builder<'v,'e when 'e :> HTMLElement>(createThisNode, checkChildNode, createResultVal) =
+    inherit RenderValC0BaseBuilder<'v,Node,INodeDocument<Node>>(
         Helper.createNodeAndDocument<'e> createThisNode, checkChildNode, createResultVal)
 
-type RenderRetC0Builder<'e when 'e :> Node>(createThisNode, checkChildNode) =
-    inherit RenderRetC0BaseBuilder<'e,Node,FableDocument<'e>>(
+type RenderRetC0Builder<'e when 'e :> HTMLElement>(createThisNode, checkChildNode) =
+    inherit RenderRetC0BaseBuilder<Node,INodeDocument<Node>>(
         Helper.createNodeAndDocument<'e> createThisNode, checkChildNode)
 
-type RenderValC1Builder<'v,'e when 'e :> Node>(createThisNode, checkChildNode, createResultVal) =
-    inherit RenderValC1BaseBuilder<'v,'e,Node,FableDocument<'e>>(
+type RenderValC1Builder<'v,'e when 'e :> HTMLElement>(createThisNode, checkChildNode, createResultVal) =
+    inherit RenderValC1BaseBuilder<'v,Node,INodeDocument<Node>>(
         Helper.createNodeAndDocument<'e> createThisNode, checkChildNode, createResultVal)
 
-type RenderRetC1Builder<'e when 'e :> Node>(createThisNode, checkChildNode) =
-    inherit RenderRetC1BaseBuilder<'e,Node,FableDocument<'e>>(
+type RenderRetC1Builder<'e when 'e :> HTMLElement>(createThisNode, checkChildNode) =
+    inherit RenderRetC1BaseBuilder<Node,INodeDocument<Node>>(
         Helper.createNodeAndDocument<'e> createThisNode, checkChildNode)
 
-type RenderValCnBuilder<'v,'e when 'e :> Node>(createThisNode, checkChildNode, createResultVal) =
-    inherit RenderValCnBaseBuilder<'v,'e,Node,FableDocument<'e>>(
+type RenderValCnBuilder<'v,'e when 'e :> HTMLElement>(createThisNode, checkChildNode, createResultVal) =
+    inherit RenderValCnBaseBuilder<'v,Node,INodeDocument<Node>>(
         Helper.createNodeAndDocument<'e> createThisNode, checkChildNode, createResultVal)
 
-type RenderRetCnBuilder<'e when 'e :> Node>(createThisNode, checkChildNode) =
-    inherit RenderRetCnBaseBuilder<'e,Node,FableDocument<'e>>(
+type RenderRetCnBuilder<'e when 'e :> HTMLElement>(createThisNode, checkChildNode) =
+    inherit RenderRetCnBaseBuilder<Node,INodeDocument<Node>>(
         Helper.createNodeAndDocument<'e> createThisNode, checkChildNode)
 
 
@@ -86,16 +86,22 @@ module FableApp =
     let inline doCreate appCtor host (content: Vide<_,_,_>) onEvaluated =
         // the "yield" is needed - to infer the correct type of "content"
         // (or as an alternative: specify it in the signature and omit "yield")
-        let content = RenderRetC1Builder((fun _ -> host), fun _ -> Keep) { yield content }
-        let ctxCtor = fun () -> NodeContext(host)
+        let content = RenderRetC1Builder((fun _ -> host), fun _ -> Keep) { content }
+        let ctxCtor = fun () -> NodeContext<Node,INodeDocument<Node>>(host)
         appCtor content ctxCtor onEvaluated
     let create host content onEvaluated =
         doCreate VideApp.create host content onEvaluated
     let createWithObjState host content onEvaluated =
         doCreate VideApp.createWithUntypedState host content onEvaluated
 
+
+//// we have to shadow some functions to prevent value restriction issues
+//// TODO: Again - why does that occur after the refactoring?
+//module Fable =
+//    let ofMutable value = Vide.ofMutable<FableContext<HTMLElement>, _> value
+
 [<AutoOpen>]
 module Defaults =
     
     [<GeneralizableValue>]
-    let vide = ComponentRetCnBuilder()
+    let vide<'e when 'e :> HTMLElement> = ComponentRetCnBuilder<'e>()
