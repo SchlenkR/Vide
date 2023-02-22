@@ -94,12 +94,16 @@ module ModifierContext =
         
         In order to get rid of the unsafe cast, we need a constraint in form of ('e :> 'n),
         which is not possible. The interesting thing to see here is the type of "this":
-            NodeBuilder<'e,'c> = NodeBuilder<'e, #NodeContext<'n>>
+            NodeBuilder<'e,'n,'c> = NodeBuilder<'e,'n,#NodeContext<'n>>
             
         Also, it is in general required that the builders have a concrete and completely
         specialized 'c (context) in Vide. This ensures smooth composition and overload
         resolution of the builder methods in the CEs, and it makes CE builder methods
         easy to implement (e.g.: see "Combine").
+
+        Even if NodeBuilder has now 'e _and also_ 'n, we still have to use an unsafe cast from
+        'e to 'n, but having also 'n as arg in NodeBuilder, we can have `checkChildNode`
+        taking a 'n instead of an 'e (which otherwise would be wrong).
     *)
     let inline apply<'v1,'v2,'s,'e,'n,'c
             when 'n: equality
