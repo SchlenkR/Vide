@@ -15,6 +15,7 @@ type TextNodeProxy<'n> =
 /// commonly used node functions. Note that from the
 /// point of view of this interface, parent and child are
 /// both 'of type 'n (which is the common node type).
+
 type INodeDocument<'n> =
     abstract member AppendChild : parent: 'n * child: 'n -> unit
     abstract member RemoveChild : parent: 'n * child: 'n -> unit
@@ -23,6 +24,12 @@ type INodeDocument<'n> =
     // This seems to be so common and useful for all type of backends
     // that we will leave it here (for now)
     abstract member CreateTextNode : text: string -> TextNodeProxy<'n>
+
+// We have (abstract NodeContext<'n> + inheritors & INodeDocument<'n>)
+// instead of (sealed NodeContext<'n,'d> & 'd :> INodeDocument<'n>)
+// because having 'd would make many things very complicated and
+// it would require having a node document with an 'e - which would
+// prevent having a concrete and completely specialized 'c (see comments below).
 
 [<AbstractClass>] 
 type NodeContext<'n when 'n: equality>
