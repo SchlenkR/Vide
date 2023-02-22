@@ -11,6 +11,10 @@ type TextNodeProxy<'n> =
         setText: string -> unit
     }
 
+/// This must be a stateless implementation that abstracts
+/// commonly used node functions. Note that from the
+/// point of view of this interface, parent and child are
+/// both 'of type 'n (which is the common node type).
 type INodeDocument<'n> =
     abstract member AppendChild : parent: 'n * child: 'n -> unit
     abstract member RemoveChild : parent: 'n * child: 'n -> unit
@@ -76,6 +80,27 @@ type NodeBuilder<'e,'c>
 module ModifierContext =
     // TODO: This is really, really weired. I think it's necessary to distinguish
     // between 'nthis and 'nhild on a general level (see branch of 2023-02-18 and many others)
+    (*
+        Generic Argument names:
+        ---
+
+        'e : A concrete element type, e.g. `HTMLButtonElement`
+        'n : The abstract node type that is the basis for
+             tree composition (e.g. `Node`)
+        ...
+
+        Notes
+        ---
+        
+        In order to get rid of the unsafe cast, we need a constraint in form of ('e :> 'n),
+        which is not possible. The interesting thing to see here is the type of "this":
+            NodeBuilder<'e,'c> = NodeBuilder<'e, #NodeContext<'n>>
+            
+        Also, it is in general required that the builders have a concrete and completely
+        specialized 'c (context) in Vide. This ensures smooth composition and overload
+        resolution of the builder methods in the CEs, and it makes CE builder methods
+        easy to implement (e.g.: see "Combine").
+    *)
     let inline apply<'v1,'v2,'s,'e,'n,'c
             when 'n: equality
             and 'c :> NodeContext<'n>
