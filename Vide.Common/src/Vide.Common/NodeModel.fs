@@ -45,10 +45,9 @@ type NodeContext<'n when 'n: equality>
         do this.KeepChildNode(child)
         do document.AppendChild(parent, child)
     member _.RemoveObsoleteChildren() =
-        do 
-            document.GetChildren(parent)
-            |> List.except keptChildren
-            |> List.iter (fun child -> document.RemoveChild(parent, child))
+        let childrenForRemoval = document.GetChildren(parent) |> List.except keptChildren
+        for child in childrenForRemoval do
+            document.RemoveChild(parent, child)
     member _.ClearContent() =
         do document.ClearChildren(parent)
 
@@ -284,7 +283,7 @@ type ComponentRetCnBaseBuilder<'n,'c
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
-    member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
+    member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
 
 type RenderRetC1BaseBuilder<'e,'n,'c
@@ -296,7 +295,7 @@ type RenderRetC1BaseBuilder<'e,'n,'c
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide v
-    member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
+    member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
     
 type RenderValC1BaseBuilder<'v,'e,'n,'c
@@ -308,7 +307,7 @@ type RenderValC1BaseBuilder<'v,'e,'n,'c
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
-    member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
+    member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
 
 type RenderRetCnBaseBuilder<'e,'n,'c
@@ -320,7 +319,7 @@ type RenderRetCnBaseBuilder<'e,'n,'c
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
-    member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
+    member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
 
 type RenderValCnBaseBuilder<'v,'e,'n,'c
@@ -332,7 +331,7 @@ type RenderValCnBaseBuilder<'v,'e,'n,'c
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
-    member _.Yield(op) = BuilderBricks.yieldBuilderOp(op)
+    member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
 
     
