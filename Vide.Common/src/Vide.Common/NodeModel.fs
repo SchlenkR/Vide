@@ -63,14 +63,14 @@ type NodeModifier<'n> = NodeModifierContext<'n> -> unit
 type NodeBuilder<'e,'c>
     (
         createContext: 'e -> 'c,
-        createThisNode: 'c -> 'e,
+        createThisElement: 'c -> 'e,
         checkChildNode: 'e -> ChildAction
     ) =
     
     inherit VideBaseBuilder()
 
     member _.CreateContext = createContext
-    member _.CreateThisNode = createThisNode
+    member _.CreateThisElement = createThisElement
     member _.CheckChildNode = checkChildNode
 
     member val InitModifiers: ResizeArray<NodeModifier<'e>> = ResizeArray() with get
@@ -119,30 +119,30 @@ module ModifierContext =
                 match s with
                 | None -> None,None
                 | Some (ms,fs) -> ms,fs
-            let thisNode,cs =
+            let thisElement,cs =
                 // Can it happen that s is Some and cs is None? I don't think so.
                 // But: See comment in definition of: Vide.Core.Vide
                 match s with
                 | None ->
-                    let newNode,s = this.CreateThisNode(parentCtx), cs
-                    do runModifiers this.InitModifiers newNode
-                    newNode,s
-                | Some node ->
-                    match this.CheckChildNode(node) with
+                    let newElement,s = this.CreateThisElement(parentCtx), cs
+                    do runModifiers this.InitModifiers newElement
+                    newElement,s
+                | Some maybeThisElement ->
+                    match this.CheckChildNode(maybeThisElement) with
                     | Keep ->
-                        parentCtx.KeepChildNode((box node) :?> 'n)
-                        node,cs
+                        parentCtx.KeepChildNode((box maybeThisElement) :?> 'n)
+                        maybeThisElement,cs
                     | DiscardAndCreateNew ->
-                        this.CreateThisNode(parentCtx), None
-            do runModifiers this.EvalModifiers thisNode
+                        this.CreateThisElement(parentCtx), None
+            do runModifiers this.EvalModifiers thisElement
             let childCtx =
                 // TODO: Why the unsafe cast everywhere in this function?
-                this.CreateContext thisNode
+                this.CreateContext thisElement
             let cv,cs = childVide cs gc childCtx
             do childCtx.RemoveObsoleteChildren()
-            do runModifiers this.AfterEvalModifiers thisNode
-            let result = createResultVal thisNode cv
-            let state = Some (Some thisNode, cs)
+            do runModifiers this.AfterEvalModifiers thisElement
+            let result = createResultVal thisElement cv
+            let state = Some (Some thisElement, cs)
             result,state
 
 module BuilderBricks =
@@ -199,18 +199,18 @@ type RenderValC0BaseBuilder<'v,'e,'n,'c
         when 'n: equality
         and 'c :> NodeContext<'n>
     >
-    (createContext, createThisNode, checkChildNode, createResultVal: 'e -> 'v) 
+    (createContext, createThisElement, checkChildNode, createResultVal: 'e -> 'v) 
     =
-    inherit NodeBuilder<'e,'c>(createContext, createThisNode, checkChildNode)
+    inherit NodeBuilder<'e,'c>(createContext, createThisElement, checkChildNode)
     member this.Run(v) = this |> ModifierContext.apply v (fun n v -> createResultVal n)
 
 type RenderRetC0BaseBuilder<'e,'n,'c
         when 'n: equality
         and 'c :> NodeContext<'n>
     >
-    (createContext, createThisNode, checkChildNode) 
+    (createContext, createThisElement, checkChildNode) 
     =
-    inherit NodeBuilder<'e,'c>(createContext, createThisNode, checkChildNode)
+    inherit NodeBuilder<'e,'c>(createContext, createThisElement, checkChildNode)
     member _.Return(x) = BuilderBricks.return'(x)
     member this.Run(v) = this |> ModifierContext.apply v (fun n v -> v)
 
@@ -218,18 +218,18 @@ type RenderValC1BaseBuilder<'v,'e,'n,'c
         when 'n: equality
         and 'c :> NodeContext<'n>
     >
-    (createContext, createThisNode, checkChildNode, createResultVal: 'e -> 'v) 
+    (createContext, createThisElement, checkChildNode, createResultVal: 'e -> 'v) 
     =
-    inherit NodeBuilder<'e,'c>(createContext, createThisNode, checkChildNode)
+    inherit NodeBuilder<'e,'c>(createContext, createThisElement, checkChildNode)
     member this.Run(v) = this |> ModifierContext.apply v (fun n v -> createResultVal n)
 
 type RenderRetC1BaseBuilder<'e,'n,'c
         when 'n: equality
         and 'c :> NodeContext<'n>
     >
-    (createContext, createThisNode, checkChildNode) 
+    (createContext, createThisElement, checkChildNode) 
     =
-    inherit NodeBuilder<'e,'c>(createContext, createThisNode, checkChildNode)
+    inherit NodeBuilder<'e,'c>(createContext, createThisElement, checkChildNode)
     member _.Return(x) = BuilderBricks.return'(x)
     member this.Run(v) = this |> ModifierContext.apply v (fun n v -> v)
 
@@ -237,9 +237,9 @@ type RenderValCnBaseBuilder<'v,'e,'n,'c
         when 'n: equality
         and 'c :> NodeContext<'n>
     >
-    (createContext, createThisNode, checkChildNode, createResultVal: 'e -> 'v) 
+    (createContext, createThisElement, checkChildNode, createResultVal: 'e -> 'v) 
     =
-    inherit NodeBuilder<'e,'c>(createContext, createThisNode, checkChildNode)
+    inherit NodeBuilder<'e,'c>(createContext, createThisElement, checkChildNode)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
     member this.Run(v) = this |> ModifierContext.apply v (fun n v -> createResultVal n)
@@ -248,9 +248,9 @@ type RenderRetCnBaseBuilder<'e,'n,'c
         when 'n: equality
         and 'c :> NodeContext<'n>
     >
-    (createContext, createThisNode, checkChildNode) 
+    (createContext, createThisElement, checkChildNode) 
     =
-    inherit NodeBuilder<'e,'c>(createContext, createThisNode, checkChildNode)
+    inherit NodeBuilder<'e,'c>(createContext, createThisElement, checkChildNode)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
     member this.Run(v) = this |> ModifierContext.apply v (fun n v -> v)
