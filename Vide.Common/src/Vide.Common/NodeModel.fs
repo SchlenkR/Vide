@@ -75,7 +75,7 @@ type NodeBuilder<'e,'c>
 
 module ModifierContext =
     // TODO: This is really, really weired. I think it's necessary to distinguish
-    // between 'nthis and 'nhild on a general level (see branch of 2023-02-18)
+    // between 'nthis and 'nhild on a general level (see branch of 2023-02-18 and many others)
     let inline apply<'v1,'v2,'s,'e,'n,'c
             when 'n: equality
             and 'c :> NodeContext<'n>
@@ -94,7 +94,7 @@ module ModifierContext =
                 match s with
                 | None -> None,None
                 | Some (ms,fs) -> ms,fs
-            let node,cs =
+            let thisNode,cs =
                 // Can it happen that s is Some and cs is None? I don't think so.
                 // But: See comment in definition of: Vide.Core.Vide
                 match s with
@@ -109,15 +109,15 @@ module ModifierContext =
                         node,cs
                     | DiscardAndCreateNew ->
                         this.CreateThisNode(parentCtx), None
-            do runModifiers this.EvalModifiers node
+            do runModifiers this.EvalModifiers thisNode
             let childCtx =
                 // TODO: Why the unsafe cast everywhere in this function?
-                this.CreateContext node
+                this.CreateContext thisNode
             let cv,cs = childVide cs gc childCtx
             do childCtx.RemoveObsoleteChildren()
-            do runModifiers this.AfterEvalModifiers node
-            let result = createResultVal node cv
-            let state = Some (Some node, cs)
+            do runModifiers this.AfterEvalModifiers thisNode
+            let result = createResultVal thisNode cv
+            let state = Some (Some thisNode, cs)
             result,state
 
 module BuilderBricks =
