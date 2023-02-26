@@ -21,10 +21,10 @@ type WebSharperDocument() =
             parent.AppendChild(child) |> ignore
         member _.RemoveChild(parent, child) =
             parent.RemoveChild(child) |> ignore
-        member _.GetChildNodes(parent) =
+        member _.GetChildren(parent) =
             let nodes = parent.ChildNodes
             [ for i in 0 .. nodes.Length - 1 do nodes.Item i ]
-        member _.ClearContent(parent) =
+        member _.ClearChildren(parent) =
             parent.TextContent <- ""
         member _.CreateTextNode(text) =
             let tn = JS.Document.CreateTextNode(text)
@@ -40,10 +40,9 @@ type WebSharperDocument() =
         member _.CreateNodeOfName(tagName) =
             JS.Document.CreateElement(tagName)
 
-type WebSharperContext(parent, evaluationManager) =
-    inherit WebContext<Node>(parent, evaluationManager, WebSharperDocument())
-    interface INodeContextFactory<Node,WebSharperContext> with
-        member _.CreateChildCtx(parent) = WebSharperContext(parent, evaluationManager)
+type WebSharperContext(parent) =
+    inherit WebContext<Node>(parent, WebSharperDocument())
+    static member Create<'e when 'e :> Node>(thisNode: 'e) = WebSharperContext(thisNode :> Node)
 
 // ==================================================================
 // Fable <-> WebSharper
@@ -61,23 +60,23 @@ type WebSharperContext(parent, evaluationManager) =
 type ComponentRetCnBuilder() =
     inherit ComponentRetCnBaseBuilder<Node,WebSharperContext>()
 
-type RenderValC0Builder<'v,'n when 'n :> Node>(createNode, checkNode, createResultVal) =
-    inherit RenderValC0BaseBuilder<'v,'n,Node,WebSharperContext>(createNode, checkNode, createResultVal)
+type RenderValC0Builder<'v,'e when 'e :> Node>(createThisElement, checkChildNode, createResultVal) =
+    inherit RenderValC0BaseBuilder<'v,'e,Node,WebSharperContext>(WebSharperContext.Create, createThisElement, checkChildNode, createResultVal)
 
-type RenderRetC0Builder<'n when 'n :> Node>(createNode, checkNode) =
-    inherit RenderRetC0BaseBuilder<'n,Node,WebSharperContext>(createNode, checkNode)
+type RenderRetC0Builder<'e when 'e :> Node>(createThisElement, checkChildNode) =
+    inherit RenderRetC0BaseBuilder<'e,Node,WebSharperContext>(WebSharperContext.Create, createThisElement, checkChildNode)
 
-type RenderValC1Builder<'v,'n when 'n :> Node>(createNode, checkNode, createResultVal) =
-    inherit RenderValC1BaseBuilder<'v,'n,Node,WebSharperContext>(createNode, checkNode, createResultVal)
+type RenderValC1Builder<'v,'e when 'e :> Node>(createThisElement, checkChildNode, createResultVal) =
+    inherit RenderValC1BaseBuilder<'v,'e,Node,WebSharperContext>(WebSharperContext.Create, createThisElement, checkChildNode, createResultVal)
 
-type RenderRetC1Builder<'n when 'n :> Node>(createNode, checkNode) =
-    inherit RenderRetC1BaseBuilder<'n,Node,WebSharperContext>(createNode, checkNode)
+type RenderRetC1Builder<'e when 'e :> Node>(createThisElement, checkChildNode) =
+    inherit RenderRetC1BaseBuilder<'e,Node,WebSharperContext>(WebSharperContext.Create, createThisElement, checkChildNode)
 
-type RenderValCnBuilder<'v,'n when 'n :> Node>(createNode, checkNode, createResultVal) =
-    inherit RenderValCnBaseBuilder<'v,'n,Node,WebSharperContext>(createNode, checkNode, createResultVal)
+type RenderValCnBuilder<'v,'e when 'e :> Node>(createThisElement, checkChildNode, createResultVal) =
+    inherit RenderValCnBaseBuilder<'v,'e,Node,WebSharperContext>(WebSharperContext.Create, createThisElement, checkChildNode, createResultVal)
 
-type RenderRetCnBuilder<'n when 'n :> Node>(createNode, checkNode) =
-    inherit RenderRetCnBaseBuilder<'n,Node,WebSharperContext>(createNode, checkNode)
+type RenderRetCnBuilder<'e when 'e :> Node>(createThisElement, checkChildNode) =
+    inherit RenderRetCnBaseBuilder<'e,Node,WebSharperContext>(WebSharperContext.Create, createThisElement, checkChildNode)
 
 
 // --------------------------------------------------
@@ -108,27 +107,30 @@ type RenderRetCnBuilder<'n when 'n :> Node> with
 // Specialized vide functions
 // --------------------------------------------------
 
-module Vide =
+// TODO
 
-    [<GeneralizableValue>]
-    let webSharperContext : Vide<WebSharperContext,unit,WebSharperContext> =
-        Vide <| fun s ctx -> ctx,None
+//module Vide =
 
-    [<GeneralizableValue>]
-    let node<'n when 'n :> Node> : Vide<'n,unit,WebSharperContext> =
-        Vide <| fun s ctx ->
-            // TODO: OUCH!!! Was ist da los - wieso bekomme ich das nicht besser hin?
-            ctx.Parent :?> 'n,None
+//    [<GeneralizableValue>]
+//    let webSharperContext : Vide<WebSharperContext,unit,WebSharperContext> =
+//        Vide <| fun s ctx -> ctx,None
+
+//    [<GeneralizableValue>]
+//    let node<'n when 'n :> Node> : Vide<'n,unit,WebSharperContext> =
+//        Vide <| fun s ctx ->
+//            // TODO: OUCH!!! Was ist da los - wieso bekomme ich das nicht besser hin?
+//            ctx.Parent :?> 'n,None
 
 // TODO: Doesn't compile in WebSharper
-//module VideApp =
-//    let inline doCreate appCtor (host: #Node) (content: Vide<'v,'s,WebSharperContext>) onEvaluated =
-//        let content = RenderRetC1Builder((fun _ -> host), fun _ -> Keep) { content }
-//        let ctxCtor = fun eval -> WebSharperContext(host, eval)
-//        appCtor content ctxCtor onEvaluated
-//    let createWebSharper host content onEvaluated =
-//        doCreate VideApp.create host content onEvaluated
-//    let createWebSharperWithObjState host content onEvaluated =
-//        doCreate VideApp.createWithUntypedState host content onEvaluated
+module VideApp =
+    module WebSharper =
+        let inline doCreate appCtor (host: #Node) (content: Vide<'v,'s,WebSharperContext>) onEvaluated =
+            let content = RenderRetC1Builder((fun _ -> host), fun _ -> Keep) { content }
+            let ctxCtor = fun () -> WebSharperContext(host)
+            appCtor content ctxCtor onEvaluated
+        let create host content onEvaluated =
+            doCreate VideApp.create host content onEvaluated
+        let createWithUntypedState host content onEvaluated =
+            doCreate VideApp.createWithUntypedState host content onEvaluated
 
 let vide = ComponentRetCnBuilder()

@@ -33,34 +33,32 @@ type FableDocument() =
 
 type FableContext(parent) =
     inherit WebContext<Node>(parent, FableDocument())
+    static member Create<'e when 'e :> Node>(thisNode: 'e) = FableContext(thisNode :> Node)
 
 // --------------------------------------------------
 // Specialized builder definitions
 // --------------------------------------------------
 
-module FableContext =
-    let create<'e when 'e :> Node> (thisNode: 'e) = FableContext(thisNode :> Node)
-
 type ComponentRetCnBuilder() =
     inherit ComponentRetCnBaseBuilder<Node,FableContext>()
 
 type RenderValC0Builder<'v,'e when 'e :> Node>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderValC0BaseBuilder<'v,'e,Node,FableContext>(FableContext.create, createThisElement, checkChildNode, createResultVal)
+    inherit RenderValC0BaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, checkChildNode, createResultVal)
 
 type RenderRetC0Builder<'e when 'e :> Node>(createThisElement, checkChildNode) =
-    inherit RenderRetC0BaseBuilder<'e,Node,FableContext>(FableContext.create, createThisElement, checkChildNode)
+    inherit RenderRetC0BaseBuilder<'e,Node,FableContext>(FableContext.Create, createThisElement, checkChildNode)
 
 type RenderValC1Builder<'v,'e when 'e :> Node>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderValC1BaseBuilder<'v,'e,Node,FableContext>(FableContext.create, createThisElement, checkChildNode, createResultVal)
+    inherit RenderValC1BaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, checkChildNode, createResultVal)
 
 type RenderRetC1Builder<'e when 'e :> Node>(createThisElement, checkChildNode) =
-    inherit RenderRetC1BaseBuilder<'e,Node,FableContext>(FableContext.create, createThisElement, checkChildNode)
+    inherit RenderRetC1BaseBuilder<'e,Node,FableContext>(FableContext.Create, createThisElement, checkChildNode)
 
 type RenderValCnBuilder<'v,'e when 'e :> Node>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderValCnBaseBuilder<'v,'e,Node,FableContext>(FableContext.create, createThisElement, checkChildNode, createResultVal)
+    inherit RenderValCnBaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, checkChildNode, createResultVal)
 
 type RenderRetCnBuilder<'e when 'e :> Node>(createThisElement, checkChildNode) =
-    inherit RenderRetCnBaseBuilder<'e,Node,FableContext>(FableContext.create, createThisElement, checkChildNode)
+    inherit RenderRetCnBaseBuilder<'e,Node,FableContext>(FableContext.Create, createThisElement, checkChildNode)
 
 
 // --------------------------------------------------
@@ -80,13 +78,14 @@ module Vide =
     //        ctx.Parent :?> 'n,None
 
 module VideApp =
-    let inline doCreate appCtor host (content: Vide<'v,'s,FableContext>) onEvaluated =
-        let content = RenderRetC1Builder((fun _ -> host), fun _ -> Keep) { content }
-        let ctxCtor = fun () -> FableContext(host)
-        appCtor content ctxCtor onEvaluated
-    let createFable host content onEvaluated =
-        doCreate VideApp.create host content onEvaluated
-    let createFableWithObjState host content onEvaluated =
-        doCreate VideApp.createWithUntypedState host content onEvaluated
+    module Fable =
+        let inline doCreate appCtor host (content: Vide<'v,'s,FableContext>) onEvaluated =
+            let content = RenderRetC1Builder((fun _ -> host), fun _ -> Keep) { content }
+            let ctxCtor = fun () -> FableContext(host)
+            appCtor content ctxCtor onEvaluated
+        let create host content onEvaluated =
+            doCreate VideApp.create host content onEvaluated
+        let createWithUntypedState host content onEvaluated =
+            doCreate VideApp.createWithUntypedState host content onEvaluated
 
 let vide = ComponentRetCnBuilder()

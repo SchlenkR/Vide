@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <Compile Include="Demos\Demos.fs" />
-    <Compile Include="App.fs" />
+    <Compile Include="Demos\App.fs" />
     <Compile Include="Client.fs" />
     <Compile Include="Startup.fs" />
     <None Include="wsconfig.json" />

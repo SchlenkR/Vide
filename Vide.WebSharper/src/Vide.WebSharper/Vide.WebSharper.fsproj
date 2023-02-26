@@ -5,9 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\..\Vide.Common\src\Vide.Common\core.fs" Link="Vide.Common\core.fs" />
-    <Compile Include="..\..\..\Vide.Common\src\Vide.Common\NodeModel.fs" Link="Vide.Common\NodeModel.fs" />
-    <Compile Include="..\..\..\Vide.Common\src\Vide.Common\WebModel.fs" Link="Vide.Common\WebModel.fs" />
+    <EmbeddedResource Remove="Vide.Common\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\Vide.Common\src\Vide.Common\core.fs" Link="Common\core.fs" />
+    <Compile Include="..\..\..\Vide.Common\src\Vide.Common\NodeModel.fs" Link="Common\NodeModel.fs" />
+    <Compile Include="..\..\..\Vide.Common\src\Vide.Common\WebModel.fs" Link="Common\WebModel.fs" />
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="WebSharper.fs" />
     <Compile Include="HtmlApiPreparation.fs" />
@@ -20,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Vide.Common\" />
+    <Folder Include="Common\" />
   </ItemGroup>
 
 </Project>
