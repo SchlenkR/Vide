@@ -31,9 +31,9 @@ type FableDocument() =
         member _.CreateNodeOfName(tagName) =
             document.createElement tagName
 
-type FableContext(parent) =
+type FableContext(parent: Node) =
     inherit WebContext<Node>(parent, FableDocument())
-    static member Create<'e when 'e :> Node>(thisNode: 'e) = FableContext(thisNode :> Node)
+    static member Create<'e when 'e :> Node>(thisNode: 'e) = FableContext(thisNode)
 
 // --------------------------------------------------
 // Specialized builder definitions
