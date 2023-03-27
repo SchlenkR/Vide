@@ -33,7 +33,9 @@ module MutableValue =
             with get() = state
             and set(value) = this.Set(value)
 
-#if USE_MUTABLE_OPERATORS
+#if EXCLUDE_MUTABLE_OPERATORS
+        // This is for websharper compilation!
+#else
         // Operators
         static member inline ( + ) (this: MutableValue<'v>, v: 'v) = this.Value + v
         static member inline ( - ) (this: MutableValue<'v>, v: 'v) = this.Value - v

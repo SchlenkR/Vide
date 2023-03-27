@@ -366,7 +366,8 @@ module TodoList =
                 
                 button
                     .disabled(String.IsNullOrWhiteSpace(itemName.Value))
-                    .onclick(fun _ -> addItem()) { 
+                    .onclick(fun _ -> addItem()) 
+                    { 
                         "Add Item" 
                     }
             }

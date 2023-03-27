@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <!-- General info -->
-    <Description>dotnet templates for Fable.Lit</Description>
-    <Copyright>Copyright 2020 Angel D. Munoz</Copyright>
-    <Authors>Angel Munoz</Authors>
+    <Description>dotnet templates for Vide.Fable</Description>
+    <Copyright>Copyright 2023 Ronald Schlenker</Copyright>
+    <Authors>Ronald Schlenker</Authors>
 
     <!-- Build config -->
     <TargetFramework>netstandard2.0</TargetFramework>

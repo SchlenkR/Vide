@@ -1,5 +1,6 @@
 
 System.Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
+let currDir = System.Environment.CurrentDirectory
 
 #r "nuget: Fake.Core.Process"
 #r "nuget: Fake.IO.FileSystem"
@@ -14,8 +15,8 @@ open Fake.IO.Globbing.Operators
 let nugetServer = "https://api.nuget.org/v3/index.json"
 let nugetPushEnvVarName = "nuget_push"
 let packPath = 
-    let packFolderName = ".pack"
-    Path.combine __SOURCE_DIRECTORY__ packFolderName
+    let packFolderName = "../.pack"
+    Path.combine currDir packFolderName
     
 [<AutoOpen>]
 module Helper =

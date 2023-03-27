@@ -1,0 +1,47 @@
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+button {
+  background-color: #fff;
+  border: 1px solid #222;
+  border-radius: 8px;
+  color: #222;
+  margin: 0;
+  padding: 7px 12px;
+}
+
+button:focus-visible {
+  box-shadow: #222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+}
+
+button:active {
+  background-color: #f7f7f7;
+  border-color: #000;
+}
+
+#app {
+  height: 100%;
+}
+
+.main {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  height: 70%;
+}
+
+.main > * {
+  margin: auto;
+}
+
+.main img {
+  margin-bottom: 20px;
+}
+
+.main button {
+  margin: 10px;
+}

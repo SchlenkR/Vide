@@ -1,11 +1,11 @@
 <Project>
 
   <PropertyGroup>
-    <Version>0.0.3</Version>
+    <Version>0.0.2</Version>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageTags>f#;fable;fable-dotnet;fable-javascript;vide</PackageTags>
+    <PackageTags>f#;vide</PackageTags>
     <PackageReleaseNotes></PackageReleaseNotes>
   </PropertyGroup>
 

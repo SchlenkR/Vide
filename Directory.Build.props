@@ -1,8 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <Description>A Reactive front-end framework for F# without dependencies.</Description>
-    <Version>0.0.1-alpha-23</Version>
+    <Description>An approach for writing composable UIs in F# the simple way.</Description>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -13,8 +12,6 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/RonaldSchlenker/vide</RepositoryUrl>
-    <PackageReleaseNotes>
-    </PackageReleaseNotes>
   </PropertyGroup>
 
 </Project>
