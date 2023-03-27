@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- General info -->
+    <Description>dotnet templates for Fable.Lit</Description>
+    <Copyright>Copyright 2020 Angel D. Munoz</Copyright>
+    <Authors>Angel Munoz</Authors>
+
+    <!-- Build config -->
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
+
+    <!-- NuGet config -->
+    <PackageType>Template</PackageType>
+    <PackageId>Vide.Fable.Templates</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
+    <PackageTags>templates;fable;vide;F#</PackageTags>
+    <PackageProjectUrl>https://github.com/ronaldschlenker/vide</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/ronaldschlenker/vide</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**" />
+    <Compile Remove="**\*" />
+  </ItemGroup>
+
+</Project>

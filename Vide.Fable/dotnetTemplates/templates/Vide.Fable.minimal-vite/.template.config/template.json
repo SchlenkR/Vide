@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "identity": "Vide.Fable",
+    "shortName": "vide.fable",
+    "name": "Vide.Fable",
+    "author": "Ronald Schlenker",
+    "classifications": [
+        "Web",
+        "F#",
+        "fable",
+        "vide"
+    ],
+    "type": {
+        "language": "F#"
+    },
+    "tags": {
+        "type": "project",
+        "language": "F#"
+    },
+    "sourceName": "AppName",
+    "preferNameDirectory": true
+}

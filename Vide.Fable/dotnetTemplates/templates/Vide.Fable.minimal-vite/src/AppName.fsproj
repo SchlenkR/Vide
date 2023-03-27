@@ -4,17 +4,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Demos.fs" />
-    <Compile Include="App.fs" />
+    <Compile Include="Views\Counter.fs" />
+    <Compile Include="Views\TodoList.fs" />
+    <Compile Include="app.fs" />
   </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Fable.Core" Version="4.0.0" />
-    <PackageReference Include="Fable.Browser.Css" Version="2.3.0" />
     <PackageReference Include="Fable.Browser.Dom" Version="2.12.0" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\..\Vide.Fable\Vide.Fable.fsproj" />
+    <PackageReference Include="Vide.Fable" Version="0.0.1" />
   </ItemGroup>
 </Project>
