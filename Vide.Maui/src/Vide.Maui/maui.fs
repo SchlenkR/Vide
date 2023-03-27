@@ -6,6 +6,7 @@ open System.Collections.Generic
 open Microsoft.Maui
 open Microsoft.Maui.Controls
 open Vide
+open Vide.WpfishModel
 
 // The current basis for vide-implementations is the
 // NodeModel (with NodeDocument and NodeContext), which
@@ -29,12 +30,12 @@ type MauiDocument() =
             | :? ICollection<IView> as viewColl -> viewColl.Remove(child) |> ignore
             | :? ContentView as contentView -> contentView.Content <- null
             | _ -> raise <| makeEx parent (Some child) "remove child"
-        member _.GetChildNodes(parent) =
+        member _.GetChildren(parent) =
             match box parent with
             | :? ICollection<IView> as viewColl -> viewColl |> Seq.toList
             | :? ContentView as contentView -> contentView.Content :> IView |> List.singleton
             | _ -> []
-        member _.ClearContent(parent) =
+        member _.ClearChildren(parent) =
             match box parent with
             | :? ICollection<IView> as viewColl -> viewColl.Clear()
             | :? ContentView as contentView -> contentView.Content <- null
@@ -49,21 +50,14 @@ type MauiDocument() =
                     setText = fun value -> tn.Text <- value
                 }
             textNode
+    interface IWpfishDocument<IView> with
+        member _.CreateNodeOfType<'e when 'e : (new: unit -> 'e)>() =
+            let e = new 'e()
+            e, (box e) :?> IView
 
-type MauiContext
-    (
-        parent,
-        evaluationManager,
-        document: MauiDocument
-    ) =
-    inherit NodeContext<IView>(parent, evaluationManager, document)
-    interface INodeContextFactory<IView,MauiContext> with
-        member _.CreateChildCtx(parent) = MauiContext(parent, evaluationManager, document)
-    member this.AddElement() =
-        let n = new 'n()
-        do this.KeepChild n
-        do (document :> INodeDocument<_>).AppendChild(parent, n)
-        n
+type MauiContext(parent: IView) =
+    inherit WpfishContext<IView>(parent, MauiDocument())
+    static member Create<'e when 'e :> IView>(thisNode: 'e) = MauiContext(thisNode)
 
 
 // --------------------------------------------------
@@ -73,23 +67,23 @@ type MauiContext
 type ComponentRetCnBuilder() =
     inherit ComponentRetCnBaseBuilder<IView,MauiContext>()
 
-type RenderValC0Builder<'v,'n when 'n :> IView>(createNode, checkNode, createResultVal) =
-    inherit RenderValC0BaseBuilder<'v,'n,IView,MauiContext>(createNode, checkNode, createResultVal)
+type RenderValC0Builder<'v,'e when 'e :> IView>(createThisElement, checkChildNode, createResultVal) =
+    inherit RenderValC0BaseBuilder<'v,'e,IView,MauiContext>(MauiContext.Create, createThisElement, checkChildNode, createResultVal)
 
-type RenderRetC0Builder<'n when 'n :> IView>(createNode, checkNode) =
-    inherit RenderRetC0BaseBuilder<'n,IView,MauiContext>(createNode, checkNode)
+type RenderRetC0Builder<'e when 'e :> IView>(createThisElement, checkChildNode) =
+    inherit RenderRetC0BaseBuilder<'e,IView,MauiContext>(MauiContext.Create, createThisElement, checkChildNode)
 
-type RenderValC1Builder<'v,'n when 'n :> IView>(createNode, checkNode, createResultVal) =
-    inherit RenderValC1BaseBuilder<'v,'n,IView,MauiContext>(createNode, checkNode, createResultVal)
+type RenderValC1Builder<'v,'e when 'e :> IView>(createThisElement, checkChildNode, createResultVal) =
+    inherit RenderValC1BaseBuilder<'v,'e,IView,MauiContext>(MauiContext.Create, createThisElement, checkChildNode, createResultVal)
 
-type RenderRetC1Builder<'n when 'n :> IView>(createNode, checkNode) =
-    inherit RenderRetC1BaseBuilder<'n,IView,MauiContext>(createNode, checkNode)
+type RenderRetC1Builder<'e when 'e :> IView>(createThisElement, checkChildNode) =
+    inherit RenderRetC1BaseBuilder<'e,IView,MauiContext>(MauiContext.Create, createThisElement, checkChildNode)
 
-type RenderValCnBuilder<'v,'n when 'n :> IView>(createNode, checkNode, createResultVal) =
-    inherit RenderValCnBaseBuilder<'v,'n,IView,MauiContext>(createNode, checkNode, createResultVal)
+type RenderValCnBuilder<'v,'e when 'e :> IView>(createThisElement, checkChildNode, createResultVal) =
+    inherit RenderValCnBaseBuilder<'v,'e,IView,MauiContext>(MauiContext.Create, createThisElement, checkChildNode, createResultVal)
 
-type RenderRetCnBuilder<'n when 'n :> IView>(createNode, checkNode) =
-    inherit RenderRetCnBaseBuilder<'n,IView,MauiContext>(createNode, checkNode)
+type RenderRetCnBuilder<'e when 'e :> IView>(createThisElement, checkChildNode) =
+    inherit RenderRetCnBaseBuilder<'e,IView,MauiContext>(MauiContext.Create, createThisElement, checkChildNode)
 
 
 // --------------------------------------------------
@@ -111,13 +105,14 @@ type RenderRetCnBuilder<'n when 'n :> IView>(createNode, checkNode) =
 //            ctx.Parent :?> 'n,None
 
 module VideApp =
-    let inline doCreate appCtor (host: #ContentView) (content: Vide<'v,'s,MauiContext>) onEvaluated =
-        let content = RenderRetC1Builder((fun _ -> host), fun _ -> Keep) { content }
-        let ctxCtor = fun eval -> MauiContext(host, eval, MauiDocument())
-        appCtor content ctxCtor onEvaluated
-    let createMaui host content onEvaluated =
-        doCreate VideApp.create host content onEvaluated
-    let createMauiWithObjState host content onEvaluated =
-        doCreate VideApp.createWithUntypedState host content onEvaluated
+    module Maui =
+        let inline doCreate appCtor (host: #ContentView) (content: Vide<'v,'s,MauiContext>) onEvaluated =
+            let content = RenderRetC1Builder((fun _ -> host), fun _ -> Keep) { content }
+            let ctxCtor = fun () -> MauiContext(host)
+            appCtor content ctxCtor onEvaluated
+        let create host content onEvaluated =
+            doCreate VideApp.create host content onEvaluated
+        let createWithUntypedState host content onEvaluated =
+            doCreate VideApp.createWithUntypedState host content onEvaluated
 
 let vide = ComponentRetCnBuilder()
