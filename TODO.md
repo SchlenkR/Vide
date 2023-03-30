@@ -49,6 +49,8 @@ Performance / Optimizations / Robustheit
   * diffing
   * instead of storing attr and events in the builder, they should have a direct effect on the underlying HTMLElement
 * MemLeaks bei evt reg?
+* Testcase:
+    For-Loop mit disjunktem State -> wie verhält sich das?
 
 
 Samples
