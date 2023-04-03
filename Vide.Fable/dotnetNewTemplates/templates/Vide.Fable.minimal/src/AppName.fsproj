@@ -4,7 +4,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="app.fs" />
+    <Compile Include="Counter.fs" />
+    <Compile Include="App.fs" />
   </ItemGroup>
   
   <ItemGroup>

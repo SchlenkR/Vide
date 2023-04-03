@@ -1,0 +1,19 @@
+
+.main {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    height: 70%;
+}
+
+.main > * {
+    margin: auto;
+}
+
+.main img {
+    margin-bottom: 20px;
+}
+
+.main button {
+    margin: 10px;
+}
