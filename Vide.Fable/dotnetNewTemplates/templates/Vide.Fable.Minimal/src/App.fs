@@ -2,7 +2,6 @@ module App
 
 open Browser
 open Vide
-
 open type Html
 
 // The famous 'counter' demo!
