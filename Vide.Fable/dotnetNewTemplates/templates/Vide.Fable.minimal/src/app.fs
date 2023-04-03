@@ -28,6 +28,6 @@ let appView =
 
 // Bootstrap the app!
 do
-    let host = document.getElementById ("app")
+    let host = document.getElementById("app")
     let app = VideApp.Fable.createWithUntypedState host appView (fun _ _ _ -> ())
     do app.EvaluationManager.RequestEvaluation()

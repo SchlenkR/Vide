@@ -3,7 +3,6 @@
 *.fs.js
 bundle.js
 temp/**
-
 build/
 
 ## Ignore Visual Studio temporary files, build results, and
