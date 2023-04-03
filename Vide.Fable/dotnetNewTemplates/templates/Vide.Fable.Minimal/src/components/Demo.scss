@@ -1,0 +1,19 @@
+
+.main-view {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    height: 70%;
+}
+
+    .main-view > * {
+        margin: auto;
+    }
+
+    .main-view img {
+        margin-bottom: 20px;
+    }
+
+    .main-view button {
+        margin: 10px;
+    }
