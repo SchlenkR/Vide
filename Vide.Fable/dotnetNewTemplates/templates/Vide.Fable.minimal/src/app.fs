@@ -21,7 +21,7 @@ let counterView =
 let appView =
     vide {
         div.class' ("main") {
-            p { img.src("./logo.png").width ("150px") }
+            p { img.src("./src/assets/logo.png").width ("150px") }
             counterView
         }
     }
