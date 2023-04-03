@@ -3,8 +3,6 @@
   <PropertyGroup>
     <!-- General info -->
     <Description>dotnet Templates for Vide.Fable</Description>
-    <Copyright>Copyright 2023 Ronald Schlenker</Copyright>
-    <Authors>Ronald Schlenker</Authors>
 
     <!-- Build config -->
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -15,17 +13,17 @@
     <!-- NuGet config -->
     <PackageType>Template</PackageType>
     <PackageId>Vide.Fable.Templates</PackageId>
-    <PackageVersion>1.0.0</PackageVersion>
     <PackageTags>templates;fable;vide;F#</PackageTags>
     <PackageProjectUrl>https://github.com/ronaldschlenker/vide</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/ronaldschlenker/vide</RepositoryUrl>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**" />
+    <Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**;templates\**\build\**;templates\**\node_modules\**;templates\**\.vs\**" />
     <Compile Remove="**\*" />
   </ItemGroup>
 
