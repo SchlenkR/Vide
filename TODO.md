@@ -61,17 +61,6 @@ Samples
 * State-Verschachtelungen (z.B. div in div mit jeweils State) oder State-In-List
 
 
-Docu
----
-
-* Operators (+=, :=,. etc)        
-* Docu: Das geht so nicht - Trigger erklären!
-        let! currentItems = Mutable.ofValue (ResizeArray())
-        let addItem item = currentItems.value.Add(item)
-        let removeItem item = currentItems.value.Remove(item) |> ignore
-* Access HTMLElement from builder wirh let! or via map/iter
-
-
 
 Propably not
 ---

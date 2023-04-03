@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <!-- General info -->
-    <Description>dotnet templates for Vide.Fable</Description>
+    <Description>dotnet Templates for Vide.Fable</Description>
     <Copyright>Copyright 2023 Ronald Schlenker</Copyright>
     <Authors>Ronald Schlenker</Authors>
 
