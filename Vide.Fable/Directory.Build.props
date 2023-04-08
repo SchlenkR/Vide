@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <Version>0.0.7</Version>
+    <Version>0.0.8</Version>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -9,6 +9,8 @@
     <PackageReleaseNotes>
       - 0.0.7
         Added App.createAndStart
+      - 0.0.8
+        App.OnEvaluated as optional settable property
     </PackageReleaseNotes>
   </PropertyGroup>
 

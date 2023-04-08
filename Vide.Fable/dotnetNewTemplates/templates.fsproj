@@ -15,7 +15,7 @@
     <PackageId>Vide.Fable.Templates</PackageId>
     <PackageTags>templates;fable;vide;F#</PackageTags>
     <PackageProjectUrl>https://github.com/ronaldschlenker/vide</PackageProjectUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/ronaldschlenker/vide</RepositoryUrl>
