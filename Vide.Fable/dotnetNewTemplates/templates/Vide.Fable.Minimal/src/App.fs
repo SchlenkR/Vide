@@ -3,7 +3,6 @@ module App
 open Fable.Core.JsInterop
 open Browser
 open Vide
-open type Html
 
 importSideEffects("./App.scss")
 
