@@ -87,5 +87,9 @@ module VideApp =
             doCreate VideApp.create host content onEvaluated
         let createWithUntypedState host content onEvaluated =
             doCreate VideApp.createWithUntypedState host content onEvaluated
+        let createAndStart host content onEvaluated =
+            doCreate VideApp.createAndStart host content onEvaluated
+        let createAndStartWithUntypedState host content onEvaluated =
+            doCreate VideApp.createAndStartWithUntypedState host content onEvaluated
 
 let vide = ComponentRetCnBuilder()

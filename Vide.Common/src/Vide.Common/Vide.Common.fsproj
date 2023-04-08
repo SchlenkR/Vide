@@ -10,6 +10,7 @@
   <ItemGroup>
     <None Include="..\..\..\README.md" Pack="true" PackagePath="\" />
     <Content Include="*.fsproj; *.fs; *.js;" Exclude="**\*.fs.js" PackagePath="fable\" />
+    <None Include="..\..\..\artwork\nuget_logo.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,4 +19,5 @@
     <Compile Include="WebModel.fs" />
     <Compile Include="WpfishModel.fs" />
   </ItemGroup>
+
 </Project>

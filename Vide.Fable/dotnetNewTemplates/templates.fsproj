@@ -27,4 +27,8 @@
     <Compile Remove="**\*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\..\artwork\nuget_logo.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
 </Project>

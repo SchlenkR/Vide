@@ -1,12 +1,15 @@
 <Project>
 
   <PropertyGroup>
-    <Version>0.0.3</Version>
+    <Version>0.0.7</Version>
   </PropertyGroup>
 
   <PropertyGroup>
     <PackageTags>f#;fable;fable-dotnet;fable-javascript;vide</PackageTags>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>
+      - 0.0.7
+        Added App.createAndStart
+    </PackageReleaseNotes>
   </PropertyGroup>
 
 </Project>

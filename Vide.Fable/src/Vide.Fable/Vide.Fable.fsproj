@@ -22,6 +22,7 @@
   <ItemGroup>
     <Content Include="*.fsproj; *.fs; *.js;" Exclude="**\*.fs.js" PackagePath="fable\" />
     <None Include="..\..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\..\artwork\nuget_logo.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
