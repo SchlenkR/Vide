@@ -79,17 +79,17 @@ module Vide =
 
 module VideApp =
     module Fable =
-        let inline doCreate appCtor host (content: Vide<'v,'s,FableContext>) onEvaluated =
+        let inline doCreate appCtor host (content: Vide<'v,'s,FableContext>) =
             let content = RenderRetC1Builder((fun _ -> host), fun _ -> Keep) { content }
             let ctxCtor = fun () -> FableContext(host)
-            appCtor content ctxCtor onEvaluated
-        let create host content onEvaluated =
-            doCreate VideApp.create host content onEvaluated
-        let createWithUntypedState host content onEvaluated =
-            doCreate VideApp.createWithUntypedState host content onEvaluated
-        let createAndStart host content onEvaluated =
-            doCreate VideApp.createAndStart host content onEvaluated
-        let createAndStartWithUntypedState host content onEvaluated =
-            doCreate VideApp.createAndStartWithUntypedState host content onEvaluated
+            appCtor content ctxCtor
+        let create host content =
+            doCreate VideApp.create host content
+        let createWithUntypedState host content =
+            doCreate VideApp.createWithUntypedState host content
+        let createAndStart host content =
+            doCreate VideApp.createAndStart host content
+        let createAndStartWithUntypedState host content =
+            doCreate VideApp.createAndStartWithUntypedState host content
 
 let vide = ComponentRetCnBuilder()

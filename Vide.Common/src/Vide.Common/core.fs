@@ -62,19 +62,14 @@ type AsyncState<'v> =
 type AsyncBindResult<'v1,'v2> = 
     AsyncBindResult of comp: Async<'v1> * cont: ('v1 -> 'v2)
 
-type VideApp<'v,'s,'c>
-    (
-        content: Vide<'v,'s,'c>,
-        ctxCtor: unit -> 'c,
-        onEvaluated: VideApp<'v,'s,'c> -> 'v -> 's option -> unit
-    ) as this 
-    =
+type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c) =
     let mutable currValue = None
     let mutable currentState = None
     let mutable isEvaluating = false
     let mutable hasPendingEvaluationRequests = false
     let mutable evaluationCount = 0uL
     let mutable suspendEvaluation = false
+    let mutable onEvaluated: (VideApp<'v,'s,'c> -> 'v -> 's option -> unit) option = None
         
     let ctx = ctxCtor()
 
@@ -98,7 +93,7 @@ type VideApp<'v,'s,'c>
                         currentState <- newState
                         isEvaluating <- false
                         evaluationCount <- evaluationCount + 1uL
-                    do onEvaluated this value currentState
+                    do onEvaluated |> Option.iter (fun x -> x this value currentState)
                     if hasPendingEvaluationRequests then
                         eval ()
                 do
@@ -107,7 +102,7 @@ type VideApp<'v,'s,'c>
                     | false -> eval ()
         member _.Suspend() =
             do suspendEvaluation <- true
-        member _.Resume() =
+        member this.Resume() =
             do suspendEvaluation <- false
             if hasPendingEvaluationRequests then
                 (this :> IEvaluationManager).RequestEvaluation()
@@ -116,13 +111,15 @@ type VideApp<'v,'s,'c>
         member _.EvaluationCount = evaluationCount
 
     member _.RootContext = ctx
-    member _.EvaluationManager = this :> IEvaluationManager
+    member this.EvaluationManager = this :> IEvaluationManager
     member _.CurrentState = currentState
+    member _.OnEvaluated
+        with get() = onEvaluated
+        and set(value) = onEvaluated <- value
 
 module VideApp =
-    let create content ctxCtor onEvaluated =
-        VideApp(content, ctxCtor, onEvaluated)
-    let createWithUntypedState content ctxCtor onEvaluated =
+    let create content ctxCtor = VideApp(content, ctxCtor)
+    let createWithUntypedState content ctxCtor =
         let content =
             Vide <| fun (s: obj option) gc ctx ->
                 let (Vide content) = content
@@ -130,12 +127,12 @@ module VideApp =
                 let v,s = content typedS gc ctx
                 let untypedS = s |> Option.map (fun s -> s :> obj)
                 v,untypedS
-        create content ctxCtor onEvaluated
-    let createAndStart content ctxCtor onEvaluated =
-        let app = VideApp(content, ctxCtor, onEvaluated)
+        create content ctxCtor
+    let createAndStart content ctxCtor =
+        let app = VideApp(content, ctxCtor)
         do app.EvaluationManager.RequestEvaluation()
         app
-    let createAndStartWithUntypedState content ctxCtor onEvaluated =
+    let createAndStartWithUntypedState content ctxCtor =
         let content =
             Vide <| fun (s: obj option) gc ctx ->
                 let (Vide content) = content
@@ -143,7 +140,7 @@ module VideApp =
                 let v,s = content typedS gc ctx
                 let untypedS = s |> Option.map (fun s -> s :> obj)
                 v,untypedS
-        createAndStart content ctxCtor onEvaluated
+        createAndStart content ctxCtor
 
 module Vide =
 

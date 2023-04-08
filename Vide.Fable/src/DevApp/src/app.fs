@@ -18,7 +18,7 @@ let mutable currentApp = None
 let demos = 
     let inline start content host =
         let content = content |> Vide.map ignore
-        let app = VideApp.Fable.createWithUntypedState host content (fun _ _ _ -> ())
+        let app = VideApp.Fable.createWithUntypedState host content
         do currentApp <- Some app
         do app.EvaluationManager.RequestEvaluation()
     let demos =
