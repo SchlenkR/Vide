@@ -131,6 +131,19 @@ module VideApp =
                 let untypedS = s |> Option.map (fun s -> s :> obj)
                 v,untypedS
         create content ctxCtor onEvaluated
+    let createAndStart content ctxCtor onEvaluated =
+        let app = VideApp(content, ctxCtor, onEvaluated)
+        do app.EvaluationManager.RequestEvaluation()
+        app
+    let createAndStartWithUntypedState content ctxCtor onEvaluated =
+        let content =
+            Vide <| fun (s: obj option) gc ctx ->
+                let (Vide content) = content
+                let typedS = s |> Option.map (fun s -> s :?> 's)
+                let v,s = content typedS gc ctx
+                let untypedS = s |> Option.map (fun s -> s :> obj)
+                v,untypedS
+        createAndStart content ctxCtor onEvaluated
 
 module Vide =
 
