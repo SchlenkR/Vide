@@ -40,49 +40,49 @@ let demos =
                     (
                         "Hello World",
                         "Just a message to the world...",
-                        start Demos.GettingStarted.helloWorld
+                        start UseCases.GettingStarted.helloWorld
                     )
 
                     (
                         "Counter",
                         "The famous, one-of-a kind counter.",
-                        start Demos.GettingStarted.counter
+                        start UseCases.GettingStarted.counter
                     )
         
                     (
                         "Conditional attributes",
                         "Count to 5 and you'll get a surprise!",
-                        start Demos.GettingStarted.conditionalAttributes
+                        start UseCases.GettingStarted.conditionalAttributes
                     )
 
                     (
                         "Conditional elements (multiple if)",
                         "Count to 5 and you'll get another surprise!",
-                        start Demos.GettingStarted.conditionalIfs
+                        start UseCases.IfElse.conditionalIfs
                     )
 
                     (
                         "Conditional elements (if/else)",
                         "TODO: This must be documented!",
-                        start Demos.GettingStarted.conditionalIfElse
+                        start UseCases.IfElse.conditionalIfElse
                     )
 
                     (
                         "List of elements",
                         "Just an immutable list.",
-                        start Demos.GettingStarted.simpleFor
+                        start UseCases.For.simpleFor
                     )
 
                     (
                         "Mutable element list",
                         "Add / Remove items",
-                        start Demos.GettingStarted.statelessFor
+                        start UseCases.For.statelessFor
                     )
 
                     (
                         "List with element state",
                         "TODO",
-                        start Demos.GettingStarted.statefulFor
+                        start UseCases.For.statefulFor
                     )
                 ]
             |}
@@ -93,7 +93,7 @@ let demos =
                     (
                         "Component emitting a value",
                         "TODO",
-                        start (Demos.Components.visualComponentReturningValues)
+                        start UseCases.Components.visualComponentReturningValues
                     )
                 ]
             |}
@@ -104,19 +104,19 @@ let demos =
                     (
                         "Async (hello world)",
                         "TODO",
-                        start Demos.Async.asyncHelloWorld
+                        start UseCases.Async.asyncHelloWorld
                     )
 
                     (
                         "Async (inside elements)",
                         "TODO",
-                        start Demos.Async.asyncInsideHtmlElements
+                        start UseCases.Async.asyncInsideHtmlElements
                     )
 
                     (
                         "Async (with return values)",
                         "TODO",
-                        start Demos.Async.asyncWithSubsequentResults
+                        start UseCases.Async.asyncWithSubsequentResults
                     )
                 ]
             |}
@@ -127,17 +127,17 @@ let demos =
                     (
                         "Retrieving text values",
                         "TODO",
-                        start Demos.Input.textInputReturnsValue
+                        start UseCases.Input.textInputReturnsValue
                     )
                     (
                         "Retrieving text values (as state)",
                         "TODO",
-                        start Demos.Input.textInputReturnsValue
+                        start UseCases.Input.textInputReturnsValue
                     )
                     (
                         "Component with input",
                         "TODO",
-                        start Demos.Input.textInputComponent
+                        start UseCases.Input.textInputComponent
                     )
                 ]
             |}
@@ -148,12 +148,12 @@ let demos =
                     (
                         "Direct access to HTMLElement (on init and eval)",
                         "TODO",
-                        start Demos.Advanced.directAccessToHtmlElementViaInitAndEval
+                        start UseCases.Advanced.directAccessToHtmlElementViaInitAndEval
                     )
                     //(
                     //    "Direct access to HTMLElement (via computation)",
                     //    "TODO",
-                    //    start Demos.Advanced.directAccessToHtmlElementViaComputation
+                    //    start UseCases.Advanced.directAccessToHtmlElementViaComputation
                     //)
                 ]
             |}
@@ -164,7 +164,7 @@ let demos =
                     (
                         "Todo List",
                         "TODO",
-                        start Demos.TodoList.view
+                        start UseCases.TodoList.view
                     )
                 ]
             |}
