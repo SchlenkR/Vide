@@ -4,13 +4,17 @@
   "type": "module",
   "scripts": {
     "postinstall": "dotnet tool restore",
-    "start": "dotnet fable watch src/DevApp.fsproj -s -o build --noCache --run vite",
-    "build": "dotnet fable src/DevApp.fsproj -o build --noCache --run vite build",
-    "pretest": "dotnet fable tests/Tests.fsproj -o build_tests",
-    "test": "mocha build_tests"
+    "clean": "rimraf ./build && rimraf ./dist",
+    "start": "npm run clean && dotnet fable watch ./src/DevApp.fsproj -s -o ./build --noCache --run vite",
+    "build": "npm run clean && dotnet fable ./src/DevApp.fsproj -o ./build --noCache --run vite build",
+    "build-test": "npm run clean && dotnet fable ./tests/Tests.fsproj -o ./build --noCache",
+    "test": "npm run build-test && mocha ./build",
+    "test-headless": "npm run build-test && vite build -c vite.headless.config.js && dotnet run --project ./headlessTests/HeadlessTests.fsproj"
   },
   "devDependencies": {
+    "@rollup/plugin-html": "^1.0.2",
     "mocha": "^10.2.0",
+    "rimraf": "^5.0.0",
     "vite": "^2.9.13"
   }
 }

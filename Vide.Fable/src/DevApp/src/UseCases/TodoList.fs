@@ -1,7 +1,6 @@
 module DevApp.UseCases.TodoList
 
 open System
-open Browser.Types
 open Vide
 open type Vide.Html
 

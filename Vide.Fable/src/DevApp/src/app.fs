@@ -24,7 +24,7 @@ let demos =
     let demos =
         [
             {|
-                category = "Screen Recorsding"
+                category = "Screen Recording"
                 elements = [
                     (
                         "Clear screen (recording)",

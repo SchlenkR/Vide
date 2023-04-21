@@ -11,3 +11,7 @@ See: [./Vide.Fable/README.md]
 ## Build
 
 See `./scripts` folder
+
+## TODO
+
+- document the directory structure of this repo!

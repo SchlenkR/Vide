@@ -6,4 +6,11 @@ export default {
     //         clientPort: 443
     //     }
     // }
-}
+    // build: {
+    //     rollupOptions: {
+    //         output: {
+    //             dir: "dist"
+    //         },
+    //     },
+    // },
+};
