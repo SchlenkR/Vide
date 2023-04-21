@@ -1,5 +1,8 @@
 module Tests
 
+open Fable
+open Browser
+open Browser.Types
 open Fable.Mocha
 
 let arithmeticTests =
@@ -19,4 +22,14 @@ let arithmeticTests =
         }
     ]
 
-Mocha.runTests arithmeticTests |> ignore
+let browserTests =
+    testList "Browser Tests" [
+        test "test 1" {
+            let e1 = document.getElementById("dummy") :?> HTMLButtonElement
+            Expect.isNotNull e1 "e1 is null"
+        }
+    ]
+
+let allTests = testList "All" [ arithmeticTests; browserTests ]
+
+Mocha.runTests allTests |> ignore

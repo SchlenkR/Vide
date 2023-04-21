@@ -11,14 +11,11 @@ export default {
       title: "Vide Headless Tests",
       tempalte: ({ attributes, bundle, files, publicPath, title }) => `
         <!DOCTYPE html>
-        <html \${attributes}>
+        <html>
           <head>
-            \${metas}
-            <title>${title}</title>
-            \${links}
           </head>
           <body>
-            \${scripts}
+            <button id="dummy>Dummy Button</button>
           </body>
         </html>`,
     }),
