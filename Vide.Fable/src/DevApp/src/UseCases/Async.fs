@@ -1,7 +1,5 @@
 module DevApp.UseCases.Async
 
-open System
-open Browser.Types
 open Vide
 open type Vide.Html
 

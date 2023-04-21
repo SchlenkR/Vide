@@ -1,7 +1,5 @@
 module DevApp.UseCases.IfElse
 
-open System
-open Browser.Types
 open Vide
 open type Vide.Html
 

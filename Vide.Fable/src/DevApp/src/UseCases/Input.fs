@@ -1,13 +1,11 @@
 module DevApp.UseCases.Input
 
-open System
-open Browser.Types
 open Vide
 open type Vide.Html
 
 let textInputReturnsValue = 
     vide {
-        // TODO: Docu - wie ändert man das PropertyChangedTrigger-Verhalten
+        // TODO: Docu - wie ï¿½ndert man das PropertyChangedTrigger-Verhalten
         let! enteredValue = input.type'("text").oninput()
         div {
             $"You say: {enteredValue.TextValue}"

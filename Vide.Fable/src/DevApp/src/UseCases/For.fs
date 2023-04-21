@@ -1,7 +1,5 @@
 module DevApp.UseCases.For
 
-open System
-open Browser.Types
 open Vide
 open type Vide.Html
 
