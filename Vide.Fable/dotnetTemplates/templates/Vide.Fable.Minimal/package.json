@@ -1,6 +1,7 @@
 {
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "postinstall": "dotnet tool restore",
     "start": "dotnet tool restore && dotnet fable watch src -s -o build --noCache --run vite",

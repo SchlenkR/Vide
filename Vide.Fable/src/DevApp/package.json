@@ -1,12 +1,16 @@
 {
+  "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "postinstall": "dotnet tool restore",
-    "start": "dotnet tool restore && dotnet fable watch src/DevApp.fsproj -s -o build --noCache --run vite",
-    "build": "dotnet tool restore && dotnet fable src/DevApp.fsproj -o build --noCache --run vite build"
+    "start": "dotnet fable watch src/DevApp.fsproj -s -o build --noCache --run vite",
+    "build": "dotnet fable src/DevApp.fsproj -o build --noCache --run vite build",
+    "pretest": "dotnet fable tests/Tests.fsproj -o build_tests",
+    "test": "mocha build_tests"
   },
   "devDependencies": {
+    "mocha": "^10.2.0",
     "vite": "^2.9.13"
-  },
-  "version": "1.0.0"
+  }
 }

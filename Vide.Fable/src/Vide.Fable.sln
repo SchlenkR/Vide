@@ -13,6 +13,10 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "HtmlApiGenerator", "HtmlApi
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Common", "..\..\Vide.Common\src\Vide.Common\Vide.Common.fsproj", "{6968D15F-8038-475E-B5CB-D63DF4E90331}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevAndTesting", "DevAndTesting", "{96A62ACF-8EB8-4981-B1B0-B409B4D0FDB0}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Tests", "DevApp\tests\Tests.fsproj", "{B067AE82-8C06-419E-840B-B26C424028AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,12 +39,18 @@ Global
 		{6968D15F-8038-475E-B5CB-D63DF4E90331}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6968D15F-8038-475E-B5CB-D63DF4E90331}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6968D15F-8038-475E-B5CB-D63DF4E90331}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B067AE82-8C06-419E-840B-B26C424028AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B067AE82-8C06-419E-840B-B26C424028AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B067AE82-8C06-419E-840B-B26C424028AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B067AE82-8C06-419E-840B-B26C424028AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{83422735-CA81-4FF5-A8B7-7A18C1D5B88A} = {96A62ACF-8EB8-4981-B1B0-B409B4D0FDB0}
 		{3BE15C07-98CF-4E13-826F-99388A29A317} = {21D9ADB0-A709-4259-9104-9EDF3B8B854F}
+		{B067AE82-8C06-419E-840B-B26C424028AE} = {96A62ACF-8EB8-4981-B1B0-B409B4D0FDB0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BA9EFFD2-32F2-4B96-9AAC-189F510310BB}

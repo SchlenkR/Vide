@@ -1,5 +1,6 @@
 namespace Vide
 
+
 type IEvaluationManager =
     abstract member RequestEvaluation: unit -> unit
     abstract member Suspend: unit -> unit
@@ -11,6 +12,7 @@ type IEvaluationManager =
 type GlobalContext = { evaluationManager: IEvaluationManager }
 
 // why we return 's option(!!) -> Because of else branch / zero
+// -> TODO: Is that still valid, now that we explicitly use preserve/discard?
 type Vide<'v,'s,'c> = Vide of ('s option -> GlobalContext -> 'c -> 'v * 's option)
 
 module Debug =
@@ -165,6 +167,13 @@ module Vide =
     [<GeneralizableValue>]
     let zero<'s,'c> : Vide<unit,'s,'c> =
         Vide <| fun s gc ctx -> (),None
+
+    [<GeneralizableValue>]
+    let elsePreserve<'s,'c> : Vide<unit,'s,'c> =
+        Vide <| fun s gc ctx -> (),s
+
+    [<GeneralizableValue>]
+    let elseForget<'s,'c> : Vide<unit,'s,'c> = zero<'s,'c>
     
     [<GeneralizableValue>]
     let context<'c> : Vide<'c,unit,'c> =
@@ -207,8 +216,9 @@ module BuilderBricks =
 
     // This zero (with "unit" as state) is required for multiple returns.
     // Another zero (with 's as state) is required for "if"s without an "else".
-    // Unfortunately, we cannot have both. For that reason, "if"s without "else"
-    // must use "else elseZero".
+    // We cannot have both, which means: We cannot have "if"s without "else".
+    // This is ok (and not unfortunate), because the developer has to make a
+    // decision about what should happen: "elseForget" or "elsePreserve".
     let zero
         ()
         : Vide<unit,unit,'c>
