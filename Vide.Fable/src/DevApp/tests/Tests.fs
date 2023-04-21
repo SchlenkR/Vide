@@ -5,6 +5,8 @@ open Browser
 open Browser.Types
 open Fable.Mocha
 
+let root = document.body.appendChild(document.createElement("div"))
+
 let arithmeticTests =
     testList "Arithmetic tests" [
         test "plus works" {
@@ -24,9 +26,8 @@ let arithmeticTests =
 
 let browserTests =
     testList "Browser Tests" [
-        test "test 1" {
-            let e1 = document.getElementById("dummy") :?> HTMLButtonElement
-            Expect.isNotNull e1 "e1 is null"
+        test "root is present" {
+            Expect.isNotNull root "root is null"
         }
     ]
 
