@@ -9,13 +9,13 @@
   <ItemGroup>
     <Compile Include="Program.fs" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\tests\Tests.fsproj" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Fable.MochaPuppeteerRunner" Version="1.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\tests\Tests.fsproj" />
   </ItemGroup>
 
 </Project>

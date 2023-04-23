@@ -5,10 +5,11 @@
   "scripts": {
     "postinstall": "dotnet tool restore",
     "clean": "rimraf ./build && rimraf ./dist",
-    "start": "npm run clean && dotnet fable watch ./src/DevApp.fsproj -s -o ./build --run vite",
-    "build": "npm run clean && dotnet fable ./src/DevApp.fsproj -o ./build --noCache --run vite build"
+    "build": "npm run clean && dotnet fable ./tests/Tests.fsproj -o ./build --noCache --run vite build",
+    "test": "npm run build && dotnet run --project ./testRunner/TestRunner.fsproj"
   },
   "devDependencies": {
+    "mocha": "^10.2.0",
     "rimraf": "^5.0.0",
     "vite": "^2.9.13"
   }

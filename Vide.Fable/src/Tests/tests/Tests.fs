@@ -2,7 +2,6 @@ module Tests
 
 open Fable
 open Browser
-open Browser.Types
 open Fable.Mocha
 
 let root = document.body.appendChild(document.createElement("div"))
