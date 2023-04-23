@@ -8,8 +8,9 @@ open Vide.WebModel
 
 type FableDocument() =
     interface INodeDocument<Node> with
-        member _.AppendChild(parent, child) =
-            parent.appendChild(child) |> ignore
+        member _.EnsureChildAppended(parent, child) =
+            if not (parent.contains child) then
+                parent.appendChild(child) |> ignore
         member _.RemoveChild(parent, child) =
             parent.removeChild(child) |> ignore
         member _.GetChildren(parent) =

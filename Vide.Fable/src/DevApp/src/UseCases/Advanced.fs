@@ -45,3 +45,28 @@ let shouldCompile2 =
 
 // TODO: returning a node from inside { .. } to enable "let! node = ..."
 
+let shouldCompile3 =
+    vide {
+        let! count = Vide.ofMutable 0
+
+        button.onclick(fun _ -> count += 1) {
+            $"Hit me! Count = {count.Value}"
+        }
+
+        if count.Value % 5 = 0 && count.Value <> 0 then
+            let! valueString = Vide.preserveValue "Hello String"
+            div.class'("the-message") { 
+                $"You have the right to defend yourself! (string value {valueString})" 
+            }
+        else 
+            Vide.elseForget
+
+        // this must compile
+        ()
+
+        if count.Value <> 5 then
+            let! valueInt = Vide.preserveValue 42
+            p { $"not yet... with int value {valueInt}" }
+        else
+            Vide.elseForget
+    }

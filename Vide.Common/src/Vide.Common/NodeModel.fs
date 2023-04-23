@@ -17,7 +17,7 @@ type TextNodeProxy<'n> =
 /// both 'of type 'n (which is the common node type).
 
 type INodeDocument<'n> =
-    abstract member AppendChild : parent: 'n * child: 'n -> unit
+    abstract member EnsureChildAppended : parent: 'n * child: 'n -> unit
     abstract member RemoveChild : parent: 'n * child: 'n -> unit
     abstract member GetChildren : parent: 'n -> 'n list
     abstract member ClearChildren : parent: 'n -> unit
@@ -39,11 +39,12 @@ type NodeContext<'n when 'n: equality>
     ) =
     let mutable keptChildren = []
     member _.NodeDocument = document
-    member _.KeepChildNode(child) =
+    member _.ShowChild(child) =
+        // What is important here:
+        // The ordering is supposed to remain unchanged!
+        // So we don't need a concept of "current index"
         do keptChildren <- child :: keptChildren
-    member this.AppendChild(child) =
-        do this.KeepChildNode(child)
-        do document.AppendChild(parent, child)
+        do document.EnsureChildAppended(parent, child)
     member _.RemoveObsoleteChildren() =
         let childrenForRemoval = document.GetChildren(parent) |> List.except keptChildren
         for child in childrenForRemoval do
@@ -138,10 +139,10 @@ module ModifierContext =
                     do runModifiers this.InitModifiers newElement
                     newElement,s
                 | Some maybeThisElement ->
-                    let eToN (e: 'e) = (box e) :?> 'n
-                    match this.CheckChildNode(eToN maybeThisElement) with
+                    let elem = (box maybeThisElement) :?> 'n
+                    match this.CheckChildNode(elem) with
                     | Keep ->
-                        parentCtx.KeepChildNode(eToN  maybeThisElement)
+                        parentCtx.ShowChild(elem)
                         maybeThisElement,cs
                     | DiscardAndCreateNew ->
                         this.CreateThisElement(parentCtx), None
@@ -171,13 +172,13 @@ module BuilderBricks =
             let textNode =
                 s |> Option.defaultWith (fun () ->
                     let textNode = ctx.NodeDocument.CreateTextNode(value)
-                    do ctx.AppendChild(textNode.node)
+                    do ctx.ShowChild(textNode.node)
                     textNode
                 )
             do
                 if textNode.getText() <> value then
                     textNode.setText(value)
-                ctx.KeepChildNode(textNode.node)
+                ctx.ShowChild(textNode.node)
             (), Some textNode
 
 // ---------------------------------------------------------------------------------

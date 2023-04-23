@@ -3,7 +3,6 @@ module UseCases.IfElse
 open Vide
 open type Vide.Html
 
-
 let ifElseWithForget =
     vide {
         let! count = Vide.ofMutable 0
@@ -12,21 +11,11 @@ let ifElseWithForget =
             $"Hit me! Count = {count.Value}"
         }
 
-        if count.Value = 5 || count.Value = 6 then
-            let! valueString = Vide.preserveValue "Hello String"
+        if count.Value % 5 = 0 && count.Value <> 0 then
             div.class'("the-message") { 
-                $"You have the right to defend yourself! (string value {valueString})" 
+                $"You have the right to defend yourself!" 
             }
         else 
-            Vide.elseForget
-
-        // this must compile
-        ()
-
-        if count.Value <> 5 then
-            let! valueInt = Vide.preserveValue 42
-            p { $"not yet... with int value {valueInt}" }
-        else
             Vide.elseForget
     }
 
@@ -39,13 +28,17 @@ let ifElseWithPreserve =
             $"Hit me! Count = {count.Value}"
         }
 
-        "if-else cannot work like that"
-        ////// TODO: That should not be used at all? And: That this seems to work
-        ////// is only an edge case, because state has same type
-        ////if count.Value = 5 then
-        ////    div.class'("the-message") { 
-        ////        $"You have the right to defend yourself!" 
-        ////    }
-        ////else
-        ////    p { $"not yet..." }
+        if count.Value % 5 = 0 && count.Value <> 0 then
+            div.class'("the-message") {
+                $"You have the right to defend yourself!" 
+            }
+
+            let! isAcknowledged = Vide.ofMutable false
+            input
+                .type'("checkbox")
+                .checked'(isAcknowledged.Value)
+                .oninput(fun x -> isAcknowledged.Value <- x.node.``checked``)
+            ()
+        else 
+            Vide.elsePreserve
     }

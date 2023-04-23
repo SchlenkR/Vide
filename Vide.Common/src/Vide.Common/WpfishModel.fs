@@ -20,7 +20,7 @@ module BuilderHelper =
     // TODO: This should not append - should be done in "apply"
     let createNode<'e,'n when 'n: equality and 'e : (new: unit -> 'e)> (ctx: WpfishContext<'n>) =
         let e,n = ctx.WpfishDocument.CreateNodeOfType<'e>()
-        do ctx.AppendChild(n)
+        do ctx.ShowChild(n)
         e
 
     let inline checkNode(expectedNodeTypeName: string, actualNodeTypeName: string) =
