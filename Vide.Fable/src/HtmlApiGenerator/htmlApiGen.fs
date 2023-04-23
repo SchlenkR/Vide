@@ -30,14 +30,14 @@ module HtmlEnumAttributeTypes =
     {{end}}
 
 module HtmlElementBuilders =
-    type HtmlGARenderValC0Builder<'v,'e when 'e :> HTMLElement and 'e: equality>(tagName, resultSelector) =
-        inherit RenderValC0Builder<'v,'e>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName), resultSelector)
+    type HtmlGARenderPotC0Builder<'v,'e when 'e :> HTMLElement and 'e: equality>(tagName, resultSelector) =
+        inherit RenderPotC0Builder<'v,'e>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName), resultSelector)
 
     type HtmlGARenderRetC0Builder<'e when 'e :> HTMLElement and 'e: equality>(tagName) =
         inherit RenderRetC0Builder<'e>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName))
 
-    type HtmlGARenderValCnBuilder<'v,'e when 'e :> HTMLElement and 'e: equality>(tagName, resultSelector) =
-        inherit RenderValCnBuilder<'v,'e>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName), resultSelector)
+    type HtmlGARenderPotCnBuilder<'v,'e when 'e :> HTMLElement and 'e: equality>(tagName, resultSelector) =
+        inherit RenderPotCnBuilder<'v,'e>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName), resultSelector)
 
     type HtmlGARenderRetCnBuilder<'e when 'e :> HTMLElement and 'e: equality>(tagName) =
         inherit RenderRetCnBuilder<'e>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName))
@@ -102,7 +102,7 @@ let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Ev
                 | true,Void ->
                     $"""
     type {elem.fsharpName}() =
-        inherit HtmlGARenderValC0Builder<{valueTypeName}, {elem.domInterfaceName}>
+        inherit HtmlGARenderPotC0Builder<{valueTypeName}, {elem.domInterfaceName}>
             (
                 "{elem.tagName}",
                 fun node -> {valueTypeName}(node)
@@ -118,7 +118,7 @@ let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Ev
                 | true,Content ->
                     $"""
     type {elem.fsharpName}() =
-        inherit HtmlGARenderValC0Builder<{valueTypeName}, {elem.domInterfaceName}>
+        inherit HtmlGARenderPotC0Builder<{valueTypeName}, {elem.domInterfaceName}>
             (
                 "{elem.tagName}",
                 fun node -> {valueTypeName}(node)
@@ -211,8 +211,8 @@ let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Ev
 
             Api.ext(
                 makeAttrs globalElementPseudoName globalAttrs,
-                "HtmlGARenderValC0Builder",
-                "#HtmlGARenderValC0Builder<_,_>",
+                "HtmlGARenderPotC0Builder",
+                "#HtmlGARenderPotC0Builder<_,_>",
                 makeEvts globalEvents
             )
             Api.ext(
@@ -223,8 +223,8 @@ let generate (elements: Element list) (globalAttrs: Attr list) (globalEvents: Ev
             )
             Api.ext(
                 makeAttrs globalElementPseudoName globalAttrs,
-                "HtmlGARenderValCnBuilder",
-                "#HtmlGARenderValCnBuilder<_,_>",
+                "HtmlGARenderPotCnBuilder",
+                "#HtmlGARenderPotCnBuilder<_,_>",
                 makeEvts globalEvents
             )
             Api.ext(

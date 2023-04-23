@@ -6,7 +6,7 @@ open type Vide.Html
 let textInputReturnsValue = 
     vide {
         // TODO: Docu - wie �ndert man das PropertyChangedTrigger-Verhalten
-        let! enteredValue = input.type'("text").oninput()
+        let! enteredValue = input.type'("text").oninput().emitValue()
         div {
             $"You say: {enteredValue.TextValue}"
         }
@@ -27,7 +27,7 @@ let textInputEvent =
 let textInputComponent = 
     vide {
         let! enteredText = div {
-            let! enteredValue = input.type'("text").oninput()
+            let! enteredValue = input.type'("text").oninput().emitValue()
             return enteredValue.TextValue
         }
 

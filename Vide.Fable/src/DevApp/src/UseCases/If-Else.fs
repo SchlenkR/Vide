@@ -38,7 +38,6 @@ let ifElseWithPreserve =
                 .type'("checkbox")
                 .checked'(isAcknowledged.Value)
                 .oninput(fun x -> isAcknowledged.Value <- x.node.``checked``)
-            ()
         else 
             Vide.elsePreserve
     }

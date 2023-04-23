@@ -188,14 +188,22 @@ module BuilderBricks =
 //    result value like for "input"), and the vide component builder.
 // ---------------------------------------------------------------------------------
 
-// -------------------------------------------------------------------
+// ---------------------------------------------------------------------------------
 // Builder definitions
 //   + Run
 //   + Return
 //     - every Content builder should bind every other builder)
 //     - standard yields
 //   + Combine,For,Delay
-// -------------------------------------------------------------------
+// -------
+// Note on 
+//     "Pot" (has potential return value) and 
+//     "Val" (has return value):
+//     -> Transformation by "emitValue" member of Pot builders imply that
+//          - derived classes have no additional state at all and
+//          - "emitValue" is not part of the fluent API and shall be called
+//            as the last element in the chain (from a user's perspective).
+// ---------------------------------------------------------------------------------
 
 type ComponentRetCnBaseBuilder<'n,'c
         when 'n : equality
@@ -216,6 +224,16 @@ type RenderValC0BaseBuilder<'v,'e,'n,'c
     inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement, checkChildNode)
     member this.Run(v) = this |> ModifierContext.apply v (fun n v -> createResultVal n)
 
+type RenderPotC0BaseBuilder<'v,'e,'n,'c
+        when 'n: equality
+        and 'c :> NodeContext<'n>
+    >
+    (createContext, createThisElement, checkChildNode, createResultVal: 'e -> 'v) 
+    =
+    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement, checkChildNode)
+    member this.Run(v) = this |> ModifierContext.apply v (fun n v -> v)
+    member _.emitValue() = RenderValC0BaseBuilder(createContext, createThisElement, checkChildNode, createResultVal)
+
 type RenderRetC0BaseBuilder<'e,'n,'c
         when 'n: equality
         and 'c :> NodeContext<'n>
@@ -234,6 +252,16 @@ type RenderValC1BaseBuilder<'v,'e,'n,'c
     =
     inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement, checkChildNode)
     member this.Run(v) = this |> ModifierContext.apply v (fun n v -> createResultVal n)
+
+type RenderPotC1BaseBuilder<'v,'e,'n,'c
+        when 'n: equality
+        and 'c :> NodeContext<'n>
+    >
+    (createContext, createThisElement, checkChildNode, createResultVal: 'e -> 'v) 
+    =
+    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement, checkChildNode)
+    member this.Run(v) = this |> ModifierContext.apply v (fun n v -> v)
+    member _.emitValue() = RenderValC1BaseBuilder(createContext, createThisElement, checkChildNode, createResultVal)
 
 type RenderRetC1BaseBuilder<'e,'n,'c
         when 'n: equality
@@ -255,6 +283,18 @@ type RenderValCnBaseBuilder<'v,'e,'n,'c
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
     member this.Run(v) = this |> ModifierContext.apply v (fun n v -> createResultVal n)
+
+type RenderPotCnBaseBuilder<'v,'e,'n,'c
+        when 'n: equality
+        and 'c :> NodeContext<'n>
+    >
+    (createContext, createThisElement, checkChildNode, createResultVal: 'e -> 'v) 
+    =
+    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement, checkChildNode)
+    member _.Combine(a, b) = BuilderBricks.combine(a, b)
+    member _.For(seq, body) = BuilderBricks.for'(seq, body)
+    member this.Run(v) = this |> ModifierContext.apply v (fun n v -> createResultVal n)
+    member _.emitValue() = RenderValCnBaseBuilder(createContext, createThisElement, checkChildNode, createResultVal)
 
 type RenderRetCnBaseBuilder<'e,'n,'c
         when 'n: equality
@@ -280,6 +320,7 @@ type ComponentRetCnBaseBuilder<'n,'c
         and 'c :> NodeContext<'n> 
     > with
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
@@ -292,6 +333,7 @@ type RenderRetC1BaseBuilder<'e,'n,'c
         and 'c :> NodeContext<'n>
     > with
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
@@ -304,6 +346,7 @@ type RenderValC1BaseBuilder<'v,'e,'n,'c
         and 'c :> NodeContext<'n>
     > with
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
@@ -316,6 +359,7 @@ type RenderRetCnBaseBuilder<'e,'n,'c
         and 'c :> NodeContext<'n>
     > with
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
@@ -328,6 +372,7 @@ type RenderValCnBaseBuilder<'v,'e,'n,'c
         and 'c :> NodeContext<'n>
     > with
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
@@ -345,6 +390,7 @@ type RenderRetC1BaseBuilder<'e,'n,'c
         and 'c :> NodeContext<'n>
     > with
     member _.Bind(m: RenderValC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderPotC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetCnBaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: ComponentRetCnBaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
@@ -354,6 +400,7 @@ type RenderRetCnBaseBuilder<'e,'n,'c
         and 'c :> NodeContext<'n>
     > with
     member _.Bind(m: RenderValC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderPotC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetCnBaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: ComponentRetCnBaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
@@ -363,6 +410,7 @@ type ComponentRetCnBaseBuilder<'n,'c
         and 'n : equality
     > with
     member _.Bind(m: RenderValC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderPotC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetCnBaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: ComponentRetCnBaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
