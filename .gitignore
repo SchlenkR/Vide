@@ -4,7 +4,6 @@
 bundle.js
 temp/**
 build/
-build_tests/
 .local-chromium
 dist/
 
