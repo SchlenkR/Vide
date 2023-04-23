@@ -12,6 +12,8 @@ let counter =
     vide {
         let! count = Vide.ofMutable 0
 
+        span.id("tmp") { "HELLO" }
+
         div {
             $"Count = "
             span.id("result") { $"{count.Value}"  }

@@ -5,8 +5,9 @@
   "scripts": {
     "postinstall": "dotnet tool restore",
     "clean": "rimraf ./build && rimraf ./dist",
-    "build": "npm run clean && dotnet fable ./tests/Tests.fsproj -o ./build --noCache --run vite build",
-    "test": "npm run build && dotnet run --project ./testRunner/TestRunner.fsproj"
+    "build": "dotnet fable ./tests/Tests.fsproj -o ./build --run vite build",
+    "test": "npm run clean && npm run build && dotnet run --project ./testRunner/TestRunner.fsproj",
+    "test-quick": "npm run build && dotnet run --project ./testRunner/TestRunner.fsproj"
   },
   "devDependencies": {
     "mocha": "^10.2.0",

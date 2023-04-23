@@ -19,9 +19,9 @@ let browserTests =
     testList "Getting Started" [
         test "Counter counts" {
             showTest UseCases.GettingStarted.counter
-            Expect.equal (elem("result").nodeValue) "0" "Initial result unexpected"
+            Expect.equal (elem("result").innerText) "0" "Initial result unexpected"
             button("inc").click()
-            Expect.equal (elem("result").nodeValue) "1" "After 1 inc click"
+            Expect.equal (elem("result").innerText) "1" "After 1 inc click"
         }
     ]
 
