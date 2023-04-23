@@ -10,8 +10,11 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageIcon>nuget_logo.png</PackageIcon>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/ronaldschlenker/vide</PackageProjectUrl>
     <RepositoryUrl>https://github.com/RonaldSchlenker/vide</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
 </Project>

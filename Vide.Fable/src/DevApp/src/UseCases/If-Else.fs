@@ -4,15 +4,13 @@ open Vide
 open type Vide.Html
 
 
-let conditionalIfs =
+let ifElseWithForget =
     vide {
         let! count = Vide.ofMutable 0
 
         button.onclick(fun _ -> count += 1) {
             $"Hit me! Count = {count.Value}"
         }
-
-        // TODO. Docu: The state can get lost because they are not compatible
 
         if count.Value = 5 || count.Value = 6 then
             let! valueString = Vide.preserveValue "Hello String"
@@ -33,7 +31,7 @@ let conditionalIfs =
     }
 
 // TODO: That is not compiling (anymore; which is ok - document this)
-let conditionalIfElse =
+let ifElseWithPreserve =
     vide {
         let! count = Vide.ofMutable 0
 

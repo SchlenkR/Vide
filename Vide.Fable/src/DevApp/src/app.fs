@@ -53,19 +53,29 @@ let demos =
                         "Count to 5 and you'll get a surprise!",
                         start UseCases.GettingStarted.conditionalAttributes
                     )
+                ]
+            |}
 
+            {|
+                category = "If-Else"
+                elements = [
                     (
-                        "Conditional elements (multiple if)",
+                        "Conditional (if - else forget)",
                         "Count to 5 and you'll get another surprise!",
-                        start UseCases.IfElse.conditionalIfs
+                        start UseCases.IfElse.ifElseWithForget
                     )
 
                     (
-                        "Conditional elements (if/else)",
+                        "Conditional (if - else preserve)",
                         "TODO: This must be documented!",
-                        start UseCases.IfElse.conditionalIfElse
+                        start UseCases.IfElse.ifElseWithPreserve
                     )
+                ]
+            |}
 
+            {|
+                category = "For (Loops)"
+                elements = [
                     (
                         "List of elements",
                         "Just an immutable list.",

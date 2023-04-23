@@ -3,6 +3,16 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <!-- NuGet config -->
+  <PropertyGroup>
+    <Version>0.0.11</Version>
+    <PackageReleaseNotes>
+      - 0.0.8
+        Vide.else... conditional helper functions
+    </PackageReleaseNotes>
+    <PackageTags>f#;vide</PackageTags>
+  </PropertyGroup>
+
   <PropertyGroup>
     <PackageId>Vide.Common</PackageId>
   </PropertyGroup>

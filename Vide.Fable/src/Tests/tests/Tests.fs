@@ -18,6 +18,7 @@ module TA =
 
 let gettingStartedTests =
     testList "Getting Started" [
+
         test "Counter counts" {
             showTest UseCases.GettingStarted.counter
             let inc = button("inc")
@@ -36,6 +37,32 @@ let gettingStartedTests =
             dec.click()
             dec.click()
             Expect.equal (textOf "result") "0" "After 3 dec clicks"
+        }
+        
+        test "Conditional attributes" {
+            showTest UseCases.GettingStarted.conditionalAttributes
+            let btn = button("hitMe")
+            let result = elem("result")
+            let assertIsHidden clicks = Expect.isTrue (result.hasAttribute("hidden")) $"Result should be 'hidden' after {clicks} clicks."
+            let assertIsNotHidden clicks = Expect.isFalse (result.hasAttribute("hidden")) $"Result should not be 'hidden' after {clicks} clicks."
+            
+            btn.click()
+            assertIsHidden 1
+
+            btn.click()
+            assertIsHidden 2
+            
+            btn.click()
+            assertIsHidden 3
+            
+            btn.click()
+            assertIsHidden 4
+            
+            btn.click()
+            assertIsNotHidden 5
+            
+            btn.click()
+            assertIsHidden 6
         }
         
         test "Conditional attributes" {

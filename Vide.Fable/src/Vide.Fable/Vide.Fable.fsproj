@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <Version>0.0.11</Version>
+    <PackageReleaseNotes>
+      - 0.0.7
+        Added App.createAndStart
+      - 0.0.8
+        App.OnEvaluated as optional settable property
+    </PackageReleaseNotes>
+    <PackageTags>f#;fable;fable-dotnet;fable-javascript;vide</PackageTags>
     <PackageId>Vide.Fable</PackageId>
   </PropertyGroup>
   
