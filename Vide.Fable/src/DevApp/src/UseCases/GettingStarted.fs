@@ -26,11 +26,11 @@ let conditionalAttributes =
     vide {
         let! count = Vide.ofMutable 0
 
-        button.onclick(fun _ -> count += 1) {
+        button.id("hitMe").onclick(fun _ -> count += 1) {
             $"Hit me! Count = {count.Value}"
         }
         div.class'("the-message") {
-            span.hidden(count.Value <> 5) {
+            span.id("result").hidden(count.Value <> 5) {
                 "You have the right to defend yourself!"
             }
         }
