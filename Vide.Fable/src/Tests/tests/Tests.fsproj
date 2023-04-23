@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="UseCases\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="..\..\DevApp\src\UseCases\GettingStarted.fs" Link="UseCases\GettingStarted.fs" />
     <Compile Include="..\..\DevApp\src\UseCases\If-Else.fs" Link="UseCases\If-Else.fs" />
     <Compile Include="..\..\DevApp\src\UseCases\For.fs" Link="UseCases\For.fs" />
