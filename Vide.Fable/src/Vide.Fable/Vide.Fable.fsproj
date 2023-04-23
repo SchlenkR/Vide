@@ -11,6 +11,8 @@
         Added App.createAndStart
       - 0.0.8
         App.OnEvaluated as optional settable property
+      - 0.0.12
+        "emitValue" for RenderVal builders
     </PackageReleaseNotes>
     <PackageTags>f#;fable;fable-dotnet;fable-javascript;vide</PackageTags>
     <PackageId>Vide.Fable</PackageId>

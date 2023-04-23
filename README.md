@@ -15,3 +15,14 @@ See `./scripts` folder
 ## TODO
 
 - document the directory structure of this repo!
+
+## Release new NuGet Packages
+
+What to do:
+
+* Increment Versions + RelNotes:
+	* Vide.Common (.fsproj)
+	* Vide.Fable (.fsproj)
+	* Vide.Fable dotnetTemplates (templates.fsproj)
+* Update Package Ref Version
+	* Vide.Fable dotnetTemplates (AppName.fsproj)
