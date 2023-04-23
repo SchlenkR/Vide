@@ -5,7 +5,7 @@ open type Vide.Html
 
 let textInputReturnsValue = 
     vide {
-        // TODO: Docu - wie �ndert man das PropertyChangedTrigger-Verhalten
+        // TODO: Docu - wie ändert man das PropertyChangedTrigger-Verhalten
         let! enteredValue = input.type'("text").oninput().emitValue()
         div {
             $"You say: {enteredValue.TextValue}"
