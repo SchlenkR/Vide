@@ -37,7 +37,13 @@ Useful (already discovered)
         * RenderComponents (die die direkt auf ctx zugreuif)
     * Gutes Beispiel: Aus "input" eine "checkbox"-Komponente machen
     * Components with events
-
+* Shortcut for:
+    ```
+    input
+        .type'("checkbox")
+        .checked'(isWillingToGoOn.Value)
+        .oninput(fun x -> isWillingToGoOn.Value <- x.node.``checked``)
+    ```
 
 
 Performance / Optimizations / Robustheit

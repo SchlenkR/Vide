@@ -3,20 +3,21 @@
   <PropertyGroup>
     <Description>dotnet Templates for Vide.Fable</Description>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <IncludeContentInPack>true</IncludeContentInPack>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
-    <ContentTargetFolders>content</ContentTargetFolders>
   </PropertyGroup>
 
   <!-- NuGet config -->
   <PropertyGroup>
-    <Version>0.0.12</Version>
+    <Version>0.0.13</Version>
     <PackageReleaseNotes>
     </PackageReleaseNotes>
     <PackageId>Vide.Fable.Templates</PackageId>
     <PackageType>Template</PackageType>
-    <PackageTags>templates;fable;vide;F#</PackageTags>
+    <PackageTags>dotnet-new;templates;fable;vide;F#</PackageTags>
+    
     <NoDefaultExcludes>true</NoDefaultExcludes>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
   </PropertyGroup>
 
   <ItemGroup>

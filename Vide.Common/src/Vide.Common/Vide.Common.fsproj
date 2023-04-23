@@ -5,7 +5,7 @@
 
   <!-- NuGet config -->
   <PropertyGroup>
-    <Version>0.0.12</Version>
+    <Version>0.0.13</Version>
     <PackageReleaseNotes>
       - 0.0.8
         Vide.else... conditional helper functions
