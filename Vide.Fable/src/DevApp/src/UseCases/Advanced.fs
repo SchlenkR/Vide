@@ -1,4 +1,4 @@
-module DevApp.UseCases.Advanced
+module UseCases.Advanced
 
 open Vide
 open type Vide.Html

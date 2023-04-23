@@ -1,4 +1,4 @@
-module DevApp.UseCases.GettingStarted
+module UseCases.GettingStarted
 
 open Vide
 open type Vide.Html
@@ -12,9 +12,12 @@ let counter =
     vide {
         let! count = Vide.ofMutable 0
 
-        div { $"Count = {count.Value}" }
-        button.onclick(fun _ -> count -= 1) { "dec" }
-        button.onclick(fun _ -> count += 1) { "inc" }
+        div {
+            $"Count = "
+            span.id("result") { $"{count.Value}"  }
+        }
+        button.id("dec").onclick(fun _ -> count -= 1) { "dec" }
+        button.id("inc").onclick(fun _ -> count += 1) { "inc" }
     }
 
 let conditionalAttributes =

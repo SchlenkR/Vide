@@ -1,4 +1,4 @@
-module DevApp.UseCases.Async
+module UseCases.Async
 
 open Vide
 open type Vide.Html

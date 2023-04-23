@@ -1,4 +1,4 @@
-module DevApp.UseCases.TodoList
+module UseCases.TodoList
 
 open System
 open Vide

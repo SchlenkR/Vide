@@ -1,4 +1,4 @@
-module DevApp.UseCases.IfElse
+module UseCases.IfElse
 
 open Vide
 open type Vide.Html
