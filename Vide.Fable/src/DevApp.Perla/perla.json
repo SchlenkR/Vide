@@ -3,11 +3,8 @@
   "index": "./index.html",
   "fable": {
     "project": "./src/DevApp.fsproj",
-    // output extension of the fable files
     "extension": ".fs.js",
-    // enable Fable source map output
     "sourceMaps": true,
-    // where to output these files
     "outDir": "./build"
   },
   "mountDirectories": {
