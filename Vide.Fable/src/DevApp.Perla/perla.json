@@ -1,0 +1,11 @@
+{
+  "$schema": "https://raw.githubusercontent.com/AngelMunoz/Perla/v1.0.0-beta-011/perla.schema.json",
+  "index": "./index.html",
+  "fable": {
+    "project": "./src/DevApp.fsproj"
+  },
+  "mountDirectories": {
+    "/src": "./src",
+    "/assets": "./assets"
+  }
+}
