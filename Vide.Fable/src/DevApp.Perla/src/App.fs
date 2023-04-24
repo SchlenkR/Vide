@@ -3,9 +3,8 @@ module App
 open Browser.Dom
 open Browser.Types
 open Fable.Core.JS
+open Fable.Core
 open Vide
-
-Fable.Core.JsInterop.importSideEffects "../assets/index.css?js"
 
 do Debug.enabledDebugChannels <- 
     [
