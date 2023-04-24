@@ -5,6 +5,8 @@ open Browser.Types
 open Fable.Core.JS
 open Vide
 
+Fable.Core.JsInterop.importSideEffects "../assets/index.css?js"
+
 do Debug.enabledDebugChannels <- 
     [
         //0

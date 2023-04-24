@@ -8,7 +8,7 @@
     "outDir": "./build"
   },
   "mountDirectories": {
-    "/": "./build",
+    "/build": "./build",
     "/assets": "./assets"
   }
 }
