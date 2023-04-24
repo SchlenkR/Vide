@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Vide</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="./assets/favicon.ico" />
-    <link rel="stylesheet" 
-          href="https://cdn.jsdelivr.net/gh/yegor256/tacit@gh-pages/tacit-css-1.5.5.min.css" />
-    <link rel="stylesheet" href="./assets/index.css" />
-    <script async crossorigin="anonymous" 
-            src="https://ga.jspm.io/npm:es-module-shims@1.7.0/dist/es-module-shims.js"></script>
+  <title>Vide</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="shortcut icon" href="./assets/favicon.ico" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yegor256/tacit@gh-pages/tacit-css-1.5.5.min.css" />
+  <link data-entry-point rel="stylesheet" href="./assets/index.css" />
+  <script async crossorigin="anonymous"
+    src="https://ga.jspm.io/npm:es-module-shims@1.7.0/dist/es-module-shims.js"></script>
 </head>
+
 <body>
-    <div class="container">
-        <div id="menu">
-            <button id="logState">Log State</button>
-            <button id="evaluate">(Re)Evaluate</button>
-            <p>
-                The source code for the demos can be found in <code>./src/demos.fs</code>
-            </p>
-        </div>
-        <div id="demo"></div>
+  <div class="container">
+    <div id="menu">
+      <button id="logState">Log State</button>
+      <button id="evaluate">(Re)Evaluate</button>
+      <p>
+        The source code for the demos can be found in <code>./src/demos.fs</code>
+      </p>
     </div>
-    <script data-entry-point type="module" src="./App.fs.js"></script>
+    <div id="demo"></div>
+  </div>
+  <script data-entry-point type="module" src="./App.fs.js"></script>
 </body>
+
 </html>
