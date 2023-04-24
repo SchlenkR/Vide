@@ -3,7 +3,6 @@ module App
 open Browser.Dom
 open Browser.Types
 open Fable.Core.JS
-open Fable.Core
 open Vide
 
 do Debug.enabledDebugChannels <- 
