@@ -1,6 +1,6 @@
 namespace Issues
 
-module Issue_2 =
+module Issue_3 =
 
     open Vide
     open type Vide.Html
@@ -36,7 +36,7 @@ module Issue_2 =
     let view() = vide { article { main { cards() } } }
 
 
-module Issue_2a =
+module Issue_3a =
 
     open Vide
     open type Vide.Html
@@ -72,7 +72,7 @@ module Issue_2a =
     let view = vide { article { main { cards } } }
 
 
-module Issue_2b =
+module Issue_3b =
 
     open Vide
     open type Vide.Html
