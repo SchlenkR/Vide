@@ -4,6 +4,8 @@ Vide offers a unique approach for writing state-aware functions and composing th
 
 > Vide is in an early prototype state, and it may be that many things you read here will already be obsolete!
 
+**Docs:** https://vide-dev.io
+
 ## Vide for Fable
 
 See: [./Vide.Fable/README.md]
