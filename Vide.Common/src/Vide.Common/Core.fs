@@ -165,7 +165,13 @@ module Vide =
     
     // why 's and not unit? -> see comment in "VideBuilder.Zero"
     [<GeneralizableValue>]
-    let zero<'s,'c> : Vide<unit,'s,'c> =
+    let zero<'c> : Vide<unit,unit,'c> =
+        Vide <| fun s gc ctx -> (),None
+
+    // this "zero", but the form where state is variable
+    // -> see comment in "VideBuilder.Zero"
+    [<GeneralizableValue>]
+    let empty<'s,'c> : Vide<unit,'s,'c> =
         Vide <| fun s gc ctx -> (),None
 
     [<GeneralizableValue>]
@@ -173,7 +179,8 @@ module Vide =
         Vide <| fun s gc ctx -> (),s
 
     [<GeneralizableValue>]
-    let elseForget<'s,'c> : Vide<unit,'s,'c> = zero<'s,'c>
+    let elseForget<'s,'c> : Vide<unit,'s,'c> = 
+        empty<'s,'c>
     
     [<GeneralizableValue>]
     let context<'c> : Vide<'c,unit,'c> =
@@ -222,7 +229,7 @@ module BuilderBricks =
     let zero
         ()
         : Vide<unit,unit,'c>
-        = Vide.zero<unit,'c>
+        = Vide.zero<'c>
 
     let delay
         (f: unit -> Vide<'v,'s,'c>)

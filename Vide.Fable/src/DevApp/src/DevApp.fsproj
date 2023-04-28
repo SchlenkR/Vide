@@ -12,6 +12,7 @@
     <Compile Include="UseCases\Async.fs" />
     <Compile Include="UseCases\Advanced.fs" />
     <Compile Include="UseCases\TodoList.fs" />
+    <Compile Include="UseCases\Issue_2.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   
@@ -19,6 +20,7 @@
     <PackageReference Include="Fable.Core" Version="4.0.0" />
     <PackageReference Include="Fable.Browser.Css" Version="2.3.0" />
     <PackageReference Include="Fable.Browser.Dom" Version="2.14.0" />
+    <PackageReference Include="Fable.Promise" Version="3.2.0" />
   </ItemGroup>
   
   <ItemGroup>

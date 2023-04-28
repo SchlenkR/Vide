@@ -177,6 +177,17 @@ let demos =
                     )
                 ]
             |}
+
+            {|
+                category = "Issues"
+                elements = [
+                    (
+                        "Issue #2",
+                        "Value Restriction",
+                        start (Issues.Issue_2.view())
+                    )
+                ]
+            |}
         ]
     demos
 
