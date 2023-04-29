@@ -974,6 +974,11 @@ type HtmlGARenderPotC0BuilderExtensions =
         static member translate(this: #HtmlGARenderPotC0Builder<_,_>, value: Global.``translate``) =
             this.onEval(fun x -> x.node.setAttribute("translate", value.ToString()))
         
+        /// The slot global attribute assigns a slot in a shadow DOM shadow tree to an element: An element with a slot attribute is assigned to the slot created by the slot element whose name attribute's value matches that slot attribute's value.
+        [<Extension>]
+        static member slot(this: #HtmlGARenderPotC0Builder<_,_>, value: string) =
+            this.onEval(fun x -> x.node.setAttribute("slot", value))
+        
 
         // Events
         
@@ -1672,6 +1677,11 @@ type HtmlGARenderRetC0BuilderExtensions =
         [<Extension>]
         static member translate(this: #HtmlGARenderRetC0Builder<_>, value: Global.``translate``) =
             this.onEval(fun x -> x.node.setAttribute("translate", value.ToString()))
+        
+        /// The slot global attribute assigns a slot in a shadow DOM shadow tree to an element: An element with a slot attribute is assigned to the slot created by the slot element whose name attribute's value matches that slot attribute's value.
+        [<Extension>]
+        static member slot(this: #HtmlGARenderRetC0Builder<_>, value: string) =
+            this.onEval(fun x -> x.node.setAttribute("slot", value))
         
 
         // Events
@@ -2372,6 +2382,11 @@ type HtmlGARenderPotCnBuilderExtensions =
         static member translate(this: #HtmlGARenderPotCnBuilder<_,_>, value: Global.``translate``) =
             this.onEval(fun x -> x.node.setAttribute("translate", value.ToString()))
         
+        /// The slot global attribute assigns a slot in a shadow DOM shadow tree to an element: An element with a slot attribute is assigned to the slot created by the slot element whose name attribute's value matches that slot attribute's value.
+        [<Extension>]
+        static member slot(this: #HtmlGARenderPotCnBuilder<_,_>, value: string) =
+            this.onEval(fun x -> x.node.setAttribute("slot", value))
+        
 
         // Events
         
@@ -3070,6 +3085,11 @@ type HtmlGARenderRetCnBuilderExtensions =
         [<Extension>]
         static member translate(this: #HtmlGARenderRetCnBuilder<_>, value: Global.``translate``) =
             this.onEval(fun x -> x.node.setAttribute("translate", value.ToString()))
+        
+        /// The slot global attribute assigns a slot in a shadow DOM shadow tree to an element: An element with a slot attribute is assigned to the slot created by the slot element whose name attribute's value matches that slot attribute's value.
+        [<Extension>]
+        static member slot(this: #HtmlGARenderRetCnBuilder<_>, value: string) =
+            this.onEval(fun x -> x.node.setAttribute("slot", value))
         
 
         // Events

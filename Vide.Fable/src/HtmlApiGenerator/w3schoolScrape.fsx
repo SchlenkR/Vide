@@ -205,6 +205,18 @@ let domPropertySetter =
         "input", "value"
     ]
 
+let additionalGlobalAttributes =
+    [
+        {
+            name = "slot"
+            fsharpName = "slot"
+            desc = "The slot global attribute assigns a slot in a shadow DOM shadow tree to an element: An element with a slot attribute is assigned to the slot created by the slot element whose name attribute's value matches that slot attribute's value."
+            types = [ AttrTyp.Text ]
+            setMode = SetAttribute
+            link = None
+        }
+    ]
+
 let additionalElements =
     [
         // slot
@@ -584,7 +596,11 @@ let generate () =
     {| 
         elements = elements
         globalEvents = globalEvents
-        globalAttrs = loadPage "ref_standardattributes.asp" |> scrapeAttrs None
+        globalAttrs = 
+            [
+                yield! loadPage "ref_standardattributes.asp" |> scrapeAttrs None
+                yield! additionalGlobalAttributes
+            ]
     |}
 
 

@@ -66,4 +66,7 @@ type BuilderExtensions =
 
 [<AutoOpen>]
 module CustomElements =
+    /// The `e` function creates an element with the given tag name.
+    /// It provides all global attributes and events, and it's possible to set attributes 
+    /// using `attr` / `attrBoolean` or register event handlers using `on`.
     let e (tagName: string) = HtmlGARenderRetCnBuilder<HTMLElement>(tagName)
