@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.0.13</Version>
+    <Version>0.0.14</Version>
     <PackageReleaseNotes>
       - 0.0.7
         Added App.createAndStart
@@ -13,6 +13,8 @@
         App.OnEvaluated as optional settable property
       - 0.0.13
         "emitValue" for RenderVal builders
+      - 0.0.14
+        "slot" and custom element convenience
     </PackageReleaseNotes>
     <PackageTags>f#;fable;fable-dotnet;fable-javascript;vide</PackageTags>
     <PackageId>Vide.Fable</PackageId>

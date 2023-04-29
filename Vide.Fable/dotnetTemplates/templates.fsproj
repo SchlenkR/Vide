@@ -7,7 +7,7 @@
 
   <!-- NuGet config -->
   <PropertyGroup>
-    <Version>0.0.13</Version>
+    <Version>0.0.14</Version>
     <PackageReleaseNotes>
     </PackageReleaseNotes>
     <PackageId>Vide.Fable.Templates</PackageId>
