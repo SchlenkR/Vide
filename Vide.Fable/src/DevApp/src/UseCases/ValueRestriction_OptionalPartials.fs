@@ -1,6 +1,8 @@
-namespace Issues
+namespace ValueRestriction_OptionalPartials
 
-module Issue_3 =
+// see also: https://github.com/RonaldSchlenker/Vide/issues/3
+
+module Alt_With_Turning_Into_Functions =
 
     open Vide
     open type Vide.Html
@@ -36,7 +38,7 @@ module Issue_3 =
     let view() = vide { article { main { cards() } } }
 
 
-module Issue_3a =
+module Alt_With_Specifying_GenArgs =
 
     open Vide
     open type Vide.Html
@@ -72,7 +74,7 @@ module Issue_3a =
     let view = vide { article { main { cards } } }
 
 
-module Issue_3b =
+module Alt_With_VideNone =
 
     open Vide
     open type Vide.Html
@@ -108,40 +110,3 @@ module Issue_3b =
     }
 
     let view = vide { article { main { cards } } }
-
-
-//module Issue_2b =
-
-//    open Vide
-//    open type Vide.Html
-
-//    let Card<'vc,'sc,'sf>
-//        (
-//            content: Vide<'vc,'sc,_>,
-//            footerContent: Vide<_,'sf,_>
-//        ) =
-//        vide {
-//            div { content }
-        
-//            match footerContent with
-//            | Some footerContent -> header { footerContent }
-//            | None -> Vide.elseForget
-//        }
-
-
-//    let cards = vide {
-//        Card(
-//            vide {
-//                let! counter = Vide.ofMutable 0
-//                $"The current count is {counter.Value} :)"
-//            },
-//            vide { "Footer is here" }
-//        )
-
-//        Card<_,_,unit>(
-//            vide { "This is just another Usage" },
-//            Vide.zero
-//        )
-//    }
-
-//    let view = vide { article { main { cards } } }

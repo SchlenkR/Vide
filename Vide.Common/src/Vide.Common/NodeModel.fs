@@ -420,19 +420,19 @@ type NodeBuilderExtensions =
     
     /// Called once on initialization.
     [<Extension>]
-    static member OnInit(this: #NodeBuilder<_,_,_>, m: NodeModifier<_>) =
+    static member onInit(this: #NodeBuilder<_,_,_>, m: NodeModifier<_>) =
         do this.InitModifiers.Add(m)
         this
     
     /// Called on every Vide evaluatiopn cycle.
     [<Extension>]
-    static member OnEval(this: #NodeBuilder<_,_,_>, m: NodeModifier<_>) =
+    static member onEval(this: #NodeBuilder<_,_,_>, m: NodeModifier<_>) =
         do this.EvalModifiers.Add(m)
         this
     
     /// Called after every Vide evaluatiopn cycle.
     [<Extension>]
-    static member OnAfterEval(this: #NodeBuilder<_,_,_>, m: NodeModifier<_>) =
+    static member onAfterEval(this: #NodeBuilder<_,_,_>, m: NodeModifier<_>) =
         do this.AfterEvalModifiers.Add(m)
         this
 

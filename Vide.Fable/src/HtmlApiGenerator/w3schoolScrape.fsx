@@ -161,7 +161,7 @@ let domInterfaceMap =
         "script", "HTMLScriptElement" 
         "section", "HTMLElement" 
         "select", "HTMLSelectElement" 
-        "slot", "HTMLSlotElement" 
+        "slot", "HTMLElement"  //"HTMLSlotElement" 
         "small", "HTMLElement" 
         "source", "HTMLSourceElement" 
         "span", "HTMLSpanElement" 
@@ -207,6 +207,35 @@ let domPropertySetter =
 
 let additionalElements =
     [
+        // slot
+        {
+            tagName = "slot"
+            fsharpName = "slot"
+            elementType = Content
+            returnsValue = false
+            domInterfaceName = "HTMLElement"
+            desc = "The slot element—part of the Web Components technology suite is a placeholder inside a web component that you can fill with your own markup, which lets you create separate DOM trees and present them together."
+            link = "tag_slot.asp"
+            includeGlobalAttrs = true
+            includeGlobalEvents = true
+            attrs = [
+                {
+                    name = "name"
+                    fsharpName = "name"
+                    desc = "A string used to get and set the slot's name."
+                    types = [ AttrTyp.Text ]
+                    setMode = SetAttribute
+                    link = None
+                }
+            ]
+            events = [
+                {
+                    name = "slotchange"
+                    desc = "The slotchange event is fired on an HTMLSlotElement instance (slot element) when the node(s) contained in that slot change."
+                }
+            ]
+        }
+
         for x in 1..6 do 
             let tagName = $"h{x}"
             {

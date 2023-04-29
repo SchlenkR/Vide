@@ -182,9 +182,9 @@ let demos =
                 category = "Issues"
                 elements = [
                     (
-                        "Issue #2",
+                        "Value Restriction (optional partials)",
                         "Value Restriction",
-                        start (Issues.Issue_3.view())
+                        start ValueRestriction_OptionalPartials.Alt_With_VideNone.view
                     )
                 ]
             |}

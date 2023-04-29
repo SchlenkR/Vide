@@ -5,11 +5,11 @@ open type Vide.Html
 
 let directAccessToHtmlElementViaInitAndEval =
     vide {
-        div.OnEval(fun x -> x.node.className <- "bam")  {
+        div.onEval(fun x -> x.node.className <- "bam")  {
             "I'm the OnEval div"
         }
 
-        div.OnInit(fun x -> x.node.className <- "bam2") {
+        div.onInit(fun x -> x.node.className <- "bam2") {
             "I'm the OnInit div"
         }
     }
