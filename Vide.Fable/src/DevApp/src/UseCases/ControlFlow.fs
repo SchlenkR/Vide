@@ -97,3 +97,94 @@ let switchCaseWithDefault =
         |> case 2 componentWithStringState
         |> caseDefault (div { "Nothing to show - this is the default case." })
     }
+
+module PartitionLikeActivePatterns =
+    let choose = false,Vide.zero
+    let caseMatch 
+        cond
+        (view: _ -> Vide<_,_,FableContext>)
+        ((caseMatchedBefore,currView): bool * Vide<_,_,FableContext>)
+        : (bool * Vide<_,_,FableContext>)
+        =
+        let resultingView =
+            vide {
+                currView
+                match caseMatchedBefore,cond with
+                | false,_
+                | true, None -> elsePreserve // TODO: parametrize
+                | true, Some x -> view x
+            }
+        (caseMatchedBefore || cond.IsSome), resultingView
+
+
+    type Union =
+        | Case0 of string
+        | Case1 of int
+        | Case2
+
+    let switchPartition =
+        vide {
+            let data = Case0 "Test"
+
+            choose
+            |> caseMatch (match data with Case0 text -> Some text | _ -> None) (fun text ->
+                vide {
+                    let! x = Vide.preserveValue text
+                    p { $"Case0: {x}" }
+                })
+            |> caseMatch (match data with Case1 num -> Some num | _ -> None) (fun num -> 
+                vide {
+                    let! x = Vide.preserveValue num
+                    p { $"Case1: {x}" }
+                })
+            |> caseMatch (match data with Case2 -> Some () | _ -> None) (fun () -> 
+                vide {
+                    let! x = Vide.preserveValue ()
+                    p { $"Case2: {x}" }
+                })
+            |> snd
+        }
+
+module MatchWithChoice =
+    type Union =
+        | Case0 of string
+        | Case1 of int
+        | Case2
+
+    let toVide c =
+        vide {
+            match c with Choice1Of3 v -> ensureVide v | _ -> elsePreserve
+            match c with Choice2Of3 v -> ensureVide v | _ -> elsePreserve
+            match c with Choice3Of3 v -> ensureVide v | _ -> elsePreserve
+        }
+
+    let view =
+        vide {
+            let! data = vide {
+                let! viewNr = chooseView
+                return
+                    match viewNr % 3 with
+                    | 0 -> Case0 "Test"
+                    | 1 -> Case1 42
+                    | 2 -> Case2
+            }
+
+            match data with
+            | Case0 text -> Choice1Of3 (
+                vide {
+                    let! x = Vide.preserveValue text
+                    p { $"Case0: {x}" }
+                })
+            | Case1 num -> Choice2Of3 (
+                vide {
+                    let! x = Vide.preserveValue num
+                    p { $"Case1: {x}" }
+                })
+            | Case2 -> Choice3Of3 (
+                vide {
+                    let! x = Vide.preserveValue ()
+                    p { $"Case2: {x}" }
+                })
+            |> toVide
+        }
+
