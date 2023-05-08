@@ -5,12 +5,14 @@
 
   <!-- NuGet config -->
   <PropertyGroup>
-    <Version>0.0.13</Version>
+    <Version>0.0.14</Version>
     <PackageReleaseNotes>
       - 0.0.8
         Vide.else... conditional helper functions
       - 0.0.12
         "emitValue" for RenderVal builders
+      - 0.0.14
+        switch/case, keyword auto-opens
     </PackageReleaseNotes>
     <PackageTags>f#;vide</PackageTags>
   </PropertyGroup>

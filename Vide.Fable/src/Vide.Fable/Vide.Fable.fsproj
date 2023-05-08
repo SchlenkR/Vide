@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.0.15</Version>
+    <Version>0.0.16</Version>
     <PackageReleaseNotes>
       - 0.0.7
         Added App.createAndStart
@@ -17,6 +17,8 @@
         "slot" and custom element convenience
       - 0.0.15
         "slot" attribute
+      - 0.0.16
+        switch/case, keyword auto-opens
     </PackageReleaseNotes>
     <PackageTags>f#;fable;fable-dotnet;fable-javascript;vide</PackageTags>
     <PackageId>Vide.Fable</PackageId>
