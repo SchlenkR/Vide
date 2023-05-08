@@ -160,6 +160,13 @@ module ModifierContext =
 module BuilderBricks =
     let inline yieldVide(v: Vide<_,_,_>) =
         v
+
+    let inline yieldConditionalPreserve(x: bool * Vide<_,_,_>) =
+        let cond,v = x
+        if cond then v else elsePreserve
+    
+    let inline yieldSwitch(x: ('a -> bool) * bool * Vide<_,_,_>) =
+        let _,_,v = x in v
     
     let inline yieldBuilderOp<'n,'c when 'c :> NodeContext<'n>>(op: BuilderOperations) =
         Vide <| fun s gc (ctx: 'c) ->
@@ -325,6 +332,8 @@ type ComponentRetCnBaseBuilder<'n,'c
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
+    member _.Yield(v) = BuilderBricks.yieldConditionalPreserve(v)
+    member _.Yield(v) = BuilderBricks.yieldSwitch(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
 
@@ -337,7 +346,9 @@ type RenderRetC1BaseBuilder<'e,'n,'c
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
-    member _.Yield(v) = BuilderBricks.yieldVide v
+    member _.Yield(v) = BuilderBricks.yieldVide(v)
+    member _.Yield(v) = BuilderBricks.yieldConditionalPreserve(v)
+    member _.Yield(v) = BuilderBricks.yieldSwitch(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
     
@@ -351,6 +362,8 @@ type RenderValC1BaseBuilder<'v,'e,'n,'c
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
+    member _.Yield(v) = BuilderBricks.yieldConditionalPreserve(v)
+    member _.Yield(v) = BuilderBricks.yieldSwitch(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
 
@@ -364,6 +377,8 @@ type RenderRetCnBaseBuilder<'e,'n,'c
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
+    member _.Yield(v) = BuilderBricks.yieldConditionalPreserve(v)
+    member _.Yield(v) = BuilderBricks.yieldSwitch(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
 
@@ -377,6 +392,8 @@ type RenderValCnBaseBuilder<'v,'e,'n,'c
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
+    member _.Yield(v) = BuilderBricks.yieldConditionalPreserve(v)
+    member _.Yield(v) = BuilderBricks.yieldSwitch(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
 

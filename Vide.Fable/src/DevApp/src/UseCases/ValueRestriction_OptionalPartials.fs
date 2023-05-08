@@ -17,7 +17,7 @@ module Alt_With_Turning_Into_Functions =
         
             match footerContent with
             | Some footerContent -> header { footerContent }
-            | None -> Vide.elseForget
+            | None -> elseForget
         }
 
     let cards() = vide {
@@ -53,7 +53,7 @@ module Alt_With_Specifying_GenArgs =
         
             match footerContent with
             | Some footerContent -> header { footerContent }
-            | None -> Vide.elseForget
+            | None -> elseForget
         }
 
     let cards = vide {
@@ -89,7 +89,7 @@ module Alt_With_VideNone =
         
             match footerContent with
             | Some footerContent -> header { footerContent }
-            | None -> Vide.elseForget
+            | None -> elseForget
         }
 
     let videNone : Vide<unit,unit,_> option = None
@@ -130,13 +130,13 @@ module Alt_With_ArgsAsFunctions =
                 div {
                     match header with
                     | Some header -> header
-                    | None -> Vide.elseForget
+                    | None -> elseForget
                     
                     content
                     
                     match footer with
                     | Some footer -> footer
-                    | None -> Vide.elseForget
+                    | None -> elseForget
                 }
             }
 
@@ -178,13 +178,13 @@ module Alt_With_ArgsAsFunctions2 =
                 div {
                     match header with
                     | Some header -> Html.header{ header () }
-                    | None -> Vide.elseForget
+                    | None -> elseForget
                     
                     content
                     
                     match footer with
                     | Some footer -> Html.footer { footer () }
-                    | None -> Vide.elseForget
+                    | None -> elseForget
                 }
             }
 
@@ -221,6 +221,7 @@ module Alt_With_ArgsAsFunctions3 =
     //    member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     //    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     //    member _.Yield(v) = BuilderBricks.yieldVide(v)
+    //    member _.Yield(v) = BuilderBricks.yieldConditionalVide(v)
     //    member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
     //    member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
     
@@ -257,13 +258,13 @@ module Alt_With_ArgsAsFunctions3 =
                 div {
                     match header with
                     | Some header -> Html.header { header() }
-                    | None -> Vide.elseForget
+                    | None -> elseForget
                     
                     content
                     
                     match footer with
                     | Some footer -> Html.footer { footer() }
-                    | None -> Vide.elseForget
+                    | None -> elseForget
                 }
             }
 

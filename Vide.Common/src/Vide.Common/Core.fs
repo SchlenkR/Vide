@@ -175,17 +175,10 @@ module Vide =
         Vide <| fun s gc ctx -> (),None
 
     [<GeneralizableValue>]
-    let elsePreserve<'s,'c> : Vide<unit,'s,'c> =
-        Vide <| fun s gc ctx -> (),s
-
-    [<GeneralizableValue>]
-    let elseForget<'s,'c> : Vide<unit,'s,'c> = 
-        empty<'s,'c>
-    
-    [<GeneralizableValue>]
     let context<'c> : Vide<'c,unit,'c> =
         Vide <| fun s gc ctx -> ctx,None
 
+    // TODO: Move to keywords? / rename to useState?
     let ofMutable x =
         Vide <| fun s gc ctx ->
             let s = s |> Option.defaultWith (fun () -> MutableValue(x, gc.evaluationManager))
@@ -364,7 +357,6 @@ module BuilderBricks =
                             va,comp,sb
                 v, Some (sa, Some comp, sb)
 
-[<AbstractClass>]
 type VideBaseBuilder() =
     member _.Bind(m, f) = BuilderBricks.bind(m, f)
     member _.Zero() = BuilderBricks.zero()
@@ -377,3 +369,22 @@ type VideBaseBuilder() =
     member _.Delay(f) = BuilderBricks.Async.delay(f)
     member _.Combine(a, b) = BuilderBricks.Async.combine(a, b)
     // TODO: async for
+
+[<AutoOpen>]
+module Keywords =
+    
+    [<GeneralizableValue>]
+    let elsePreserve<'s,'c> : Vide<unit,'s,'c> =
+        Vide <| fun s gc ctx -> (),s
+
+    [<GeneralizableValue>]
+    let elseForget<'s,'c> : Vide<unit,'s,'c> = 
+        Vide.empty<'s,'c>
+
+    type [<RequireQualifiedAccess>] CaseType = Always | First
+
+    let switch (guard: 'g -> bool) = guard,false,Vide.zero
+
+    // The case functions need to be defined in the context of the
+    // Vide model, because a generic "vide" builder is not present
+    // and it's behaviour is specific.

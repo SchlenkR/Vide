@@ -97,3 +97,50 @@ module VideApp =
             doCreate VideApp.createAndStartWithUntypedState host content
 
 let vide = ComponentRetCnBuilder()
+
+[<AutoOpen>]
+module Keywords =
+    
+    let caseWithBehavior 
+            (guardValue: 'g)
+            caseType
+            (view: Vide<_,_,_>) 
+            (elseBehavior: Vide<_,_,_>)
+            (switchState: ('g -> bool) * bool * Vide<_,_,_>)
+        =
+        let guard,caseMatchedBefore,currView = switchState
+        let cond =
+            let innerCond = guard guardValue
+            match caseType with
+            | CaseType.First -> innerCond
+            | CaseType.Always -> (not caseMatchedBefore) && innerCond
+        let resultingView =
+            vide {
+                currView
+                if cond then view else elseBehavior
+            }
+        guard, (caseMatchedBefore || cond), resultingView
+        
+    let case cond view switchState =
+        caseWithBehavior cond CaseType.First view elsePreserve switchState
+    let caseAnd cond view switchState =
+        caseWithBehavior cond CaseType.Always view elsePreserve switchState
+    let caseForget cond view switchState =
+        caseWithBehavior cond CaseType.First view elseForget switchState
+    let caseForgetAnd cond view switchState =
+        caseWithBehavior cond CaseType.Always view elseForget switchState
+        
+    let caseDefaultWithBehaviour
+            (view: Vide<_,_,_>) 
+            (elseBehavior: Vide<_,_,_>)
+            (switchState: ('g -> bool) * bool * Vide<_,_,_>)
+        =
+        let _,caseMatchedBefore,currView = switchState
+        vide {
+            currView
+            if not caseMatchedBefore then view else elseBehavior
+        }
+    let caseDefault (view: Vide<_,_,_>) switchState =
+        caseDefaultWithBehaviour view elsePreserve switchState
+    let caseDefaultForget (view: Vide<_,_,_>) switchState =
+        caseDefaultWithBehaviour view elseForget switchState

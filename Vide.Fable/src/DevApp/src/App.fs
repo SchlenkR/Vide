@@ -57,18 +57,30 @@ let demos =
             |}
 
             {|
-                category = "If-Else"
+                category = "Control Flow"
                 elements = [
                     (
-                        "Conditional (if - else forget)",
+                        "if - else forget",
                         "Count to 5 and you'll get another surprise!",
-                        start UseCases.IfElse.ifElseWithForget
+                        start UseCases.ControlFlow.ifElseWithForget
                     )
 
                     (
-                        "Conditional (if - else preserve)",
+                        "if - else preserve",
                         "TODO: This must be documented!",
-                        start UseCases.IfElse.ifElseWithPreserve
+                        start UseCases.ControlFlow.ifElseWithPreserve
+                    )
+
+                    (
+                        "switch/case",
+                        "There are 3 views. The 2nd view is resetted on show, all other view retain their state.",
+                        start UseCases.ControlFlow.switchCase
+                    )
+
+                    (
+                        "switch/case (with default)",
+                        "There are 3 views. The 2nd view is resetted on show, all other view retain their state.",
+                        start UseCases.ControlFlow.switchCaseWithDefault
                     )
                 ]
             |}

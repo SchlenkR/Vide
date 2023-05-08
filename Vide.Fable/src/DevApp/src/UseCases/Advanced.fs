@@ -59,7 +59,7 @@ let shouldCompile3 =
                 $"You have the right to defend yourself! (string value {valueString})" 
             }
         else 
-            Vide.elseForget
+            elseForget
 
         // this must compile
         ()
@@ -68,5 +68,5 @@ let shouldCompile3 =
             let! valueInt = Vide.preserveValue 42
             p { $"not yet... with int value {valueInt}" }
         else
-            Vide.elseForget
+            elseForget
     }

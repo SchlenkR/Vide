@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <Compile Include="..\..\DevApp\src\UseCases\GettingStarted.fs" Link="UseCases\GettingStarted.fs" />
-    <Compile Include="..\..\DevApp\src\UseCases\If-Else.fs" Link="UseCases\If-Else.fs" />
+    <Compile Include="..\..\DevApp\src\UseCases\ControlFlow.fs" Link="UseCases\ControlFlow.fs" />
     <Compile Include="..\..\DevApp\src\UseCases\For.fs" Link="UseCases\For.fs" />
     <Compile Include="..\..\DevApp\src\UseCases\Input.fs" Link="UseCases\Input.fs" />
     <Compile Include="..\..\DevApp\src\UseCases\Components.fs" Link="UseCases\Components.fs" />

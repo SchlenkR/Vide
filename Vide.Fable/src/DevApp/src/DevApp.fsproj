@@ -5,7 +5,7 @@
 
   <ItemGroup>
     <Compile Include="UseCases\GettingStarted.fs" />
-    <Compile Include="UseCases\If-Else.fs" />
+    <Compile Include="UseCases\ControlFlow.fs" />
     <Compile Include="UseCases\For.fs" />
     <Compile Include="UseCases\Input.fs" />
     <Compile Include="UseCases\Components.fs" />
