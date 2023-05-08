@@ -184,7 +184,7 @@ let demos =
                     (
                         "Value Restriction (optional partials)",
                         "Value Restriction",
-                        start ValueRestriction_OptionalPartials.Alt_With_VideNone.view
+                        start ValueRestriction_OptionalPartials.Alt_With_ArgsAsFunctions.view
                     )
                 ]
             |}
