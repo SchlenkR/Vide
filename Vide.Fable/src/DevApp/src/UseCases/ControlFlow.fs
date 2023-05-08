@@ -101,12 +101,10 @@ let switchCaseWithDefault =
     vide {
         let! viewNr = chooseView
 
-        let x =
-            switch (fun x -> x = viewNr)
-            |> case 0 componentWithBooleanState
-            |> caseForget 1 componentWithIntState
-            |> case 2 componentWithStringState
-            |> caseDefault (div { "Nothing to show - this is the default case." })
-        x
+        switch (fun x -> x = viewNr)
+        |> case 0 componentWithBooleanState
+        |> caseForget 1 componentWithIntState
+        |> case 2 componentWithStringState
+        |> caseDefault (div { "Nothing to show - this is the default case." })
     }
 
