@@ -102,7 +102,7 @@ let switchCaseWithDefault =
         let! viewNr = chooseView
 
         let x =
-            switch ((=) viewNr)
+            switch (fun x -> x = viewNr)
             |> case 0 componentWithBooleanState
             |> caseForget 1 componentWithIntState
             |> case 2 componentWithStringState
