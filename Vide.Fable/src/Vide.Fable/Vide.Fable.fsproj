@@ -29,9 +29,9 @@
 
   <ItemGroup>
     <Compile Include="Fable.fs" />
-    <Compile Include="HtmlApiPreparation.fs" />
+    <Compile Include="HtmlApiPre.fs" />
     <Compile Include="HtmlApi.fs" />
-    <Compile Include="HtmlApiManualAdditions.fs" />
+    <Compile Include="HtmlApiPost.fs" />
   </ItemGroup>
 
   <ItemGroup>

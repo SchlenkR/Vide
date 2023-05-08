@@ -1,4 +1,4 @@
-namespace Vide.HtmlApiPreparation
+namespace Vide.HtmlApiPre
 
 open Browser.Types
 

@@ -34,10 +34,7 @@ let ifElseWithPreserve =
             }
 
             let! isAcknowledged = Vide.ofMutable false
-            input
-                .type'("checkbox")
-                .checked'(isAcknowledged.Value)
-                .oninput(fun x -> isAcknowledged.Value <- x.node.``checked``)
+            input.bind(isAcknowledged)
         else 
             elsePreserve
     }
@@ -64,19 +61,13 @@ let componentWithIntState = vide {
 let componentWithStringState = vide {
     let! state = Vide.ofMutable "Hello"
     p { $"String: {state.Value}" }
-    input
-        .type'("text")
-        .value(state.Value)
-        .oninput(fun x -> state.Value <- x.node.value)
+    input.bind(state)
 }
 
 let componentWithBooleanState = vide {
     let! state = Vide.ofMutable true
     p { $"Bool: {state.Value}" }
-    input
-        .type'("checkbox")
-        .checked'(state.Value)
-        .oninput(fun x -> state.Value <- x.node.``checked``)
+    input.bind(state)
 }
 
 let chooseView = vide {

@@ -28,11 +28,7 @@ let view = vide {
                     todoList.Value <- { todoList.Value with items = newItem :: todoList.Value.items }
                     itemName.Reset()
                 
-            input
-                .type'("text")
-                .value(itemName.Value)
-                .oninput(fun x -> itemName.Value <- x.node.value)
-                
+            input.bind(itemName)
             button
                 .disabled(String.IsNullOrWhiteSpace(itemName.Value))
                 .onclick(fun _ -> addItem()) 
@@ -45,10 +41,7 @@ let view = vide {
         for item in todoList.Value.items do
             div.class'("flex-row") {
                 p { item.name }
-                input
-                    .type'("checkbox")
-                    .checked'(item.isDone)
-                    .oninput(fun x -> item.isDone <- x.node.``checked``)
+                input.bind(item.isDone, fun value -> item.isDone <- value)
             }
     }
 }
