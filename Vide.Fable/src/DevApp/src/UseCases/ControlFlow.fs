@@ -39,17 +39,16 @@ let ifElseWithPreserve =
             elsePreserve
     }
 
-let yieldConditionalPreserve =
-    vide {
-        let! count = Vide.ofMutable 0
-        button.onclick(fun _ -> count += 1) {
-            $"Hit me! Count = {count.Value}"
-        }
-
-        // TODO: Why not committing to "is/else" - is that shortcut really good?
-        // Propably it's better to remove the possibility for "yieldConditionalPreserve" in Core
-        (count.Value = 5), p { "YOU DID IT!" }
-    }
+////let yieldConditionalPreserve =
+////    vide {
+////        let! count = Vide.ofMutable 0
+////        button.onclick(fun _ -> count += 1) {
+////            $"Hit me! Count = {count.Value}"
+////        }
+////        // TODO: Why not committing to "is/else" - is that shortcut really good?
+////        // Propably it's better to remove the possibility for "yieldConditionalPreserve" in Core
+////        (count.Value = 5), p { "YOU DID IT!" }
+////    }
 
 let componentWithIntState = vide {
     let! state = Vide.ofMutable 0
@@ -98,4 +97,3 @@ let switchCaseWithDefault =
         |> case 2 componentWithStringState
         |> caseDefault (div { "Nothing to show - this is the default case." })
     }
-
