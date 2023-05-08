@@ -146,17 +146,20 @@ module PartitionLikeActivePatterns =
         }
 
 module MatchWithChoice =
-    type Union =
-        | Case0 of string
-        | Case1 of int
-        | Case2
 
+    // This will be hidden in "yield" builder methods, so the user
+    // won't have to explicitly invoke this. Also: More Choices.
     let toVide c =
         vide {
             match c with Choice1Of3 v -> ensureVide v | _ -> elsePreserve
             match c with Choice2Of3 v -> ensureVide v | _ -> elsePreserve
             match c with Choice3Of3 v -> ensureVide v | _ -> elsePreserve
         }
+
+    type Union =
+        | Case0 of string
+        | Case1 of int
+        | Case2
 
     let view =
         vide {
@@ -187,4 +190,3 @@ module MatchWithChoice =
                 })
             |> toVide
         }
-
