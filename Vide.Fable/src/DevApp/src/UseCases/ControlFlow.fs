@@ -77,27 +77,6 @@ let chooseView = vide {
     return count.Value
 }
 
-let switchCase =
-    vide {
-        let! viewNr = chooseView
-
-        switch id
-        |> case (viewNr = 0) componentWithBooleanState
-        |> caseForget (viewNr = 1) componentWithIntState
-        |> case (viewNr = 2) componentWithStringState
-    }
-
-let switchCaseWithDefault =
-    vide {
-        let! viewNr = chooseView
-
-        switch (fun x -> x = viewNr)
-        |> case 0 componentWithBooleanState
-        |> caseForget 1 componentWithIntState
-        |> case 2 componentWithStringState
-        |> caseDefault (div { "Nothing to show - this is the default case." })
-    }
-
 module PartitionLikeActivePatterns =
     let choose = false,Vide.zero
     let caseMatch 
@@ -118,26 +97,26 @@ module PartitionLikeActivePatterns =
 
 
     type Union =
-        | Case0 of string
-        | Case1 of int
-        | Case2
+        | View0 of string
+        | View1 of int
+        | View2
 
     let switchPartition =
         vide {
-            let data = Case0 "Test"
+            let data = View0 "Test"
 
             choose
-            |> caseMatch (match data with Case0 text -> Some text | _ -> None) (fun text ->
+            |> caseMatch (match data with View0 text -> Some text | _ -> None) (fun text ->
                 vide {
                     let! x = Vide.preserveValue text
                     p { $"Case0: {x}" }
                 })
-            |> caseMatch (match data with Case1 num -> Some num | _ -> None) (fun num -> 
+            |> caseMatch (match data with View1 num -> Some num | _ -> None) (fun num -> 
                 vide {
                     let! x = Vide.preserveValue num
                     p { $"Case1: {x}" }
                 })
-            |> caseMatch (match data with Case2 -> Some () | _ -> None) (fun () -> 
+            |> caseMatch (match data with View2 -> Some () | _ -> None) (fun () -> 
                 vide {
                     let! x = Vide.preserveValue ()
                     p { $"Case2: {x}" }
@@ -157,9 +136,9 @@ module MatchWithChoice =
         }
 
     type Union =
-        | Case0 of string
-        | Case1 of int
-        | Case2
+        | View0 of string
+        | View1 of int
+        | View2
 
     let view =
         vide {
@@ -167,26 +146,81 @@ module MatchWithChoice =
                 let! viewNr = chooseView
                 return
                     match viewNr % 3 with
-                    | 0 -> Case0 "Test"
-                    | 1 -> Case1 42
-                    | 2 -> Case2
+                    | 0 -> View0 "Test"
+                    | 1 -> View1 42
+                    | _ -> View2
             }
 
             match data with
-            | Case0 text -> Choice1Of3 (
+            | View0 text -> Choice1Of3 (
                 vide {
                     let! x = Vide.preserveValue text
                     p { $"Case0: {x}" }
                 })
-            | Case1 num -> Choice2Of3 (
+            | View1 num -> Choice2Of3 (
                 vide {
                     let! x = Vide.preserveValue num
                     p { $"Case1: {x}" }
                 })
-            | Case2 -> Choice3Of3 (
+            | View2 -> Choice3Of3 (
                 vide {
                     let! x = Vide.preserveValue ()
                     p { $"Case2: {x}" }
                 })
             |> toVide
         }
+
+////module MatchWithBranch =
+
+////    type Branch<'a,'b,'c,'d,'e> =
+////        | B1 of 'a
+////        | B2 of 'b
+////        | B3 of 'c
+////        | B4 of 'd
+////        | B5 of 'e
+
+////    // This will be hidden in "yield" builder methods, so the user
+////    // won't have to explicitly invoke this. Also: More Choices.
+////    let asBranch<'a,'b,'c,'d,'e> (c: Branch<'a,'b,'c,'d,'e>) =
+////        vide {
+////            match c with B1 v -> ensureVide v | _ -> elsePreserve
+////            match c with B2 v -> ensureVide v | _ -> elsePreserve
+////            match c with B3 v -> ensureVide v | _ -> elsePreserve
+////            match c with B4 v -> ensureVide v | _ -> elsePreserve
+////            match c with B5 v -> ensureVide v | _ -> elsePreserve
+////        }
+
+////    type Union =
+////        | View0 of string
+////        | View1 of int
+////        | View2
+
+////    let view =
+////        vide {
+////            let! data = vide {
+////                let! viewNr = chooseView
+////                return
+////                    match viewNr % 3 with
+////                    | 0 -> View0 "Test"
+////                    | 1 -> View1 42
+////                    | _ -> View2
+////            }
+
+////            match data with
+////            | View0 text -> B1 (
+////                vide {
+////                    let! x = Vide.preserveValue text
+////                    p { $"Case0: {x}" }
+////                })
+////            | View1 num -> B2 (
+////                vide {
+////                    let! x = Vide.preserveValue num
+////                    p { $"Case1: {x}" }
+////                })
+////            | View2 -> B3 (
+////                vide {
+////                    let! x = Vide.preserveValue ()
+////                    p { $"Case2: {x}" }
+////                })
+////            |> asBranch
+////        }

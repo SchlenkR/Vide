@@ -388,12 +388,3 @@ module Keywords =
     [<GeneralizableValue>]
     let elseForget<'s,'c> : Vide<unit,'s,'c> = 
         Vide.empty<'s,'c>
-
-    type Switch<'v,'s,'c,'g> = Switch of guard:('g -> bool) * caseMatched:bool * view:Vide<'v,'s,'c>
-    type [<RequireQualifiedAccess>] CaseType = Always | First
-
-    let switch guard = Switch(guard,false,Vide.zero)
-
-    // The case functions need to be defined in the context of the
-    // Vide model, because a generic "vide" builder is not present
-    // and it's behaviour is specific.
