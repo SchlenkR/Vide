@@ -73,7 +73,7 @@ module Vide =
 
     [<GeneralizableValue>]
     let fableContext : Vide<FableContext,unit,FableContext> =
-        Vide <| fun s gc ctx -> ctx,None
+        fun s gc ctx -> ctx,None
 
     //[<GeneralizableValue>]
     //let node<'n when 'n :> Node> : Vide<'n,unit,FableContext> =
@@ -102,13 +102,13 @@ let vide = ComponentRetCnBuilder()
 module Keywords =
     
     let caseWithBehavior 
-            (guardValue: 'g)
-            caseType
-            (view: Vide<_,_,_>) 
-            (elseBehavior: Vide<_,_,_>)
-            (switchState: ('g -> bool) * bool * Vide<_,_,_>)
+        guardValue
+        caseType
+        (view: Vide<_,_,FableContext>) 
+        (elseBehavior: Vide<_,_,FableContext>)
+        (Switch (guard,caseMatchedBefore,currView): Switch<_,_,FableContext,_>)
+        : Switch<_,_,FableContext,_>
         =
-        let guard,caseMatchedBefore,currView = switchState
         let cond =
             let innerCond = guard guardValue
             match caseType with
@@ -119,7 +119,7 @@ module Keywords =
                 currView
                 if cond then view else elseBehavior
             }
-        guard, (caseMatchedBefore || cond), resultingView
+        Switch (guard, (caseMatchedBefore || cond), resultingView)
         
     let case cond view switchState =
         caseWithBehavior cond CaseType.First view elsePreserve switchState
@@ -131,16 +131,18 @@ module Keywords =
         caseWithBehavior cond CaseType.Always view elseForget switchState
         
     let caseDefaultWithBehaviour
-            (view: Vide<_,_,_>) 
-            (elseBehavior: Vide<_,_,_>)
-            (switchState: ('g -> bool) * bool * Vide<_,_,_>)
+        (view: Vide<_,_,FableContext>) 
+        (elseBehavior: Vide<_,_,FableContext>)
+        (Switch (_,caseMatchedBefore,currView) : Switch<_,_,FableContext,_>)
+        : Vide<_,_,FableContext>
         =
-        let _,caseMatchedBefore,currView = switchState
         vide {
             currView
             if not caseMatchedBefore then view else elseBehavior
         }
-    let caseDefault (view: Vide<_,_,_>) switchState =
+    let caseDefault view switchState =
         caseDefaultWithBehaviour view elsePreserve switchState
-    let caseDefaultForget (view: Vide<_,_,_>) switchState =
+    let caseDefaultEmpty switchState =
+        caseDefault zero switchState
+    let caseDefaultForget view switchState =
         caseDefaultWithBehaviour view elseForget switchState

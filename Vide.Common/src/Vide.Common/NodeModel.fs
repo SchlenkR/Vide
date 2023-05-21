@@ -76,6 +76,8 @@ type NodeBuilder<'e,'n,'c>
     
     inherit VideBaseBuilder()
 
+    member _.Delay(f) = BuilderBricks.delay<_,_,'c>(f)
+
     member _.CreateContext = createContext
     member _.CreateThisElement = createThisElement
     member _.CheckChildNode = checkChildNode
@@ -116,12 +118,12 @@ module ModifierContext =
             when 'n: equality
             and 'c :> NodeContext<'n>
         >
-        (Vide childVide: Vide<'v1,'s,'c>)
+        (childVide: Vide<'v1,'s,'c>)
         (createResultVal: 'e -> 'v1 -> 'v2)
         (this: NodeBuilder<'e,'n,'c>)
         : Vide<'v2, NodeBuilderState<'e,'s>, 'c>
         =
-        Vide <| fun s gc (parentCtx: 'c) ->
+        fun s gc (parentCtx: 'c) ->
             Debug.print 0 "RUN:NodeBuilder"
             let inline runModifiers modifiers node =
                 for m in modifiers do
@@ -160,22 +162,18 @@ module ModifierContext =
 module BuilderBricks =
     let inline yieldVide(v: Vide<_,_,_>) =
         v
-
-    let inline yieldConditionalPreserve(x: bool * Vide<_,_,_>) =
-        let cond,v = x
-        if cond then v else elsePreserve
     
-    let inline yieldSwitch(x: ('a -> bool) * bool * Vide<_,_,_>) =
-        let _,_,v = x in v
+    let inline yieldSwitch(Switch (_,_,v)) =
+        v
     
     let inline yieldBuilderOp<'n,'c when 'c :> NodeContext<'n>>(op: BuilderOperations) =
-        Vide <| fun s gc (ctx: 'c) ->
+        ensureVide <| fun s gc (ctx: 'c) ->
             match op with
             | Clear -> ctx.ClearContent()
             (),None
 
     let inline yieldText<'n,'c when 'c :> NodeContext<'n>>(value: string) =
-        Vide <| fun s gc (ctx: 'c) ->
+        ensureVide <| fun s gc (ctx: 'c) ->
             let textNode =
                 s |> Option.defaultWith (fun () ->
                     let textNode = ctx.NodeDocument.CreateTextNode(value)
@@ -218,9 +216,9 @@ type ComponentRetCnBaseBuilder<'n,'c
     > () =
     inherit VideBaseBuilder()
     member _.Return(x: 'v) = BuilderBricks.return'<'v,'c>(x)
-    member _.Delay(f) = BuilderBricks.delay(f)
-    member _.Combine(a, b) = BuilderBricks.combine(a, b)
-    member _.For(seq, body) = BuilderBricks.for'(seq, body)
+    member _.Delay(f) = BuilderBricks.delay<_,_,'c>(f)
+    member _.Combine(a, b) = BuilderBricks.combine<_,_,_,_,'c>(a, b)
+    member _.For(seq, body) = BuilderBricks.for'<_,_,_,'c>(seq, body)
 
 type RenderValC0BaseBuilder<'v,'e,'n,'c
         when 'n: equality
@@ -324,15 +322,14 @@ type RenderRetCnBaseBuilder<'e,'n,'c
 
 type ComponentRetCnBaseBuilder<'n,'c
         when 'n : equality
-        and 'c :> NodeContext<'n> 
+        and 'c :> NodeContext<'n>
     > with
-    member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
+    member _.Yield(b: RenderValC0BaseBuilder<_,_,_,'c>) = b {()}
+    member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,'c>) = b {()}
+    member _.Yield(b: RenderRetC0BaseBuilder<_,_,'c>) = b {()}
+    member _.Yield(b: RenderRetCnBaseBuilder<_,_,'c>) = b {()}
+    member _.Yield(b: ComponentRetCnBaseBuilder<_,'c>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
-    member _.Yield(v) = BuilderBricks.yieldConditionalPreserve(v)
     member _.Yield(v) = BuilderBricks.yieldSwitch(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
@@ -347,7 +344,6 @@ type RenderRetC1BaseBuilder<'e,'n,'c
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
-    member _.Yield(v) = BuilderBricks.yieldConditionalPreserve(v)
     member _.Yield(v) = BuilderBricks.yieldSwitch(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
@@ -362,7 +358,6 @@ type RenderValC1BaseBuilder<'v,'e,'n,'c
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
-    member _.Yield(v) = BuilderBricks.yieldConditionalPreserve(v)
     member _.Yield(v) = BuilderBricks.yieldSwitch(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
@@ -377,7 +372,6 @@ type RenderRetCnBaseBuilder<'e,'n,'c
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
-    member _.Yield(v) = BuilderBricks.yieldConditionalPreserve(v)
     member _.Yield(v) = BuilderBricks.yieldSwitch(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
@@ -392,7 +386,6 @@ type RenderValCnBaseBuilder<'v,'e,'n,'c
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = BuilderBricks.yieldVide(v)
-    member _.Yield(v) = BuilderBricks.yieldConditionalPreserve(v)
     member _.Yield(v) = BuilderBricks.yieldSwitch(v)
     member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
     member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
