@@ -159,7 +159,7 @@ module ModifierContext =
             let state = Some (Some thisElement, cs)
             result,state
 
-module BuilderBricks =
+module NodeModelBuilderBricks =
     let inline yieldVide(v: Vide<_,_,_>) =
         v
     
@@ -326,9 +326,9 @@ type ComponentRetCnBaseBuilder<'n,'c
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,'c>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,'c>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,'c>) = b {()}
-    member _.Yield(v) = BuilderBricks.yieldVide(v)
-    member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
-    member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
+    member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
+    member _.Yield(op) = NodeModelBuilderBricks.yieldBuilderOp<'n,'c>(op)
+    member _.Yield(op) = NodeModelBuilderBricks.yieldText<'n,'c>(op)
 
 type RenderRetC1BaseBuilder<'e,'n,'c
         when 'n: equality
@@ -339,9 +339,9 @@ type RenderRetC1BaseBuilder<'e,'n,'c
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
-    member _.Yield(v) = BuilderBricks.yieldVide(v)
-    member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
-    member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
+    member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
+    member _.Yield(op) = NodeModelBuilderBricks.yieldBuilderOp<'n,'c>(op)
+    member _.Yield(op) = NodeModelBuilderBricks.yieldText<'n,'c>(op)
     
 type RenderValC1BaseBuilder<'v,'e,'n,'c
         when 'n: equality
@@ -352,9 +352,9 @@ type RenderValC1BaseBuilder<'v,'e,'n,'c
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
-    member _.Yield(v) = BuilderBricks.yieldVide(v)
-    member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
-    member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
+    member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
+    member _.Yield(op) = NodeModelBuilderBricks.yieldBuilderOp<'n,'c>(op)
+    member _.Yield(op) = NodeModelBuilderBricks.yieldText<'n,'c>(op)
 
 type RenderRetCnBaseBuilder<'e,'n,'c
         when 'n: equality
@@ -365,9 +365,9 @@ type RenderRetCnBaseBuilder<'e,'n,'c
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
-    member _.Yield(v) = BuilderBricks.yieldVide(v)
-    member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
-    member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
+    member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
+    member _.Yield(op) = NodeModelBuilderBricks.yieldBuilderOp<'n,'c>(op)
+    member _.Yield(op) = NodeModelBuilderBricks.yieldText<'n,'c>(op)
 
 type RenderValCnBaseBuilder<'v,'e,'n,'c
         when 'n: equality
@@ -378,9 +378,9 @@ type RenderValCnBaseBuilder<'v,'e,'n,'c
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
-    member _.Yield(v) = BuilderBricks.yieldVide(v)
-    member _.Yield(op) = BuilderBricks.yieldBuilderOp<'n,'c>(op)
-    member _.Yield(op) = BuilderBricks.yieldText<'n,'c>(op)
+    member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
+    member _.Yield(op) = NodeModelBuilderBricks.yieldBuilderOp<'n,'c>(op)
+    member _.Yield(op) = NodeModelBuilderBricks.yieldText<'n,'c>(op)
 
     
 // ----------------------------------------------------------------------------

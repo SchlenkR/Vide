@@ -124,16 +124,7 @@ module PartitionLikeActivePatterns =
             |> snd
         }
 
-module MatchWithChoice =
-
-    // This will be hidden in "yield" builder methods, so the user
-    // won't have to explicitly invoke this. Also: More Choices.
-    let toVide c =
-        vide {
-            match c with Choice1Of3 v -> ensureVide v | _ -> elsePreserve
-            match c with Choice2Of3 v -> ensureVide v | _ -> elsePreserve
-            match c with Choice3Of3 v -> ensureVide v | _ -> elsePreserve
-        }
+module MatchWithBranch =
 
     type Union =
         | View0 of string
@@ -152,75 +143,19 @@ module MatchWithChoice =
             }
 
             match data with
-            | View0 text -> Choice1Of3 (
+            | View0 text -> B1Of3 (
                 vide {
                     let! x = Vide.preserveValue text
                     p { $"Case0: {x}" }
                 })
-            | View1 num -> Choice2Of3 (
+            | View1 num -> B2Of3 (
                 vide {
                     let! x = Vide.preserveValue num
                     p { $"Case1: {x}" }
                 })
-            | View2 -> Choice3Of3 (
+            | View2 -> B3Of3 (
                 vide {
                     let! x = Vide.preserveValue ()
                     p { $"Case2: {x}" }
                 })
-            |> toVide
         }
-
-////module MatchWithBranch =
-
-////    type Branch<'a,'b,'c,'d,'e> =
-////        | B1 of 'a
-////        | B2 of 'b
-////        | B3 of 'c
-////        | B4 of 'd
-////        | B5 of 'e
-
-////    // This will be hidden in "yield" builder methods, so the user
-////    // won't have to explicitly invoke this. Also: More Choices.
-////    let asBranch<'a,'b,'c,'d,'e> (c: Branch<'a,'b,'c,'d,'e>) =
-////        vide {
-////            match c with B1 v -> ensureVide v | _ -> elsePreserve
-////            match c with B2 v -> ensureVide v | _ -> elsePreserve
-////            match c with B3 v -> ensureVide v | _ -> elsePreserve
-////            match c with B4 v -> ensureVide v | _ -> elsePreserve
-////            match c with B5 v -> ensureVide v | _ -> elsePreserve
-////        }
-
-////    type Union =
-////        | View0 of string
-////        | View1 of int
-////        | View2
-
-////    let view =
-////        vide {
-////            let! data = vide {
-////                let! viewNr = chooseView
-////                return
-////                    match viewNr % 3 with
-////                    | 0 -> View0 "Test"
-////                    | 1 -> View1 42
-////                    | _ -> View2
-////            }
-
-////            match data with
-////            | View0 text -> B1 (
-////                vide {
-////                    let! x = Vide.preserveValue text
-////                    p { $"Case0: {x}" }
-////                })
-////            | View1 num -> B2 (
-////                vide {
-////                    let! x = Vide.preserveValue num
-////                    p { $"Case1: {x}" }
-////                })
-////            | View2 -> B3 (
-////                vide {
-////                    let! x = Vide.preserveValue ()
-////                    p { $"Case2: {x}" }
-////                })
-////            |> asBranch
-////        }

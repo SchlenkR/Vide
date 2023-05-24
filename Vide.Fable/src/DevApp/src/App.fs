@@ -72,21 +72,9 @@ let demos =
                     )
 
                     (
-                        "switch/case",
-                        "There are 3 views. The 2nd view is resetted on show, all other view retain their state.",
-                        start UseCases.ControlFlow.switchCase
-                    )
-
-                    (
-                        "switch/case (with default)",
-                        "There are 3 views. The 2nd view is resetted on show, all other view retain their state.",
-                        start UseCases.ControlFlow.switchCaseWithDefault
-                    )
-
-                    (
                         "match",
                         "TODO",
-                        start UseCases.ControlFlow.MatchWithChoice.view
+                        start UseCases.ControlFlow.MatchWithBranch.view
                     )
                 ]
             |}
