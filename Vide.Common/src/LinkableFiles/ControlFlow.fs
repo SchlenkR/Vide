@@ -1,3 +1,10 @@
+(*
+    This file is intended to be included in Vide projects via link.
+    The reason for this is that `vide` CE builder instance can only be defined
+    in the specific implementation projects (e.g. Vide.Fable), and builders
+    are a thing which is hard to abstract.
+*)
+
 namespace Vide
 
 [<AutoOpen>]
