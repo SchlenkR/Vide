@@ -11,6 +11,7 @@
     <Compile Include="UseCases\Components.fs" />
     <Compile Include="UseCases\Async.fs" />
     <Compile Include="UseCases\Advanced.fs" />
+    <Compile Include="UseCases\VidePresentation.fs" />
     <Compile Include="UseCases\TodoList.fs" />
     <Compile Include="UseCases\ValueRestriction_OptionalPartials.fs" />
     <Compile Include="UseCases\CustomElements.fs" />

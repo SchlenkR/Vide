@@ -181,6 +181,12 @@ let demos =
                         "TODO",
                         start UseCases.TodoList.view
                     )
+                    
+                    (
+                        "Vide Showcase",
+                        "TODO",
+                        start UseCases.VideShowcase.view
+                    )
                 ]
             |}
 
