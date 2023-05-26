@@ -22,42 +22,6 @@ module Debug =
     let mutable enabledDebugChannels : int list = []
     let print channel s = if enabledDebugChannels |> List.contains channel then printfn "%s" s
 
-[<AutoOpen>]
-module MutableValue =
-    type MutableValue<'a when 'a: equality>(initial: 'a, evalManager: IEvaluationManager) =
-        let mutable state = initial
-        member _.Set(value) =
-            // Not just a perf opt: prevent stack overflows (see demo case asyncHelloWorld)!
-            if value <> state then
-                do state <- value
-                do evalManager.RequestEvaluation()
-        member this.Reset() = this.Set(initial)
-        member inline this.Update(op, value) =
-            this.Value <- op this.Value value
-        member this.Value
-            with get() = state
-            and set(value) = this.Set(value)
-
-#if EXCLUDE_MUTABLE_OPERATORS
-        // This is for websharper compilation!
-#else
-        // Operators
-        static member inline ( + ) (this: MutableValue<'v>, v: 'v) = this.Value + v
-        static member inline ( - ) (this: MutableValue<'v>, v: 'v) = this.Value - v
-        static member inline ( / ) (this: MutableValue<'v>, v: 'v) = this.Value / v
-        static member inline ( * ) (this: MutableValue<'v>, v: 'v) = this.Value * v
-        static member inline ( % ) (this: MutableValue<'v>, v: 'v) = this.Value % v
-    
-    // TODO: Do I really want this / AutoOpen and the ops at all?
-    let inline ( += ) (mutVal: MutableValue<_>) x = mutVal.Update((+), x)
-    let inline ( -= ) (mutVal: MutableValue<_>) x = mutVal.Update((-), x)
-    let inline ( *= ) (mutVal: MutableValue<_>) x = mutVal.Update((*), x)
-    let inline ( /= ) (mutVal: MutableValue<_>) x = mutVal.Update((/), x)
-    let inline ( := ) (mutVal: MutableValue<_>) x = mutVal.Value <- x
-    
-    // TODO: override arithmetic ops
-#endif
-
 type AsyncState<'v> =
     {
         startedWorker: Async<'v>
@@ -93,19 +57,15 @@ module Vide =
 
     // this "zero", but the form where state is variable
     // -> see comment in "VideBuilder.Zero"
-    [<GeneralizableValue>]
-    let empty<'s,'c> : Vide<unit,'s,'c> =
-        fun s gc ctx -> (),None
+    // -> we don't really need that, only as "elseForget" or cases
+    // with similar semantics.
+    ////[<GeneralizableValue>]
+    ////let empty<'s,'c> : Vide<unit,'s,'c> =
+    ////    fun s gc ctx -> (),None
 
     [<GeneralizableValue>]
     let context<'c> : Vide<'c,unit,'c> =
         fun s gc ctx -> ctx,None
-
-    // TODO: Move to keywords? / rename to useState?
-    let ofMutable x =
-        ensureVide <| fun s gc ctx ->
-            let s = s |> Option.defaultWith (fun () -> MutableValue(x, gc.evaluationManager))
-            s, Some s
 
 module BuilderBricks =
     let bind<'v1,'s1,'v2,'s2,'c>
@@ -288,6 +248,23 @@ type VideBaseBuilder() =
     // TODO: async for
 
 [<AutoOpen>]
+module ControlFlow =
+    type Branch2<'b1,'b2> =
+        | B1Of2 of 'b1
+        | B2Of2 of 'b2
+    
+    type Branch3<'b1,'b2,'b3> =
+        | B1Of3 of 'b1
+        | B2Of3 of 'b2
+        | B3Of3 of 'b3
+    
+    type Branch4<'b1,'b2,'b3,'b4> =
+        | B1Of4 of 'b1
+        | B2Of4 of 'b2
+        | B3Of4 of 'b3
+        | B4Of4 of 'b4
+
+[<AutoOpen>]
 module Keywords =
     
     [<GeneralizableValue>]
@@ -296,4 +273,5 @@ module Keywords =
 
     [<GeneralizableValue>]
     let elseForget<'s,'c> : Vide<unit,'s,'c> = 
-        Vide.empty<'s,'c>
+        fun s gc ctx -> (),None
+        //Vide.empty<'s,'c>

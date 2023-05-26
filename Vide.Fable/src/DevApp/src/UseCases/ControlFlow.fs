@@ -69,61 +69,6 @@ let componentWithBooleanState = vide {
     input.bind(state)
 }
 
-let chooseView = vide {
-    let! count = Vide.ofMutable 0
-    button.id("dec").onclick(fun _ -> count -= 1) { "Previous View" }
-    button.id("inc").onclick(fun _ -> count += 1) { "Next View" }
-    $" - View nr. {count.Value}"
-    return count.Value
-}
-
-module PartitionLikeActivePatterns =
-    let choose = false,Vide.zero
-    let caseMatch 
-        cond
-        (view: _ -> Vide<_,_,FableContext>)
-        ((caseMatchedBefore,currView): bool * Vide<_,_,FableContext>)
-        : (bool * Vide<_,_,FableContext>)
-        =
-        let resultingView =
-            vide {
-                currView
-                match caseMatchedBefore,cond with
-                | false,_
-                | true, None -> elsePreserve // TODO: parametrize
-                | true, Some x -> view x
-            }
-        (caseMatchedBefore || cond.IsSome), resultingView
-
-
-    type Union =
-        | View0 of string
-        | View1 of int
-        | View2
-
-    let switchPartition =
-        vide {
-            let data = View0 "Test"
-
-            choose
-            |> caseMatch (match data with View0 text -> Some text | _ -> None) (fun text ->
-                vide {
-                    let! x = Vide.preserveValue text
-                    p { $"Case0: {x}" }
-                })
-            |> caseMatch (match data with View1 num -> Some num | _ -> None) (fun num -> 
-                vide {
-                    let! x = Vide.preserveValue num
-                    p { $"Case1: {x}" }
-                })
-            |> caseMatch (match data with View2 -> Some () | _ -> None) (fun () -> 
-                vide {
-                    let! x = Vide.preserveValue ()
-                    p { $"Case2: {x}" }
-                })
-            |> snd
-        }
-
 module MatchWithBranch =
 
     type Union =
@@ -131,6 +76,14 @@ module MatchWithBranch =
         | View1 of int
         | View2
 
+    let chooseView = vide {
+        let! count = Vide.ofMutable 0
+        button.id("dec").onclick(fun _ -> count -= 1) { "Previous View" }
+        button.id("inc").onclick(fun _ -> count += 1) { "Next View" }
+        $" - View nr. {count.Value}"
+        return count.Value
+    }
+    
     let view =
         vide {
             let! data = vide {

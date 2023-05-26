@@ -29,8 +29,20 @@
     <PackageReference Include="Fable.Browser.Dom" Version="2.14.0" />
   </ItemGroup>
 
+  <!--
+      Vide.Common.ControlFlow cannot be linked, so we copy it.
+      https://stackoverflow.com/questions/44643288/target-beforebuild-doesnt-work-in-csproj 
+  -->
+  <Target Name="CopyControlFlow" BeforeTargets="Build">
+    <Copy SourceFiles="$(ProjectDir)..\..\..\Vide.Common\src\LinkableFiles\Vide.Common.ControlFlow.fs" 
+          DestinationFolder="$(ProjectDir)"
+          OverwriteReadOnlyFiles="true"
+          ContinueOnError="false" />
+  </Target>
+
   <ItemGroup>
     <Compile Include="Fable.fs" />
+    <Compile Include="Vide.Common.ControlFlow.fs" />
     <Compile Include="HtmlApiPre.fs" />
     <Compile Include="HtmlApi.fs" />
     <Compile Include="HtmlApiPost.fs" />
@@ -45,5 +57,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vide.Common\src\Vide.Common\Vide.Common.fsproj" />
   </ItemGroup>
+
 </Project>
 
