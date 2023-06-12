@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net7.0</TargetFrameworks>
+		<RootNamespace>Vide.Avalonia</RootNamespace>
+	</PropertyGroup>
+
+  <ItemGroup>
+	  <Compile Include="Avalonia.fs" />
+	  <Compile Include="GenericAvaloniaApi.fs" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.0.0-rc1.1" />
+  </ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\Vide.Common\src\Vide.Common\Vide.Common.fsproj" />
+	</ItemGroup>
+
+</Project>

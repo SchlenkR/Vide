@@ -21,7 +21,7 @@ let simpleVideDemo () =
                 let! count = Vide.ofMutable 0
 
                 P<StackLayout>() {
-                    for x in 0..5 do
+                    for x in 0..count.Value do
                         V<Label>(fun l -> l.Text <- $"For loop at index {x}")
                 }
 
@@ -33,15 +33,21 @@ let simpleVideDemo () =
                             l.FontAttributes <- FontAttributes.Bold)
                 }
                 
-                V<Button>(fun b -> 
-                    b.Text <- "Click me!"
-                    b.Margin <- Microsoft.Maui.Thickness(0, 5))
-                    .onInit(fun x -> x.node.Clicked.Add(fun _ -> count.Value <- count.Value + 1))
+                P<StackLayout>(fun sl ->
+                    sl.Orientation <- StackOrientation.Horizontal) {
+                    V<Button>(fun b -> 
+                        b.Text <- "Dec"
+                        b.Margin <- Microsoft.Maui.Thickness(0, 5))
+                        .onInit(fun x -> x.node.Clicked.Add(fun _ -> count.Value <- count.Value - 1))
+                    V<Button>(fun b -> 
+                        b.Text <- "Inc"
+                        b.Margin <- Microsoft.Maui.Thickness(0, 5))
+                        .onInit(fun x -> x.node.Clicked.Add(fun _ -> count.Value <- count.Value + 1))
+                }                
             }
     }
 
 let start demo = 
     let host = ContentView()
-    let app = VideApp.Maui.createAndStartWithUntypedState host demo
-    do app.EvaluationManager.RequestEvaluation()
+    let _ = VideApp.ForHost(host).CreateAndStartWithUntypedState(demo)
     host

@@ -109,18 +109,11 @@ type RenderRetCnBuilder<'e when 'e :> IView>(createThisElement, checkChildNode) 
 //            // TODO: OUCH!!! Was ist da los - wieso bekomme ich das nicht besser hin?
 //            ctx.Parent :?> 'n,None
 
-module VideApp =
-    module Maui =
-        let inline doCreate appCtor (host: #ContentView) (content: Vide<'v,'s,MauiContext>) =
-            let ctxCtor = fun () -> MauiContext(host)
-            appCtor content ctxCtor
-        let create host content =
-            doCreate VideApp.create host content
-        let createWithUntypedState host content =
-            doCreate VideApp.createWithUntypedState host content
-        let createAndStart host content =
-            doCreate VideApp.createAndStart host content
-        let createAndStartWithUntypedState host content =
-            doCreate VideApp.createAndStartWithUntypedState host content
+type VideApp =
+    static member ForHost(host) = 
+        VideAppFactory(
+            (fun () -> MauiContext(host)),
+            (fun (ctx: MauiContext) -> ctx.RemoveObsoleteChildren())
+        )
 
 let vide = ComponentRetCnBuilder()
