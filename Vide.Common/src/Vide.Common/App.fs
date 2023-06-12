@@ -53,25 +53,21 @@ type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c, ctxFin: 'c 
     member _.CurrentState = currentState
     member _.SetOnEvaluated(value) = onEvaluated <- value
 
-module VideApp =
-    let start (app: VideApp<_,_,_>) =
+type VideAppFactory<'c>(ctxCtor, ctxFin) =
+    let start (app: VideApp<_,_,'c>) =
         do app.EvaluationManager.RequestEvaluation()
         app
-
-    let create content ctxCtor ctxFin =
+    member _.Create(content) : VideApp<_,_,'c> =
         VideApp(content, ctxCtor, ctxFin)
-
-    let createWithUntypedState content ctxCtor =
+    member this.CreateWithUntypedState(content) : VideApp<_,_,'c> =
         let content =
             ensureVide <| fun (s: obj option) gc ctx ->
                 let typedS = s |> Option.map (fun s -> s :?> 's)
                 let v,s = content typedS gc ctx
                 let untypedS = s |> Option.map (fun s -> s :> obj)
                 v,untypedS
-        create content ctxCtor
-
-    let createAndStart content ctxCtor ctxFin =
-        VideApp(content, ctxCtor, ctxFin) |> start
-
-    let createAndStartWithUntypedState content ctxCtor ctxFin =
-        createWithUntypedState content ctxCtor ctxFin |> start
+        this.Create(content)
+    member this.CreateAndStart(content) : VideApp<_,_,'c> =
+        this.Create(content) |> start
+    member this.CreateAndStartWithUntypedState(content) : VideApp<_,_,'c> =
+        this.CreateWithUntypedState(content) |> start

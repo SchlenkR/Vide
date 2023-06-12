@@ -9,7 +9,7 @@ open Vide
 [<AutoOpen>]
 module TA =
     let showTest testView = 
-        VideApp.Fable.createAndStart (document.getElementById("testHost")) testView
+        VideApp.ForHost(document.getElementById("testHost")).CreateAndStart(testView)
         |> ignore
     let elem id = document.getElementById id
     let textOf id = (document.getElementById id).innerText

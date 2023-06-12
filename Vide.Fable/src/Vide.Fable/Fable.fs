@@ -85,19 +85,11 @@ module Vide =
     //        // TODO: OUCH!!! Was ist da los - wieso bekomme ich das nicht besser hin?
     //        ctx.Parent :?> 'n,None
 
-module VideApp =
-    module Fable =
-        type VideFable<'v,'s> = Vide<'v,'s,FableContext>
-        let ctxCtor host = (fun () -> FableContext(host))
-        let ctxFin = fun (ctx: FableContext) -> ctx.RemoveObsoleteChildren()
-
-        let create host (content: VideFable<_,_>) =
-            VideApp.create content (ctxCtor host) ctxFin
-        let createWithUntypedState host (content: VideFable<_,_>) =
-            VideApp.createWithUntypedState content (ctxCtor host) ctxFin
-        let createAndStart host (content: VideFable<_,_>) =
-            VideApp.createAndStart content (ctxCtor host) ctxFin
-        let createAndStartWithUntypedState host (content: VideFable<_,_>) =
-            VideApp.createAndStartWithUntypedState content (ctxCtor host) ctxFin
+type VideApp =
+    static member ForHost(host) = 
+        VideAppFactory(
+            (fun () -> FableContext(host)),
+            (fun (ctx: FableContext) -> ctx.RemoveObsoleteChildren())
+        )
 
 let vide = ComponentRetCnBuilder()
