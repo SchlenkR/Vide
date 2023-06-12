@@ -5,8 +5,8 @@ open Vide
 open type Vide.Html
 
 
-type TodoItem = { name: string; mutable isDone: bool }
 type TodoList = { items: TodoItem list }
+and TodoItem = { name: string; mutable isDone: bool }
     
 let view = vide {
     let! todoList = Vide.ofMutable { items = [] }
@@ -14,20 +14,16 @@ let view = vide {
         
     h1.class'("title") { "TODO List" }
     div {
-        let! itemName = Vide.ofMutable ""
-    
         p {
-            let addItem () =
-                let newItem = { name = itemName.Value; isDone = false }
-                do
-                    setItems (newItem :: todoList.Value.items)
-                    itemName.Reset()
-                
+            let! itemName = Vide.ofMutable ""
+
             input.bind(itemName)
             button
                 .disabled(String.IsNullOrWhiteSpace(itemName.Value))
-                .onclick(fun _ -> addItem()) 
-                { 
+                .onclick(fun _ ->
+                    let newItem = { name = itemName.Value; isDone = false }
+                    do setItems (newItem :: todoList.Value.items)
+                    do itemName.Reset()) { 
                     "Add Item" 
                 }
         }
