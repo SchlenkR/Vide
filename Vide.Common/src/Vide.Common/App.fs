@@ -50,12 +50,17 @@ type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c) =
     member _.RootContext = ctx
     member this.EvaluationManager = this :> IEvaluationManager
     member _.CurrentState = currentState
-    member _.OnEvaluated
+    member _.SetOnEvaluated(value) = onEvaluated <- value
         with get() = onEvaluated
         and set(value) = onEvaluated <- value
 
 module VideApp =
-    let create content ctxCtor = VideApp(content, ctxCtor)
+    let start (app: VideApp<_,_,_>) =
+        do app.EvaluationManager.RequestEvaluation()
+        app
+
+    let create content ctxCtor =
+        VideApp(content, ctxCtor)
 
     let createWithUntypedState (content: Vide<_,_,_>) ctxCtor =
         let content =
@@ -67,15 +72,7 @@ module VideApp =
         create content ctxCtor
 
     let createAndStart content ctxCtor =
-        let app = VideApp(content, ctxCtor)
-        do app.EvaluationManager.RequestEvaluation()
-        app
+        VideApp(content, ctxCtor) |> start
 
     let createAndStartWithUntypedState (content: Vide<_,_,_>) ctxCtor =
-        let content =
-            ensureVide <| fun (s: obj option) gc ctx ->
-                let typedS = s |> Option.map (fun s -> s :?> 's)
-                let v,s = content typedS gc ctx
-                let untypedS = s |> Option.map (fun s -> s :> obj)
-                v,untypedS
-        createAndStart content ctxCtor
+        createWithUntypedState content ctxCtor |> start

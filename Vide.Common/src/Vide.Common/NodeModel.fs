@@ -149,9 +149,7 @@ module ModifierContext =
                     | DiscardAndCreateNew ->
                         this.CreateThisElement(parentCtx), None
             do runModifiers this.EvalModifiers thisElement
-            let childCtx =
-                // TODO: Why the unsafe cast everywhere in this function?
-                this.CreateContext thisElement
+            let childCtx = this.CreateContext thisElement
             let cv,cs = childVide cs gc childCtx
             do childCtx.RemoveObsoleteChildren()
             do runModifiers this.AfterEvalModifiers thisElement

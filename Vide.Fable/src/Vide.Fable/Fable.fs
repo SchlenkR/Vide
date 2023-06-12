@@ -34,6 +34,7 @@ type FableDocument() =
 
 type FableContext(parent: Node) =
     inherit WebContext<Node>(parent, FableDocument())
+    //do Debug.print 0 $"""New FableContext for: {parent.nodeName}(id={try parent.attributes.getNamedItem("id").value.ToString() with _ -> "-"}) """
     static member Create<'e when 'e :> Node>(thisNode: 'e) = FableContext(thisNode)
 
 // --------------------------------------------------
