@@ -6,6 +6,10 @@ open Browser.Types
 open Vide
 open Vide.WebModel
 
+module Debug =
+    let show (n: Node) =
+        $"""{n.nodeName}(id={try n.attributes.getNamedItem("id").value.ToString() with _ -> "-"}) """
+
 type FableDocument() =
     interface INodeDocument<Node> with
         member _.EnsureChildAppended(parent, child) =
@@ -34,7 +38,6 @@ type FableDocument() =
 
 type FableContext(parent: Node) =
     inherit WebContext<Node>(parent, FableDocument())
-    //do Debug.print 0 $"""New FableContext for: {parent.nodeName}(id={try parent.attributes.getNamedItem("id").value.ToString() with _ -> "-"}) """
     static member Create<'e when 'e :> Node>(thisNode: 'e) = FableContext(thisNode)
 
 // --------------------------------------------------
@@ -84,17 +87,17 @@ module Vide =
 
 module VideApp =
     module Fable =
-        let inline doCreate appCtor host (content: Vide<'v,'s,FableContext>) =
-            let content = RenderRetC1Builder((fun _ -> host), fun _ -> Keep) { content }
-            let ctxCtor = fun () -> FableContext(host)
-            appCtor content ctxCtor
-        let create host content =
-            doCreate VideApp.create host content
-        let createWithUntypedState host content =
-            doCreate VideApp.createWithUntypedState host content
-        let createAndStart host content =
-            doCreate VideApp.createAndStart host content
-        let createAndStartWithUntypedState host content =
-            doCreate VideApp.createAndStartWithUntypedState host content
+        type VideFable<'v,'s> = Vide<'v,'s,FableContext>
+        let ctxCtor host = (fun () -> FableContext(host))
+        let ctxFin = fun (ctx: FableContext) -> ctx.RemoveObsoleteChildren()
+
+        let create host (content: VideFable<_,_>) =
+            VideApp.create content (ctxCtor host) ctxFin
+        let createWithUntypedState host (content: VideFable<_,_>) =
+            VideApp.createWithUntypedState content (ctxCtor host) ctxFin
+        let createAndStart host (content: VideFable<_,_>) =
+            VideApp.createAndStart content (ctxCtor host) ctxFin
+        let createAndStartWithUntypedState host (content: VideFable<_,_>) =
+            VideApp.createAndStartWithUntypedState content (ctxCtor host) ctxFin
 
 let vide = ComponentRetCnBuilder()

@@ -1,6 +1,6 @@
 ﻿namespace Vide
 
-type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c) =
+type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c, ctxFin: 'c -> unit) =
     let mutable currValue = None
     let mutable currentState = None
     let mutable isEvaluating = false
@@ -22,7 +22,11 @@ type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c) =
                         isEvaluating <- true
                     let value,newState = 
                         let gc = { evaluationManager = this.EvaluationManager } 
-                        content currentState gc (ctxCtor ())
+                        Debug.print 0 "-----------------------------------------"
+                        let ctx = ctxCtor ()
+                        let res = content currentState gc ctx
+                        do ctxFin ctx
+                        res
                     do
                         currValue <- Some value
                         currentState <- newState
@@ -54,10 +58,10 @@ module VideApp =
         do app.EvaluationManager.RequestEvaluation()
         app
 
-    let create content ctxCtor =
-        VideApp(content, ctxCtor)
+    let create content ctxCtor ctxFin =
+        VideApp(content, ctxCtor, ctxFin)
 
-    let createWithUntypedState (content: Vide<_,_,_>) ctxCtor =
+    let createWithUntypedState content ctxCtor =
         let content =
             ensureVide <| fun (s: obj option) gc ctx ->
                 let typedS = s |> Option.map (fun s -> s :?> 's)
@@ -66,8 +70,8 @@ module VideApp =
                 v,untypedS
         create content ctxCtor
 
-    let createAndStart content ctxCtor =
-        VideApp(content, ctxCtor) |> start
+    let createAndStart content ctxCtor ctxFin =
+        VideApp(content, ctxCtor, ctxFin) |> start
 
-    let createAndStartWithUntypedState (content: Vide<_,_,_>) ctxCtor =
-        createWithUntypedState content ctxCtor |> start
+    let createAndStartWithUntypedState content ctxCtor ctxFin =
+        createWithUntypedState content ctxCtor ctxFin |> start
