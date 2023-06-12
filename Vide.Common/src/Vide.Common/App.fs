@@ -8,8 +8,6 @@ type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c) =
     let mutable evaluationCount = 0uL
     let mutable suspendEvaluation = false
     let mutable onEvaluated: (VideApp<'v,'s,'c> -> 'v -> 's option -> unit) option = None
-        
-    let ctx = ctxCtor()
 
     interface IEvaluationManager with
         member this.RequestEvaluation() =
@@ -19,12 +17,12 @@ type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c) =
                 // During an evaluation, requests for another evaluation can
                 // occur, which have to be handled as _subsequent_ evaluations!
                 let rec eval () =
-                    do 
+                    do
                         hasPendingEvaluationRequests <- false
                         isEvaluating <- true
                     let value,newState = 
                         let gc = { evaluationManager = this.EvaluationManager } 
-                        content currentState gc this.RootContext
+                        content currentState gc (ctxCtor ())
                     do
                         currValue <- Some value
                         currentState <- newState
@@ -47,12 +45,9 @@ type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c) =
         member _.HasPendingEvaluationRequests = hasPendingEvaluationRequests
         member _.EvaluationCount = evaluationCount
 
-    member _.RootContext = ctx
     member this.EvaluationManager = this :> IEvaluationManager
     member _.CurrentState = currentState
     member _.SetOnEvaluated(value) = onEvaluated <- value
-        with get() = onEvaluated
-        and set(value) = onEvaluated <- value
 
 module VideApp =
     let start (app: VideApp<_,_,_>) =
