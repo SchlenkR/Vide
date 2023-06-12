@@ -1,6 +1,5 @@
 module Vide.WebModel
 
-open System
 open Vide
 
 // TODO: Include "WpfisModel" again and move some MAUI things (i.e. AddElement) to WpfishContext
