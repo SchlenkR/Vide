@@ -20,10 +20,15 @@ type MauiDocument() =
         let childTypeName = match child with Some child -> child.GetType().Name | None -> "-"
         Exception $"Cannot perform '{actionName}' to node of type {parent.GetType().Name} (child type = {childTypeName})."
     interface INodeDocument<IView> with
-        member _.AppendChild(parent, child) =
+        member _.EnsureChildAppended(parent, child) =
             match box parent with
-            | :? ICollection<IView> as viewColl -> viewColl.Add(child)
-            | :? ContentView as contentView -> contentView.Content <- child :?> View
+            | :? ICollection<IView> as viewColl ->
+                if not (viewColl.Contains(child)) then
+                    viewColl.Add(child)
+            | :? ContentView as contentView ->
+                let childView = child :?> View
+                if contentView.Content <> childView then
+                    contentView.Content <- childView
             | _ -> raise <| makeEx parent (Some child) "append child"
         member _.RemoveChild(parent, child) =
             match box parent with
@@ -106,13 +111,16 @@ type RenderRetCnBuilder<'e when 'e :> IView>(createThisElement, checkChildNode) 
 
 module VideApp =
     module Maui =
-        let inline doCreate appCtor (host: #ContentView) (content: Vide<'v,'s,MauiContext>) onEvaluated =
-            let content = RenderRetC1Builder((fun _ -> host), fun _ -> Keep) { content }
+        let inline doCreate appCtor (host: #ContentView) (content: Vide<'v,'s,MauiContext>) =
             let ctxCtor = fun () -> MauiContext(host)
-            appCtor content ctxCtor onEvaluated
-        let create host content onEvaluated =
-            doCreate VideApp.create host content onEvaluated
-        let createWithUntypedState host content onEvaluated =
-            doCreate VideApp.createWithUntypedState host content onEvaluated
+            appCtor content ctxCtor
+        let create host content =
+            doCreate VideApp.create host content
+        let createWithUntypedState host content =
+            doCreate VideApp.createWithUntypedState host content
+        let createAndStart host content =
+            doCreate VideApp.createAndStart host content
+        let createAndStartWithUntypedState host content =
+            doCreate VideApp.createAndStartWithUntypedState host content
 
 let vide = ComponentRetCnBuilder()

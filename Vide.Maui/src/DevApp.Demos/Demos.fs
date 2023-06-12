@@ -36,15 +36,12 @@ let simpleVideDemo () =
                 V<Button>(fun b -> 
                     b.Text <- "Click me!"
                     b.Margin <- Microsoft.Maui.Thickness(0, 5))
-                    .OnInit(fun x -> x.node.Clicked.Add(fun _ -> count.Value <- count.Value + 1))
+                    .onInit(fun x -> x.node.Clicked.Add(fun _ -> count.Value <- count.Value + 1))
             }
     }
 
 let start demo = 
     let host = ContentView()
-    let app =
-        let onEvaluated (app: VideApp<_,_,_>) v s =
-            printfn $"Evaluated {app.EvaluationManager.EvaluationCount} times."
-        VideApp.Maui.create host demo onEvaluated
+    let app = VideApp.Maui.createAndStartWithUntypedState host demo
     do app.EvaluationManager.RequestEvaluation()
     host
