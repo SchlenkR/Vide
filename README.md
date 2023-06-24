@@ -8,7 +8,7 @@ Vide offers a unique approach for writing state-aware functions and composing th
 
 ## Vide for Fable
 
-See: [./Vide.Fable/README.md]
+See: [./Vide.Fable/README.md](./Vide.Fable/README.md)
 
 ## Build
 
