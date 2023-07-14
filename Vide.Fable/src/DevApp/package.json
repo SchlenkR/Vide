@@ -6,10 +6,11 @@
     "postinstall": "dotnet tool restore",
     "clean": "rimraf ./build && rimraf ./dist",
     "start": "npm run clean && dotnet fable watch ./src/DevApp.fsproj -s -o ./build --run vite",
+    "dev": "npm run start",
     "build": "npm run clean && dotnet fable ./src/DevApp.fsproj -o ./build --noCache --run vite build"
   },
   "devDependencies": {
     "rimraf": "^5.0.0",
-    "vite": "^2.9.13"
+    "vite": "^4.4.4"
   }
 }

@@ -3,7 +3,7 @@ namespace Vide
 open System.Runtime.CompilerServices
 open Browser.Types
 open Vide
-open HtmlElementBuilders
+open Vide.HtmlElementBuilders
 
 [<Extension>]
 type BuilderExtensions =

@@ -12,6 +12,6 @@
   "devDependencies": {
     "mocha": "^10.2.0",
     "rimraf": "^5.0.0",
-    "vite": "^2.9.13"
+    "vite": "^4.4.4"
   }
 }

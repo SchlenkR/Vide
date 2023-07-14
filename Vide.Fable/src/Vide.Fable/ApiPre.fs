@@ -1,4 +1,4 @@
-namespace Vide.ApiPre
+namespace Vide
 
 open Browser.Types
 

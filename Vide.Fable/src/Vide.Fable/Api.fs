@@ -10,8 +10,7 @@ namespace Vide
 open System.Runtime.CompilerServices
 open Browser.Types
 open Vide
-open Vide.WebModel
-open Vide.ApiPre
+
 
 [<AutoOpen>]
 module HtmlEnumAttributeTypes =
@@ -503,19 +502,7 @@ module HtmlEnumAttributeTypes =
     
 
 module HtmlElementBuilders =
-    type HtmlGARenderPotC0Builder<'v,'e when 'e :> HTMLElement and 'e: equality>(tagName, resultSelector) =
-        inherit RenderPotC0Builder<'v,'e>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName), resultSelector)
-
-    type HtmlGARenderRetC0Builder<'e when 'e :> HTMLElement and 'e: equality>(tagName) =
-        inherit RenderRetC0Builder<'e>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName))
-
-    type HtmlGARenderPotCnBuilder<'v,'e when 'e :> HTMLElement and 'e: equality>(tagName, resultSelector) =
-        inherit RenderPotCnBuilder<'v,'e>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName), resultSelector)
-
-    type HtmlGARenderRetCnBuilder<'e when 'e :> HTMLElement and 'e: equality>(tagName) =
-        inherit RenderRetCnBuilder<'e>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.nodeName))
-
-    
+   
     type a() =
         inherit HtmlGARenderRetCnBuilder<HTMLAnchorElement>("a")
                     
