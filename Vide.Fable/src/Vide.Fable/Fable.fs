@@ -89,7 +89,7 @@ type VideApp =
     static member ForHost(host) = 
         VideAppFactory(
             (fun () -> FableContext(host)),
-            (fun (ctx: FableContext) -> ctx.RemoveObsoleteChildren())
+            (fun (ctx: FableContext) -> do ctx.RemoveObsoleteChildren())
         )
 
 let vide = ComponentRetCnBuilder()
