@@ -10,7 +10,7 @@ open Vide.WpfishModel
 
 module Helper =
     let registerCtor (this: NodeBuilder<_,_,_>) onEval = 
-        onEval |> Option.iter (fun onEval -> this.EvalModifiers.Add(fun ctx -> onEval ctx.node))
+        onEval |> Option.iter (fun onEval -> this.PreEvalModifiers.Add(fun ctx -> onEval ctx.node))
     let checkNode<'e> (node: IView) =
         // TODO
         BuilderHelper.checkNode(typeof<'e>.FullName, node.GetType().FullName)
