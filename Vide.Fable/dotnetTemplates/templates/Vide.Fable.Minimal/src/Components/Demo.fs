@@ -9,7 +9,7 @@ importSideEffects("./Demo.scss")
 let view =
     vide {
         div.class' ("main-view") {
-            p { img.src("./src/components/logo.png").width("150px") }
+            p { img.src("./src/Components/logo.png").width("150px") }
             hr
             "The whole Vide world"
         }
