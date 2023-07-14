@@ -11,7 +11,7 @@ open System.Runtime.CompilerServices
 open Browser.Types
 open Vide
 open Vide.WebModel
-open Vide.HtmlApiPre
+open Vide.ApiPre
 
 [<AutoOpen>]
 module HtmlEnumAttributeTypes =
