@@ -322,6 +322,9 @@ type ComponentRetCnBaseBuilder<'n,'c
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,'c>) = b {()}
     member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,'c>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,'c>) = b {()}
+    member _.Yield(b: RenderValC1BaseBuilder<_,_,_,'c>) = b {()}
+    member _.Yield(b: RenderPotC1BaseBuilder<_,_,_,'c>) = b {()}
+    member _.Yield(b: RenderRetC1BaseBuilder<_,_,'c>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,'c>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,'c>) = b {()}
     member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
@@ -335,6 +338,9 @@ type RenderRetC1BaseBuilder<'e,'n,'c
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
+    member _.Yield(b: RenderValC1BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderPotC1BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderRetC1BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
@@ -348,6 +354,9 @@ type RenderValC1BaseBuilder<'v,'e,'n,'c
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
+    member _.Yield(b: RenderValC1BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderPotC1BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderRetC1BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
@@ -361,6 +370,9 @@ type RenderRetCnBaseBuilder<'e,'n,'c
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
+    member _.Yield(b: RenderValC1BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderPotC1BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderRetC1BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
@@ -374,6 +386,9 @@ type RenderValCnBaseBuilder<'v,'e,'n,'c
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
+    member _.Yield(b: RenderValC1BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderPotC1BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderRetC1BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
@@ -392,6 +407,9 @@ type RenderRetC1BaseBuilder<'e,'n,'c
     member _.Bind(m: RenderValC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderPotC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderValC1BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderPotC1BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderRetC1BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetCnBaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: ComponentRetCnBaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
 
@@ -402,6 +420,9 @@ type RenderRetCnBaseBuilder<'e,'n,'c
     member _.Bind(m: RenderValC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderPotC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderValC1BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderPotC1BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderRetC1BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetCnBaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: ComponentRetCnBaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
 
@@ -412,6 +433,9 @@ type ComponentRetCnBaseBuilder<'n,'c
     member _.Bind(m: RenderValC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderPotC0BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetC0BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderValC1BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderPotC1BaseBuilder<_,_,_,_>, f) = BuilderBricks.bind(m {()}, f)
+    member _.Bind(m: RenderRetC1BaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: RenderRetCnBaseBuilder<_,_,_>, f) = BuilderBricks.bind(m {()}, f)
     member _.Bind(m: ComponentRetCnBaseBuilder<_,_>, f) = BuilderBricks.bind(m {()}, f)
 

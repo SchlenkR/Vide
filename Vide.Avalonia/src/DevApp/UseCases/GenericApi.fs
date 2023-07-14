@@ -1,11 +1,11 @@
-﻿module Demos
+﻿module UseCases.GenericApi
 
 open Vide
-open Vide.GenericAvaloniaApi
 open Avalonia.Controls
 open Avalonia.Layout
 open Avalonia.Media
 open Avalonia
+open Vide.GenericAvaloniaApi
 
 let simpleVideDemo =
     vide {

@@ -9,7 +9,7 @@ open type Vide.AvaloniaControls
 type TodoList = { items: TodoItem list }
 and TodoItem = { name: string; mutable isDone: bool }
 
-let Card = Grid.Margin(Thickness 10.0)
+let Card = Grid //.Margin(Thickness 10.0)
 
 let view = vide {
     let! todoList = Vide.ofMutable { items = [] }
@@ -17,13 +17,11 @@ let view = vide {
         
     TextBlock.Text("TODO List")
     StackPanel {
-        Grid {
+        Card {
             let! itemName = Vide.ofMutable ""
 
-            let a = TextBox.bind(itemName)
-            let b = Button
-            yield a
-            yield b
+            // TextBox.bind(itemName)
+            Button
                 // .IsEnabled(not String.IsNullOrWhiteSpace(itemName.Value)) {}
                 // .Click(fun _ ->
                 //     let newItem = { name = itemName.Value; isDone = false }

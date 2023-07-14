@@ -7,14 +7,8 @@ open Vide
 type App() =
     inherit Application()
     
-    let mkWindow () =
-        let host = ContentControl()
-        let window = Window(
-            Background = Media.Brushes.DarkSlateBlue,
-            Content = host
-        )
-        let _ = VideApp.ForHost(host).CreateAndStart(Demos.simpleVideDemo)
-        window
+    // let demo = UseCases.GenericApi.simpleVideDemo
+    let demo = UseCases.TodoList.view
     
     override this.Initialize() =
         this.Styles.Add(FluentTheme())
@@ -22,9 +16,15 @@ type App() =
     override this.OnFrameworkInitializationCompleted() =
         match this.ApplicationLifetime with
         | :? IClassicDesktopStyleApplicationLifetime as desktopLifetime ->
-            desktopLifetime.MainWindow <- mkWindow ()
+            desktopLifetime.MainWindow <-
+                let host = ContentControl()
+                let window = Window(
+                    Background = Media.Brushes.DarkSlateBlue,
+                    Content = host
+                )
+                let _ = VideApp.ForHost(host).CreateAndStart(demo)
+                window
         | _ -> failwith "Unexpected ApplicationLifetime"
-
 
 AppBuilder
     .Configure<App>()

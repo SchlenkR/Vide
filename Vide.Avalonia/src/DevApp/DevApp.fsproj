@@ -1,23 +1,19 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
-    <Compile Include="Demos.fs" />
+    <Compile Include="UseCases\GenericApi.fs" />
+    <Compile Include="UseCases\TodoList.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.0-rc1.1" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-rc1.1" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Avalonia" Version="11.0.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Vide.Avalonia\Vide.Avalonia.fsproj" />
   </ItemGroup>
-
 </Project>

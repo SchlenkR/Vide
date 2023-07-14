@@ -6,10 +6,12 @@
   <ItemGroup>
     <Compile Include="Avalonia.fs" />
     <Compile Include="GenericAvaloniaApi.fs" />
+    <Compile Include="ApiPre.fs" />
     <Compile Include="Api.fs" />
+    <Compile Include="ApiPost.fs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Avalonia" Version="11.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vide.Common\src\Vide.Common\Vide.Common.fsproj" />
