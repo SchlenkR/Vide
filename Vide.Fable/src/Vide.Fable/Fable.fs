@@ -91,28 +91,6 @@ type VideApp =
             (fun (ctx: FableContext) -> do ctx.RemoveObsoleteChildren())
         )
 
-type HtmlGARenderPotC0Builder<'v,'e when 'e :> HTMLElement and 'e: equality>(tagName, resultSelector) =
-    inherit RenderPotC0Builder<'v,'e>(
-        BuilderHelper.createNode tagName, 
-        (fun node -> BuilderHelper.checkNode tagName node.nodeName), 
-        resultSelector)
-
-type HtmlGARenderRetC0Builder<'e when 'e :> HTMLElement and 'e: equality>(tagName) =
-    inherit RenderRetC0Builder<'e>(
-        BuilderHelper.createNode tagName, 
-        (fun node -> BuilderHelper.checkNode tagName node.nodeName))
-
-type HtmlGARenderPotCnBuilder<'v,'e when 'e :> HTMLElement and 'e: equality>(tagName, resultSelector) =
-    inherit RenderPotCnBuilder<'v,'e>(
-        BuilderHelper.createNode tagName, 
-        (fun node -> BuilderHelper.checkNode tagName node.nodeName), 
-        resultSelector)
-
-type HtmlGARenderRetCnBuilder<'e when 'e :> HTMLElement and 'e: equality>(tagName) =
-    inherit RenderRetCnBuilder<'e>(
-        BuilderHelper.createNode tagName, 
-        (fun node -> BuilderHelper.checkNode tagName node.nodeName))
-
 [<AutoOpen>]
 module VideBuilderInstance =
     let vide = ComponentRetCnBuilder()

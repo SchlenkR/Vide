@@ -1,4 +1,11 @@
 
+Mandatory
+---
+
+* AttachedProperties (Wpfish)
+* Solution for multiple content properties / templates + slots
+
+
 New Ideas / Brainstorm
 ---
 
