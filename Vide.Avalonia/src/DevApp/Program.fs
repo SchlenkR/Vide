@@ -4,11 +4,15 @@ open Avalonia.Controls
 open Avalonia.Themes.Fluent
 open Vide
 
+module FormFactor =
+    let mobile = 390.0, 644.0
+    let desktop = 1200.0, 700.0
+
 type App() =
     inherit Application()
     
-    //let demo = UseCases.GettingStarted.counter
-    let demo = UseCases.TodoList.view
+    //let demo = UseCases.GettingStarted.counter, FormFactor.desktop
+    let demo = UseCases.TodoList.view, FormFactor.mobile
     
     override this.Initialize() =
         this.Styles.Add(FluentTheme())
@@ -20,9 +24,11 @@ type App() =
                 let host = ContentControl()
                 let window = Window(
                     Background = Media.Brushes.DarkSlateBlue,
-                    Content = host
+                    Content = host,
+                    Width = fst (snd demo),
+                    Height = snd (snd demo)
                 )
-                let _ = VideApp.ForHost(host).CreateAndStart(demo)
+                let _ = VideApp.ForHost(host).CreateAndStart(fst demo)
                 window
         | _ -> failwith "Unexpected ApplicationLifetime"
 

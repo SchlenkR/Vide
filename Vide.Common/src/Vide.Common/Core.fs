@@ -19,8 +19,11 @@ module TypingHelper =
     let ensureVide f : Vide<_,_,_> = f
 
 module Debug =
-    let mutable enabledDebugChannels : int list = []
-    let print channel s = if enabledDebugChannels |> List.contains channel then printfn "%s" s
+    let mutable enabledDebugChannels = set [0]
+    let print channel s = 
+        if enabledDebugChannels.Contains(channel) then 
+            do System.Diagnostics.Debug.WriteLine(s)
+            do printfn "%s" s
 
 type AsyncState<'v> =
     {

@@ -22,13 +22,18 @@ type TextBoxBindExtensions =
     static member bind(this: TextBox, value: MutableValue<string>) =
         this
             .Text(value.Value)
-            .TextInput(fun x -> value.Value <- x.node.Text)
+            .TextChanged(fun args ->
+                if value.Value <> args.node.Text
+                then value.Value <- args.node.Text
+                else args.requestEvaluation <- false
+            )
     
-    [<Extension>]
-    static member bind(this: TextBox, value: string, setter: string -> unit) =
-        this
-            .Text(value)
-            .TextInput(fun x -> setter(x.node.Text))
+    // Currently, don't provide this due to possibility of never-ending update cycle
+    //[<Extension>]
+    //static member bind(this: TextBox, value: string, setter: string -> unit) =
+    //    this
+    //        .Text(value)
+    //        .TextInput(fun x -> setter(x.node.Text))
     
 
 [<Extension>]

@@ -10,6 +10,7 @@ Avalonia API
 
 * .HorizontalAlignment(HorizontalAlignment.Center) 
   -> Control.HAlign.Center
+* Think about some way for css-like styling
 
 
 New Ideas / Brainstorm
@@ -19,6 +20,15 @@ New Ideas / Brainstorm
 * timer / Observables
 * SVG API
 * Vide als .fsx file und dann einen C# SourceGen
+* Work this idea out: Shadowing and defaults
+  ```
+    type AvaloniaControlsEx =
+        static member inline TextBlock =
+            AvaloniaControlBuilders.TextBlock().onInit(fun x -> x.node.FontSize <- 80.0)
+
+        open type Vide.AvaloniaControls
+        open type AvaloniaControlsEx
+    ```
 
 Useful (already discovered)
 ---
@@ -53,6 +63,13 @@ Useful (already discovered)
 
 Performance / Optimizations / Robustheit
 ---
+
+* 2 Property-APIs: For each Property: 1 for Init-Only and 1 for OnEval
+* Compare current values and only set when different (also in 'bind' methods)
+  * Mandatory for bind in conjunction with:
+    [<Extension>]
+    static member Text(this: #AvaloniaControlBuilders.TextBox, value) =
+        this.onEval(fun x -> if x.node.Text <> value then x.node.Text <- value)
 
 * Optimize "EvaluateView"
 * Perf
