@@ -1,4 +1,4 @@
-namespace Vide
+namespace Vide.Avalonia
 
 open Avalonia.Controls
 open Vide

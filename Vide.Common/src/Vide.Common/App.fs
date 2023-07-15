@@ -7,7 +7,7 @@ type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c, ctxFin: 'c 
     let mutable hasPendingEvaluationRequests = false
     let mutable evaluationCount = 0uL
     let mutable suspendEvaluation = false
-    let mutable onEvaluated: (VideApp<'v,'s,'c> -> 'v -> 's option -> unit) option = None
+    let mutable onEvaluated: ('v -> 's option -> unit) option = None
 
     interface IEvaluationManager with
         member this.RequestEvaluation() =
@@ -32,7 +32,7 @@ type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c, ctxFin: 'c 
                         currentState <- newState
                         isEvaluating <- false
                         evaluationCount <- evaluationCount + 1uL
-                    do onEvaluated |> Option.iter (fun x -> x this value currentState)
+                    do onEvaluated |> Option.iter (fun x -> x value currentState)
                     if hasPendingEvaluationRequests then
                         eval ()
                 do
@@ -51,7 +51,8 @@ type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c, ctxFin: 'c 
 
     member this.EvaluationManager = this :> IEvaluationManager
     member _.CurrentState = currentState
-    member _.SetOnEvaluated(value) = onEvaluated <- value
+    member _.OnEvaluated(value) = onEvaluated <- Some value
+    member _.OnEvaluated() = onEvaluated <- None
 
 type VideAppFactory<'c>(ctxCtor, ctxFin) =
     let start (app: VideApp<_,_,'c>) =

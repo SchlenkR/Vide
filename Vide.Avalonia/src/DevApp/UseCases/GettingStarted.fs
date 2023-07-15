@@ -1,8 +1,12 @@
 ﻿module UseCases.GettingStarted
 
-open Vide
+open Avalonia
 open Avalonia.Layout
-open type Vide.AvaloniaControls
+open Avalonia.Media
+open Vide
+open Vide.Avalonia
+
+open type Vide.Avalonia.Controls
 
 // TODO: demo for async + clear
 

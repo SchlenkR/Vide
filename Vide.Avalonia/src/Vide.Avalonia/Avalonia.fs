@@ -1,5 +1,4 @@
-﻿[<AutoOpen>]
-module Vide.Avalonia
+﻿namespace Vide.Avalonia
 
 open System
 open Avalonia.Controls
@@ -106,4 +105,6 @@ type VideApp =
             (fun (ctx: AvaloniaContext) -> ctx.RemoveObsoleteChildren())
         )
 
-let vide = ComponentRetCnBuilder()
+[<AutoOpen>]
+module TopLevels =
+    let vide = ComponentRetCnBuilder()

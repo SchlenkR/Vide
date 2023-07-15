@@ -22,13 +22,14 @@ New Ideas / Brainstorm
 * Vide als .fsx file und dann einen C# SourceGen
 * Work this idea out: Shadowing and defaults
   ```
-    type AvaloniaControlsEx =
+    type [<AutoOpen>] AvaloniaControlsEx =
         static member inline TextBlock =
             AvaloniaControlBuilders.TextBlock().onInit(fun x -> x.node.FontSize <- 80.0)
 
         open type Vide.AvaloniaControls
         open type AvaloniaControlsEx
     ```
+* [<AutoOpen>] for all API factories? That would make `open type Vide.AvaloniaControls` unnecessary.
 
 Useful (already discovered)
 ---
@@ -139,4 +140,13 @@ HTML Api Gen
     let x1 = X()config..myProp()
     let x2 = X(myProp = 12).attrs.myProp()
     let x2 = X(myProp = 12).attrs.myProp()
+
+Docu
+---
+
+* IMPORTANT: Do NOT do this, since this is a pitfall that I stumbled acrowss (TODO List Avalonia), and it causes really strange behaviour. Why? Controls are reused! Instead, it's absolutely necessary to always instanciate a new builder (Shadow a new type or use somehow other styling techniques):
+    let Button = Button.Margin(Thickness 5.0)
+    let TextBlock = TextBlock.Margin(Thickness 5.0)
+    let TextBox = TextBox.Margin(Thickness 5.0)
+    let DockPanel = DockPanel.LastChildFill(true)
 

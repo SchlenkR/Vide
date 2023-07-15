@@ -5,7 +5,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Avalonia.fs" />
-    <Compile Include="GenericAvaloniaApi.fs" />
     <Compile Include="ApiPre.fs" />
     <Compile Include="Api.fs" />
     <Compile Include="ApiPost.fs" />

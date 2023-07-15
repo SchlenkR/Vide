@@ -4,7 +4,6 @@
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="UseCases\GenericApi.fs" />
     <Compile Include="UseCases\GettingStarted.fs" />
     <Compile Include="UseCases\TodoList.fs" />
     <Compile Include="Program.fs" />

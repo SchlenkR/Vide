@@ -1,27 +1,24 @@
 module UseCases.TodoList
 
 open System
-open Avalonia
-open Avalonia.Layout
-open Avalonia.Media
 open Vide
+open Vide.Avalonia
 
-open type Vide.AvaloniaControls
+open type Vide.Avalonia.Controls
 
-// Some defaults first...
-let Card = Grid.Margin(Thickness 10.0)
-let H1 = TextBlock.onInit(fun tb ->
-    // TODO: Since the API is currently not auto-generated and far from complete,
-    // 'onInit' is used to gain direct access to the Avalonia Control for
-    // setting some defaults.
-    tb.node.Margin <- Thickness(0.0, 12.0, 0.0, 24.0)
-    tb.node.FontSize <- 28.0
-    tb.node.FontWeight <- FontWeight.Bold
-    )
-let Button = Button.Margin(Thickness 5.0)
-let TextBlock = TextBlock.Margin(Thickness 5.0)
-let TextBox = TextBox.Margin(Thickness 5.0)
-let DockPanel = DockPanel.LastChildFill(true)
+// Some Defaults...
+type AvaloniaControlsDefaults =
+    static member H1 = TextBlock.onInit(fun x ->
+        // TODO: Since the API is currently not auto-generated and far from complete,
+        // 'onInit' is used to gain direct access to the Avalonia Control for
+        // setting some defaults.
+        x.node.Margin <- Thickness(0, 12, 0, 18)
+        x.node.FontSize <- 28
+        x.node.FontWeight <- FontWeight.Bold
+        )
+    static member DockPanel = DockPanel.LastChildFill(true)
+
+open type AvaloniaControlsDefaults
 
 
 // ...here we go
@@ -33,20 +30,23 @@ let view = vide {
     let! todoList = Vide.ofMutable { items = [] }
     let setItems items = todoList.Value <- { todoList.Value with items = items }
         
-    DockPanel {
+    DockPanel.Margin(4) {
         
         H1
             .HorizontalAlignment(HorizontalAlignment.Center)
-            .DockPanel().Dock(Controls.Dock.Top)
+            .DockPanel().Dock(Dock.Top)
             .Text("TODO List")
         
-        DockPanel.DockPanel().Dock(Controls.Dock.Bottom) {
+        DockPanel
+            .Margin(4) 
+            .DockPanel().Dock(Dock.Bottom) {
             let! itemName = Vide.ofMutable ""
 
             Button
-                .DockPanel().Dock(Controls.Dock.Right)
-                .Margin(Thickness 0.0)
+                .DockPanel().Dock(Dock.Right)
+                .Margin(Thickness 0)
                 .IsEnabled(String.IsNullOrWhiteSpace(itemName.Value) |> not)
+                .onInit(fun x -> x.node.IsDefault <- true)
                 .Click(fun _ ->
                     let newItem = { name = itemName.Value; isDone = false }
                     do setItems (newItem :: todoList.Value.items)
@@ -56,17 +56,19 @@ let view = vide {
             TextBox.bind(itemName)
         }
 
-        VStack {
+        VStack.Margin(4) {
             for item in todoList.Value.items do
-                HStack {
+                DockPanel {
                     Button
                         .IsEnabled(item.isDone)
-                        .Click(fun _ -> setItems (todoList.Value.items |> List.except [item])) 
-                        {
-                            "Remove"
-                        }
+                        .DockPanel().Dock(Dock.Right)
+                        .Click(fun _ -> setItems (todoList.Value.items |> List.except [item]))
+                        { "Remove" }
                     CheckBox.bind(item.isDone, fun value -> item.isDone <- value)
-                    item.name
+                    TextBlock
+                        .VerticalAlignment(VerticalAlignment.Center)
+                        .TextTrimming(TextTrimming.CharacterEllipsis)
+                        .Text(item.name)
                 }
         }
     }

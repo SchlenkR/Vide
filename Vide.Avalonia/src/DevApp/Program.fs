@@ -3,6 +3,7 @@ open Avalonia.Controls.ApplicationLifetimes
 open Avalonia.Controls
 open Avalonia.Themes.Fluent
 open Vide
+open Vide.Avalonia
 
 module FormFactor =
     let mobile = 390.0, 644.0
@@ -13,6 +14,7 @@ type App() =
     
     //let demo = UseCases.GettingStarted.counter, FormFactor.desktop
     let demo = UseCases.TodoList.view, FormFactor.mobile
+    //let demo = UseCases.EvalDebugger.view, FormFactor.mobile
     
     override this.Initialize() =
         this.Styles.Add(FluentTheme())
@@ -28,7 +30,10 @@ type App() =
                     Width = fst (snd demo),
                     Height = snd (snd demo)
                 )
-                let _ = VideApp.ForHost(host).CreateAndStart(fst demo)
+                let app = VideApp.ForHost(host).CreateAndStart(fst demo)
+                do app.OnEvaluated(fun v s ->
+                    Debug.print 0 $"Eval DONE ({app.EvaluationManager.EvaluationCount} cycles)"
+                )
                 window
         | _ -> failwith "Unexpected ApplicationLifetime"
 

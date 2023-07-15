@@ -11,7 +11,7 @@
 // </NOT YET auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Vide
+namespace Vide.Avalonia
 
 open System
 open System.Runtime.CompilerServices
@@ -19,7 +19,7 @@ open Vide
 
 type AvaloniaControl = Avalonia.Controls.Control
 
-module AvaloniaControlBuilders =
+module ControlBuilders =
 
     type TextBlock() =
         inherit ContentLeafRetBuilder<Avalonia.Controls.TextBlock>()
@@ -54,22 +54,22 @@ type NodeBuilderExtensions =
         [<Extension>]
         static member inline Margin<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'n,'c> and 'e :> Avalonia.Controls.Control>
             (this: 'nb, value)
-            = this.onEval(fun x -> x.node.Margin <- value)
+            = this.onEval(fun x -> if x.node.Margin <> value then x.node.Margin <- value)
         
         [<Extension>]
         static member HorizontalAlignment<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'n,'c> and 'e :> Avalonia.Controls.Control>
             (this: 'nb, value)
-            = this.onEval(fun x -> x.node.HorizontalAlignment <- value)
+            = this.onEval(fun x -> if x.node.HorizontalAlignment <> value then x.node.HorizontalAlignment <- value)
         
         [<Extension>]
         static member VerticalAlignment<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'n,'c> and 'e :> Avalonia.Controls.Control>
             (this: 'nb, value)
-            = this.onEval(fun x -> x.node.VerticalAlignment <- value)
+            = this.onEval(fun x -> if x.node.VerticalAlignment <> value then x.node.VerticalAlignment <- value)
         
         [<Extension>]
         static member IsEnabled<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'n,'c> and 'e :> Avalonia.Controls.Control>
             (this: 'nb, value)
-            = this.onEval(fun x -> x.node.IsEnabled <- value)
+            = this.onEval(fun x -> if x.node.IsEnabled <> value then x.node.IsEnabled <- value)
     
         // Events
     end
@@ -105,8 +105,12 @@ type TextBlockExtensions =
         // Properties
         
         [<Extension>]
-        static member Text(this: #AvaloniaControlBuilders.TextBlock, value) =
-            this.onEval(fun x -> x.node.Text <- value)
+        static member Text(this: #ControlBuilders.TextBlock, value) =
+            this.onEval(fun x -> if x.node.Text <> value then x.node.Text <- value)
+        
+        [<Extension>]
+        static member TextTrimming(this: #ControlBuilders.TextBlock, value) =
+            this.onEval(fun x -> if x.node.TextTrimming <> value then x.node.TextTrimming <- value)
     
         // Events
     end
@@ -117,16 +121,18 @@ type TextBoxExtensions =
         // Properties
         
         [<Extension>]
-        static member Text(this: #AvaloniaControlBuilders.TextBox, value) =
-            this.onEval(fun x -> if x.node.Text <> value then x.node.Text <- value)
+        static member Text(this: #ControlBuilders.TextBox, value) =
+            this.onEval(fun x -> if x.node.Text <> value then x.node.Text <- value
+            )
     
         // Events
     
         [<Extension>]
-        static member TextChanged(this: #AvaloniaControlBuilders.TextBox, handler) =
+        static member TextChanged(this: #ControlBuilders.TextBox, handler) =
             this.onInit(fun x ->
                 let wrappedHandler = Event.handle x.node x.globalContext handler
                 x.node.TextChanged.Add(wrappedHandler))
+                //x.node.AddHandler(Avalonia.Controls.TextBox.TextChangedEvent,)
 
     end
 
@@ -138,7 +144,7 @@ type ButtonExtensions =
         // Events
     
         [<Extension>]
-        static member Click(this: #AvaloniaControlBuilders.Button, handler) =
+        static member Click(this: #ControlBuilders.Button, handler) =
             this.onInit(fun x ->
                 let wrappedHandler = Event.handle x.node x.globalContext handler
                 x.node.Click.Add(wrappedHandler))
@@ -151,13 +157,13 @@ type CheckBoxExtensions =
         // Properties
         
         [<Extension>]
-        static member IsChecked(this: #AvaloniaControlBuilders.CheckBox, value) =
-            this.onEval(fun x -> x.node.IsChecked <- value)
+        static member IsChecked(this: #ControlBuilders.CheckBox, value) =
+            this.onEval(fun x -> if x.node.IsChecked <> value then x.node.IsChecked <- value)
     
         // Events
     
         [<Extension>]
-        static member IsCheckedChanged(this: #AvaloniaControlBuilders.CheckBox, handler) =
+        static member IsCheckedChanged(this: #ControlBuilders.CheckBox, handler) =
             this.onInit(fun x ->
                 let wrappedHandler = Event.handle x.node x.globalContext handler
                 x.node.IsCheckedChanged.Add(wrappedHandler))
@@ -169,8 +175,8 @@ type StackPanelExtensions =
         // Properties
         
         [<Extension>]
-        static member Orientation(this: #AvaloniaControlBuilders.StackPanel, value) =
-            this.onEval(fun x -> x.node.Orientation <- value)
+        static member Orientation(this: #ControlBuilders.StackPanel, value) =
+            this.onEval(fun x -> if x.node.Orientation <> value then x.node.Orientation <- value)
     
         // Events
     end
@@ -181,8 +187,8 @@ type DockPanelExtensions =
         // Properties
         
         [<Extension>]
-        static member LastChildFill(this: #AvaloniaControlBuilders.DockPanel, value) =
-            this.onEval(fun x -> x.node.LastChildFill <- value)
+        static member LastChildFill(this: #ControlBuilders.DockPanel, value) =
+            this.onEval(fun x -> if x.node.LastChildFill <> value then x.node.LastChildFill <- value)
     
         // Events
     end
@@ -217,11 +223,11 @@ type DockPanelAttachedProperties =
 // -------------------------------
 
 
-type AvaloniaControls =
-    static member inline TextBlock = AvaloniaControlBuilders.TextBlock()
-    static member inline TextBox = AvaloniaControlBuilders.TextBox()
-    static member inline Button = AvaloniaControlBuilders.Button()
-    static member inline CheckBox = AvaloniaControlBuilders.CheckBox()
-    static member inline Grid = AvaloniaControlBuilders.Grid()
-    static member inline StackPanel = AvaloniaControlBuilders.StackPanel()
-    static member inline DockPanel = AvaloniaControlBuilders.DockPanel()
+type Controls =
+    static member TextBlock = ControlBuilders.TextBlock()
+    static member TextBox = ControlBuilders.TextBox()
+    static member Button = ControlBuilders.Button()
+    static member CheckBox = ControlBuilders.CheckBox()
+    static member Grid = ControlBuilders.Grid()
+    static member StackPanel = ControlBuilders.StackPanel()
+    static member DockPanel = ControlBuilders.DockPanel()
