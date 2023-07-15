@@ -25,16 +25,32 @@ module AvaloniaControlBuilders =
         inherit PanelRetBuilder<Avalonia.Controls.StackPanel>()
 
 [<Extension>]
-type ContentLeafRetBuilderExtensions =
+type NodeBuilderExtensions =
     class
         // Properties
         
         [<Extension>]
-        static member Margin(this: #ContentLeafRetBuilder<_>, value) =
+        static member Margin<'nb,'e,'n,'c
+                when 'nb :> NodeBuilder<'e,'n,'c>
+                and 'e :> Avalonia.Controls.Control>(this: 'nb, value) =
             this.onEval(fun x -> x.node.Margin <- value)
         
         [<Extension>]
-        static member IsEnabled(this: #ContentLeafRetBuilder<_>, value) =
+        static member HorizontalAlignment<'nb,'e,'n,'c
+                when 'nb :> NodeBuilder<'e,'n,'c>
+                and 'e :> Avalonia.Controls.Control>(this: 'nb, value) =
+            this.onEval(fun x -> x.node.HorizontalAlignment <- value)
+        
+        [<Extension>]
+        static member VerticalAlignment<'nb,'e,'n,'c
+                when 'nb :> NodeBuilder<'e,'n,'c>
+                and 'e :> Avalonia.Controls.Control>(this: 'nb, value) =
+            this.onEval(fun x -> x.node.VerticalAlignment <- value)
+        
+        [<Extension>]
+        static member IsEnabled<'nb,'e,'n,'c
+                when 'nb :> NodeBuilder<'e,'n,'c>
+                and 'e :> Avalonia.Controls.Control>(this: 'nb, value) =
             this.onEval(fun x -> x.node.IsEnabled <- value)
     
         // Events
@@ -44,15 +60,6 @@ type ContentLeafRetBuilderExtensions =
 type ContentLeafPotBuilderExtensions =
     class
         // Properties
-        
-        [<Extension>]
-        static member Margin(this: #ContentLeafPotBuilder<_,_>, value) =
-            this.onEval(fun x -> x.node.Margin <- value)
-            
-        [<Extension>]
-        static member IsEnabled(this: #ContentLeafPotBuilder<_,_>, value) =
-            this.onEval(fun x -> x.node.IsEnabled <- value)
-
         // Events
     end
 
@@ -60,15 +67,6 @@ type ContentLeafPotBuilderExtensions =
 type ContentControlRetBuilderExtensions =
     class
         // Properties
-        
-        [<Extension>]
-        static member Margin(this: #ContentControlRetBuilder<_>, value) =
-            this.onEval(fun x -> x.node.Margin <- value)
-            
-        [<Extension>]
-        static member IsEnabled(this: #ContentControlRetBuilder<_>, value) =
-            this.onEval(fun x -> x.node.IsEnabled <- value)
-
         // Events
     end
 
@@ -76,15 +74,6 @@ type ContentControlRetBuilderExtensions =
 type PanelRetBuilderExtensions =
     class
         // Properties
-        
-        [<Extension>]
-        static member Margin(this: #PanelRetBuilder<_>, value) =
-            this.onEval(fun x -> x.node.Margin <- value)
-            
-        [<Extension>]
-        static member IsEnabled(this: #PanelRetBuilder<_>, value) =
-            this.onEval(fun x -> x.node.IsEnabled <- value)
-
         // Events
     end
 
@@ -117,7 +106,7 @@ type TextBoxExtensions =
     
         [<Extension>]
         static member TextInput(this: #AvaloniaControlBuilders.TextBox, handler) =
-            this.onEval(fun x ->
+            this.onInit(fun x ->
                 let wrappedHandler = Event.handle x.node x.globalContext handler
                 x.node.TextChanged.Add(wrappedHandler))
 
@@ -132,7 +121,7 @@ type ButtonExtensions =
     
         [<Extension>]
         static member Click(this: #AvaloniaControlBuilders.Button, handler) =
-            this.onEval(fun x ->
+            this.onInit(fun x ->
                 let wrappedHandler = Event.handle x.node x.globalContext handler
                 x.node.Click.Add(wrappedHandler))
     end
@@ -151,7 +140,7 @@ type CheckBoxExtensions =
     
         [<Extension>]
         static member IsCheckedChanged(this: #AvaloniaControlBuilders.CheckBox, handler) =
-            this.onEval(fun x ->
+            this.onInit(fun x ->
                 let wrappedHandler = Event.handle x.node x.globalContext handler
                 x.node.IsCheckedChanged.Add(wrappedHandler))
     end

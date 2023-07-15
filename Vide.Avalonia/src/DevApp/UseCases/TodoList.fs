@@ -3,6 +3,8 @@ module UseCases.TodoList
 open System
 open Vide
 open Avalonia
+open Avalonia.Layout
+open Avalonia.Media
 open type Vide.AvaloniaControls
 
 
@@ -11,53 +13,42 @@ and TodoItem = { name: string; mutable isDone: bool }
 
 let Card = Grid //.Margin(Thickness 10.0)
 
+let H1 = TextBlock.onInit(fun tb -> 
+    tb.node.FontSize <- 20.0
+    tb.node.FontWeight <- FontWeight.Bold
+    )
+
 let view = vide {
     let! todoList = Vide.ofMutable { items = [] }
     let setItems items = todoList.Value <- { todoList.Value with items = items }
         
-    TextBlock.Text("TODO List")
-    StackPanel {
-        Card {
-            let! itemName = Vide.ofMutable ""
+    VStack 
+        .HorizontalAlignment(HorizontalAlignment.Center) 
+        .VerticalAlignment(VerticalAlignment.Center) {
+        
+        H1.Text("TODO List")
+        
+        let! itemName = Vide.ofMutable ""
+        TextBox.bind(itemName)
+        Button
+            .IsEnabled(String.IsNullOrWhiteSpace(itemName.Value) |> not)
+            .Click(fun _ ->
+                let newItem = { name = itemName.Value; isDone = false }
+                do setItems (newItem :: todoList.Value.items)
+                do itemName.Reset()) { 
+                "Add Item" 
+            }
 
-            // TextBox.bind(itemName)
-            Button
-                // .IsEnabled(not String.IsNullOrWhiteSpace(itemName.Value)) {}
-                // .Click(fun _ ->
-                //     let newItem = { name = itemName.Value; isDone = false }
-                //     do setItems (newItem :: todoList.Value.items)
-                //     do itemName.Reset()) { 
-                //     "Add Item" 
-                // }
-        }
-    }
-    VStack {
         for item in todoList.Value.items do
-            Grid {
+            HStack {
                 Button
-                    .IsEnabled(not item.isDone)
+                    .IsEnabled(item.isDone)
                     .Click(fun _ -> setItems (todoList.Value.items |> List.except [item])) 
                     {
                         "Remove"
                     }
-                CheckBox //.bind(item.isDone, fun value -> item.isDone <- value)
-                Card { item.name }
+                CheckBox.bind(item.isDone, fun value -> item.isDone <- value)
+                item.name
             }
     }
 }
-
-
-
-//module Playground =
-
-//    let bindTest =
-//        vide {
-//            div.OnEval(fun x _ -> x.className <- "bam")  {
-//                "I'm the OnEval div"
-//            }
-
-//            div.OnInit(fun x _ -> x.className <- "bam2") {
-//                "I'm the OnInit div"
-//            }
-//        }
-

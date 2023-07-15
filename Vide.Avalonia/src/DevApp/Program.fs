@@ -7,7 +7,7 @@ open Vide
 type App() =
     inherit Application()
     
-    // let demo = UseCases.GenericApi.simpleVideDemo
+    //let demo = UseCases.GettingStarted.counter
     let demo = UseCases.TodoList.view
     
     override this.Initialize() =

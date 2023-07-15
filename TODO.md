@@ -5,6 +5,12 @@ Mandatory
 * AttachedProperties (Wpfish)
 * Solution for multiple content properties / templates + slots
 
+Avalonia API
+---
+
+* .HorizontalAlignment(HorizontalAlignment.Center) 
+  -> Control.HAlign.Center
+
 
 New Ideas / Brainstorm
 ---
@@ -13,7 +19,6 @@ New Ideas / Brainstorm
 * timer / Observables
 * SVG API
 * Vide als .fsx file und dann einen C# SourceGen
-
 
 Useful (already discovered)
 ---
