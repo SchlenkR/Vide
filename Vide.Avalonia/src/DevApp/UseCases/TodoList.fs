@@ -3,25 +3,8 @@ module UseCases.TodoList
 open System
 open Vide
 open Vide.Avalonia
-
 open type Vide.Avalonia.Controls
-
-// Some Defaults...
-type AvaloniaControlsDefaults =
-    static member H1 = TextBlock.onInit(fun x ->
-        // TODO: Since the API is currently not auto-generated and far from complete,
-        // 'onInit' is used to gain direct access to the Avalonia Control for
-        // setting some defaults.
-        x.node.Margin <- Thickness(0, 12, 0, 18)
-        x.node.FontSize <- 28
-        x.node.FontWeight <- FontWeight.Bold
-        )
-    static member DockPanel = DockPanel.LastChildFill(true)
-
-open type AvaloniaControlsDefaults
-
-
-// ...here we go
+open type Vide.Avalonia.AvaloniaControlsDefaults
 
 type TodoList = { items: TodoItem list }
 and TodoItem = { name: string; mutable isDone: bool }
@@ -33,21 +16,22 @@ let view = vide {
                 { name = "Write Vide docu"; isDone = false }
                 { name = "Cook new ramen broth"; isDone = false }
                 { name = "Stuff that's already done"; isDone = true }
+                { name = "Auto-gen Vide Avalonia API"; isDone = false }
+                { name = "Wrap this list in ScrollViewer"; isDone = false }
             ] 
         }
         |> Vide.ofMutable
     let setItems items = todoList.Value <- { todoList.Value with items = items }
         
     DockPanel.Margin(4) {
-        
         H1
             .HorizontalAlignment(HorizontalAlignment.Center)
             .DockPanel().Dock(Dock.Top)
             .Text("My TODO List")
-        
         DockPanel
             .Margin(4) 
             .DockPanel().Dock(Dock.Bottom) {
+            
             let! itemName = Vide.ofMutable ""
 
             Button
@@ -72,7 +56,8 @@ let view = vide {
                         .DockPanel().Dock(Dock.Right)
                         .Click(fun _ -> setItems (todoList.Value.items |> List.except [item]))
                         { "Remove" }
-                    CheckBox.bind(item.isDone, fun value -> item.isDone <- value)
+                    CheckBox
+                        .bind(item.isDone, fun value -> item.isDone <- value)
                     TextBlock
                         .VerticalAlignment(VerticalAlignment.Center)
                         .TextTrimming(TextTrimming.CharacterEllipsis)

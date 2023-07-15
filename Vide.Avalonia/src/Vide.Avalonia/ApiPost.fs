@@ -101,3 +101,16 @@ type FontWeight = Avalonia.Media.FontWeight
 type Thickness = Avalonia.Thickness
 type HorizontalAlignment = Avalonia.Layout.HorizontalAlignment
 type VerticalAlignment = Avalonia.Layout.VerticalAlignment
+
+
+// Some Defaults...
+type AvaloniaControlsDefaults =
+    static member H1 = TextBlock.onInit(fun x ->
+        // TODO: Since the API is currently not auto-generated and far from complete,
+        // 'onInit' is used to gain direct access to the Avalonia Control for
+        // setting some defaults.
+        x.node.Margin <- Thickness(0, 12, 0, 18)
+        x.node.FontSize <- 28
+        x.node.FontWeight <- FontWeight.Bold
+        )
+    static member DockPanel = DockPanel.LastChildFill(true)

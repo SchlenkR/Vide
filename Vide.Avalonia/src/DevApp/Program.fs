@@ -31,7 +31,8 @@ type App() =
                     Background = Media.Brushes.DarkSlateBlue,
                     Content = host,
                     Width = fst (snd demo),
-                    Height = snd (snd demo)
+                    Height = snd (snd demo),
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner
                 )
                 let app = VideApp.ForHost(host).CreateAndStart(fst demo)
                 do app.OnEvaluated(fun v s ->

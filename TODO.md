@@ -5,12 +5,14 @@ Mandatory
 * AttachedProperties (Wpfish)
 * Solution for multiple content properties / templates + slots
 
-Avalonia API
+Avalonia
 ---
 
 * .HorizontalAlignment(HorizontalAlignment.Center) 
   -> Control.HAlign.Center
 * Think about some way for css-like styling
+* Provide some convenience for: type App() =
+
 
 
 New Ideas / Brainstorm
