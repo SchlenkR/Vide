@@ -33,6 +33,9 @@ module ControlBuilders =
     type CheckBox() =
         inherit ContentControlPotBuilder<Nullable<bool>, Avalonia.Controls.CheckBox>(fun node -> node.IsChecked)
 
+    type ScrollViewer() =
+        inherit ContentControlRetBuilder<Avalonia.Controls.ScrollViewer>()
+
     type Grid() =
         inherit PanelRetBuilder<Avalonia.Controls.Grid>()
 
@@ -92,6 +95,7 @@ type ContentControlRetBuilderExtensions =
 type PanelRetBuilderExtensions =
     class
         // Properties
+        
         // Events
     end
 
@@ -150,7 +154,6 @@ type ButtonExtensions =
                 x.node.Click.Add(wrappedHandler))
     end
         
-
 [<Extension>]
 type CheckBoxExtensions =
     class
@@ -167,6 +170,14 @@ type CheckBoxExtensions =
             this.onInit(fun x ->
                 let wrappedHandler = Event.handle x.node x.globalContext handler
                 x.node.IsCheckedChanged.Add(wrappedHandler))
+    end
+
+[<Extension>]
+type ScrollViewerExtensions =
+    class
+        // Properties
+        
+        // Events
     end
         
 [<Extension>]
@@ -195,6 +206,7 @@ type DockPanelExtensions =
 
 
 // -------------------------------
+
 
 module AttachedProperties =
     type DockPanel<'nb,'e
@@ -228,6 +240,7 @@ type Controls =
     static member TextBox = ControlBuilders.TextBox()
     static member Button = ControlBuilders.Button()
     static member CheckBox = ControlBuilders.CheckBox()
+    static member ScrollViewer = ControlBuilders.ScrollViewer()
     static member Grid = ControlBuilders.Grid()
     static member StackPanel = ControlBuilders.StackPanel()
     static member DockPanel = ControlBuilders.DockPanel()

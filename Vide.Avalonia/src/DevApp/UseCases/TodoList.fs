@@ -27,7 +27,15 @@ type TodoList = { items: TodoItem list }
 and TodoItem = { name: string; mutable isDone: bool }
 
 let view = vide {
-    let! todoList = Vide.ofMutable { items = [] }
+    let! todoList = 
+        { 
+            items = [
+                { name = "Write Vide docu"; isDone = false }
+                { name = "Cook new ramen broth"; isDone = false }
+                { name = "Stuff that's already done"; isDone = true }
+            ] 
+        }
+        |> Vide.ofMutable
     let setItems items = todoList.Value <- { todoList.Value with items = items }
         
     DockPanel.Margin(4) {
@@ -35,7 +43,7 @@ let view = vide {
         H1
             .HorizontalAlignment(HorizontalAlignment.Center)
             .DockPanel().Dock(Dock.Top)
-            .Text("TODO List")
+            .Text("My TODO List")
         
         DockPanel
             .Margin(4) 
