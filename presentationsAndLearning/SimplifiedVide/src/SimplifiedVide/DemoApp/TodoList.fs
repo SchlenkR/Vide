@@ -12,43 +12,48 @@ open type Vide.Html
 //   emitting control statements like in LocSta would be necessary).
 
 type TodoItem = { name: string; mutable isDone: bool }
-type TodoList = { items: TodoItem list }
+type TodoList = { items: ResizeArray<TodoItem> }
     
 let view = vide {
-    let! todoList = Vide.ofMutable { items = [] }
+    let! todoList = Vide.ofMutable { items = ResizeArray() }
         
-    h1.class'("title") { "TODO List" }
-    div {
+    h1.class'("title") { "My TODO List" }
+    div.id("addItemPanel") {
         let! itemName = Vide.ofMutable ""
-    
-        p {
-            let addItem () =
-                let newItem = { name = itemName.Value; isDone = false }
-                do
-                    todoList.Value <- { todoList.Value with items = newItem :: todoList.Value.items }
-                    itemName.Reset()
-                
-            input
-                .type'("text")
-                .value(itemName.Value)
-                .oninput(fun x -> itemName.Value <- x.node.value)
-                
-            button
-                .disabled(String.IsNullOrWhiteSpace(itemName.Value))
-                .onclick(fun _ -> addItem()) 
-                { 
-                    "Add Item" 
-                }
-        }
+        let addItem () =
+            let newItem = { name = itemName.Value; isDone = false }
+            do todoList.Value.items.Add(newItem)
+            do itemName.Reset()
+        input
+            .class'("itemName")
+            .type'("text")
+            .value(itemName.Value)
+            .oninput(fun x -> itemName.Value <- x.node.value)
+        button
+            .class'("newItem")
+            .disabled(String.IsNullOrWhiteSpace(itemName.Value))
+            .onclick(fun _ -> addItem()) 
+            { 
+                "Add Item" 
+            }
     }
-    div {
+    div.id("itemsPanel") {
         for item in todoList.Value.items do
-            div.class'("flex-row") {
-                p { item.name }
+            let removeItem () = do todoList.Value.items.Remove(item) |> ignore
+            div.class'("item") {
                 input
+                    .class'("itemDone")
                     .type'("checkbox")
                     .checked'(item.isDone)
                     .oninput(fun x -> item.isDone <- x.node.``checked``)
+                span { item.name }
+                button
+                    .class'("removeItem")
+                    .disabled(not item.isDone)
+                    .onclick(fun _ -> removeItem ()) 
+                    {
+                        "Remove" 
+                    }
             }
     }
 }

@@ -30,11 +30,39 @@ body {
     padding: 3px 10px;
 }
 
+#host {
+    max-width: 700px;
+}
+
 #host h1 {
     margin-top: 0;
 }
 
-.flex-row {
-    display: flex;
+#addItemPanel {
+    display: grid;
+    grid-template-columns: 1fr auto;
+}
+
+#addItemPanel .itemName {
+    border-radius: var(--br) 0 0 var(--br);
+}
+
+#addItemPanel .newItem {
+    border-radius: 0 var(--br) 0 var(--br) 0;
+}
+
+#itemsPanel button {
+    margin-bottom: 0;
+}
+
+#itemsPanel .item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
     gap: 5px;
+    margin-bottom: 10px;
+}
+
+#itemsPanel .itemDone {
+    margin: 5px;
 }
