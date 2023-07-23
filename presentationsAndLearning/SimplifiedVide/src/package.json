@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run clean && dotnet fable watch ./SimplifiedVide/SimplifiedVide.fsproj -s -o ./build --run vite",
+    "postinstall": "dotnet tool restore",
+    "clean": "rimraf ./build && rimraf ./dist"
+  },
+  "devDependencies": {
+    "rimraf": "^5.0.0",
+    "vite": "^4.4.4"
+  }
+}
