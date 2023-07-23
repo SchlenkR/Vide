@@ -4,8 +4,8 @@ type Vide<'v,'s,'c> = Vide of ('s option -> IApp -> 'c -> 'v * 's)
 
 and IApp =
     abstract member RequestEvaluation: unit -> unit
-    abstract member Suspend: unit -> unit
-    abstract member Resume: unit -> unit
+    abstract member SuspendEvaluation: unit -> unit
+    abstract member ResumeEvaluation: unit -> unit
 
 type NoState = NoState
 

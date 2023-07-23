@@ -37,9 +37,9 @@ module Event =
         fun evt ->
             let args = { node = node; evt = evt; app = app; requestEvaluation = true }
             try
-                do app.Suspend()
+                do app.SuspendEvaluation()
                 do callback args
                 if args.requestEvaluation then
                     app.RequestEvaluation()
             finally
-                do app.Resume()
+                do app.ResumeEvaluation()

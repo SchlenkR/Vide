@@ -41,9 +41,9 @@ type VideApp<'v,'s>
                     match isEvaluating with
                     | true -> hasPendingEvaluationRequests <- true
                     | false -> eval ()
-        member _.Suspend() =
+        member _.SuspendEvaluation() =
             do suspendEvaluation <- true
-        member this.Resume() =
+        member this.ResumeEvaluation() =
             do suspendEvaluation <- false
             if hasPendingEvaluationRequests then
                 (this :> IApp).RequestEvaluation()

@@ -6,43 +6,30 @@ module Vide.NodeModel
 open Browser
 open Browser.Types
 
-module NodeDocument =
-    let ensureChildAppended (parent: Node) (child: Node) =
-        if not (parent.contains child) then
-            parent.appendChild(child) |> ignore
-    let removeChild (parent: Node) (child: Node) =
-        parent.removeChild(child) |> ignore
-    let getChildren (parent: Node) =
-        let nodes = parent.childNodes
-        [ for i in 0 .. nodes.length-1 do nodes.Item i ]
-    let clearChildren (parent: Node) =
-        parent.textContent <- ""
-    let createTextNode (text: string) =
-        let tn = document.createTextNode(text)
-        do tn.textContent <- text
-        tn
-    let createNodeOfName (tagName: string) =
-        document.createElement(tagName)
-
 // TODO: Inline things
 type NodeContext(parent: Node) =
     let mutable keptChildren = []
-    member _.CreateTextNode(value: string) =
-        NodeDocument.createTextNode value
+    member _.CreateTextNode(text: string) =
+        let tn = document.createTextNode(text)
+        do tn.textContent <- text
+        tn
     member _.ShowChild(child) =
         // What is important here:
         // The ordering is supposed to remain unchanged!
         // So we don't need a concept of "current index"
         do keptChildren <- child :: keptChildren
-        do NodeDocument.ensureChildAppended parent child
+        if not (parent.contains child) then
+            parent.appendChild(child) |> ignore
     member _.RemoveObsoleteChildren() =
-        let childrenForRemoval = NodeDocument.getChildren parent |> List.except keptChildren
+        let childrenForRemoval = 
+            let children =
+                let nodes = parent.childNodes
+                [ for i in 0 .. nodes.length-1 do nodes.Item i ]
+            children |> List.except keptChildren
         for child in childrenForRemoval do
-            NodeDocument.removeChild parent child
+            parent.removeChild(child) |> ignore
     member _.ClearContent() =
-        do NodeDocument.clearChildren parent
-    static member Create<'e when 'e :> Node>(thisNode: 'e) =
-        NodeContext(thisNode)
+        do parent.textContent <- ""
     
 type ChildAction = Keep | DiscardAndCreateNew
 
@@ -62,9 +49,8 @@ type NodeBuilder<'e  when 'e :> Node>(tagName: string) =
     member val PreEvalModifiers: ResizeArray<NodeModifier<'e>> = ResizeArray() with get
     member val PostEvalModifiers: ResizeArray<NodeModifier<'e>> = ResizeArray() with get
     
-    member _.CreateContext(elem: 'e) = NodeContext.Create(elem)
     member _.CreateThisElement(ctx: NodeContext) =
-        let n = NodeDocument.createNodeOfName tagName
+        let n = document.createElement(tagName)
         do ctx.ShowChild(n)
         // TODO: Can we get rid of the unsafe cast?
         (box n) :?> 'e
@@ -104,7 +90,7 @@ module NodeBuilder =
                     | DiscardAndCreateNew ->
                         thisBuilder.CreateThisElement(ctx), None
             do runModifiers thisBuilder.PreEvalModifiers thisElement
-            let thisCtx = thisBuilder.CreateContext(thisElement)
+            let thisCtx = NodeContext(thisElement)
             let cv,cs = childVide cs app thisCtx
             do thisCtx.RemoveObsoleteChildren()
             do runModifiers thisBuilder.PostEvalModifiers thisElement
