@@ -4,7 +4,7 @@ open System.Runtime.CompilerServices
 open Vide
 
 [<Extension>]
-type NodeBuilderExtensions =
+type NodeBuilderPostExtensions =
 
     /// Called once on initialization.
     [<Extension>]

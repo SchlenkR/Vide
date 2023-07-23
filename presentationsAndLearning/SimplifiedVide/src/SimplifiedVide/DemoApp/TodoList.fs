@@ -1,4 +1,4 @@
-module DemoApp.TodoList
+module TodoList
 
 open System
 open Vide

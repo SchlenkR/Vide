@@ -4,7 +4,7 @@ open Browser.Dom
 open Fable.Core.JS
 open Vide
 
-let content = DemoApp.TodoList.view
+let content = TodoList.view
 let host = document.getElementById("host")
 let app = VideApp.createAndStart(host, content) :> IApp
 
