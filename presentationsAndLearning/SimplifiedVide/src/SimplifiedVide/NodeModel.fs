@@ -54,10 +54,6 @@ type NodeBuilder<'e  when 'e :> Node>(tagName: string) =
         do ctx.ShowChild(n)
         // TODO: Can we get rid of the unsafe cast?
         (box n) :?> 'e
-    member _.CheckChildNode(actualNode: Node) =
-        match actualNode.nodeName.ToUpper() = tagName.ToUpper() with
-        | true -> Keep
-        | false -> DiscardAndCreateNew
 
 module NodeBuilder =
     let inline run<'v,'s,'e when 'e :> Node>
@@ -82,12 +78,8 @@ module NodeBuilder =
                     do runModifiers thisBuilder.InitModifiers newElement
                     newElement,s
                 | Some thisElement ->
-                    match thisBuilder.CheckChildNode(thisElement) with
-                    | Keep ->
-                        do ctx.ShowChild(thisElement)
-                        thisElement,cs
-                    | DiscardAndCreateNew ->
-                        thisBuilder.CreateThisElement(ctx), None
+                    do ctx.ShowChild(thisElement)
+                    thisElement,cs
             do runModifiers thisBuilder.PreEvalModifiers thisElement
             let thisCtx = NodeContext(thisElement)
             let cv,cs = childVide cs app thisCtx

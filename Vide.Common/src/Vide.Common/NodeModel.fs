@@ -72,6 +72,7 @@ type NodeBuilder<'e,'n,'c>
     (
         createContext: 'e -> 'c,
         createThisElement: 'c -> 'e,
+        // TODO: This can be removed I guess! (see: SeimplifiedVide)
         checkChildNode: 'n -> ChildAction
     ) =
     
@@ -81,6 +82,7 @@ type NodeBuilder<'e,'n,'c>
 
     member _.CreateContext = createContext
     member _.CreateThisElement = createThisElement
+    // TODO: This can be removed I guess! (see: SeimplifiedVide)
     member _.CheckChildNode = checkChildNode
 
     member val InitModifiers: ResizeArray<NodeModifier<'e>> = ResizeArray() with get
