@@ -85,6 +85,6 @@ module BuilderBricks =
                 |> List.unzip
             resValues, (resStates |> Map.ofList)
 
-type VideBaseBuilder() =
+type VideBuilder() =
     member _.Bind(m, f) = BuilderBricks.bind(m, f)
     member _.Zero() = BuilderBricks.zero()

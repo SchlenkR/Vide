@@ -1,13 +1,13 @@
 ﻿[<AutoOpen>]
 module Vide.MutableValue
 
-type MutableValue<'a when 'a: equality>(initial: 'a, evalManager: IApp) =
+type MutableValue<'a when 'a: equality>(initial: 'a, app: IApp) =
     let mutable state = initial
     member _.Set(value) =
         // Not just a perf opt: prevent stack overflows (see demo case asyncHelloWorld)!
         if value <> state then
             do state <- value
-            do evalManager.RequestEvaluation()
+            do app.RequestEvaluation()
     member this.Reset() = this.Set(initial)
     member inline this.Update(op, value) =
         this.Value <- op this.Value value
@@ -17,6 +17,6 @@ type MutableValue<'a when 'a: equality>(initial: 'a, evalManager: IApp) =
 
 module Vide =
     let ofMutable x =
-        Vide <| fun s gc ->
-            let s = s |> Option.defaultWith (fun () -> MutableValue(x, gc.evaluationManager))
+        Vide <| fun s app ctx ->
+            let s = s |> Option.defaultWith (fun () -> MutableValue(x, app))
             s,s

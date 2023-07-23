@@ -1,73 +1,45 @@
-namespace Vide
+﻿namespace Vide
 
-open Browser.Types
-open Vide.WebModel
+open System.Runtime.CompilerServices
+open Vide
 
-type HtmlGARenderPotC0Builder<'v,'e when 'e :> HTMLElement and 'e: equality>(tagName, resultSelector) =
-    inherit RenderPotC0Builder<'v,'e>(
-        BuilderHelper.createNode tagName, 
-        (fun node -> BuilderHelper.checkNode tagName node.nodeName), 
-        resultSelector)
+[<Extension>]
+type NodeBuilderExtensions =
 
-type HtmlGARenderRetC0Builder<'e when 'e :> HTMLElement and 'e: equality>(tagName) =
-    inherit RenderRetC0Builder<'e>(
-        BuilderHelper.createNode tagName, 
-        (fun node -> BuilderHelper.checkNode tagName node.nodeName))
+    /// Called once on initialization.
+    [<Extension>]
+    static member onInit(this: #NodeBuilder<'e>, m: NodeModifier<'e>) =
+        do this.InitModifiers.Add(m)
+        this
 
-type HtmlGARenderPotCnBuilder<'v,'e when 'e :> HTMLElement and 'e: equality>(tagName, resultSelector) =
-    inherit RenderPotCnBuilder<'v,'e>(
-        BuilderHelper.createNode tagName, 
-        (fun node -> BuilderHelper.checkNode tagName node.nodeName), 
-        resultSelector)
+    /// Called on every Vide evaluatiopn cycle.
+    [<Extension>]
+    static member onEval(this: #NodeBuilder<'e>, m: NodeModifier<'e>) =
+        do this.PreEvalModifiers.Add(m)
+        this
 
-type HtmlGARenderRetCnBuilder<'e when 'e :> HTMLElement and 'e: equality>(tagName) =
-    inherit RenderRetCnBuilder<'e>(
-        BuilderHelper.createNode tagName, 
-        (fun node -> BuilderHelper.checkNode tagName node.nodeName))
+    /// Called after every Vide evaluatiopn cycle.
+    [<Extension>]
+    static member onAfterEval(this: #NodeBuilder<'e>, m: NodeModifier<'e>) =
+        do this.PostEvalModifiers.Add(m)
+        this
 
-type VoidResult = unit
+module Event =
+    type NodeEventArgs<'evt,'e> =
+        {
+            node: 'e
+            evt: 'evt
+            app: IApp
+            mutable requestEvaluation: bool
+        }
 
-[<AbstractClass>]
-type NodeValue<'n>(node: 'n) =
-    member _.Node = node
-
-// TODO: "Value"s: Forward other (common) properties of the HTMLElements
-
-type inputValue(node: HTMLInputElement) =
-    inherit NodeValue<HTMLInputElement>(node)
-    member _.TextValue
-        with get() = node.value
-        and set(value) = node.value <- value
-    member _.IsChecked
-        with get() = node.``checked``
-        and set(value) = node.``checked`` <- value
-
-type datalistValue(node: HTMLDataListElement) =
-    inherit NodeValue<HTMLDataListElement>(node)
-
-type optionValue(node: HTMLOptionElement) =
-    inherit NodeValue<HTMLOptionElement>(node)
-
-type outputValue(node: HTMLElement) =
-    inherit NodeValue<HTMLElement>(node)
-
-type selectValue(node: HTMLSelectElement) =
-    inherit NodeValue<HTMLSelectElement>(node)
-
-type textareaValue(node: HTMLTextAreaElement) =
-    inherit NodeValue<HTMLTextAreaElement>(node)
-
-//type Event =
-//    static member inline doBind(value: MutableValue<_>, getter) =
-//        fun (args: Event.FableEventArgs<_, HTMLInputElement>) ->
-//            value.Value <- getter(InputResult(args.node))
-//    static member inline bind(value: MutableValue<string>) =
-//        Event.doBind(value, fun x -> x.TextValue)
-//    static member inline bind(value: MutableValue<int>) =
-//        Event.doBind(value, fun x -> x.IntValue)
-//    static member inline bind(value: MutableValue<float>) =
-//        Event.doBind(value, fun x -> x.FloatValue)
-//    static member inline bind(value: MutableValue<DateTime>) =
-//        Event.doBind(value, fun x -> x.DateValue)
-//    static member inline bind(value: MutableValue<bool>) =
-//        Event.doBind(value, fun x -> x.IsChecked)
+    let inline handle (node: 'e) (app: IApp) (callback: NodeEventArgs<'evt,'e> -> unit) =
+        fun evt ->
+            let args = { node = node; evt = evt; app = app; requestEvaluation = true }
+            try
+                do app.Suspend()
+                do callback args
+                if args.requestEvaluation then
+                    app.RequestEvaluation()
+            finally
+                do app.Resume()

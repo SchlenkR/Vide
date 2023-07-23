@@ -9,17 +9,18 @@ body {
     height: 100%;
     display: grid;
     grid-template-columns: 450px auto;
-    gap: 50px;
+}
+
+.container > div {
+    padding: 50px;
 }
 
 #menu {
     overflow: auto;
     height: 100%;
-    padding: 30px;
     display: grid;
     align-items: stretch;
     align-content: start;
-    padding-right: 20px;
     border-right: 1px solid black;
 }
 
@@ -29,50 +30,11 @@ body {
     padding: 3px 10px;
 }
 
-#innerDemoHost {
-    max-width: 95%;
-}
-
-#innerDemoHost div {
-    margin-bottom: 10px;
-}
-
-#demo button {
-    padding: 3px 15px;
+#host h1 {
+    margin-top: 0;
 }
 
 .flex-row {
     display: flex;
     gap: 5px;
-}
-
-
-/* -----------------------------------
-   Styles for specific demo cases
------------------------------------ */
-#demo .the-message {
-    font-weight: bold;
-}
-
-#demo .card {
-    background-color: darkorange;
-    padding: 10px
-}
-
-#demo .bam {
-    background-color: lime;
-}
-
-#demo .bam2 {
-    background-color: pink;
-    width: 200px;
-    height: 200px;
-}
-
-.hide {
-    display: none;
-}
-
-.async-box {
-    border: 2px solid black;
 }

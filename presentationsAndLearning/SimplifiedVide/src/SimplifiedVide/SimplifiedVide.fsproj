@@ -10,9 +10,13 @@
   <ItemGroup>
     <Compile Include="Core.fs" />
     <Compile Include="NodeModel.fs" />
-    <Compile Include="Fable.fs" />
     <Compile Include="App.fs" />
     <Compile Include="MutableValue.fs" />
+    <Compile Include="ApiPre.fs" />
+    <Compile Include="Api.fs" />
+    <Compile Include="ApiPost.fs" />
+    <Compile Include="DemoApp\TodoList.fs" />
+    <Compile Include="DemoApp\DemoApp.fs" />
     <!--<Compile Include="ApiPre.fs" />
     <Compile Include="Api.fs" />
     <Compile Include="ApiPost.fs" />-->

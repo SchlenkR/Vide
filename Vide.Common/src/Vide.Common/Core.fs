@@ -10,8 +10,10 @@ type IEvaluationManager =
 
 type GlobalContext = { evaluationManager: IEvaluationManager }
 
-// why we return 's option(!!) -> Because of else branch / zero
-// -> TODO: Is that still valid, now that we explicitly use preserve/discard?
+// Why we return option(!) of 's? -> Because of else branch / zero:
+// See elseForget: The state type of the else branch has to be the same
+// state type used in the if branch, but: It has no value.
+// So it must be an Option<'s>.
 type Vide<'v,'s,'c> = 's option -> GlobalContext -> 'c -> 'v * 's option
 
 [<AutoOpen>]

@@ -1,6 +1,12 @@
 ﻿namespace Vide
 
-type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c, ctxFin: 'c -> unit) =
+type VideApp<'v,'s>
+    (
+        content: Vide<'v,'s,NodeContext>,
+        ctxCtor: unit -> NodeContext, 
+        ctxFin: NodeContext -> unit
+    )
+    =
     let mutable currValue = None
     let mutable currentState = None
     let mutable isEvaluating = false
@@ -20,13 +26,8 @@ type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c, ctxFin: 'c 
                     do isEvaluating <- true
                     let value,newState = 
                         let ctx = ctxCtor ()
-                        let gc = 
-                            { 
-                                evaluationManager = this.EvaluationManager
-                                context = ctx
-                            }
                         let (Vide videContent) = content
-                        let res = videContent currentState gc
+                        let res = videContent currentState (this :> IApp) ctx
                         do ctxFin ctx
                         res
                     do
@@ -46,24 +47,11 @@ type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c, ctxFin: 'c 
             do suspendEvaluation <- false
             if hasPendingEvaluationRequests then
                 (this :> IApp).RequestEvaluation()
-    member this.EvaluationManager = this :> IApp
-    member _.CurrentState = currentState
 
-type VideAppFactory<'c>(ctxCtor, ctxFin) =
-    let start (app: VideApp<_,_,'c>) =
-        do app.EvaluationManager.RequestEvaluation()
+module VideApp =
+    let createAndStart(host, content) =
+        let ctxCtor () = NodeContext(host)
+        let ctxFin (ctx: NodeContext) = do ctx.RemoveObsoleteChildren()
+        let app = VideApp(content, ctxCtor, ctxFin)
+        do (app :> IApp).RequestEvaluation()
         app
-    member _.Create(content) : VideApp<_,_,'c> =
-        VideApp(content, ctxCtor, ctxFin)
-    member this.CreateWithUntypedState(content) : VideApp<_,_,'c> =
-        let content =
-            Vide <| fun (s: obj option) gc ->
-                let typedS = s |> Option.map (fun s -> s :?> 's)
-                let v,s = content typedS gc
-                let untypedS = s |> Option.map (fun s -> s :> obj)
-                v,untypedS
-        this.Create(content)
-    member this.CreateAndStart(content) : VideApp<_,_,'c> =
-        this.Create(content) |> start
-    member this.CreateAndStartWithUntypedState(content) : VideApp<_,_,'c> =
-        this.CreateWithUntypedState(content) |> start

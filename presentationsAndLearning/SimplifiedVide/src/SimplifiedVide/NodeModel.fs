@@ -5,7 +5,6 @@ module Vide.NodeModel
 
 open Browser
 open Browser.Types
-open System.Runtime.CompilerServices
 
 module NodeDocument =
     let ensureChildAppended (parent: Node) (child: Node) =
@@ -56,25 +55,24 @@ type NodeModifierContext<'e when 'e :> Node> =
 type NodeModifier<'e when 'e :> Node> = NodeModifierContext<'e> -> unit
 
 // TODO: Inline Check-functions etc.
-type NodeBuilder<'e  when 'e :> Node>
-    (
-        createThisElement: NodeContext -> 'e,
-        checkChildNode: Node -> ChildAction
-    ) 
-    =
-    inherit VideBaseBuilder()
-    
-    member _.Delay(f) = BuilderBricks.delay<_,_,NodeContext>(f)
-    
-    member _.CreateContext(elem: 'e) = NodeContext.Create(elem)
-    member _.CreateThisElement = createThisElement
-    member _.CheckChildNode = checkChildNode
-    
+type NodeBuilder<'e  when 'e :> Node>(tagName: string) =
+    inherit VideBuilder()
+
     member val InitModifiers: ResizeArray<NodeModifier<'e>> = ResizeArray() with get
     member val PreEvalModifiers: ResizeArray<NodeModifier<'e>> = ResizeArray() with get
     member val PostEvalModifiers: ResizeArray<NodeModifier<'e>> = ResizeArray() with get
+    
+    member _.CreateContext(elem: 'e) = NodeContext.Create(elem)
+    member _.CreateThisElement(ctx: NodeContext) =
+        let n = NodeDocument.createNodeOfName tagName
+        do ctx.ShowChild(n)
+        // TODO: Can we get rid of the unsafe cast?
+        (box n) :?> 'e
+    member _.CheckChildNode(actualNode: Node) =
+        match actualNode.nodeName.ToUpper() = tagName.ToUpper() with
+        | true -> Keep
+        | false -> DiscardAndCreateNew
 
-// 'e when 'e :> Node
 module NodeBuilder =
     let inline run<'v1,'v2,'s,'e when 'e :> Node>
         (thisBuilder: NodeBuilder<'e>)
@@ -132,58 +130,28 @@ module BuilderBricks =
                 do ctx.ShowChild(textNode)
             (),textNode
 
-type VideComponentBuilder() =
-    inherit VideBaseBuilder()
+type VideBuilder with
     member _.Return(x) = BuilderBricks.return'(x)
     member _.Delay(f) = BuilderBricks.delay(f)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
 
-    member _.Yield(b: VideComponentBuilder) = b { () }
+    member _.Yield(b: VideBuilder) = b { () }
     member _.Yield(b: NodeBuilder<_>) = b { () }
     member _.Yield(v) = BuilderBricks.yieldVide(v)
     member _.Yield(value) = BuilderBricks.yieldText(value)
 
 type NodeBuilder<'e  when 'e :> Node> with
+    member _.Return(x) = BuilderBricks.return'(x)
+    member _.Delay(f) = BuilderBricks.delay(f)
+    member _.Combine(a, b) = BuilderBricks.combine(a, b)
+    member _.For(seq, body) = BuilderBricks.for'(seq, body)
+    
     member this.Run(v) = NodeBuilder.run this v (fun n v -> v)
-    
-[<Extension>]
-type NodeBuilderExtensions =
-    
-    /// Called once on initialization.
-    [<Extension>]
-    static member onInit(this: #NodeBuilder<_>, m: NodeModifier<_>) =
-        do this.InitModifiers.Add(m)
-        this
-    
-    /// Called on every Vide evaluatiopn cycle.
-    [<Extension>]
-    static member onEval(this: #NodeBuilder<_>, m: NodeModifier<_>) =
-        do this.PreEvalModifiers.Add(m)
-        this
-    
-    /// Called after every Vide evaluatiopn cycle.
-    [<Extension>]
-    static member onAfterEval(this: #NodeBuilder<_>, m: NodeModifier<_>) =
-        do this.PostEvalModifiers.Add(m)
-        this
 
-module Event =
-    type NodeEventArgs<'evt,'e> =
-        {
-            node: 'e
-            evt: 'evt
-            app: IApp
-            mutable requestEvaluation: bool
-        }
-    
-    let inline handle (node: 'e) (app: IApp) (callback: NodeEventArgs<'evt,'e> -> unit) =
-        fun evt ->
-            let args = { node = node; evt = evt; app = app; requestEvaluation = true }
-            try
-                do app.Suspend()
-                do callback args
-                if args.requestEvaluation then
-                    app.RequestEvaluation()
-            finally
-                do app.Resume()
+    member _.Yield(b: VideBuilder) = b { () }
+    member _.Yield(b: NodeBuilder<_>) = b { () }
+    member _.Yield(v) = BuilderBricks.yieldVide(v)
+    member _.Yield(value) = BuilderBricks.yieldText(value)
+
+let vide = VideBuilder()
