@@ -60,11 +60,10 @@ type NodeBuilder<'e  when 'e :> Node>(tagName: string) =
         | false -> DiscardAndCreateNew
 
 module NodeBuilder =
-    let inline run<'v1,'v2,'s,'e when 'e :> Node>
+    let inline run<'v,'s,'e when 'e :> Node>
         (thisBuilder: NodeBuilder<'e>)
-        (Vide childVide: Vide<'v1,'s,NodeContext>)
-        (createResultVal: 'e -> 'v1 -> 'v2)
-        : Vide<'v2, 'e * 's, NodeContext>
+        (Vide childVide: Vide<'v,'s,NodeContext>)
+        : Vide<unit,'e * 's,NodeContext>
         =
         Vide <| fun s app ctx ->
             let inline runModifiers modifiers node =
@@ -94,9 +93,8 @@ module NodeBuilder =
             let cv,cs = childVide cs app thisCtx
             do thisCtx.RemoveObsoleteChildren()
             do runModifiers thisBuilder.PostEvalModifiers thisElement
-            let result = createResultVal thisElement cv
             let state = thisElement,cs
-            result,state
+            (),state
 
 module BuilderBricks =
     let inline yieldVide(v: Vide<_,_,_>) =
@@ -133,7 +131,7 @@ type NodeBuilder<'e  when 'e :> Node> with
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
     
-    member this.Run(v) = NodeBuilder.run this v (fun n v -> v)
+    member this.Run(v) = NodeBuilder.run this v
 
     member _.Yield(b: VideBuilder) = b { () }
     member _.Yield(b: NodeBuilder<_>) = b { () }
