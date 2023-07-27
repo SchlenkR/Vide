@@ -9,6 +9,7 @@ type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c, ctxFin: 'c 
     let mutable suspendEvaluation = false
     let mutable onEvaluated: ('v -> 's option -> unit) option = None
 
+    // TODO: rename to IHost or IRoot
     interface IEvaluationManager with
         member this.RequestEvaluation() =
             if suspendEvaluation then
