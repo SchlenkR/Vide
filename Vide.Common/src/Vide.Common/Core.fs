@@ -17,7 +17,7 @@ and IHost =
 
 [<AutoOpen>]
 module TypingHelper =
-    let ensureVide f : Vide<_,_,_> = f
+    let ensureVide<'v,'s,'c> f : Vide<'v,'s,'c> = f
 
 module Debug =
     let mutable enabledDebugChannels = set [0]
