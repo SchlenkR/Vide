@@ -188,7 +188,7 @@ let start () =
             menu.AppendChild(btn) |> ignore
 
     As<HTMLButtonElement>(JS.Document.GetElementById("evaluate")).Onclick <- fun _ ->
-        currentApp |> Option.iter (fun app -> apphost.Host.RequestEvaluation())
+        currentApp |> Option.iter (fun app -> app.EvaluationManager.RequestEvaluation())
 
     As<HTMLButtonElement>(JS.Document.GetElementById("logState")).Onclick <- fun _ ->
         currentApp |> Option.iter (fun app -> Console.Log(app))

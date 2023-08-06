@@ -1,7 +1,7 @@
 ﻿[<AutoOpen>]
 module Vide.MutableValue
 
-type MutableValue<'a when 'a: equality>(initial: 'a, evalManager: IHost) =
+type MutableValue<'a when 'a: equality>(initial: 'a, evalManager: IEvaluationManager) =
     let mutable state = initial
     member _.Set(value) =
         // Not just a perf opt: prevent stack overflows (see demo case asyncHelloWorld)!
@@ -40,6 +40,6 @@ module Vide =
     
     // TODO: Move to keywords? / rename to useState?
     let ofMutable x =
-        ensureVide <| fun s host ctx ->
-            let s = s |> Option.defaultWith (fun () -> MutableValue(x, host))
+        ensureVide <| fun s gc ctx ->
+            let s = s |> Option.defaultWith (fun () -> MutableValue(x, gc.evaluationManager))
             s, Some s
