@@ -40,9 +40,9 @@ type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c, ctxFin: 'c 
                     match isEvaluating with
                     | true -> hasPendingEvaluationRequests <- true
                     | false -> eval ()
-        member _.Suspend() =
+        member _.SuspendEvaluation() =
             do suspendEvaluation <- true
-        member this.Resume() =
+        member this.ResumeEvaluation() =
             do suspendEvaluation <- false
             if hasPendingEvaluationRequests then
                 (this :> IEvaluationManager).RequestEvaluation()

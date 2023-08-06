@@ -472,9 +472,9 @@ module Event =
         fun evt ->
             let args = { node = node; evt = evt; gc = gc; requestEvaluation = true }
             try
-                do gc.evaluationManager.Suspend()
+                do gc.evaluationManager.SuspendEvaluation()
                 do callback args
                 if args.requestEvaluation then
                     gc.evaluationManager.RequestEvaluation()
             finally
-                do gc.evaluationManager.Resume()
+                do gc.evaluationManager.ResumeEvaluation()
