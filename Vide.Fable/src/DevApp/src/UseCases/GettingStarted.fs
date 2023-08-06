@@ -11,6 +11,7 @@ let helloWorld =
 let counter =
     vide {
         let! count = Vide.ofMutable 0
+        let v : int = count
 
         span.id("tmp") { "HELLO" }
 
