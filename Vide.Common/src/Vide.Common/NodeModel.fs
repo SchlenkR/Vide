@@ -71,9 +71,7 @@ type NodeModifier<'n> = NodeModifierContext<'n> -> unit
 type NodeBuilder<'e,'n,'c>
     (
         createContext: 'e -> 'c,
-        createThisElement: 'c -> 'e,
-        // TODO: This can be removed I guess! (see: SeimplifiedVide)
-        checkChildNode: 'n -> ChildAction
+        createThisElement: 'c -> 'e
     ) =
     
     inherit VideBaseBuilder()
@@ -82,8 +80,6 @@ type NodeBuilder<'e,'n,'c>
 
     member _.CreateContext = createContext
     member _.CreateThisElement = createThisElement
-    // TODO: This can be removed I guess! (see: SeimplifiedVide)
-    member _.CheckChildNode = checkChildNode
 
     member val InitModifiers: ResizeArray<NodeModifier<'e>> = ResizeArray() with get
     member val PreEvalModifiers: ResizeArray<NodeModifier<'e>> = ResizeArray() with get
@@ -113,6 +109,8 @@ module NodeBuilder =
         resolution of the builder methods in the CEs, and it makes CE builder methods
         easy to implement (e.g.: see "Combine").
 
+        // TODO: Is this still valid? `checkChildNode` was removed, so maybe we can do this again?
+        
         Even if NodeBuilder has now 'e _and also_ 'n, we still have to use an unsafe cast from
         'e to 'n, but having also 'n as arg in NodeBuilder, we can have `checkChildNode`
         taking a 'n instead of an 'e (which otherwise would be wrong).
@@ -143,14 +141,9 @@ module NodeBuilder =
                     let newElement,s = thisBuilder.CreateThisElement(parentCtx), cs
                     do runModifiers thisBuilder.InitModifiers newElement
                     newElement,s
-                | Some maybeThisElement ->
-                    let elem = (box maybeThisElement) :?> 'n
-                    match thisBuilder.CheckChildNode(elem) with
-                    | Keep ->
-                        do parentCtx.ShowChild(elem)
-                        maybeThisElement,cs
-                    | DiscardAndCreateNew ->
-                        thisBuilder.CreateThisElement(parentCtx), None
+                | Some thisElement ->
+                    do parentCtx.ShowChild(box thisElement :?> 'n)
+                    thisElement,cs
             do runModifiers thisBuilder.PreEvalModifiers thisElement
             let thisCtx = thisBuilder.CreateContext(thisElement)
             let cv,cs = childVide cs gc thisCtx
@@ -221,28 +214,28 @@ type RenderValC0BaseBuilder<'v,'e,'n,'c
         when 'n: equality
         and 'c :> NodeContext<'n>
     >
-    (createContext, createThisElement, checkChildNode, createResultVal: 'e -> 'v) 
+    (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
-    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement, checkChildNode)
+    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement)
     member this.Run(v) = NodeBuilder.run this v (fun n v -> createResultVal n)
 
 type RenderPotC0BaseBuilder<'v,'e,'n,'c
         when 'n: equality
         and 'c :> NodeContext<'n>
     >
-    (createContext, createThisElement, checkChildNode, createResultVal: 'e -> 'v) 
+    (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
-    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement, checkChildNode)
+    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement)
     member this.Run(v) = NodeBuilder.run this v (fun n v -> v)
-    member _.emitValue() = RenderValC0BaseBuilder(createContext, createThisElement, checkChildNode, createResultVal)
+    member _.emitValue() = RenderValC0BaseBuilder(createContext, createThisElement, createResultVal)
 
 type RenderRetC0BaseBuilder<'e,'n,'c
         when 'n: equality
         and 'c :> NodeContext<'n>
     >
-    (createContext, createThisElement, checkChildNode) 
+    (createContext, createThisElement) 
     =
-    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement, checkChildNode)
+    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement)
     member _.Return(x) = BuilderBricks.return'(x)
     member this.Run(v) = NodeBuilder.run this v (fun n v -> v)
 
@@ -250,28 +243,28 @@ type RenderValC1BaseBuilder<'v,'e,'n,'c
         when 'n: equality
         and 'c :> NodeContext<'n>
     >
-    (createContext, createThisElement, checkChildNode, createResultVal: 'e -> 'v) 
+    (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
-    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement, checkChildNode)
+    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement)
     member this.Run(v) = NodeBuilder.run this v (fun n v -> createResultVal n)
 
 type RenderPotC1BaseBuilder<'v,'e,'n,'c
         when 'n: equality
         and 'c :> NodeContext<'n>
     >
-    (createContext, createThisElement, checkChildNode, createResultVal: 'e -> 'v) 
+    (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
-    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement, checkChildNode)
+    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement)
     member this.Run(v) = NodeBuilder.run this v (fun n v -> v)
-    member _.emitValue() = RenderValC1BaseBuilder(createContext, createThisElement, checkChildNode, createResultVal)
+    member _.emitValue() = RenderValC1BaseBuilder(createContext, createThisElement, createResultVal)
 
 type RenderRetC1BaseBuilder<'e,'n,'c
         when 'n: equality
         and 'c :> NodeContext<'n>
     >
-    (createContext, createThisElement, checkChildNode) 
+    (createContext, createThisElement) 
     =
-    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement, checkChildNode)
+    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement)
     member _.Return(x) = BuilderBricks.return'(x)
     member this.Run(v) = NodeBuilder.run this v (fun n v -> v)
 
@@ -279,9 +272,9 @@ type RenderValCnBaseBuilder<'v,'e,'n,'c
         when 'n: equality
         and 'c :> NodeContext<'n>
     >
-    (createContext, createThisElement, checkChildNode, createResultVal: 'e -> 'v) 
+    (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
-    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement, checkChildNode)
+    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
     member this.Run(v) = NodeBuilder.run this v (fun n v -> createResultVal n)
@@ -290,21 +283,21 @@ type RenderPotCnBaseBuilder<'v,'e,'n,'c
         when 'n: equality
         and 'c :> NodeContext<'n>
     >
-    (createContext, createThisElement, checkChildNode, createResultVal: 'e -> 'v) 
+    (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
-    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement, checkChildNode)
+    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
     member this.Run(v) = NodeBuilder.run this v (fun n v -> createResultVal n)
-    member _.emitValue() = RenderValCnBaseBuilder(createContext, createThisElement, checkChildNode, createResultVal)
+    member _.emitValue() = RenderValCnBaseBuilder(createContext, createThisElement, createResultVal)
 
 type RenderRetCnBaseBuilder<'e,'n,'c
         when 'n: equality
         and 'c :> NodeContext<'n>
     >
-    (createContext, createThisElement, checkChildNode) 
+    (createContext, createThisElement) 
     =
-    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement, checkChildNode)
+    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
     member this.Run(v) = NodeBuilder.run this v (fun n v -> v)

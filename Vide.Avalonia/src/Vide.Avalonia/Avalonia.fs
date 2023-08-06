@@ -72,26 +72,26 @@ type AvaloniaContext(parent: Control) =
 type ComponentRetCnBuilder() =
     inherit ComponentRetCnBaseBuilder<Control,AvaloniaContext>()
 
-type RenderValC0Builder<'v,'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderValC0BaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, checkChildNode, createResultVal)
-type RenderPotC0Builder<'v,'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderValC0BaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, checkChildNode, createResultVal)
-type RenderRetC0Builder<'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, checkChildNode) =
-    inherit RenderRetC0BaseBuilder<'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, checkChildNode)
+type RenderValC0Builder<'v,'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, createResultVal) =
+    inherit RenderValC0BaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, createResultVal)
+type RenderPotC0Builder<'v,'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, createResultVal) =
+    inherit RenderValC0BaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, createResultVal)
+type RenderRetC0Builder<'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement) =
+    inherit RenderRetC0BaseBuilder<'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement)
 
-type RenderValC1Builder<'v,'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderValC1BaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, checkChildNode, createResultVal)
-type RenderPotC1Builder<'v,'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderPotC1BaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, checkChildNode, createResultVal)
-type RenderRetC1Builder<'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, checkChildNode) =
-    inherit RenderRetC1BaseBuilder<'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, checkChildNode)
+type RenderValC1Builder<'v,'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, createResultVal) =
+    inherit RenderValC1BaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, createResultVal)
+type RenderPotC1Builder<'v,'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, createResultVal) =
+    inherit RenderPotC1BaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, createResultVal)
+type RenderRetC1Builder<'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement) =
+    inherit RenderRetC1BaseBuilder<'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement)
 
-type RenderValCnBuilder<'v,'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderValCnBaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, checkChildNode, createResultVal)
-type RenderPotCnBuilder<'v,'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderPotCnBaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, checkChildNode, createResultVal)
-type RenderRetCnBuilder<'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, checkChildNode) =
-    inherit RenderRetCnBaseBuilder<'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, checkChildNode)
+type RenderValCnBuilder<'v,'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, createResultVal) =
+    inherit RenderValCnBaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, createResultVal)
+type RenderPotCnBuilder<'v,'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, createResultVal) =
+    inherit RenderPotCnBaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, createResultVal)
+type RenderRetCnBuilder<'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement) =
+    inherit RenderRetCnBaseBuilder<'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement)
 
 
 // --------------------------------------------------

@@ -72,23 +72,23 @@ type MauiContext(parent: IView) =
 type ComponentRetCnBuilder() =
     inherit ComponentRetCnBaseBuilder<IView,MauiContext>()
 
-type RenderValC0Builder<'v,'e when 'e :> IView>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderValC0BaseBuilder<'v,'e,IView,MauiContext>(MauiContext.Create, createThisElement, checkChildNode, createResultVal)
+type RenderValC0Builder<'v,'e when 'e :> IView>(createThisElement, createResultVal) =
+    inherit RenderValC0BaseBuilder<'v,'e,IView,MauiContext>(MauiContext.Create, createThisElement, createResultVal)
 
-type RenderRetC0Builder<'e when 'e :> IView>(createThisElement, checkChildNode) =
-    inherit RenderRetC0BaseBuilder<'e,IView,MauiContext>(MauiContext.Create, createThisElement, checkChildNode)
+type RenderRetC0Builder<'e when 'e :> IView>(createThisElement) =
+    inherit RenderRetC0BaseBuilder<'e,IView,MauiContext>(MauiContext.Create, createThisElement)
 
-type RenderValC1Builder<'v,'e when 'e :> IView>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderValC1BaseBuilder<'v,'e,IView,MauiContext>(MauiContext.Create, createThisElement, checkChildNode, createResultVal)
+type RenderValC1Builder<'v,'e when 'e :> IView>(createThisElement, createResultVal) =
+    inherit RenderValC1BaseBuilder<'v,'e,IView,MauiContext>(MauiContext.Create, createThisElement, createResultVal)
 
-type RenderRetC1Builder<'e when 'e :> IView>(createThisElement, checkChildNode) =
-    inherit RenderRetC1BaseBuilder<'e,IView,MauiContext>(MauiContext.Create, createThisElement, checkChildNode)
+type RenderRetC1Builder<'e when 'e :> IView>(createThisElement) =
+    inherit RenderRetC1BaseBuilder<'e,IView,MauiContext>(MauiContext.Create, createThisElement)
 
-type RenderValCnBuilder<'v,'e when 'e :> IView>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderValCnBaseBuilder<'v,'e,IView,MauiContext>(MauiContext.Create, createThisElement, checkChildNode, createResultVal)
+type RenderValCnBuilder<'v,'e when 'e :> IView>(createThisElement, createResultVal) =
+    inherit RenderValCnBaseBuilder<'v,'e,IView,MauiContext>(MauiContext.Create, createThisElement, createResultVal)
 
-type RenderRetCnBuilder<'e when 'e :> IView>(createThisElement, checkChildNode) =
-    inherit RenderRetCnBaseBuilder<'e,IView,MauiContext>(MauiContext.Create, createThisElement, checkChildNode)
+type RenderRetCnBuilder<'e when 'e :> IView>(createThisElement) =
+    inherit RenderRetCnBaseBuilder<'e,IView,MauiContext>(MauiContext.Create, createThisElement)
 
 
 // --------------------------------------------------

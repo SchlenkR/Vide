@@ -46,26 +46,26 @@ type FableContext(parent: Node) =
 type ComponentRetCnBuilder() =
     inherit ComponentRetCnBaseBuilder<Node,FableContext>()
 
-type RenderValC0Builder<'v,'e when 'e :> Node>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderValC0BaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, checkChildNode, createResultVal)
-type RenderPotC0Builder<'v,'e when 'e :> Node>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderPotC0BaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, checkChildNode, createResultVal)
-type RenderRetC0Builder<'e when 'e :> Node>(createThisElement, checkChildNode) =
-    inherit RenderRetC0BaseBuilder<'e,Node,FableContext>(FableContext.Create, createThisElement, checkChildNode)
+type RenderValC0Builder<'v,'e when 'e :> Node>(createThisElement, createResultVal) =
+    inherit RenderValC0BaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, createResultVal)
+type RenderPotC0Builder<'v,'e when 'e :> Node>(createThisElement, createResultVal) =
+    inherit RenderPotC0BaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, createResultVal)
+type RenderRetC0Builder<'e when 'e :> Node>(createThisElement) =
+    inherit RenderRetC0BaseBuilder<'e,Node,FableContext>(FableContext.Create, createThisElement)
 
-type RenderValC1Builder<'v,'e when 'e :> Node>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderValC1BaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, checkChildNode, createResultVal)
-type RenderPotC1Builder<'v,'e when 'e :> Node>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderPotC1BaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, checkChildNode, createResultVal)
-type RenderRetC1Builder<'e when 'e :> Node>(createThisElement, checkChildNode) =
-    inherit RenderRetC1BaseBuilder<'e,Node,FableContext>(FableContext.Create, createThisElement, checkChildNode)
+type RenderValC1Builder<'v,'e when 'e :> Node>(createThisElement, createResultVal) =
+    inherit RenderValC1BaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, createResultVal)
+type RenderPotC1Builder<'v,'e when 'e :> Node>(createThisElement, createResultVal) =
+    inherit RenderPotC1BaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, createResultVal)
+type RenderRetC1Builder<'e when 'e :> Node>(createThisElement) =
+    inherit RenderRetC1BaseBuilder<'e,Node,FableContext>(FableContext.Create, createThisElement)
 
-type RenderValCnBuilder<'v,'e when 'e :> Node>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderValCnBaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, checkChildNode, createResultVal)
-type RenderPotCnBuilder<'v,'e when 'e :> Node>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderValCnBaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, checkChildNode, createResultVal)
-type RenderRetCnBuilder<'e when 'e :> Node>(createThisElement, checkChildNode) =
-    inherit RenderRetCnBaseBuilder<'e,Node,FableContext>(FableContext.Create, createThisElement, checkChildNode)
+type RenderValCnBuilder<'v,'e when 'e :> Node>(createThisElement, createResultVal) =
+    inherit RenderValCnBaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, createResultVal)
+type RenderPotCnBuilder<'v,'e when 'e :> Node>(createThisElement, createResultVal) =
+    inherit RenderValCnBaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, createResultVal)
+type RenderRetCnBuilder<'e when 'e :> Node>(createThisElement) =
+    inherit RenderRetCnBaseBuilder<'e,Node,FableContext>(FableContext.Create, createThisElement)
 
 
 // --------------------------------------------------

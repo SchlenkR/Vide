@@ -60,23 +60,23 @@ type WebSharperContext(parent) =
 type ComponentRetCnBuilder() =
     inherit ComponentRetCnBaseBuilder<Node,WebSharperContext>()
 
-type RenderValC0Builder<'v,'e when 'e :> Node>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderValC0BaseBuilder<'v,'e,Node,WebSharperContext>(WebSharperContext.Create, createThisElement, checkChildNode, createResultVal)
+type RenderValC0Builder<'v,'e when 'e :> Node>(createThisElement, createResultVal) =
+    inherit RenderValC0BaseBuilder<'v,'e,Node,WebSharperContext>(WebSharperContext.Create, createThisElement, createResultVal)
 
-type RenderRetC0Builder<'e when 'e :> Node>(createThisElement, checkChildNode) =
-    inherit RenderRetC0BaseBuilder<'e,Node,WebSharperContext>(WebSharperContext.Create, createThisElement, checkChildNode)
+type RenderRetC0Builder<'e when 'e :> Node>(createThisElement) =
+    inherit RenderRetC0BaseBuilder<'e,Node,WebSharperContext>(WebSharperContext.Create, createThisElement)
 
-type RenderValC1Builder<'v,'e when 'e :> Node>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderValC1BaseBuilder<'v,'e,Node,WebSharperContext>(WebSharperContext.Create, createThisElement, checkChildNode, createResultVal)
+type RenderValC1Builder<'v,'e when 'e :> Node>(createThisElement, createResultVal) =
+    inherit RenderValC1BaseBuilder<'v,'e,Node,WebSharperContext>(WebSharperContext.Create, createThisElement, createResultVal)
 
-type RenderRetC1Builder<'e when 'e :> Node>(createThisElement, checkChildNode) =
-    inherit RenderRetC1BaseBuilder<'e,Node,WebSharperContext>(WebSharperContext.Create, createThisElement, checkChildNode)
+type RenderRetC1Builder<'e when 'e :> Node>(createThisElement) =
+    inherit RenderRetC1BaseBuilder<'e,Node,WebSharperContext>(WebSharperContext.Create, createThisElement)
 
-type RenderValCnBuilder<'v,'e when 'e :> Node>(createThisElement, checkChildNode, createResultVal) =
-    inherit RenderValCnBaseBuilder<'v,'e,Node,WebSharperContext>(WebSharperContext.Create, createThisElement, checkChildNode, createResultVal)
+type RenderValCnBuilder<'v,'e when 'e :> Node>(createThisElement, createResultVal) =
+    inherit RenderValCnBaseBuilder<'v,'e,Node,WebSharperContext>(WebSharperContext.Create, createThisElement, createResultVal)
 
-type RenderRetCnBuilder<'e when 'e :> Node>(createThisElement, checkChildNode) =
-    inherit RenderRetCnBaseBuilder<'e,Node,WebSharperContext>(WebSharperContext.Create, createThisElement, checkChildNode)
+type RenderRetCnBuilder<'e when 'e :> Node>(createThisElement) =
+    inherit RenderRetCnBaseBuilder<'e,Node,WebSharperContext>(WebSharperContext.Create, createThisElement)
 
 
 // --------------------------------------------------
