@@ -12,7 +12,7 @@ type BuilderExtensions =
     /// Registers the an event handler.
     [<Extension>]
     static member on<'nb,'e,'n
-            when 'nb :> NodeBuilder<'e,'n,FableContext>
+            when 'nb :> NodeBuilder<'e,FableContext>
             and 'e :> HTMLElement 
             and 'n :> Node>
         (
@@ -25,7 +25,7 @@ type BuilderExtensions =
     /// Sets an arbitrary attribute's value on every eval cycle.
     [<Extension>]
     static member attr<'nb,'e,'n
-            when 'nb :> NodeBuilder<'e,'n,FableContext>
+            when 'nb :> NodeBuilder<'e,FableContext>
             and 'e :> HTMLElement 
             and 'n :> Node>
         (
@@ -38,7 +38,7 @@ type BuilderExtensions =
     /// Sets an arbitrary boolean attribute's value on every eval cycle.
     [<Extension>]
     static member attrBoolean<'nb,'e,'n
-            when 'nb :> NodeBuilder<'e,'n,FableContext>
+            when 'nb :> NodeBuilder<'e,FableContext>
             and 'e :> HTMLElement 
             and 'n :> Node>
         (
@@ -54,7 +54,7 @@ type BuilderExtensions =
     /// Sets the value of a 'data-' attribute on every eval cycle.
     [<Extension>]
     static member data<'nb,'e,'n
-            when 'nb :> NodeBuilder<'e,'n,FableContext>
+            when 'nb :> NodeBuilder<'e,FableContext>
             and 'e :> HTMLElement 
             and 'n :> Node>
         (

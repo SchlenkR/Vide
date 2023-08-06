@@ -57,16 +57,18 @@ type BuilderOperations = | Clear
 
 type NodeBuilderState<'e,'s> = option<'e> * option<'s>
 
-type NodeModifierContext<'e> =
-    {
+type NodeModifierContext<'e> = 
+    { 
         node: 'e
         globalContext: GlobalContext
     }
 
 type NodeModifier<'n> = NodeModifierContext<'n> -> unit
 
+// TODO: Since having removed checkChildNode, we could remove 'n.
+// Does that open ways for simplification?
 [<AbstractClass>]
-type NodeBuilder<'e,'n,'c>
+type NodeBuilder<'e,'c>
     (
         createContext: 'e -> 'c,
         createThisElement: 'c -> 'e
@@ -117,7 +119,7 @@ module NodeBuilder =
             when 'n: equality
             and 'c :> NodeContext<'n>
         >
-        (thisBuilder: NodeBuilder<'e,'n,'c>)
+        (thisBuilder: NodeBuilder<'e,'c>)
         (childVide: Vide<'v1,'s,'c>)
         (createResultVal: 'e -> 'v1 -> 'v2)
         : Vide<'v2, NodeBuilderState<'e,'s>, 'c>
@@ -214,7 +216,7 @@ type RenderValC0BaseBuilder<'v,'e,'n,'c
     >
     (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
-    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement)
+    inherit NodeBuilder<'e,'c>(createContext, createThisElement)
     member this.Run(v) = NodeBuilder.run this v (fun n v -> createResultVal n)
 
 type RenderPotC0BaseBuilder<'v,'e,'n,'c
@@ -223,7 +225,7 @@ type RenderPotC0BaseBuilder<'v,'e,'n,'c
     >
     (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
-    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement)
+    inherit NodeBuilder<'e,'c>(createContext, createThisElement)
     member this.Run(v) = NodeBuilder.run this v (fun n v -> v)
     member _.emitValue() = RenderValC0BaseBuilder(createContext, createThisElement, createResultVal)
 
@@ -233,7 +235,7 @@ type RenderRetC0BaseBuilder<'e,'n,'c
     >
     (createContext, createThisElement) 
     =
-    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement)
+    inherit NodeBuilder<'e,'c>(createContext, createThisElement)
     member _.Return(x) = BuilderBricks.return'(x)
     member this.Run(v) = NodeBuilder.run this v (fun n v -> v)
 
@@ -243,7 +245,7 @@ type RenderValC1BaseBuilder<'v,'e,'n,'c
     >
     (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
-    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement)
+    inherit NodeBuilder<'e,'c>(createContext, createThisElement)
     member this.Run(v) = NodeBuilder.run this v (fun n v -> createResultVal n)
 
 type RenderPotC1BaseBuilder<'v,'e,'n,'c
@@ -252,7 +254,7 @@ type RenderPotC1BaseBuilder<'v,'e,'n,'c
     >
     (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
-    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement)
+    inherit NodeBuilder<'e,'c>(createContext, createThisElement)
     member this.Run(v) = NodeBuilder.run this v (fun n v -> v)
     member _.emitValue() = RenderValC1BaseBuilder(createContext, createThisElement, createResultVal)
 
@@ -262,7 +264,7 @@ type RenderRetC1BaseBuilder<'e,'n,'c
     >
     (createContext, createThisElement) 
     =
-    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement)
+    inherit NodeBuilder<'e,'c>(createContext, createThisElement)
     member _.Return(x) = BuilderBricks.return'(x)
     member this.Run(v) = NodeBuilder.run this v (fun n v -> v)
 
@@ -272,7 +274,7 @@ type RenderValCnBaseBuilder<'v,'e,'n,'c
     >
     (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
-    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement)
+    inherit NodeBuilder<'e,'c>(createContext, createThisElement)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
     member this.Run(v) = NodeBuilder.run this v (fun n v -> createResultVal n)
@@ -283,7 +285,7 @@ type RenderPotCnBaseBuilder<'v,'e,'n,'c
     >
     (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
-    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement)
+    inherit NodeBuilder<'e,'c>(createContext, createThisElement)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
     member this.Run(v) = NodeBuilder.run this v (fun n v -> createResultVal n)
@@ -295,7 +297,7 @@ type RenderRetCnBaseBuilder<'e,'n,'c
     >
     (createContext, createThisElement) 
     =
-    inherit NodeBuilder<'e,'n,'c>(createContext, createThisElement)
+    inherit NodeBuilder<'e,'c>(createContext, createThisElement)
     member _.Combine(a, b) = BuilderBricks.combine(a, b)
     member _.For(seq, body) = BuilderBricks.for'(seq, body)
     member this.Run(v) = NodeBuilder.run this v (fun n v -> v)
@@ -437,19 +439,19 @@ type NodeBuilderExtensions =
     
     /// Called once on initialization.
     [<Extension>]
-    static member onInit(this: #NodeBuilder<_,_,_>, m: NodeModifier<_>) =
+    static member onInit(this: #NodeBuilder<_,_>, m: NodeModifier<_>) =
         do this.InitModifiers.Add(m)
         this
     
     /// Called on every Vide evaluatiopn cycle.
     [<Extension>]
-    static member onEval(this: #NodeBuilder<_,_,_>, m: NodeModifier<_>) =
+    static member onEval(this: #NodeBuilder<_,_>, m: NodeModifier<_>) =
         do this.PreEvalModifiers.Add(m)
         this
     
     /// Called after every Vide evaluatiopn cycle.
     [<Extension>]
-    static member onAfterEval(this: #NodeBuilder<_,_,_>, m: NodeModifier<_>) =
+    static member onAfterEval(this: #NodeBuilder<_,_>, m: NodeModifier<_>) =
         do this.PostEvalModifiers.Add(m)
         this
 

@@ -55,22 +55,22 @@ type NodeBuilderExtensions =
         // Properties
         
         [<Extension>]
-        static member inline Margin<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'n,'c> and 'e :> Avalonia.Controls.Control>
+        static member inline Margin<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'c> and 'e :> Avalonia.Controls.Control>
             (this: 'nb, value)
             = this.onEval(fun x -> if x.node.Margin <> value then x.node.Margin <- value)
         
         [<Extension>]
-        static member HorizontalAlignment<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'n,'c> and 'e :> Avalonia.Controls.Control>
+        static member HorizontalAlignment<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'c> and 'e :> Avalonia.Controls.Control>
             (this: 'nb, value)
             = this.onEval(fun x -> if x.node.HorizontalAlignment <> value then x.node.HorizontalAlignment <- value)
         
         [<Extension>]
-        static member VerticalAlignment<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'n,'c> and 'e :> Avalonia.Controls.Control>
+        static member VerticalAlignment<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'c> and 'e :> Avalonia.Controls.Control>
             (this: 'nb, value)
             = this.onEval(fun x -> if x.node.VerticalAlignment <> value then x.node.VerticalAlignment <- value)
         
         [<Extension>]
-        static member IsEnabled<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'n,'c> and 'e :> Avalonia.Controls.Control>
+        static member IsEnabled<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'c> and 'e :> Avalonia.Controls.Control>
             (this: 'nb, value)
             = this.onEval(fun x -> if x.node.IsEnabled <> value then x.node.IsEnabled <- value)
     
@@ -210,7 +210,7 @@ type DockPanelExtensions =
 
 module AttachedProperties =
     type DockPanel<'nb,'e
-            when 'nb :> NodeBuilder<'e,AvaloniaControl,AvaloniaContext>
+            when 'nb :> NodeBuilder<'e,AvaloniaContext>
             and 'e :> AvaloniaControl>
         = { target: 'nb }
 
@@ -220,7 +220,7 @@ type DockPanelAttachedProperties =
         // Entry
 
         [<Extension>]
-        static member inline DockPanel(this: #NodeBuilder<_,AvaloniaControl,AvaloniaContext>)  =
+        static member inline DockPanel(this: #NodeBuilder<_,AvaloniaContext>)  =
             { AttachedProperties.DockPanel.target = this }
 
         // Properties

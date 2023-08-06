@@ -70,27 +70,27 @@ type BindExtensions =
 type ConvenienceExtensions =
 
     [<Extension>]
-    static member inline Margin<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'n,'c> and 'e :> Avalonia.Controls.Control>
+    static member inline Margin<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'c> and 'e :> Avalonia.Controls.Control>
         (this: 'nb, value) = this.Margin(Avalonia.Thickness(value))
 
     [<Extension>]
-    static member inline Margin<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'n,'c> and 'e :> Avalonia.Controls.Control>
+    static member inline Margin<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'c> and 'e :> Avalonia.Controls.Control>
         (this: 'nb, leftRight, topBottom) = this.Margin(Avalonia.Thickness(leftRight, topBottom))
 
     [<Extension>]
-    static member inline MarginLeft<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'n,'c> and 'e :> Avalonia.Controls.Control>
+    static member inline MarginLeft<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'c> and 'e :> Avalonia.Controls.Control>
         (this: 'nb, value) = this.Margin(Avalonia.Thickness(value, 0, 0, 0))
 
     [<Extension>]
-    static member inline MarginTop<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'n,'c> and 'e :> Avalonia.Controls.Control>
+    static member inline MarginTop<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'c> and 'e :> Avalonia.Controls.Control>
         (this: 'nb, value) = this.Margin(Avalonia.Thickness(0, value, 0, 0))
 
     [<Extension>]
-    static member inline MarginRight<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'n,'c> and 'e :> Avalonia.Controls.Control>
+    static member inline MarginRight<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'c> and 'e :> Avalonia.Controls.Control>
         (this: 'nb, value) = this.Margin(Avalonia.Thickness(0, 0, value, 0))
 
     [<Extension>]
-    static member inline MarginBottom<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'n,'c> and 'e :> Avalonia.Controls.Control>
+    static member inline MarginBottom<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'c> and 'e :> Avalonia.Controls.Control>
         (this: 'nb, value) = this.Margin(Avalonia.Thickness(0, 0, 0, value))
 
     
