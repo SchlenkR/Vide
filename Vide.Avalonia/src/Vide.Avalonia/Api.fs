@@ -134,7 +134,7 @@ type TextBoxExtensions =
         [<Extension>]
         static member TextChanged(this: #ControlBuilders.TextBox, handler) =
             this.onInit(fun x ->
-                let wrappedHandler = Event.handle x.node x.host handler
+                let wrappedHandler = Event.handle x.node x.globalContext handler
                 x.node.TextChanged.Add(wrappedHandler))
                 //x.node.AddHandler(Avalonia.Controls.TextBox.TextChangedEvent,)
 
@@ -150,7 +150,7 @@ type ButtonExtensions =
         [<Extension>]
         static member Click(this: #ControlBuilders.Button, handler) =
             this.onInit(fun x ->
-                let wrappedHandler = Event.handle x.node x.host handler
+                let wrappedHandler = Event.handle x.node x.globalContext handler
                 x.node.Click.Add(wrappedHandler))
     end
         
@@ -168,7 +168,7 @@ type CheckBoxExtensions =
         [<Extension>]
         static member IsCheckedChanged(this: #ControlBuilders.CheckBox, handler) =
             this.onInit(fun x ->
-                let wrappedHandler = Event.handle x.node x.host handler
+                let wrappedHandler = Event.handle x.node x.globalContext handler
                 x.node.IsCheckedChanged.Add(wrappedHandler))
     end
 
