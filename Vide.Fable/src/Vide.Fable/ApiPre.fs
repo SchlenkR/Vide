@@ -4,26 +4,16 @@ open Browser.Types
 open Vide.WebModel
 
 type HtmlGARenderPotC0Builder<'v,'e when 'e :> HTMLElement and 'e: equality>(tagName, resultSelector) =
-    inherit RenderPotC0Builder<'v,'e>(
-        BuilderHelper.createNode tagName, 
-        (fun node -> BuilderHelper.checkNode tagName node.nodeName), 
-        resultSelector)
+    inherit RenderPotC0Builder<'v,'e>(BuilderHelper.createNode tagName, resultSelector)
 
 type HtmlGARenderRetC0Builder<'e when 'e :> HTMLElement and 'e: equality>(tagName) =
-    inherit RenderRetC0Builder<'e>(
-        BuilderHelper.createNode tagName, 
-        (fun node -> BuilderHelper.checkNode tagName node.nodeName))
+    inherit RenderRetC0Builder<'e>(BuilderHelper.createNode tagName)
 
 type HtmlGARenderPotCnBuilder<'v,'e when 'e :> HTMLElement and 'e: equality>(tagName, resultSelector) =
-    inherit RenderPotCnBuilder<'v,'e>(
-        BuilderHelper.createNode tagName, 
-        (fun node -> BuilderHelper.checkNode tagName node.nodeName), 
-        resultSelector)
+    inherit RenderPotCnBuilder<'v,'e>(BuilderHelper.createNode tagName, resultSelector)
 
 type HtmlGARenderRetCnBuilder<'e when 'e :> HTMLElement and 'e: equality>(tagName) =
-    inherit RenderRetCnBuilder<'e>(
-        BuilderHelper.createNode tagName, 
-        (fun node -> BuilderHelper.checkNode tagName node.nodeName))
+    inherit RenderRetCnBuilder<'e>(BuilderHelper.createNode tagName)
 
 type VoidResult = unit
 

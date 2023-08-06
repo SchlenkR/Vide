@@ -57,8 +57,6 @@ type BuilderOperations = | Clear
 
 type NodeBuilderState<'e,'s> = option<'e> * option<'s>
 
-type ChildAction = Keep | DiscardAndCreateNew
-
 type NodeModifierContext<'e> =
     {
         node: 'e

@@ -11,6 +11,7 @@ do Debug.enabledDebugChannels <-
         1
         10
     ]
+    |> set
 
 let mutable currentApp = None
 

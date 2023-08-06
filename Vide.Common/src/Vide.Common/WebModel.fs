@@ -24,12 +24,3 @@ module BuilderHelper =
         do ctx.ShowChild(n)
         // TODO: Can we get rid of the unsafe cast?
         (box n) :?> 'e
-    
-    let checkNode (expectedNodeName: string) (actualNodeName: string) =
-        // WebSharper has no Equals(.., StrComp) available, so we use this
-        // which is enough for HTML element tags.
-        match actualNodeName.ToUpper() = expectedNodeName.ToUpper() with
-        | true -> Keep
-        | false ->
-            // TODO: if/else detection? Expected node name: {expectedNodeName}, but was: {actualNodeName}"
-            DiscardAndCreateNew

@@ -31,8 +31,6 @@ type NodeContext(parent: Node) =
     member _.ClearContent() =
         do parent.textContent <- ""
     
-type ChildAction = Keep | DiscardAndCreateNew
-
 type NodeModifierContext<'e when 'e :> Node> =
     {
         node: 'e

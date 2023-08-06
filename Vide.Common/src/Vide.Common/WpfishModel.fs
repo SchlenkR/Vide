@@ -22,8 +22,3 @@ module BuilderHelper =
         let e,n = ctx.WpfishDocument.CreateNodeOfType<'e>()
         do ctx.ShowChild(n)
         e
-
-    let inline checkNode(expectedNodeTypeName: string, actualNodeTypeName: string) =
-        match actualNodeTypeName.Equals(expectedNodeTypeName, StringComparison.OrdinalIgnoreCase) with
-        | true -> Keep
-        | false -> DiscardAndCreateNew

@@ -1,6 +1,13 @@
 namespace Vide
 
-type IEvaluationManager =
+// TODO: generalize this again
+// Why we return option(!) of 's? -> Because of else branch / zero:
+// See elseForget: The state type of the else branch has to be the same
+// state type used in the if branch, but: It has no value.
+// So it must be an Option<'s>.
+type Vide<'v,'s,'c> = 's option -> GlobalContext -> 'c -> 'v * 's option
+
+and IEvaluationManager =
     abstract member RequestEvaluation: unit -> unit
     abstract member SuspendEvaluation: unit -> unit
     abstract member ResumeEvaluation: unit -> unit
@@ -8,14 +15,7 @@ type IEvaluationManager =
     abstract member HasPendingEvaluationRequests: bool
     abstract member EvaluationCount: uint64
 
-type GlobalContext = { evaluationManager: IEvaluationManager }
-
-// TODO: generalize this again
-// Why we return option(!) of 's? -> Because of else branch / zero:
-// See elseForget: The state type of the else branch has to be the same
-// state type used in the if branch, but: It has no value.
-// So it must be an Option<'s>.
-type Vide<'v,'s,'c> = 's option -> GlobalContext -> 'c -> 'v * 's option
+and GlobalContext = { evaluationManager: IEvaluationManager }
 
 [<AutoOpen>]
 module TypingHelper =

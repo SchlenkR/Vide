@@ -512,16 +512,16 @@ module HtmlEnumAttributeTypes =
 
 module HtmlElementBuilders =
     type HtmlGARenderValC0Builder<'v,'n when 'n :> HTMLElement and 'n: equality>(tagName, resultSelector) =
-        inherit RenderValC0Builder<'v,'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.NodeName), resultSelector)
+        inherit RenderValC0Builder<'v,'n>(BuilderHelper.createNode tagName, resultSelector)
 
     type HtmlGARenderRetC0Builder<'n when 'n :> HTMLElement and 'n: equality>(tagName) =
-        inherit RenderRetC0Builder<'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.NodeName))
+        inherit RenderRetC0Builder<'n>(BuilderHelper.createNode tagName)
 
     type HtmlGARenderValCnBuilder<'v,'n when 'n :> HTMLElement and 'n: equality>(tagName, resultSelector) =
-        inherit RenderValCnBuilder<'v,'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.NodeName), resultSelector)
+        inherit RenderValCnBuilder<'v,'n>(BuilderHelper.createNode tagName, resultSelector)
 
     type HtmlGARenderRetCnBuilder<'n when 'n :> HTMLElement and 'n: equality>(tagName) =
-        inherit RenderRetCnBuilder<'n>(BuilderHelper.createNode tagName, (fun node -> BuilderHelper.checkNode tagName node.NodeName))
+        inherit RenderRetCnBuilder<'n>(BuilderHelper.createNode tagName)
 
     
     type a() =
