@@ -15,6 +15,10 @@ and IEvaluationManager =
     abstract member HasPendingEvaluationRequests: bool
     abstract member EvaluationCount: uint64
 
+// TODO: Really, really strange: If we remove this (unnecessary) record,
+// then we get an "Lookup on object of indeterminate type based on information prior to this program point."
+// error when we use MutableValue. We can then annotate the mutable value, and it works.
+// FSAC seems to understand everything; FSC not?
 and GlobalContext = { evaluationManager: IEvaluationManager }
 
 [<AutoOpen>]
