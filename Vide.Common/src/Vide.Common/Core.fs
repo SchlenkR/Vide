@@ -10,6 +10,7 @@ type IEvaluationManager =
 
 type GlobalContext = { evaluationManager: IEvaluationManager }
 
+// TODO: generalize this again
 // Why we return option(!) of 's? -> Because of else branch / zero:
 // See elseForget: The state type of the else branch has to be the same
 // state type used in the if branch, but: It has no value.
