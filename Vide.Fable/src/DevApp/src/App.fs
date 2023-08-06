@@ -20,7 +20,7 @@ let demos =
         let content = content |> Vide.map ignore
         let app = VideApp.ForHost(host).CreateWithUntypedState(content)
         do currentApp <- Some app
-        do app.EvaluationManager.RequestEvaluation()
+        do app.Host.RequestEvaluation()
     let demos =
         [
             {|
@@ -228,7 +228,7 @@ for x in demos do
         menu.appendChild(btn) |> ignore
 
 document.getElementById("evaluate").onclick <- fun _ ->
-    currentApp |> Option.iter (fun app -> app.EvaluationManager.RequestEvaluation())
+    currentApp |> Option.iter (fun app -> app.Host.RequestEvaluation())
 
 document.getElementById("logState").onclick <- fun _ ->
     currentApp |> Option.iter (fun app -> console.log(app))

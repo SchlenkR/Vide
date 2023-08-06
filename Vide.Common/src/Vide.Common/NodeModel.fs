@@ -57,11 +57,7 @@ type BuilderOperations = | Clear
 
 type NodeBuilderState<'e,'s> = option<'e> * option<'s>
 
-type NodeModifierContext<'e> =
-    {
-        node: 'e
-        globalContext: GlobalContext
-    }
+type NodeModifierContext<'e> = { node: 'e; host: IHost }
 
 type NodeModifier<'n> = NodeModifierContext<'n> -> unit
 
@@ -122,11 +118,11 @@ module NodeBuilder =
         (createResultVal: 'e -> 'v1 -> 'v2)
         : Vide<'v2, NodeBuilderState<'e,'s>, 'c>
         =
-        fun s gc (parentCtx: 'c) ->
+        fun s host (parentCtx: 'c) ->
             Debug.print 0 "RUN:NodeBuilder"
             let inline runModifiers modifiers node =
                 for m in modifiers do
-                    m { node = node; globalContext = gc }
+                    m { node = node; host = host }
             let s,cs =
                 match s with
                 | None -> None,None
@@ -144,7 +140,7 @@ module NodeBuilder =
                     thisElement,cs
             do runModifiers thisBuilder.PreEvalModifiers thisElement
             let thisCtx = thisBuilder.CreateContext(thisElement)
-            let cv,cs = childVide cs gc thisCtx
+            let cv,cs = childVide cs host thisCtx
             do thisCtx.RemoveObsoleteChildren()
             do runModifiers thisBuilder.PostEvalModifiers thisElement
             let result = createResultVal thisElement cv
@@ -156,12 +152,12 @@ module NodeModelBuilderBricks =
         v
     
     let inline yieldBuilderOp<'n,'c when 'c :> NodeContext<'n>>(op: BuilderOperations) =
-        ensureVide <| fun s gc (ctx: 'c) ->
+        ensureVide <| fun s host (ctx: 'c) ->
             match op with | Clear -> do ctx.ClearContent()
             (),None
 
     let inline yieldText<'n,'c when 'c :> NodeContext<'n>>(value: string) =
-        ensureVide <| fun s gc (ctx: 'c) ->
+        ensureVide <| fun s host (ctx: 'c) ->
             let textNode =
                 s |> Option.defaultWith (fun () ->
                     let textNode = ctx.CreateTextNode(value)
@@ -458,21 +454,21 @@ module Event =
         {
             node: 'e
             evt: 'evt
-            gc: GlobalContext
+            host: IHost
             mutable requestEvaluation: bool
         }
     
     let inline handle
         (node: 'e)
-        (gc: GlobalContext)
+        (host: IHost)
         (callback: NodeEventArgs<'evt,'e> -> unit)
         =
         fun evt ->
-            let args = { node = node; evt = evt; gc = gc; requestEvaluation = true }
+            let args = { node = node; evt = evt; host = host; requestEvaluation = true }
             try
-                do gc.evaluationManager.SuspendEvaluation()
+                do host.SuspendEvaluation()
                 do callback args
                 if args.requestEvaluation then
-                    gc.evaluationManager.RequestEvaluation()
+                    host.RequestEvaluation()
             finally
-                do gc.evaluationManager.ResumeEvaluation()
+                do host.ResumeEvaluation()

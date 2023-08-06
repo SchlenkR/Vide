@@ -36,7 +36,7 @@ type App() =
                 )
                 let app = VideApp.ForHost(host).CreateAndStart(fst demo)
                 do app.OnEvaluated(fun v s ->
-                    Debug.print 99 $"Eval DONE ({app.EvaluationManager.EvaluationCount} cycles)"
+                    Debug.print 99 $"Eval DONE ({app.Host.EvaluationCount} cycles)"
                 )
                 window
         | _ -> failwith "Unexpected ApplicationLifetime"

@@ -10,7 +10,7 @@ type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c, ctxFin: 'c 
     let mutable onEvaluated: ('v -> 's option -> unit) option = None
 
     // TODO: rename to IHost or IRoot
-    interface IEvaluationManager with
+    interface IHost with
         member this.RequestEvaluation() =
             if suspendEvaluation then
                 hasPendingEvaluationRequests <- true
@@ -22,10 +22,9 @@ type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c, ctxFin: 'c 
                         hasPendingEvaluationRequests <- false
                         isEvaluating <- true
                     let value,newState = 
-                        let gc = { evaluationManager = this.EvaluationManager } 
                         Debug.print 0 "-----------------------------------------"
                         let ctx = ctxCtor ()
-                        let res = content currentState gc ctx
+                        let res = content currentState (this :> IHost) ctx
                         do ctxFin ctx
                         res
                     do
@@ -45,27 +44,27 @@ type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c, ctxFin: 'c 
         member this.ResumeEvaluation() =
             do suspendEvaluation <- false
             if hasPendingEvaluationRequests then
-                (this :> IEvaluationManager).RequestEvaluation()
+                (this :> IHost).RequestEvaluation()
         member _.IsEvaluating = isEvaluating
         member _.HasPendingEvaluationRequests = hasPendingEvaluationRequests
         member _.EvaluationCount = evaluationCount
 
-    member this.EvaluationManager = this :> IEvaluationManager
+    member this.Host = this :> IHost
     member _.CurrentState = currentState
     member _.OnEvaluated(value) = onEvaluated <- Some value
     member _.OnEvaluated() = onEvaluated <- None
 
 type VideAppFactory<'c>(ctxCtor, ctxFin) =
     let start (app: VideApp<_,_,'c>) =
-        do app.EvaluationManager.RequestEvaluation()
+        do app.Host.RequestEvaluation()
         app
     member _.Create(content) : VideApp<_,_,'c> =
         VideApp(content, ctxCtor, ctxFin)
     member this.CreateWithUntypedState(content) : VideApp<_,_,'c> =
         let content =
-            ensureVide <| fun (s: obj option) gc ctx ->
+            ensureVide <| fun (s: obj option) host ctx ->
                 let typedS = s |> Option.map (fun s -> s :?> 's)
-                let v,s = content typedS gc ctx
+                let v,s = content typedS host ctx
                 let untypedS = s |> Option.map (fun s -> s :> obj)
                 v,untypedS
         this.Create(content)
