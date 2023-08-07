@@ -60,7 +60,7 @@ type NodeBuilderState<'e,'s> = option<'e> * option<'s>
 type NodeModifierContext<'e> = 
     { 
         node: 'e
-        globalContext: GlobalContext
+        host: IHost
     }
 
 type NodeModifier<'n> = NodeModifierContext<'n> -> unit
@@ -128,7 +128,7 @@ module NodeBuilder =
             Debug.print 0 "RUN:NodeBuilder"
             let inline runModifiers modifiers node =
                 for m in modifiers do
-                    m { node = node; globalContext = gc }
+                    m { node = node; host = gc }
             let s,cs =
                 match s with
                 | None -> None,None
@@ -393,21 +393,21 @@ module Event =
         {
             node: 'e
             evt: 'evt
-            gc: GlobalContext
+            host: IHost
             mutable requestEvaluation: bool
         }
     
     let inline handle
         (node: 'e)
-        (gc: GlobalContext)
+        (host: IHost)
         (callback: NodeEventArgs<'evt,'e> -> unit)
         =
         fun evt ->
-            let args = { node = node; evt = evt; gc = gc; requestEvaluation = true }
+            let args = { node = node; evt = evt; host = host; requestEvaluation = true }
             try
-                do gc.SuspendEvaluation()
+                do host.SuspendEvaluation()
                 do callback args
                 if args.requestEvaluation then
-                    gc.RequestEvaluation()
+                    host.RequestEvaluation()
             finally
-                do gc.ResumeEvaluation()
+                do host.ResumeEvaluation()
