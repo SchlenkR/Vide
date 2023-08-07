@@ -120,11 +120,11 @@ module NodeBuilder =
             and 'c :> NodeContext<'n>
         >
         (thisBuilder: NodeBuilder<'e,'c>)
-        (childVide: Vide<'v1,'s,'c>)
+        (Vide childVide: Vide<'v1,'s,'c>)
         (createResultVal: 'e -> 'v1 -> 'v2)
         : Vide<'v2, NodeBuilderState<'e,'s>, 'c>
         =
-        fun s gc (parentCtx: 'c) ->
+        Vide <| fun s gc (parentCtx: 'c) ->
             Debug.print 0 "RUN:NodeBuilder"
             let inline runModifiers modifiers node =
                 for m in modifiers do
@@ -158,12 +158,12 @@ module NodeModelBuilderBricks =
         v
     
     let inline yieldBuilderOp<'n,'c when 'c :> NodeContext<'n>>(op: BuilderOperations) =
-        ensureVide <| fun s gc (ctx: 'c) ->
+        Vide <| fun s gc (ctx: 'c) ->
             match op with | Clear -> do ctx.ClearContent()
             (),None
 
     let inline yieldText<'n,'c when 'c :> NodeContext<'n>>(value: string) =
-        ensureVide <| fun s gc (ctx: 'c) ->
+        Vide <| fun s gc (ctx: 'c) ->
             let textNode =
                 s |> Option.defaultWith (fun () ->
                     let textNode = ctx.CreateTextNode(value)
@@ -472,9 +472,9 @@ module Event =
         fun evt ->
             let args = { node = node; evt = evt; gc = gc; requestEvaluation = true }
             try
-                do gc.evaluationManager.SuspendEvaluation()
+                do gc.SuspendEvaluation()
                 do callback args
                 if args.requestEvaluation then
-                    gc.evaluationManager.RequestEvaluation()
+                    gc.RequestEvaluation()
             finally
-                do gc.evaluationManager.ResumeEvaluation()
+                do gc.ResumeEvaluation()

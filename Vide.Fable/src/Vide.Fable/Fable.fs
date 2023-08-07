@@ -76,7 +76,7 @@ module Vide =
 
     [<GeneralizableValue>]
     let fableContext : Vide<FableContext,unit,FableContext> =
-        fun s gc ctx -> ctx,None
+        Vide <| fun s gc ctx -> ctx,None
 
     //[<GeneralizableValue>]
     //let node<'n when 'n :> Node> : Vide<'n,unit,FableContext> =

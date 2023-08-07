@@ -96,19 +96,19 @@ module MatchWithBranch =
             }
 
             match data with
-            | View0 text -> B1Of3 (
-                vide {
+            | View0 text ->
+                B1Of3 <| vide {
                     let! x = Vide.preserveValue text
-                    p { $"Case0: {x}" }
-                })
-            | View1 num -> B2Of3 (
-                vide {
+                    $"Case0: {x}"
+                }
+            | View1 num ->
+                B2Of3 <| vide {
                     let! x = Vide.preserveValue num
-                    p { $"Case1: {x}" }
-                })
-            | View2 -> B3Of3 (
-                vide {
+                    $"Case1: {x}"
+                }
+            | View2 ->
+                B3Of3 <| vide {
                     let! x = Vide.preserveValue ()
-                    p { $"Case2: {x}" }
-                })
+                    $"Case2: {x}"
+                }
         }

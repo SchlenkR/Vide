@@ -40,6 +40,6 @@ module Vide =
     
     // TODO: Move to keywords? / rename to useState?
     let ofMutable x =
-        ensureVide <| fun s gc ctx ->
-            let s = s |> Option.defaultWith (fun () -> MutableValue(x, gc.evaluationManager))
+        Vide <| fun s gc ctx ->
+            let s = s |> Option.defaultWith (fun () -> MutableValue(x, gc))
             s, Some s

@@ -5,7 +5,7 @@ namespace Vide
 // See elseForget: The state type of the else branch has to be the same
 // state type used in the if branch, but: It has no value.
 // So it must be an Option<'s>.
-type Vide<'v,'s,'c> = 's option -> GlobalContext -> 'c -> 'v * 's option
+type Vide<'v,'s,'c> = Vide of ('s option -> GlobalContext -> 'c -> 'v * 's option)
 
 and IEvaluationManager =
     abstract member RequestEvaluation: unit -> unit
@@ -19,11 +19,7 @@ and IEvaluationManager =
 // then we get an "Lookup on object of indeterminate type based on information prior to this program point."
 // error when we use MutableValue. We can then annotate the mutable value, and it works.
 // FSAC seems to understand everything; FSC not?
-and GlobalContext = { evaluationManager: IEvaluationManager }
-
-[<AutoOpen>]
-module TypingHelper =
-    let ensureVide f : Vide<_,_,_> = f
+and GlobalContext = IEvaluationManager
 
 module Debug =
     let mutable enabledDebugChannels = set [0]
@@ -45,25 +41,25 @@ module Vide =
 
     // Preserves the first value given and discards subsequent values.
     let preserveValue x =
-        ensureVide <| fun s gc ctx ->
+        Vide <| fun s gc ctx ->
             let s = s |> Option.defaultValue x
             s, Some s
     
     let preserveWith x =
-        ensureVide <| fun s gc ctx ->
+        Vide <| fun s gc ctx ->
             let s = s |> Option.defaultWith x
             s, Some s
     
     // TODO: Think about which function is "global" and module-bound
-    let map (proj: 'v1 -> 'v2) (v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
-        fun s gc ctx ->
+    let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
+        Vide <| fun s gc ctx ->
             let v,s = v s gc ctx
             proj v, s
     
     // why 's and not unit? -> see comment in "VideBuilder.Zero"
     [<GeneralizableValue>]
     let zero<'c> : Vide<unit,unit,'c> =
-        fun s gc ctx -> (),None
+        Vide <| fun s gc ctx -> (),None
 
     // this "zero", but the form where state is variable
     // -> see comment in "VideBuilder.Zero"
@@ -75,23 +71,23 @@ module Vide =
 
     [<GeneralizableValue>]
     let context<'c> : Vide<'c,unit,'c> =
-        fun s gc ctx -> ctx,None
+        Vide <| fun s gc ctx -> ctx,None
 
 module BuilderBricks =
     let bind<'v1,'s1,'v2,'s2,'c>
         (
-            m: Vide<'v1,'s1,'c>,
+            Vide m: Vide<'v1,'s1,'c>,
             f: 'v1 -> Vide<'v2,'s2,'c>
         ) 
         : Vide<'v2,'s1 option * 's2 option,'c>
         =
-        fun s gc ctx ->
+        Vide <| fun s gc ctx ->
             let ms,fs =
                 match s with
                 | None -> None,None
                 | Some (ms,fs) -> ms,fs
             let mv,ms = m ms gc ctx
-            let f = f mv
+            let (Vide f) = f mv
             let fv,fs = f fs gc ctx
             fv, Some (ms,fs)
 
@@ -99,7 +95,7 @@ module BuilderBricks =
         (x: 'v)
         : Vide<'v,unit,'c> 
         =
-        fun s gc ctx -> x,None
+        Vide <| fun s gc ctx -> x,None
 
     let yield'<'v,'s,'c>
         (v: Vide<'v,'s,'c>)
@@ -121,7 +117,7 @@ module BuilderBricks =
         (f: unit -> Vide<'v,'s,'c>)
         : Vide<'v,'s,'c>
         =
-        f()
+        f ()
 
     // TODO
     // those 2 are important for being able to combine
@@ -144,12 +140,12 @@ module BuilderBricks =
     //    combine a b fst
     let combine<'v1,'s1,'v2,'s2,'c>
         (
-           a: Vide<'v1,'s1,'c>,
-           b: Vide<'v2,'s2,'c>
+           Vide a: Vide<'v1,'s1,'c>,
+           Vide b: Vide<'v2,'s2,'c>
         )
         : Vide<'v2,'s1 option * 's2 option,'c>
         =
-        fun s gc ctx ->
+        Vide <| fun s gc ctx ->
             let sa,sb =
                 match s with
                 | None -> None,None
@@ -165,14 +161,14 @@ module BuilderBricks =
         ) 
         : Vide<'v list, Map<'a, 's option>,'c>
         = 
-        fun s gc ctx ->
+        Vide <| fun s gc ctx ->
             Debug.print 0 "FOR"
             let mutable currMap = s |> Option.defaultValue Map.empty
             let resValues,resStates =
                 [ for x in input do
                     let matchingState = currMap |> Map.tryFind x |> Option.flatten
                     let v,s = 
-                        let v = body x
+                        let (Vide v) = body x
                         v matchingState gc ctx
                     do currMap <- currMap |> Map.remove x
                     v, (x,s)
@@ -202,12 +198,12 @@ module BuilderBricks =
     
         let combine<'v,'x,'s1,'s2,'c>
             (
-                a: Vide<'v,'s1,'c>,
+                Vide a: Vide<'v,'s1,'c>,
                 b: AsyncBindResult<'x, Vide<'v,'s2,'c>>
             )
             : Vide<'v, 's1 option * AsyncState<_> option * 's2 option, 'c>
             =
-            fun s gc ctx ->
+            Vide <| fun s gc ctx ->
                 let sa,comp,sb =
                     match s with
                     | None -> None,None,None
@@ -223,7 +219,7 @@ module BuilderBricks =
                             let onsuccess res =
                                 Debug.print 1 $"awaited result: {res}"
                                 do result.Value <- Some res
-                                do gc.evaluationManager.RequestEvaluation()
+                                do gc.RequestEvaluation()
                             // TODO: global cancellation handler / ex / cancellation, etc.
                             let onexception ex = ()
                             let oncancel ex = ()
@@ -234,7 +230,7 @@ module BuilderBricks =
                         match comp.result.Value with
                         | Some v ->
                             let (AsyncBindResult (_,f)) = b
-                            let b = f v
+                            let (Vide b) = f v
                             let vb,sb = b sb gc ctx
                             vb,comp,sb
                         | None ->
@@ -279,9 +275,9 @@ module Keywords =
     
     [<GeneralizableValue>]
     let elsePreserve<'s,'c> : Vide<unit,'s,'c> =
-        fun s gc ctx -> (),s
+        Vide <| fun s gc ctx -> (),s
 
     [<GeneralizableValue>]
     let elseForget<'s,'c> : Vide<unit,'s,'c> = 
-        fun s gc ctx -> (),None
+        Vide <| fun s gc ctx -> (),None
         //Vide.empty<'s,'c>

@@ -22,10 +22,10 @@ type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c, ctxFin: 'c 
                         hasPendingEvaluationRequests <- false
                         isEvaluating <- true
                     let value,newState = 
-                        let gc = { evaluationManager = this.EvaluationManager } 
                         Debug.print 0 "-----------------------------------------"
                         let ctx = ctxCtor ()
-                        let res = content currentState gc ctx
+                        let (Vide content) = content
+                        let res = content currentState this.EvaluationManager ctx
                         do ctxFin ctx
                         res
                     do
@@ -61,9 +61,9 @@ type VideAppFactory<'c>(ctxCtor, ctxFin) =
         app
     member _.Create(content) : VideApp<_,_,'c> =
         VideApp(content, ctxCtor, ctxFin)
-    member this.CreateWithUntypedState(content) : VideApp<_,_,'c> =
+    member this.CreateWithUntypedState(Vide content) : VideApp<_,_,'c> =
         let content =
-            ensureVide <| fun (s: obj option) gc ctx ->
+            Vide <| fun (s: obj option) gc ctx ->
                 let typedS = s |> Option.map (fun s -> s :?> 's)
                 let v,s = content typedS gc ctx
                 let untypedS = s |> Option.map (fun s -> s :> obj)
