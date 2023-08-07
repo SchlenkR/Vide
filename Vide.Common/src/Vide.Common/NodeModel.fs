@@ -310,10 +310,7 @@ type RenderRetCnBaseBuilder<'e,'n,'c
 //     - standard yields
 // -------------------------------------------------------------------
 
-type ComponentRetCnBaseBuilder<'n,'c
-        when 'n : equality
-        and 'c :> NodeContext<'n>
-    > with
+type VideBaseBuilder with
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,'c>) = b {()}
     member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,'c>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,'c>) = b {()}
@@ -322,70 +319,6 @@ type ComponentRetCnBaseBuilder<'n,'c
     member _.Yield(b: RenderRetC1BaseBuilder<_,_,'c>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,'c>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,'c>) = b {()}
-    member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
-    member _.Yield(op) = NodeModelBuilderBricks.yieldBuilderOp<'n,'c>(op)
-    member _.Yield(op) = NodeModelBuilderBricks.yieldText<'n,'c>(op)
-
-type RenderRetC1BaseBuilder<'e,'n,'c
-        when 'n: equality
-        and 'c :> NodeContext<'n>
-    > with
-    member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: RenderValC1BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderPotC1BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderRetC1BaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
-    member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
-    member _.Yield(op) = NodeModelBuilderBricks.yieldBuilderOp<'n,'c>(op)
-    member _.Yield(op) = NodeModelBuilderBricks.yieldText<'n,'c>(op)
-    
-type RenderValC1BaseBuilder<'v,'e,'n,'c
-        when 'n: equality
-        and 'c :> NodeContext<'n>
-    > with
-    member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: RenderValC1BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderPotC1BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderRetC1BaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
-    member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
-    member _.Yield(op) = NodeModelBuilderBricks.yieldBuilderOp<'n,'c>(op)
-    member _.Yield(op) = NodeModelBuilderBricks.yieldText<'n,'c>(op)
-
-type RenderRetCnBaseBuilder<'e,'n,'c
-        when 'n: equality
-        and 'c :> NodeContext<'n>
-    > with
-    member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: RenderValC1BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderPotC1BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderRetC1BaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
-    member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
-    member _.Yield(op) = NodeModelBuilderBricks.yieldBuilderOp<'n,'c>(op)
-    member _.Yield(op) = NodeModelBuilderBricks.yieldText<'n,'c>(op)
-
-type RenderValCnBaseBuilder<'v,'e,'n,'c
-        when 'n: equality
-        and 'c :> NodeContext<'n>
-    > with
-    member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: RenderValC1BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderPotC1BaseBuilder<_,_,_,_>) = b {()}
-    member _.Yield(b: RenderRetC1BaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
     member _.Yield(op) = NodeModelBuilderBricks.yieldBuilderOp<'n,'c>(op)
     member _.Yield(op) = NodeModelBuilderBricks.yieldText<'n,'c>(op)
