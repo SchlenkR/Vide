@@ -13,63 +13,33 @@
 module Vide.ControlFlow
 
 module ControlFlowBuilderBricks =
-    let yieldBranch2 x =
+    let yieldBranch2 (x: Branch2<Vide<unit,_,_>, Vide<unit,_,_>>) =
         vide {
-            match x with B1Of2 v -> ensureVide v | _ -> elsePreserve
-            match x with B2Of2 v -> ensureVide v | _ -> elsePreserve
+            match x with B1Of2 v -> v | _ -> elsePreserve
+            match x with B2Of2 v -> v | _ -> elsePreserve
         }
         
-    let yieldBranch3 x =
+    let inline yieldBranch3 (x: Branch3<Vide<unit,_,_>, Vide<unit,_,_>, Vide<unit,_,_>>) =
         vide {
-            match x with B1Of3 v -> ensureVide v | _ -> elsePreserve
-            match x with B2Of3 v -> ensureVide v | _ -> elsePreserve
-            match x with B3Of3 v -> ensureVide v | _ -> elsePreserve
+            match x with B1Of3 v -> yield v | _ -> yield elsePreserve
+            match x with B2Of3 v -> yield v | _ -> yield elsePreserve
+            match x with B3Of3 v -> yield v | _ -> yield elsePreserve
         }
         
-    let yieldBranch4 x =
+    let yieldBranch4 (x: Branch4<Vide<unit,_,_>, Vide<unit,_,_>, Vide<unit,_,_>, Vide<unit,_,_>>) =
         vide {
-            match x with B1Of4 v -> ensureVide v | _ -> elsePreserve
-            match x with B2Of4 v -> ensureVide v | _ -> elsePreserve
-            match x with B3Of4 v -> ensureVide v | _ -> elsePreserve
-            match x with B4Of4 v -> ensureVide v | _ -> elsePreserve
+            match x with B1Of4 v -> v | _ -> elsePreserve
+            match x with B2Of4 v -> v | _ -> elsePreserve
+            match x with B3Of4 v -> v | _ -> elsePreserve
+            match x with B4Of4 v -> v | _ -> elsePreserve
         }
 
 
 // -------------------------------------------------------------------
-// "Yielsd"s 
+// "Yielsd"s
 // -------------------------------------------------------------------
     
-type ComponentRetCnBaseBuilder<'n,'c
-        when 'n : equality
-        and 'c :> NodeContext<'n>
-    > with
+type VideBaseBuilder with
     member _.Yield(v) = ControlFlowBuilderBricks.yieldBranch2(v)
     member _.Yield(v) = ControlFlowBuilderBricks.yieldBranch3(v)
-    
-type RenderRetC1BaseBuilder<'e,'n,'c
-        when 'n: equality
-        and 'c :> NodeContext<'n>
-    > with
-    member _.Yield(v) = ControlFlowBuilderBricks.yieldBranch2(v)
-    member _.Yield(v) = ControlFlowBuilderBricks.yieldBranch3(v)
-        
-type RenderValC1BaseBuilder<'v,'e,'n,'c
-        when 'n: equality
-        and 'c :> NodeContext<'n>
-    > with
-    member _.Yield(v) = ControlFlowBuilderBricks.yieldBranch2(v)
-    member _.Yield(v) = ControlFlowBuilderBricks.yieldBranch3(v)
-    
-type RenderRetCnBaseBuilder<'e,'n,'c
-        when 'n: equality
-        and 'c :> NodeContext<'n>
-    > with
-    member _.Yield(v) = ControlFlowBuilderBricks.yieldBranch2(v)
-    member _.Yield(v) = ControlFlowBuilderBricks.yieldBranch3(v)
-    
-type RenderValCnBaseBuilder<'v,'e,'n,'c
-        when 'n: equality
-        and 'c :> NodeContext<'n>
-    > with
-    member _.Yield(v) = ControlFlowBuilderBricks.yieldBranch2(v)
-    member _.Yield(v) = ControlFlowBuilderBricks.yieldBranch3(v)
+    member _.Yield(v) = ControlFlowBuilderBricks.yieldBranch4(v)

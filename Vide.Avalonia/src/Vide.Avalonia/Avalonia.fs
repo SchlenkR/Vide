@@ -62,7 +62,9 @@ type AvaloniaDocument() =
 
 type AvaloniaContext(parent: Control) =
     inherit WpfishContext<Control>(parent, AvaloniaDocument())
-    static member Create<'e when 'e :> Control>(thisNode: 'e) = AvaloniaContext(thisNode)
+
+module AvaloniaContext =
+    let create<'e when 'e :> Control> (host: IHost) (thisNode: 'e) = AvaloniaContext(thisNode)
 
 
 // --------------------------------------------------
@@ -73,25 +75,25 @@ type ComponentRetCnBuilder() =
     inherit ComponentRetCnBaseBuilder<Control,AvaloniaContext>()
 
 type RenderValC0Builder<'v,'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, createResultVal) =
-    inherit RenderValC0BaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, createResultVal)
+    inherit RenderValC0BaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.create, createThisElement, createResultVal)
 type RenderPotC0Builder<'v,'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, createResultVal) =
-    inherit RenderValC0BaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, createResultVal)
+    inherit RenderValC0BaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.create, createThisElement, createResultVal)
 type RenderRetC0Builder<'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement) =
-    inherit RenderRetC0BaseBuilder<'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement)
+    inherit RenderRetC0BaseBuilder<'e,Control,AvaloniaContext>(AvaloniaContext.create, createThisElement)
 
 type RenderValC1Builder<'v,'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, createResultVal) =
-    inherit RenderValC1BaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, createResultVal)
+    inherit RenderValC1BaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.create, createThisElement, createResultVal)
 type RenderPotC1Builder<'v,'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, createResultVal) =
-    inherit RenderPotC1BaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, createResultVal)
+    inherit RenderPotC1BaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.create, createThisElement, createResultVal)
 type RenderRetC1Builder<'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement) =
-    inherit RenderRetC1BaseBuilder<'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement)
+    inherit RenderRetC1BaseBuilder<'e,Control,AvaloniaContext>(AvaloniaContext.create, createThisElement)
 
 type RenderValCnBuilder<'v,'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, createResultVal) =
-    inherit RenderValCnBaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, createResultVal)
+    inherit RenderValCnBaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.create, createThisElement, createResultVal)
 type RenderPotCnBuilder<'v,'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement, createResultVal) =
-    inherit RenderPotCnBaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement, createResultVal)
+    inherit RenderPotCnBaseBuilder<'v,'e,Control,AvaloniaContext>(AvaloniaContext.create, createThisElement, createResultVal)
 type RenderRetCnBuilder<'e when 'e :> Control and 'e : (new: unit -> 'e)>(createThisElement) =
-    inherit RenderRetCnBaseBuilder<'e,Control,AvaloniaContext>(AvaloniaContext.Create, createThisElement)
+    inherit RenderRetCnBaseBuilder<'e,Control,AvaloniaContext>(AvaloniaContext.create, createThisElement)
 
 
 // --------------------------------------------------
@@ -102,7 +104,7 @@ type VideApp =
     static member ForHost(host) = 
         VideAppFactory(
             (fun () -> AvaloniaContext(host)),
-            (fun (ctx: AvaloniaContext) -> ctx.RemoveObsoleteChildren())
+            (fun ctx -> ctx.ctx.RemoveObsoleteChildren())
         )
 
 [<AutoOpen>]

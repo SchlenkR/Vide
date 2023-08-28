@@ -5,65 +5,31 @@ namespace Vide
 // See elseForget: The state type of the else branch has to be the same
 // state type used in the if branch, but: It has no value.
 // So it must be an Option<'s>.
-type Vide<'v,'s,'c> = 's option -> GlobalContext -> 'c -> 'v * 's option
-
-and IEvaluationManager =
-    abstract member RequestEvaluation: unit -> unit
-    abstract member SuspendEvaluation: unit -> unit
-    abstract member ResumeEvaluation: unit -> unit
-    abstract member IsEvaluating: bool
-    abstract member HasPendingEvaluationRequests: bool
-    abstract member EvaluationCount: uint64
-
-// TODO: Really, really strange: If we remove this (unnecessary) record,
-// then we get an "Lookup on object of indeterminate type based on information prior to this program point."
-// error when we use MutableValue. We can then annotate the mutable value, and it works.
-// FSAC seems to understand everything; FSC not?
-and GlobalContext = { evaluationManager: IEvaluationManager }
-
-[<AutoOpen>]
-module TypingHelper =
-    let ensureVide f : Vide<_,_,_> = f
-
-module Debug =
-    let mutable enabledDebugChannels = set [0]
-    let print channel s = 
-        if enabledDebugChannels.Contains(channel) then 
-            do System.Diagnostics.Debug.WriteLine(s)
-            do printfn "%s" s
-
-type AsyncState<'v> =
-    {
-        startedWorker: Async<'v>
-        result: Ref<'v option>
-    }
-
-type AsyncBindResult<'v1,'v2> = 
-    AsyncBindResult of comp: Async<'v1> * cont: ('v1 -> 'v2)
+type Vide<'v,'s,'c> = Vide of ('s option -> 'c -> 'v * 's option)
 
 module Vide =
 
     // Preserves the first value given and discards subsequent values.
     let preserveValue x =
-        ensureVide <| fun s gc ctx ->
+        Vide <| fun s ctx ->
             let s = s |> Option.defaultValue x
             s, Some s
     
     let preserveWith x =
-        ensureVide <| fun s gc ctx ->
+        Vide <| fun s ctx ->
             let s = s |> Option.defaultWith x
             s, Some s
     
     // TODO: Think about which function is "global" and module-bound
-    let map (proj: 'v1 -> 'v2) (v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
-        fun s gc ctx ->
-            let v,s = v s gc ctx
+    let map (proj: 'v1 -> 'v2) (Vide v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
+        Vide <| fun s ctx ->
+            let v,s = v s ctx
             proj v, s
     
     // why 's and not unit? -> see comment in "VideBuilder.Zero"
     [<GeneralizableValue>]
     let zero<'c> : Vide<unit,unit,'c> =
-        fun s gc ctx -> (),None
+        Vide <| fun s ctx -> (),None
 
     // this "zero", but the form where state is variable
     // -> see comment in "VideBuilder.Zero"
@@ -71,35 +37,35 @@ module Vide =
     // with similar semantics.
     ////[<GeneralizableValue>]
     ////let empty<'s,'c> : Vide<unit,'s,'c> =
-    ////    fun s gc ctx -> (),None
+    ////    fun s ctx -> (),None
 
     [<GeneralizableValue>]
     let context<'c> : Vide<'c,unit,'c> =
-        fun s gc ctx -> ctx,None
+        Vide <| fun s ctx -> ctx,None
 
 module BuilderBricks =
     let bind<'v1,'s1,'v2,'s2,'c>
         (
-            m: Vide<'v1,'s1,'c>,
+            Vide m: Vide<'v1,'s1,'c>,
             f: 'v1 -> Vide<'v2,'s2,'c>
         ) 
         : Vide<'v2,'s1 option * 's2 option,'c>
         =
-        fun s gc ctx ->
+        Vide <| fun s ctx ->
             let ms,fs =
                 match s with
                 | None -> None,None
                 | Some (ms,fs) -> ms,fs
-            let mv,ms = m ms gc ctx
-            let f = f mv
-            let fv,fs = f fs gc ctx
+            let mv,ms = m ms ctx
+            let (Vide f) = f mv
+            let fv,fs = f fs ctx
             fv, Some (ms,fs)
 
     let return'<'v,'c>
         (x: 'v)
         : Vide<'v,unit,'c> 
         =
-        fun s gc ctx -> x,None
+        Vide <| fun s ctx -> x,None
 
     let yield'<'v,'s,'c>
         (v: Vide<'v,'s,'c>)
@@ -121,7 +87,7 @@ module BuilderBricks =
         (f: unit -> Vide<'v,'s,'c>)
         : Vide<'v,'s,'c>
         =
-        f()
+        f ()
 
     // TODO
     // those 2 are important for being able to combine
@@ -144,18 +110,18 @@ module BuilderBricks =
     //    combine a b fst
     let combine<'v1,'s1,'v2,'s2,'c>
         (
-           a: Vide<'v1,'s1,'c>,
-           b: Vide<'v2,'s2,'c>
+           Vide a: Vide<'v1,'s1,'c>,
+           Vide b: Vide<'v2,'s2,'c>
         )
         : Vide<'v2,'s1 option * 's2 option,'c>
         =
-        fun s gc ctx ->
+        Vide <| fun s ctx ->
             let sa,sb =
                 match s with
                 | None -> None,None
                 | Some (ms,fs) -> ms,fs
-            let va,sa = a sa gc ctx
-            let vb,sb = b sb gc ctx
+            let va,sa = a sa ctx
+            let vb,sb = b sb ctx
             vb, Some (sa,sb)
 
     let for'<'a,'v,'s,'c when 'a: comparison>
@@ -165,100 +131,35 @@ module BuilderBricks =
         ) 
         : Vide<'v list, Map<'a, 's option>,'c>
         = 
-        fun s gc ctx ->
-            Debug.print 0 "FOR"
+        Vide <| fun s ctx ->
             let mutable currMap = s |> Option.defaultValue Map.empty
             let resValues,resStates =
                 [ for x in input do
                     let matchingState = currMap |> Map.tryFind x |> Option.flatten
                     let v,s = 
-                        let v = body x
-                        v matchingState gc ctx
+                        let (Vide v) = body x
+                        v matchingState ctx
                     do currMap <- currMap |> Map.remove x
                     v, (x,s)
                 ]
                 |> List.unzip
             resValues, Some (resStates |> Map.ofList)
 
+// For value restriction and other resolution issues, it's better to
+// move these (remaining) builder methods "as close as possible" to the builder class that's
+// most specialized.
+type VideBaseBuilder() = class end
 
-    // ---------------------
-    // ASYNC
-    // ---------------------
-    
-    module Async =
-        let bind<'v1,'v2,'s,'c>
-            (
-                m: Async<'v1>,
-                f: 'v1 -> Vide<'v2,'s,'c>
-            ) : AsyncBindResult<'v1, Vide<'v2,'s,'c>>
-            =
-            AsyncBindResult(m, f)
-    
-        let delay
-            (f: unit -> AsyncBindResult<'v1,'v2>)
-            : AsyncBindResult<'v1,'v2>
-            =
-            f()
-    
-        let combine<'v,'x,'s1,'s2,'c>
-            (
-                a: Vide<'v,'s1,'c>,
-                b: AsyncBindResult<'x, Vide<'v,'s2,'c>>
-            )
-            : Vide<'v, 's1 option * AsyncState<_> option * 's2 option, 'c>
-            =
-            fun s gc ctx ->
-                let sa,comp,sb =
-                    match s with
-                    | None -> None,None,None
-                    | Some (sa,comp,sb) -> sa,comp,sb
-                // TODO: Really reevaluate here at this place?
-                let va,sa = a sa gc ctx
-                let v,comp,sb =
-                    match comp with
-                    | None ->
-                        let (AsyncBindResult (comp,_)) = b
-                        let result = ref None
-                        do
-                            let onsuccess res =
-                                Debug.print 1 $"awaited result: {res}"
-                                do result.Value <- Some res
-                                do gc.evaluationManager.RequestEvaluation()
-                            // TODO: global cancellation handler / ex / cancellation, etc.
-                            let onexception ex = ()
-                            let oncancel ex = ()
-                            do Async.StartWithContinuations(comp, onsuccess, onexception, oncancel)
-                        let comp = { startedWorker = comp; result = result }
-                        va,comp,None
-                    | Some comp ->
-                        match comp.result.Value with
-                        | Some v ->
-                            let (AsyncBindResult (_,f)) = b
-                            let b = f v
-                            let vb,sb = b sb gc ctx
-                            vb,comp,sb
-                        | None ->
-                            va,comp,sb
-                v, Some (sa, Some comp, sb)
-
-// TODO:
-//    For value restriction and other resolution issues, it's better to
-//    move these (remaining) builder methods "as close as possible" to the builder class that's
-//    most specialized.
-type VideBaseBuilder() =
-    member _.Bind(m, f) = BuilderBricks.bind(m, f)
-    member _.Zero() = BuilderBricks.zero()
-
-    // ---------------------
-    // ASYNC
-    // ---------------------
-    member _.Bind(m, f) = BuilderBricks.Async.bind(m, f)
-    member _.Delay(f) = BuilderBricks.Async.delay(f)
-    member _.Combine(a, b) = BuilderBricks.Async.combine(a, b)
-    // TODO: async for
+[<AutoOpen>]
+module VideBaseBuilderCoreExtensions =
+    type VideBaseBuilder with
+        member _.Bind(m, f) = BuilderBricks.bind(m, f)
+        member _.Zero() = BuilderBricks.zero()
 
 [<AutoOpen>]
 module ControlFlow =
+    // TODO: More branches
+
     type Branch2<'b1,'b2> =
         | B1Of2 of 'b1
         | B2Of2 of 'b2
@@ -279,9 +180,9 @@ module Keywords =
     
     [<GeneralizableValue>]
     let elsePreserve<'s,'c> : Vide<unit,'s,'c> =
-        fun s gc ctx -> (),s
+        Vide <| fun s ctx -> (),s
 
     [<GeneralizableValue>]
     let elseForget<'s,'c> : Vide<unit,'s,'c> = 
-        fun s gc ctx -> (),None
+        Vide <| fun s ctx -> (),None
         //Vide.empty<'s,'c>

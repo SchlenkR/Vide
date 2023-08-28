@@ -5,14 +5,6 @@ open Browser.Types
 open Fable.Core.JS
 open Vide
 
-do Debug.enabledDebugChannels <- 
-    [
-        //0
-        1
-        10
-    ]
-    |> set
-
 let mutable currentApp = None
 
 let demos = 

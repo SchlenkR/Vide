@@ -23,11 +23,12 @@
 
   <ItemGroup>
     <Compile Include="Core.fs" />
-    <Compile Include="MutableValue.fs" />
-    <Compile Include="App.fs" />
-    <Compile Include="NodeModel.fs" />
-    <Compile Include="WebModel.fs" />
-    <Compile Include="WpfishModel.fs" />
+    <Compile Include="EventTriggeredModel/EventTriggeredCore.fs" />
+    <Compile Include="EventTriggeredModel/MutableValue.fs" />
+    <Compile Include="EventTriggeredModel/App.fs" />
+    <Compile Include="EventTriggeredModel/NodeModel.fs" />
+    <Compile Include="EventTriggeredModel/WebModel.fs" />
+    <Compile Include="EventTriggeredModel/WpfishModel.fs" />
   </ItemGroup>
 
   <ItemGroup>

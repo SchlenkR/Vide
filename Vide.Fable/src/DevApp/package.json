@@ -5,8 +5,7 @@
   "scripts": {
     "postinstall": "dotnet tool restore",
     "clean": "rimraf ./build && rimraf ./dist",
-    "start": "npm run clean && dotnet fable watch ./src/DevApp.fsproj -s -o ./build --run vite",
-    "dev": "npm run start",
+    "dev": "npm run clean && dotnet fable watch ./src/DevApp.fsproj -s -o ./build --run vite",
     "build": "npm run clean && dotnet fable ./src/DevApp.fsproj -o ./build --noCache --run vite build"
   },
   "devDependencies": {
