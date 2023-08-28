@@ -37,7 +37,9 @@ type FableDocument() =
 
 type FableContext(parent: Node) =
     inherit WebContext<Node>(parent, FableDocument())
-    static member Create<'e when 'e :> Node>(thisNode: 'e) = FableContext(thisNode)
+
+module FableContext =
+    let create<'e when 'e :> Node> (host: IHost) (thisNode: 'e) = FableContext(thisNode)
 
 // --------------------------------------------------
 // Specialized builder definitions
@@ -47,42 +49,42 @@ type ComponentRetCnBuilder() =
     inherit ComponentRetCnBaseBuilder<Node,FableContext>()
 
 type RenderValC0Builder<'v,'e when 'e :> Node>(createThisElement, createResultVal) =
-    inherit RenderValC0BaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, createResultVal)
+    inherit RenderValC0BaseBuilder<'v,'e,Node,FableContext>(FableContext.create, createThisElement, createResultVal)
 type RenderPotC0Builder<'v,'e when 'e :> Node>(createThisElement, createResultVal) =
-    inherit RenderPotC0BaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, createResultVal)
+    inherit RenderPotC0BaseBuilder<'v,'e,Node,FableContext>(FableContext.create, createThisElement, createResultVal)
 type RenderRetC0Builder<'e when 'e :> Node>(createThisElement) =
-    inherit RenderRetC0BaseBuilder<'e,Node,FableContext>(FableContext.Create, createThisElement)
+    inherit RenderRetC0BaseBuilder<'e,Node,FableContext>(FableContext.create, createThisElement)
 
 type RenderValC1Builder<'v,'e when 'e :> Node>(createThisElement, createResultVal) =
-    inherit RenderValC1BaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, createResultVal)
+    inherit RenderValC1BaseBuilder<'v,'e,Node,FableContext>(FableContext.create, createThisElement, createResultVal)
 type RenderPotC1Builder<'v,'e when 'e :> Node>(createThisElement, createResultVal) =
-    inherit RenderPotC1BaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, createResultVal)
+    inherit RenderPotC1BaseBuilder<'v,'e,Node,FableContext>(FableContext.create, createThisElement, createResultVal)
 type RenderRetC1Builder<'e when 'e :> Node>(createThisElement) =
-    inherit RenderRetC1BaseBuilder<'e,Node,FableContext>(FableContext.Create, createThisElement)
+    inherit RenderRetC1BaseBuilder<'e,Node,FableContext>(FableContext.create, createThisElement)
 
 type RenderValCnBuilder<'v,'e when 'e :> Node>(createThisElement, createResultVal) =
-    inherit RenderValCnBaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, createResultVal)
+    inherit RenderValCnBaseBuilder<'v,'e,Node,FableContext>(FableContext.create, createThisElement, createResultVal)
 type RenderPotCnBuilder<'v,'e when 'e :> Node>(createThisElement, createResultVal) =
-    inherit RenderValCnBaseBuilder<'v,'e,Node,FableContext>(FableContext.Create, createThisElement, createResultVal)
+    inherit RenderValCnBaseBuilder<'v,'e,Node,FableContext>(FableContext.create, createThisElement, createResultVal)
 type RenderRetCnBuilder<'e when 'e :> Node>(createThisElement) =
-    inherit RenderRetCnBaseBuilder<'e,Node,FableContext>(FableContext.Create, createThisElement)
+    inherit RenderRetCnBaseBuilder<'e,Node,FableContext>(FableContext.create, createThisElement)
 
 
 // --------------------------------------------------
 // Specialized vide functions
 // --------------------------------------------------
 
-module Vide =
+// TODO:
+// module Vide =
+//     [<GeneralizableValue>]
+//     let fableContext : Vide<FableContext,unit,HostContext<FableContext>> =
+//         Vide <| fun s ctx -> ctx,None
 
-    [<GeneralizableValue>]
-    let fableContext : Vide<FableContext,unit,FableContext> =
-        Vide <| fun s host ctx -> ctx,None
-
-    //[<GeneralizableValue>]
-    //let node<'n when 'n :> Node> : Vide<'n,unit,FableContext> =
-    //    Vide <| fun s host ctx ->
-    //        // TODO: OUCH!!! Was ist da los - wieso bekomme ich das nicht besser hin?
-    //        ctx.Parent :?> 'n,None
+//     [<GeneralizableValue>]
+//     let node<'n when 'n :> Node> : Vide<'n,unit,FableContext> =
+//        Vide <| fun s host ctx ->
+//            // TODO: OUCH!!! Was ist da los - wieso bekomme ich das nicht besser hin?
+//            ctx.Parent :?> 'n,None
 
 type VideApp =
     static member ForHost(host) = 
