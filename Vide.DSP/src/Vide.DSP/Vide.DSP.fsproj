@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <RootNamespace>Vide.DSP</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Lib.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Vide.Common\src\Vide.Common\Vide.Common.fsproj" />
+  </ItemGroup>
+</Project>

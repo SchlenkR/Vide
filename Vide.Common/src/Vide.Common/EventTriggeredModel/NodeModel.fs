@@ -4,6 +4,18 @@ module Vide.NodeModel
 open System.Runtime.CompilerServices
 open Vide
 
+type NodeModelBaseBuilder() =
+    inherit VideBaseBuilder()
+    // non-async
+    member _.Bind(m, f) = BuilderBricks.bind(m, f)
+    member _.Zero() = BuilderBricks.zero()
+    // async
+    member _.Bind(m, f) = AsyncBuilderBricks.bind(m, f)
+    member _.Delay(f) = AsyncBuilderBricks.delay(f)
+    member _.Combine(a, b) = AsyncBuilderBricks.combine(a, b)
+    // TODO: async for
+
+
 type TextNodeProxy<'n> =
     {
         node: 'n
@@ -73,8 +85,7 @@ type NodeBuilder<'e,'c>
         createContext: IHost -> 'e -> 'c,
         createThisElement: IHost -> 'c -> 'e
     ) =
-    
-    inherit VideBaseBuilder()
+    inherit NodeModelBaseBuilder()
 
     member val InitModifiers: ResizeArray<NodeModifier<'e>> = ResizeArray() with get
     member val PreEvalModifiers: ResizeArray<NodeModifier<'e>> = ResizeArray() with get
@@ -205,9 +216,9 @@ module NodeModelBuilderBricks =
 
 type ComponentRetCnBaseBuilder<'n,'c
         when 'n : equality
-        and 'c :> NodeContext<'n> 
+        and 'c :> NodeContext<'n>
     > () =
-    inherit VideBaseBuilder()
+    inherit NodeModelBaseBuilder()
     member _.Return(x) = BuilderBricks.return'<_,HostContext<'c>>(x)
     member _.Delay(f) = BuilderBricks.delay<_,_,HostContext<'c>>(f)
     member _.Combine(a, b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
@@ -315,7 +326,7 @@ type RenderRetCnBaseBuilder<'e,'n,'c
 
 // TODO: Instead of specifying all Render- and Comp-builders explicitly,
 //       could we just use NodeBuilder when there's no special treatment necessary?
-type VideBaseBuilder with
+type NodeModelBaseBuilder with
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}

@@ -23,8 +23,8 @@ type Vide<'v,'s,'c> = ('s option -> 'c -> 'v * 's option)
 [<AutoOpen>]
 module VideHandling =
     type InlineIfLambdaAttribute() = inherit System.Attribute()
-    let inline mkVide (v: Vide<_,_,_>) = v
-    let inline runVide (v: Vide<_,_,_>) = v
+    let inline mkVide<'v,'s,'c> (v: Vide<'v,'s,'c>) = v
+    let inline runVide<'v,'s,'c> (v: Vide<'v,'s,'c>) = v
 
 #endif
 
@@ -169,13 +169,8 @@ module BuilderBricks =
 // For value restriction and other resolution issues, it's better to
 // move these (remaining) builder methods "as close as possible" to the builder class that's
 // most specialized.
+[<AbstractClass>]
 type VideBaseBuilder() = class end
-
-[<AutoOpen>]
-module VideBaseBuilderCoreExtensions =
-    type VideBaseBuilder with
-        member _.Bind(m, f) = BuilderBricks.bind(m, f)
-        member _.Zero() = BuilderBricks.zero()
 
 [<AutoOpen>]
 module ControlFlow =

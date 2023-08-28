@@ -73,11 +73,3 @@ module AsyncBuilderBricks =
                     | None ->
                         va,comp,sb
             v, Some (sa, Some comp, sb)
-
-[<AutoOpen>]
-module VideBaseBuilderAsyncExtensions =
-    type VideBaseBuilder with
-        member _.Bind(m, f) = AsyncBuilderBricks.bind(m, f)
-        member _.Delay(f) = AsyncBuilderBricks.delay(f)
-        member _.Combine(a, b) = AsyncBuilderBricks.combine(a, b)
-        // TODO: async for
