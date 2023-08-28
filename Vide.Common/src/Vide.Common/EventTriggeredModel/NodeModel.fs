@@ -119,9 +119,11 @@ module NodeBuilder =
             when 'n: equality
             and 'c :> NodeContext<'n>
         >
-        (thisBuilder: NodeBuilder<'e,'c>)
-        (Vide childVide: Vide<'v1, 's, HostContext<'c>>)
-        (createResultVal: 'e -> 'v1 -> 'v2)
+        (
+            thisBuilder: NodeBuilder<'e,'c>,
+            Vide childVide: Vide<'v1, 's, HostContext<'c>>,
+            createResultVal: 'e -> 'v1 -> 'v2
+        )
         : Vide<'v2, NodeBuilderState<'e,'s>, HostContext<'c>>
         =
         Vide <| fun s parentCtx ->
@@ -206,10 +208,10 @@ type ComponentRetCnBaseBuilder<'n,'c
         and 'c :> NodeContext<'n> 
     > () =
     inherit VideBaseBuilder()
-    member _.Return(x: 'v) = BuilderBricks.return'<'v,'c>(x)
-    member _.Delay(f) = BuilderBricks.delay<_,_,'c>(f)
-    member _.Combine(a, b) = BuilderBricks.combine<_,_,_,_,'c>(a, b)
-    member _.For(seq, body) = BuilderBricks.for'<_,_,_,'c>(seq, body)
+    member _.Return(x) = BuilderBricks.return'<_,HostContext<'c>>(x)
+    member _.Delay(f) = BuilderBricks.delay<_,_,HostContext<'c>>(f)
+    member _.Combine(a, b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
+    member _.For(seq, body) = BuilderBricks.for'<_,_,_,HostContext<'c>>(seq, body)
 
 type RenderValC0BaseBuilder<'v,'e,'n,'c
         when 'n: equality
@@ -218,7 +220,7 @@ type RenderValC0BaseBuilder<'v,'e,'n,'c
     (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
     inherit NodeBuilder<'e,'c>(createContext, createThisElement)
-    member this.Run(v) = NodeBuilder.run this v (fun n v -> createResultVal n)
+    member this.Run(v) = NodeBuilder.run(this, v, (fun n v -> createResultVal n))
 
 type RenderPotC0BaseBuilder<'v,'e,'n,'c
         when 'n: equality
@@ -227,7 +229,7 @@ type RenderPotC0BaseBuilder<'v,'e,'n,'c
     (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
     inherit NodeBuilder<'e,'c>(createContext, createThisElement)
-    member this.Run(v) = NodeBuilder.run this v (fun n v -> v)
+    member this.Run(v) = NodeBuilder.run(this, v, (fun n v -> v))
     member _.emitValue() = RenderValC0BaseBuilder(createContext, createThisElement, createResultVal)
 
 type RenderRetC0BaseBuilder<'e,'n,'c
@@ -237,8 +239,8 @@ type RenderRetC0BaseBuilder<'e,'n,'c
     (createContext, createThisElement) 
     =
     inherit NodeBuilder<'e,'c>(createContext, createThisElement)
-    member _.Return(x) = BuilderBricks.return'(x)
-    member this.Run(v) = NodeBuilder.run this v (fun n v -> v)
+    member _.Return(x) = BuilderBricks.return'<_,HostContext<'c>>(x)
+    member this.Run(v) = NodeBuilder.run(this, v, (fun n v -> v))
 
 type RenderValC1BaseBuilder<'v,'e,'n,'c
         when 'n: equality
@@ -247,7 +249,7 @@ type RenderValC1BaseBuilder<'v,'e,'n,'c
     (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
     inherit NodeBuilder<'e,'c>(createContext, createThisElement)
-    member this.Run(v) = NodeBuilder.run this v (fun n v -> createResultVal n)
+    member this.Run(v) = NodeBuilder.run(this, v, (fun n v -> createResultVal n))
 
 type RenderPotC1BaseBuilder<'v,'e,'n,'c
         when 'n: equality
@@ -256,7 +258,7 @@ type RenderPotC1BaseBuilder<'v,'e,'n,'c
     (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
     inherit NodeBuilder<'e,'c>(createContext, createThisElement)
-    member this.Run(v) = NodeBuilder.run this v (fun n v -> v)
+    member this.Run(v) = NodeBuilder.run(this, v, (fun n v -> v))
     member _.emitValue() = RenderValC1BaseBuilder(createContext, createThisElement, createResultVal)
 
 type RenderRetC1BaseBuilder<'e,'n,'c
@@ -266,8 +268,8 @@ type RenderRetC1BaseBuilder<'e,'n,'c
     (createContext, createThisElement) 
     =
     inherit NodeBuilder<'e,'c>(createContext, createThisElement)
-    member _.Return(x) = BuilderBricks.return'(x)
-    member this.Run(v) = NodeBuilder.run this v (fun n v -> v)
+    member _.Return(x) = BuilderBricks.return'<_,HostContext<'c>>(x)
+    member this.Run(v) = NodeBuilder.run(this, v, (fun n v -> v))
 
 type RenderValCnBaseBuilder<'v,'e,'n,'c
         when 'n: equality
@@ -276,9 +278,9 @@ type RenderValCnBaseBuilder<'v,'e,'n,'c
     (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
     inherit NodeBuilder<'e,'c>(createContext, createThisElement)
-    member _.Combine(a, b) = BuilderBricks.combine(a, b)
-    member _.For(seq, body) = BuilderBricks.for'(seq, body)
-    member this.Run(v) = NodeBuilder.run this v (fun n v -> createResultVal n)
+    member _.Combine(a, b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
+    member _.For(seq, body) = BuilderBricks.for'<_,_,_,HostContext<'c>>(seq, body)
+    member this.Run(v) = NodeBuilder.run(this, v, (fun n v -> createResultVal n))
 
 type RenderPotCnBaseBuilder<'v,'e,'n,'c
         when 'n: equality
@@ -287,9 +289,9 @@ type RenderPotCnBaseBuilder<'v,'e,'n,'c
     (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
     inherit NodeBuilder<'e,'c>(createContext, createThisElement)
-    member _.Combine(a, b) = BuilderBricks.combine(a, b)
-    member _.For(seq, body) = BuilderBricks.for'(seq, body)
-    member this.Run(v) = NodeBuilder.run this v (fun n v -> createResultVal n)
+    member _.Combine(a, b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
+    member _.For(seq, body) = BuilderBricks.for'<_,_,_,HostContext<'c>>(seq, body)
+    member this.Run(v) = NodeBuilder.run(this, v, (fun n v -> createResultVal n))
     member _.emitValue() = RenderValCnBaseBuilder(createContext, createThisElement, createResultVal)
 
 type RenderRetCnBaseBuilder<'e,'n,'c
@@ -299,9 +301,9 @@ type RenderRetCnBaseBuilder<'e,'n,'c
     (createContext, createThisElement) 
     =
     inherit NodeBuilder<'e,'c>(createContext, createThisElement)
-    member _.Combine(a, b) = BuilderBricks.combine(a, b)
-    member _.For(seq, body) = BuilderBricks.for'(seq, body)
-    member this.Run(v) = NodeBuilder.run this v (fun n v -> v)
+    member _.Combine(a, b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
+    member _.For(seq, body) = BuilderBricks.for'<_,_,_,HostContext<'c>>(seq, body)
+    member this.Run(v) = NodeBuilder.run(this, v, (fun n v -> v))
     member _.Return(x) = BuilderBricks.return'(x)
 
 
@@ -323,8 +325,8 @@ type VideBaseBuilder with
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
-    member _.Yield(op) = NodeModelBuilderBricks.yieldBuilderOp<'n,'c>(op)
-    member _.Yield(op) = NodeModelBuilderBricks.yieldText<'n,'c>(op)
+    member _.Yield(op) = NodeModelBuilderBricks.yieldBuilderOp(op)
+    member _.Yield(op) = NodeModelBuilderBricks.yieldText(op)
 
     
 // ----------------------------------------------------------------------------

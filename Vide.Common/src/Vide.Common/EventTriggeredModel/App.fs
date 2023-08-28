@@ -1,6 +1,11 @@
 ﻿namespace Vide
 
-type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c, ctxFin: 'c -> unit) =
+type VideApp<'v,'s,'c>
+    (
+        content: Vide<'v,'s,HostContext<'c>>,
+        ctxCtor: unit -> 'c,
+        ctxFin: HostContext<'c> -> unit
+    ) =
     let mutable currValue = None
     let mutable currentState = None
     let mutable isEvaluating = false
@@ -22,7 +27,7 @@ type VideApp<'v,'s,'c>(content: Vide<'v,'s,'c>, ctxCtor: unit -> 'c, ctxFin: 'c 
                         hasPendingEvaluationRequests <- false
                         isEvaluating <- true
                     let value,newState = 
-                        let ctx = ctxCtor ()
+                        let ctx = { host = this; ctx = ctxCtor () }
                         let (Vide content) = content
                         let res = content currentState ctx
                         do ctxFin ctx

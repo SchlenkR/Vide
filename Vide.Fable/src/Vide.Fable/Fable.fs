@@ -90,7 +90,7 @@ type VideApp =
     static member ForHost(host) = 
         VideAppFactory(
             (fun () -> FableContext(host)),
-            (fun (ctx: FableContext) -> do ctx.RemoveObsoleteChildren())
+            (fun ctx -> do ctx.ctx.RemoveObsoleteChildren())
         )
 
 [<AutoOpen>]
