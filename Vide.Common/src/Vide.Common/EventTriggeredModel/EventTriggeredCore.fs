@@ -36,18 +36,18 @@ module AsyncBuilderBricks =
 
     let combine<'v, 'x, 's1, 's2, 'c>
         (
-            Vide a: Vide<'v, 's1, HostContext<'c>>,
+            a: Vide<'v, 's1, HostContext<'c>>,
             b: AsyncBindResult<'x, Vide<'v, 's2, HostContext<'c>>>
         )
         : Vide<'v, 's1 option * AsyncState<_> option * 's2 option, HostContext<'c>>
         =
-        Vide <| fun s ctx ->
+        mkVide <| fun s ctx ->
             let sa,comp,sb =
                 match s with
                 | None -> None,None,None
                 | Some (sa,comp,sb) -> sa,comp,sb
             // TODO: Really reevaluate here at this place?
-            let va,sa = a sa ctx
+            let va,sa = (runVide a) sa ctx
             let v,comp,sb =
                 match comp with
                 | None ->
@@ -67,7 +67,7 @@ module AsyncBuilderBricks =
                     match comp.result.Value with
                     | Some v ->
                         let (AsyncBindResult (_,f)) = b
-                        let (Vide b) = f v
+                        let b = runVide (f v)
                         let vb,sb = b sb ctx
                         vb,comp,sb
                     | None ->

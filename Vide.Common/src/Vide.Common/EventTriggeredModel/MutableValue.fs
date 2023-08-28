@@ -40,6 +40,6 @@ module Vide =
     
     // TODO: Move to keywords? / rename to useState?
     let ofMutable x =
-        Vide <| fun s (ctx: HostContext<_>) ->
+        mkVide <| fun s (ctx: HostContext<_>) ->
             let s = s |> Option.defaultWith (fun () -> MutableValue(x, ctx.host))
             s, Some s

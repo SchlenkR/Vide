@@ -28,8 +28,7 @@ type VideApp<'v,'s,'c>
                         isEvaluating <- true
                     let value,newState = 
                         let ctx = { host = this; ctx = ctxCtor () }
-                        let (Vide content) = content
-                        let res = content currentState ctx
+                        let res = (runVide content) currentState ctx
                         do ctxFin ctx
                         res
                     do
@@ -65,11 +64,11 @@ type VideAppFactory<'c>(ctxCtor, ctxFin) =
         app
     member _.Create(content) : VideApp<_,_,'c> =
         VideApp(content, ctxCtor, ctxFin)
-    member this.CreateWithUntypedState(Vide content) : VideApp<_,_,'c> =
+    member this.CreateWithUntypedState(content: Vide<_,_,_>) : VideApp<_,_,'c> =
         let content =
-            Vide <| fun (s: obj option) ctx ->
+            mkVide <| fun (s: obj option) ctx ->
                 let typedS = s |> Option.map (fun s -> s :?> 's)
-                let v,s = content typedS ctx
+                let v,s = (runVide content) typedS ctx
                 let untypedS = s |> Option.map (fun s -> s :> obj)
                 v,untypedS
         this.Create(content)

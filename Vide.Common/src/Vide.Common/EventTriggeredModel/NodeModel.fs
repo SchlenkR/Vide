@@ -121,12 +121,12 @@ module NodeBuilder =
         >
         (
             thisBuilder: NodeBuilder<'e,'c>,
-            Vide childVide: Vide<'v1, 's, HostContext<'c>>,
+            childVide: Vide<'v1, 's, HostContext<'c>>,
             createResultVal: 'e -> 'v1 -> 'v2
         )
         : Vide<'v2, NodeBuilderState<'e,'s>, HostContext<'c>>
         =
-        Vide <| fun s parentCtx ->
+        mkVide <| fun s parentCtx ->
             let inline runModifiers modifiers node =
                 for m in modifiers do
                     m { node = node; host = parentCtx.host }
@@ -149,7 +149,7 @@ module NodeBuilder =
             let thisCtx =
                 let newCtx = thisBuilder.CreateContext parentCtx.host thisElement
                 { parentCtx with ctx = newCtx }
-            let cv,cs = childVide cs thisCtx
+            let cv,cs = (runVide childVide) cs thisCtx
             do thisCtx.ctx.RemoveObsoleteChildren()
             do runModifiers thisBuilder.PostEvalModifiers thisElement
             let result = createResultVal thisElement cv
@@ -161,12 +161,12 @@ module NodeModelBuilderBricks =
         v
     
     let inline yieldBuilderOp<'n,'c when 'c :> NodeContext<'n>>(op: BuilderOperations) =
-        Vide <| fun s (ctx: HostContext<'c>) ->
+        mkVide <| fun s (ctx: HostContext<'c>) ->
             match op with | Clear -> do ctx.ctx.ClearContent()
             (),None
 
     let inline yieldText<'n,'c when 'c :> NodeContext<'n>>(value: string) =
-        Vide <| fun s (ctx: HostContext<'c>) ->
+        mkVide <| fun s (ctx: HostContext<'c>) ->
             let textNode =
                 s |> Option.defaultWith (fun () ->
                     let textNode = ctx.ctx.CreateTextNode(value)
