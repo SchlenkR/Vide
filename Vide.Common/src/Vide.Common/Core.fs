@@ -6,13 +6,13 @@ namespace Vide
 // state type used in the if branch, but: It has no value.
 // So it must be an Option<'s>.
 
-#if OMIT_SINGLE_CASE_DU
+#if OMIT_SINGLECASEDU_AND_USE_INLINEIFLAMBDA
 
 type Vide<'v,'s,'c> = ('s option -> 'c -> 'v * 's option)
 
 [<AutoOpen>]
 module VideHandling =
-    type InlineIfLambdaAttribute = Attribute
+    type InlineIfLambdaAttribute() = inherit System.Attribute()
     let inline mkVide (v: Vide<_,_,_>) = v
     let inline runVide (v: Vide<_,_,_>) = v
 
@@ -22,7 +22,7 @@ type Vide<'v,'s,'c> = Vide of ('s option -> 'c -> 'v * 's option)
 
 [<AutoOpen>]
 module VideHandling =
-    type InlineIfLambdaAttribute = InlineIfLambdaAttribute
+    type InlineIfLambdaAttribute = FSharp.Core.InlineIfLambdaAttribute
     let inline mkVide v = Vide v
     let inline runVide (Vide v) = v
 
@@ -42,7 +42,7 @@ module Vide =
             s, Some s
     
     // TODO: Think about which function is "global" and module-bound
-    let map (proj: 'v1 -> 'v2) (v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
+    let inline map ([<InlineIfLambda>] proj: 'v1 -> 'v2) (v: Vide<'v1,'s,'c>) : Vide<'v2,'s,'c> =
         mkVide <| fun s ctx ->
             let v,s = (runVide v) s ctx
             proj v, s
@@ -65,10 +65,10 @@ module Vide =
         mkVide <| fun s ctx -> ctx,None
 
 module BuilderBricks =
-    let bind<'v1,'s1,'v2,'s2,'c>
+    let inline bind<'v1,'s1,'v2,'s2,'c>
         (
             m: Vide<'v1,'s1,'c>,
-            f: 'v1 -> Vide<'v2,'s2,'c>
+            [<InlineIfLambda>] f: 'v1 -> Vide<'v2,'s2,'c>
         ) 
         : Vide<'v2,'s1 option * 's2 option,'c>
         =
@@ -104,8 +104,8 @@ module BuilderBricks =
         : Vide<unit,unit,'c>
         = Vide.zero<'c>
 
-    let delay<'v,'s,'c>
-        (f: unit -> Vide<'v,'s,'c>)
+    let inline delay<'v,'s,'c>
+        ([<InlineIfLambda>] f: unit -> Vide<'v,'s,'c>)
         : Vide<'v,'s,'c>
         =
         f ()
@@ -145,10 +145,10 @@ module BuilderBricks =
             let vb,sb = (runVide b) sb ctx
             vb, Some (sa,sb)
 
-    let for'<'a,'v,'s,'c when 'a: comparison>
+    let inline for'<'a,'v,'s,'c when 'a: comparison>
         (
             input: seq<'a>,
-            body: 'a -> Vide<'v,'s,'c>
+            [<InlineIfLambda>] body: 'a -> Vide<'v,'s,'c>
         ) 
         : Vide<'v list, Map<'a, 's option>,'c>
         = 
