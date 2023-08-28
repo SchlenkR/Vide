@@ -18,7 +18,8 @@ type WpfishContext<'n when 'n: equality>
 
 module BuilderHelper =
     // TODO: This should not append - should be done in "apply"
-    let createNode<'e,'n when 'n: equality and 'e : (new: unit -> 'e)> (ctx: WpfishContext<'n>) =
-        let e,n = ctx.WpfishDocument.CreateNodeOfType<'e>()
-        do ctx.ShowChild(n)
-        e
+    let createNode<'e,'n when 'n: equality and 'e : (new: unit -> 'e)> =
+        fun (host: IHost) (ctx: WpfishContext<'n>) ->
+            let e,n = ctx.WpfishDocument.CreateNodeOfType<'e>()
+            do ctx.ShowChild(n)
+            e
