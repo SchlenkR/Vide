@@ -12,9 +12,6 @@ module FormFactor =
 type App() =
     inherit Application()
 
-    do
-        Debug.enabledDebugChannels <- set [99]
-
     //let demo = UseCases.GettingStarted.counter, FormFactor.desktop
     let demo = UseCases.TodoList.view, FormFactor.mobile
     //let demo = UseCases.EvalDebugger.view, FormFactor.mobile
@@ -36,7 +33,7 @@ type App() =
                 )
                 let app = VideApp.ForHost(host).CreateAndStart(fst demo)
                 do app.OnEvaluated(fun v s ->
-                    Debug.print 99 $"Eval DONE ({app.EvaluationManager.EvaluationCount} cycles)"
+                    Debug.WriteLine($"Eval DONE ({app.EvaluationManager.EvaluationCount} cycles)")
                 )
                 window
         | _ -> failwith "Unexpected ApplicationLifetime"
