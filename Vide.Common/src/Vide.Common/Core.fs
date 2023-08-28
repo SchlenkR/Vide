@@ -6,17 +6,7 @@ namespace Vide
 // state type used in the if branch, but: It has no value.
 // So it must be an Option<'s>.
 
-#if OMIT_SINGLECASEDU_AND_USE_INLINEIFLAMBDA
-
-type Vide<'v,'s,'c> = ('s option -> 'c -> 'v * 's option)
-
-[<AutoOpen>]
-module VideHandling =
-    type InlineIfLambdaAttribute() = inherit System.Attribute()
-    let inline mkVide (v: Vide<_,_,_>) = v
-    let inline runVide (v: Vide<_,_,_>) = v
-
-#else
+#if USE_SINGLECASEDU_WITHOUT_INLINEIFLAMBDA
 
 type Vide<'v,'s,'c> = Vide of ('s option -> 'c -> 'v * 's option)
 
@@ -25,6 +15,16 @@ module VideHandling =
     type InlineIfLambdaAttribute = FSharp.Core.InlineIfLambdaAttribute
     let inline mkVide v = Vide v
     let inline runVide (Vide v) = v
+
+#else
+
+type Vide<'v,'s,'c> = ('s option -> 'c -> 'v * 's option)
+
+[<AutoOpen>]
+module VideHandling =
+    type InlineIfLambdaAttribute() = inherit System.Attribute()
+    let inline mkVide (v: Vide<_,_,_>) = v
+    let inline runVide (v: Vide<_,_,_>) = v
 
 #endif
 
