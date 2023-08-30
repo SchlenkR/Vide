@@ -4,7 +4,7 @@
     <RootNamespace>Vide.DSP</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Lib.fs" />
+    <Compile Include="Notes.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vide.Common\src\Vide.Common\Vide.Common.fsproj" />

@@ -31,13 +31,13 @@ module VideHandling =
 module Vide =
 
     // Preserves the first value given and discards subsequent values.
-    let preserveValue x =
-        mkVide <| fun s ctx ->
+    let preserveValue<'v,'c> (x: 'v) =
+        mkVide <| fun s (ctx: 'c) ->
             let s = s |> Option.defaultValue x
             s, Some s
     
-    let preserveWith x =
-        mkVide <| fun s ctx ->
+    let preserveWith<'v,'c> (x: unit -> 'v) =
+        mkVide <| fun s (ctx: 'c) ->
             let s = s |> Option.defaultWith x
             s, Some s
     
@@ -46,7 +46,7 @@ module Vide =
         mkVide <| fun s ctx ->
             let v,s = (runVide v) s ctx
             proj v, s
-    
+
     // why 's and not unit? -> see comment in "VideBuilder.Zero"
     [<GeneralizableValue>]
     let zero<'c> : Vide<unit,unit,'c> =
@@ -61,7 +61,7 @@ module Vide =
     ////    fun s ctx -> (),None
 
     [<GeneralizableValue>]
-    let context<'c> : Vide<'c,unit,'c> =
+    let ctx<'c> : Vide<'c,unit,'c> =
         mkVide <| fun s ctx -> ctx,None
 
 module BuilderBricks =

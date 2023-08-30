@@ -23,6 +23,8 @@
 
   <ItemGroup>
     <Compile Include="Core.fs" />
+    <Compile Include="Dsp/Core.fs" />
+    <Compile Include="Dsp/BinOps.fs" />
     <Compile Include="EventTriggeredModel/EventTriggeredCore.fs" />
     <Compile Include="EventTriggeredModel/MutableValue.fs" />
     <Compile Include="EventTriggeredModel/App.fs" />
