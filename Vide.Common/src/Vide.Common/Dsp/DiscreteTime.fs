@@ -9,12 +9,26 @@ type [<Struct>] DiscreteTimeContext =
         samplePos: int
     }
 
+module DiscreteTimeContext =
+    let mkGetCtx sampleRate =
+        let ctx = { sampleRate = sampleRate; samplePos = 0 }
+        fun i -> { ctx with samplePos = i }
+
 module Const =
     let pi = Math.PI
     let pi2 = 2.0 * pi
     let sqrt2 = 1.4142135623730951
 
 module Fx =
+    module Eval =
+        let inline toEvaluable sampleRate ([<InlineIfLambda>] fx) =
+            let getCtx = DiscreteTimeContext.mkGetCtx sampleRate
+            Fx.Eval.toEvaluable getCtx fx
+
+        let inline toSeq sampleRate ([<InlineIfLambda>] fx) =
+            let getCtx = DiscreteTimeContext.mkGetCtx sampleRate
+            Fx.Eval.toSeq getCtx fx
+
     module Envelopes =
         /// An Envelope follower (tc: [0.0 .. 1.0])
         let follower initial tc (input: float) =
@@ -229,7 +243,17 @@ module Fx =
             biQuadBase p calcCoeffs input
 
 module Gen =
+    module Eval =
+        let inline toEvaluable sampleRate gen =
+            let getCtx = DiscreteTimeContext.mkGetCtx sampleRate
+            Gen.Eval.toEvaluable getCtx gen
+
+        let inline toSeq sampleRate gen =
+            let getCtx = DiscreteTimeContext.mkGetCtx sampleRate
+            Gen.Eval.toSeq getCtx gen
+
     module Osc =
+        // TODO: Don't use the Random dotnet class, but a better random generator for Vide
         let noise =
             mkVide <| fun s (ctx: DiscreteTimeContext) ->
                 let random = s |> Option.defaultWith Random

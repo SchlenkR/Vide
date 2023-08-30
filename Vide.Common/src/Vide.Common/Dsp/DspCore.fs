@@ -96,15 +96,15 @@ module Gen =
     module Eval =
         let inline toEvaluable
             (getCtx: int -> 'c)
-            (generator: Vide<'v,'s,'c>) 
+            (gen: Vide<'v,'s,'c>) 
             =
-            Fx.Eval.toEvaluable getCtx (fun () -> generator)
+            Fx.Eval.toEvaluable getCtx (fun () -> gen)
 
         let inline toSeq
             (getCtx: int -> 'c)
-            (generator: Vide<'v,'s,'c>) 
+            (gen: Vide<'v,'s,'c>) 
             =
-            let evaluable = toEvaluable getCtx generator
+            let evaluable = toEvaluable getCtx gen
             seq { while true do evaluable () }
 
         let eval n (v: Vide<_,_,_>) =
