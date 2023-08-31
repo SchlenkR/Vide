@@ -1,3 +1,4 @@
+[<AutoOpen>]
 module Vide.Dsp.DiscreteTime
 
 open System
@@ -5,13 +6,14 @@ open Vide
 
 type [<Struct>] DiscreteTimeContext =
     {
-        sampleRate: float
+        sampleRate: int
+        sampleRateFloat: float
         samplePos: int
     }
 
 module DiscreteTimeContext =
     let mkGetCtx sampleRate =
-        let ctx = { sampleRate = sampleRate; samplePos = 0 }
+        let ctx = { sampleRate = sampleRate; sampleRateFloat = float sampleRate; samplePos = 0 }
         fun i -> { ctx with samplePos = i }
 
 module Const =
@@ -98,7 +100,7 @@ module Fx =
 
         let lowPass (p: BiQuadParams) input =
             let calcCoeffs (ctx: DiscreteTimeContext) =
-                let k = Math.Tan(Const.pi * p.frq / ctx.sampleRate)
+                let k = Math.Tan(Const.pi * p.frq / ctx.sampleRateFloat)
                 let norm = 1.0 / (1.0 + k / p.q + k * k)
                 let a0 = k * k * norm
                 let a1 = 2.0 * a0
@@ -115,7 +117,7 @@ module Fx =
 
         let bandPass (p: BiQuadParams) input =
             let calcCoeffs (ctx: DiscreteTimeContext) =
-                let k = Math.Tan(Const.pi * p.frq / ctx.sampleRate)
+                let k = Math.Tan(Const.pi * p.frq / ctx.sampleRateFloat)
                 let norm = 1.0 / (1.0 + k / p.q + k * k)
                 let a0 = k / p.q * norm
                 let a1 = 0.0
@@ -132,7 +134,7 @@ module Fx =
 
         let highShelf (p: BiQuadParams) input =
             let calcCoeffs (ctx: DiscreteTimeContext) =
-                let k = Math.Tan(Const.pi * p.frq / ctx.sampleRate)
+                let k = Math.Tan(Const.pi * p.frq / ctx.sampleRateFloat)
                 let v = Math.Pow(10.0, Math.Abs(p.gain) / 20.0)
                 match p.gain >= 0.0 with
                 | true ->
@@ -157,7 +159,7 @@ module Fx =
 
         let highPass (p: BiQuadParams) input =
             let calcCoeffs (ctx: DiscreteTimeContext) =
-                let k = Math.Tan(Const.pi * p.frq / ctx.sampleRate)
+                let k = Math.Tan(Const.pi * p.frq / ctx.sampleRateFloat)
                 let norm = 1.0 / (1.0 + k / p.q + k * k)
                 let a0 = norm
                 let a1 = -2.0 * a0
@@ -174,7 +176,7 @@ module Fx =
 
         let lowShelf (p: BiQuadParams) input =
             let calcCoeffs (ctx: DiscreteTimeContext) =
-                let k = Math.Tan(Const.pi * p.frq / ctx.sampleRate)
+                let k = Math.Tan(Const.pi * p.frq / ctx.sampleRateFloat)
                 let v = Math.Pow(10.0, Math.Abs(p.gain) / 20.0)
                 match p.gain >= 0.0 with
                 | true ->
@@ -199,7 +201,7 @@ module Fx =
 
         let notch (p: BiQuadParams)  input=
             let calcCoeffs (ctx: DiscreteTimeContext) =
-                let k = Math.Tan(Const.pi * p.frq / ctx.sampleRate)
+                let k = Math.Tan(Const.pi * p.frq / ctx.sampleRateFloat)
                 let norm = 1.0 / (1.0 + k / p.q + k * k)
                 let a0 = (1.0 + k * k) * norm
                 let a1 = 2.0 * (k * k - 1.0) * norm
@@ -217,7 +219,7 @@ module Fx =
         let peak (p: BiQuadParams) input =
             let calcCoeffs (ctx: DiscreteTimeContext) =
                 let v = Math.Pow(10.0, Math.Abs(p.gain) / 20.0)
-                let k = Math.Tan(Const.pi * p.frq / ctx.sampleRate)
+                let k = Math.Tan(Const.pi * p.frq / ctx.sampleRateFloat)
                 let l = p.q * k + k * k
                 match p.gain >= 0.0 with
                 | true ->
@@ -263,7 +265,7 @@ module Gen =
         let osc (frq: float) f =
             mkVide <| fun s (ctx: DiscreteTimeContext) ->
                 let angle = s |> Option.defaultValue 0.0
-                let newAngle = (angle + Const.pi2 * frq / ctx.sampleRate) % Const.pi2
+                let newAngle = (angle + Const.pi2 * frq / ctx.sampleRateFloat) % Const.pi2
                 f newAngle, Some newAngle
 
         // TODO: phase

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <RootNamespace>Vide.DSP</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Playback.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Vide.Common\src\Vide.Common\Vide.Common.fsproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.2.0" />
+  </ItemGroup>
+</Project>
