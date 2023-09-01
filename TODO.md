@@ -28,10 +28,10 @@ New Ideas / Brainstorm
         static member inline TextBlock =
             AvaloniaControlBuilders.TextBlock().onInit(fun x -> x.node.FontSize <- 80.0)
 
-        open type Vide.AvaloniaControls
+        open type Vide.UI.AvaloniaControls
         open type AvaloniaControlsEx
     ```
-* [<AutoOpen>] for all API factories? That would make `open type Vide.AvaloniaControls` unnecessary.
+* [<AutoOpen>] for all API factories? That would make `open type Vide.UI.AvaloniaControls` unnecessary.
 
 Useful (already discovered)
 ---

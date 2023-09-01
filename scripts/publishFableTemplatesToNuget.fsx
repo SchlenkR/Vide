@@ -2,5 +2,5 @@
 open Build
 
 cleanPackFolder ()
-pack "../Vide.Fable/dotnetTemplates/templates.fsproj"
+pack "../Vide.UI/Vide.UI.Fable/dotnetTemplates/templates.fsproj"
 publish ()

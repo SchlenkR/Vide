@@ -1,1 +1,1 @@
-dotnet run --project ../Vide.Fable/src/HtmlApiGenerator/HtmlApiGenerator.fsproj -- --clean
+dotnet run --project ../Vide.UI/Vide.UI.Fable/src/HtmlApiGenerator/HtmlApiGenerator.fsproj -- --clean
