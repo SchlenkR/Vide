@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Avalonia", "Vide.Avalonia\Vide.Avalonia.fsproj", "{2C252739-36FC-48F1-B519-7DCA2E9A8FC0}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Common", "..\..\Vide.Common\src\Vide.Common\Vide.Common.fsproj", "{6CB0C914-EFC0-4E95-B114-14DC226A4CB3}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Common", "..\..\..\Vide.Common\src\Vide.Common\Vide.Common.fsproj", "{6CB0C914-EFC0-4E95-B114-14DC226A4CB3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevApp", "DevApp", "{B528D157-B35F-477F-8D69-8BF9AC4F60DE}"
 EndProject

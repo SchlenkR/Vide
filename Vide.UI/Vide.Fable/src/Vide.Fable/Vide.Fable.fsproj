@@ -31,7 +31,7 @@
       https://stackoverflow.com/questions/44643288/target-beforebuild-doesnt-work-in-csproj 
   -->
   <Target Name="CopyControlFlow" BeforeTargets="Build">
-    <Copy SourceFiles="$(ProjectDir)..\..\..\Vide.Common\src\LinkableFiles\Vide.Common.ControlFlow.fs" DestinationFolder="$(ProjectDir)" OverwriteReadOnlyFiles="true" ContinueOnError="false" />
+    <Copy SourceFiles="$(ProjectDir)..\..\..\..\Vide.Common\src\LinkableFiles\Vide.Common.ControlFlow.fs" DestinationFolder="$(ProjectDir)" OverwriteReadOnlyFiles="true" ContinueOnError="false" />
   </Target>
   <ItemGroup>
     <Compile Include="Fable.fs" />
@@ -42,10 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="*.fsproj; *.fs; *.js;" Exclude="**\*.fs.js" PackagePath="fable\" />
-    <None Include="..\..\..\README.md" Pack="true" PackagePath="\" />
-    <None Include="..\..\..\artwork\nuget_logo.png" Pack="true" PackagePath="\" />
+    <None Include="..\..\..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\..\..\artwork\nuget_logo.png" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Vide.Common\src\Vide.Common\Vide.Common.fsproj" />
+    <ProjectReference Include="..\..\..\..\Vide.Common\src\Vide.Common\Vide.Common.fsproj" />
   </ItemGroup>
 </Project>
