@@ -24,6 +24,7 @@ let noisyModulated = dsp {
 
 let lessNoisy = 
     noisyModulated
-    |=> Fx.Filter.lowPass { frq = 50.0; q = 0.9; gain = 1.0 }
+    |=> Fx.Filter.lowPass { frq = 500.0; q = 0.9; gain = 1.0 }
 
-playSync 44100 2 (TimeSpan.FromSeconds 4.0) lessNoisy
+let voice = Playback.startParallel 44100 2 (TimeSpan.FromSeconds 10.0) lessNoisy
+voice.stop()
