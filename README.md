@@ -36,3 +36,9 @@ What to do:
 	* Vide.UI.Fable dotnetTemplates (templates.fsproj)
 * Update Package Ref Version
 	* Vide.UI.Fable dotnetTemplates (AppName.fsproj)
+* Fablke
+  * Check if all files are included correctly
+  * Check the correct versions are referenced for Vide.UI.Fable in the template
+  * npm i for the tempalte and update lockfile
+  * Are the correct SDK versions referenced in the template
+  * instanciate the template; npm i; npm run build
