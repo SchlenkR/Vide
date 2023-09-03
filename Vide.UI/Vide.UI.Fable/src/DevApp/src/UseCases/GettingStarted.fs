@@ -18,15 +18,15 @@ let counter =
             $"Count = "
             span.id("result") { $"{count.Value}"  }
         }
-        button.id("dec").onclick(fun _ -> count -= 1) { "dec" }
-        button.id("inc").onclick(fun _ -> count += 1) { "inc" }
+        button.id("dec").onclick(fun _ -> count.Set(count.Value - 1)) { "dec" }
+        button.id("inc").onclick(fun _ -> count.Set(count.Value + 1)) { "inc" }
     }
 
 let conditionalAttributes =
     vide {
         let! count = Vide.ofMutable 0
 
-        button.id("hitMe").onclick(fun _ -> count += 1) {
+        button.id("hitMe").onclick(fun _ -> count.Set(count.Value + 1)) {
             $"Hit me! Count = {count.Value}"
         }
         div.class'("the-message") {

@@ -10,9 +10,9 @@ let simpleFor =
     }
 
 let statelessFor =
-    let nextNum() = System.Random().Next(10000)
     vide {
         let! items = Vide.ofMutable []
+        let nextNum() = 0 :: items.Value |> List.max |> (+) 1
         let add1 _ = items := items.Value @ [nextNum()]
         let add100 _ = items := items.Value @ [ for _ in 0..100 do nextNum() ]
         let removeAll _ = items :=  []
@@ -29,9 +29,9 @@ let statelessFor =
     }
 
 let statefulFor =
-    let nextNum() = System.Random().Next(10000)
     vide {
         let! items = Vide.ofMutable []
+        let nextNum() = 0 :: items.Value |> List.max |> (+) 1
         let add1 _ = items := items.Value @ [nextNum()]
         let add100 _ = items := items.Value @ [ for _ in 0..100 do nextNum() ]
         let removeAll _ = items := []

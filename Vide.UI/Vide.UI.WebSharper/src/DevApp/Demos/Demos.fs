@@ -91,9 +91,9 @@ module GettingStarted =
         }
 
     let statelessFor =
-        let nextNum() = System.Random().Next(10000)
         vide {
             let! items = Vide.ofMutable []
+            let nextNum() = 0 :: items.Value |> List.max |> (+) 1
             let add1 _ = items.Value <- items.Value @ [nextNum()]
             let add100 _ = items.Value <- items.Value @ [ for _ in 0..100 do nextNum() ]
             let removeAll _ = items.Value <-  []
@@ -110,9 +110,9 @@ module GettingStarted =
         }
 
     let statefulFor =
-        let nextNum() = System.Random().Next(10000)
         vide {
             let! items = Vide.ofMutable []
+            let nextNum() = 0 :: items.Value |> List.max |> (+) 1
             let add1 _ = items.Value <- items.Value @ [nextNum()]
             let add100 _ = items.Value <- items.Value @ [ for _ in 0..100 do nextNum() ]
             let removeAll _ = items.Value <- []
@@ -136,7 +136,7 @@ module GettingStarted =
 module Input =
     let textInputReturnsValue = 
         vide {
-            // TODO: Docu - wie ändert man das PropertyChangedTrigger-Verhalten
+            // TODO: Docu - wie ï¿½ndert man das PropertyChangedTrigger-Verhalten
             let! enteredValue = input.type'("text").oninput()
             div {
                 $"You say: {enteredValue.TextValue}"

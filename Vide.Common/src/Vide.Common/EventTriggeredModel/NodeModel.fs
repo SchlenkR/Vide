@@ -2,7 +2,6 @@
 module Vide.NodeModel
 
 open System.Runtime.CompilerServices
-open System.Collections.Generic
 open Vide
 
 type NodeModelBaseBuilder() =
@@ -169,15 +168,15 @@ module NodeModelBuilderBricks =
             let state = Some (Some thisElement, cs)
             result,state
 
-    let inline forWithKVP<'a,'key,'v,'s,'c when 'key: equality>
+    let inline forWithKVP<'a,'key,'v,'s,'c when 'key: comparison>
         (
             elems: seq<KVP<'key, 'a>>,
             [<InlineIfLambda>] body: 'a -> Vide<'v,'s,'c>
         )
-        : Vide<'v list, Dictionary<'key, 's option>, 'c>
+        : Vide<'v list, Map<'key, 's option>, 'c>
         =
         mkVide <| fun s ctx ->
-            let currMap = s |> Option.defaultValue (Dictionary())
+            let mutable currMap = s |> Option.defaultValue Map.empty
             let resValues,resStates =
                 [ for KVP(key,elem) in elems do
                     let matchingState =
@@ -190,10 +189,13 @@ module NodeModelBuilderBricks =
                     v, (key,s)
                 ]
                 |> List.unzip
-            resValues, Some (System.Linq.Enumerable.ToDictionary(resStates, fst, snd))
+            let newState = resStates |> Map.ofList
+            if newState.Count <> resStates.Length then
+                failwith "Duplicate key in forWithKVP"
+            resValues, Some newState
 
     let inline forWithKeyField<^a,'key,'v,'s,'c
-            when 'key: equality
+            when 'key: comparison
             and ^a: (member key: 'key)
         >
         (
@@ -469,6 +471,6 @@ module Event =
                 do host.ResumeEvaluation()
 
 [<RequireQualifiedAccess>]
-module Seq =
+module For =
     let keyed elems = elems |> Seq.map KVP
     let selfKeyed elems = elems |> Seq.map (fun x -> KVP (x,x))

@@ -36,7 +36,7 @@ let view = vide {
         }
     }
     div {
-        for item in todoList.Value.items do
+        for item in todoList.Value.items |> For.selfKeyed do
             div.class'("flex-row") {
                 input.bind(item.isDone, fun value -> item.isDone <- value)
                 button

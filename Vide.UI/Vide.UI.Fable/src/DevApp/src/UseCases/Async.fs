@@ -104,5 +104,5 @@ let asyncWithSubsequentResults =
         }
         
         let! componentResult = myAsyncComponent
-        currRes := componentResult
+        do componentResult |> currRes.Set
     }
