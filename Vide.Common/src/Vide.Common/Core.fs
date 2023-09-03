@@ -110,7 +110,7 @@ module BuilderBricks =
         : Vide<unit,unit,'c>
         = Vide.zeroFixedState<'c>
 
-    let zeroAdaptiveState<'c>
+    let zeroAdaptiveState<'s,'c>
         ()
         : Vide<unit,'s,'c>
         = Vide.zeroAdaptiveState<'s,'c>
