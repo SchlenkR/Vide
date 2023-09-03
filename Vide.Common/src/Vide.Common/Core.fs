@@ -156,26 +156,15 @@ module BuilderBricks =
             let vb,sb = (runVide b) sb ctx
             vb, Some (sa,sb)
 
-    let inline for'<'a,'v,'s,'c when 'a: comparison>
-        (
-            input: seq<'a>,
-            [<InlineIfLambda>] body: 'a -> Vide<'v,'s,'c>
-        ) 
-        : Vide<'v list, Map<'a, 's option>,'c>
-        = 
-        mkVide <| fun s ctx ->
-            let mutable currMap = s |> Option.defaultValue Map.empty
-            let resValues,resStates =
-                [ for x in input do
-                    let matchingState = currMap |> Map.tryFind x |> Option.flatten
-                    let v,s = 
-                        let v = runVide (body x)
-                        v matchingState ctx
-                    do currMap <- currMap |> Map.remove x
-                    v, (x,s)
-                ]
-                |> List.unzip
-            resValues, Some (resStates |> Map.ofList)
+    // 'for' is really a NodeModel, speific thing, so I moved it there.
+    // let inline for'<'a,'v,'s,'c when 'a: comparison>
+    //     (
+    //         inpElems: seq<'a>,
+    //         [<InlineIfLambda>] body: 'a -> Vide<'v,'s,'c>
+    //     ) 
+    //     : Vide<'v list, ResizeArray<'s option>, 'c>
+    //     =
+    //     mkVide <| fun s ctx ->
 
 // For value restriction and other resolution issues, it's better to
 // move these (remaining) builder methods "as close as possible" to the builder class that's

@@ -2,6 +2,7 @@
 module Vide.NodeModel
 
 open System.Runtime.CompilerServices
+open System.Collections.Generic
 open Vide
 
 type NodeModelBaseBuilder() =
@@ -15,13 +16,15 @@ type NodeModelBaseBuilder() =
     member _.Combine(a, b) = AsyncBuilderBricks.combine(a, b)
     // TODO: async for
 
-
 type TextNodeProxy<'n> =
     {
         node: 'n
         getText: unit -> string
         setText: string -> unit
     }
+
+[<Struct>]
+type KVP<'k,'v> = KVP of 'k * 'v
 
 /// This must be a stateless implementation that abstracts
 /// commonly used node functions. Note that from the
@@ -166,30 +169,40 @@ module NodeModelBuilderBricks =
             let state = Some (Some thisElement, cs)
             result,state
 
-    let inline for'<'a,'v,'s,'c when 'a: not struct>
+    let inline forWithKVP<'a,'key,'v,'s,'c when 'key: equality>
         (
-            inpElems: seq<'a>,
+            elems: seq<KVP<'key, 'a>>,
             [<InlineIfLambda>] body: 'a -> Vide<'v,'s,'c>
         )
-        : Vide<'v list, Dictionary<'a, 's option>, 'c>
+        : Vide<'v list, Dictionary<'key, 's option>, 'c>
         =
         mkVide <| fun s ctx ->
-            let values,newItemStates =
-                // TODO: Here's perhaps a lot of potential for perf improvements
-                let lastElemStates = s |> Option.defaultValue (System.Collections.Generic.Dictionary())
-                [ for inpElem in inpElems do
-                    let matchingLastElem =
-                        lastElemStates
-                        |> Seq.tryFind (fun (k,s) -> k = inpElem)
-                        then lastElemStates.[idx] 
-                        else None
-                    let elemValue,newElemState =
-                        let videForElem = runVide (body inpElem)
-                        videForElem matchingLastElem ctx
-                    elemValue,newElemState
+            let currMap = s |> Option.defaultValue (Dictionary())
+            let resValues,resStates =
+                [ for KVP(key,elem) in elems do
+                    let matchingState =
+                        let found,maybeValue = currMap.TryGetValue(key)
+                        if found then maybeValue else None
+                    let v,s =
+                        let v = runVide (body elem)
+                        v matchingState ctx
+                    do currMap.Remove(key) |> ignore
+                    v, (key,s)
                 ]
                 |> List.unzip
-            values, Some newItemStates
+            resValues, Some (System.Linq.Enumerable.ToDictionary(resStates, fst, snd))
+
+    let inline forWithKeyField<^a,'key,'v,'s,'c
+            when 'key: equality
+            and ^a: (member key: 'key)
+        >
+        (
+            input: seq<^a>,
+            [<InlineIfLambda>] body
+        )
+        =
+        let input = input |> Seq.map (fun x -> KVP (x.key,x))
+        forWithKVP<^a,'key,'v,'s,'c> (input, body)
 
     let inline yieldVide(v: Vide<_,_,_>) =
         v
@@ -243,9 +256,10 @@ type ComponentRetCnBaseBuilder<'n,'c
     > () =
     inherit NodeModelBaseBuilder()
     member _.Return(x) = BuilderBricks.return'<_,HostContext<'c>>(x)
-    member _.Delay(f) = BuilderBricks.delay<_,_,HostContext<'c>>(f)
-    member _.Combine(a, b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
-    member _.For(seq, body) = NodeModelBuilderBricks.for'<_,_,_,HostContext<'c>>(seq, body)
+    member _.Delay([<InlineIfLambda>] f) = BuilderBricks.delay<_,_,HostContext<'c>>(f)
+    member _.Combine([<InlineIfLambda>] a, [<InlineIfLambda>] b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
+    member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKVP<_,_,_,_,HostContext<'c>>(seq, body)
+    member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKeyField<_,_,_,_,HostContext<'c>>(seq, body)
 
 type RenderValC0BaseBuilder<'v,'e,'n,'c
         when 'n: equality
@@ -312,9 +326,10 @@ type RenderValCnBaseBuilder<'v,'e,'n,'c
     (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
     inherit NodeBuilder<'e,'c>(createContext, createThisElement)
-    member _.Combine(a, b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
-    member _.For(seq, body) = NodeModelBuilderBricks.for'<_,_,_,HostContext<'c>>(seq, body)
-    member this.Run(v) = NodeModelBuilderBricks.run(this, v, (fun n v -> createResultVal n))
+    member _.Combine([<InlineIfLambda>] a, [<InlineIfLambda>] b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
+    member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKVP<_,_,_,_,HostContext<'c>>(seq, body)
+    member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKeyField<_,_,_,_,HostContext<'c>>(seq, body)
+    member this.Run([<InlineIfLambda>] v) = NodeModelBuilderBricks.run(this, v, (fun n v -> createResultVal n))
 
 type RenderPotCnBaseBuilder<'v,'e,'n,'c
         when 'n: equality
@@ -323,9 +338,10 @@ type RenderPotCnBaseBuilder<'v,'e,'n,'c
     (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
     inherit NodeBuilder<'e,'c>(createContext, createThisElement)
-    member _.Combine(a, b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
-    member _.For(seq, body) = NodeModelBuilderBricks.for'<_,_,_,HostContext<'c>>(seq, body)
-    member this.Run(v) = NodeModelBuilderBricks.run(this, v, (fun n v -> createResultVal n))
+    member _.Combine([<InlineIfLambda>] a, [<InlineIfLambda>] b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
+    member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKVP<_,_,_,_,HostContext<'c>>(seq, body)
+    member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKeyField<_,_,_,_,HostContext<'c>>(seq, body)
+    member this.Run([<InlineIfLambda>] v) = NodeModelBuilderBricks.run(this, v, (fun n v -> createResultVal n))
     member _.emitValue() = RenderValCnBaseBuilder(createContext, createThisElement, createResultVal)
 
 type RenderRetCnBaseBuilder<'e,'n,'c
@@ -335,9 +351,10 @@ type RenderRetCnBaseBuilder<'e,'n,'c
     (createContext, createThisElement) 
     =
     inherit NodeBuilder<'e,'c>(createContext, createThisElement)
-    member _.Combine(a, b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
-    member _.For(seq, body) = NodeModelBuilderBricks.for'<_,_,_,HostContext<'c>>(seq, body)
-    member this.Run(v) = NodeModelBuilderBricks.run(this, v, (fun n v -> v))
+    member _.Combine([<InlineIfLambda>] a, [<InlineIfLambda>] b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
+    member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKVP<_,_,_,_,HostContext<'c>>(seq, body)
+    member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKeyField<_,_,_,_,HostContext<'c>>(seq, body)
+    member this.Run([<InlineIfLambda>] v) = NodeModelBuilderBricks.run(this, v, (fun n v -> v))
     member _.Return(x) = BuilderBricks.return'(x)
 
 
@@ -360,7 +377,7 @@ type NodeModelBaseBuilder with
     member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
     member _.Yield(op) = NodeModelBuilderBricks.yieldBuilderOp(op)
-    member _.Yield(op) = NodeModelBuilderBricks.yieldText(op)
+    member _.Yield(text) = NodeModelBuilderBricks.yieldText(text)
 
     
 // ----------------------------------------------------------------------------
@@ -450,3 +467,7 @@ module Event =
                     host.RequestEvaluation()
             finally
                 do host.ResumeEvaluation()
+
+[<RequireQualifiedAccess>]
+module Seq =
+    let keyed elems = elems |> Seq.map KVP

@@ -7,17 +7,17 @@ open type Vide.UI.Avalonia.Controls
 open type Vide.UI.Avalonia.AvaloniaControlsDefaults
 
 type TodoList = { items: TodoItem list }
-and TodoItem = { name: string; mutable isDone: bool }
+and TodoItem = { name: string; mutable isDone: bool; key: int }
 
 let view = vide {
     let! todoList = 
         { 
             items = [
-                { name = "Write Vide docu"; isDone = false }
-                { name = "Cook new ramen broth"; isDone = false }
-                { name = "Stuff that's already done"; isDone = true }
-                { name = "Auto-gen Vide Avalonia API"; isDone = false }
-                { name = "Wrap this list in ScrollViewer"; isDone = false }
+                { name = "Write Vide docu"; isDone = false; key = 0 }
+                { name = "Cook new ramen broth"; isDone = false; key = 1 }
+                { name = "Stuff that's already done"; isDone = true; key = 2 }
+                { name = "Auto-gen Vide Avalonia API"; isDone = false; key = 3 }
+                { name = "Wrap this list in ScrollViewer"; isDone = false; key = 4 }
             ] 
         }
         |> Vide.ofMutable
@@ -40,10 +40,14 @@ let view = vide {
                 .IsEnabled(String.IsNullOrWhiteSpace(itemName.Value) |> not)
                 .onInit(fun x -> x.node.IsDefault <- true)
                 .Click(fun _ ->
-                    let newItem = { name = itemName.Value; isDone = false }
+                    let nextId = 
+                        match  todoList.Value.items |> List.map (fun x -> x.key) |> List.sortDescending with
+                        | [] -> 0
+                        | x::_ -> x + 1
+                    let newItem = { name = itemName.Value; isDone = false; key = nextId }
                     do setItems (newItem :: todoList.Value.items)
                     do itemName.Reset()) { 
-                    "Add Item" 
+                        "Add Item"
                 }
             TextBox.bind(itemName)
         }

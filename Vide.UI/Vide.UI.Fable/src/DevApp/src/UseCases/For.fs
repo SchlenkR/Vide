@@ -42,7 +42,9 @@ let statefulFor =
         
         for x in items.Value do
             div.class'("card") {
-                let removeMe _ = items := items.Value |> List.except [x]
+                let removeMe _ = 
+                    printfn $"Removing element with ID {x} ..."
+                    items := items.Value |> List.except [x]
                 button.onclick(removeMe) { $"Remove {x}" }
 
                 let! count = Vide.ofMutable 0

@@ -70,6 +70,7 @@ Useful (already discovered)
 Performance / Optimizations / Robustheit
 ---
 
+* More [<InlineIfLambda>] on builder methods etc.
 * 2 Property-APIs: For each Property: 1 for Init-Only and 1 for OnEval
 * Compare current values and only set when different (also in 'bind' methods)
   * Mandatory for bind in conjunction with:
