@@ -29,7 +29,7 @@ type TextNodeProxy<'n> =
 /// both 'of type 'n (which is the common node type).
 
 type INodeDocument<'n> =
-    abstract member EnsureChildAppended : parent: 'n * child: 'n -> unit
+    abstract member EnsureChildAppendedAtIdx : parent:'n * child:'n * idx:int -> unit
     abstract member RemoveChild : parent: 'n * child: 'n -> unit
     abstract member GetChildren : parent: 'n -> 'n list
     abstract member ClearChildren : parent: 'n -> unit
@@ -54,10 +54,9 @@ type NodeContext<'n when 'n: equality>
         document.CreateTextNode(value)
     member _.ShowChild(child) =
         // What is important here:
-        // The ordering is supposed to remain unchanged!
-        // So we don't need a concept of "current index"
+        // The ordering of elements can change; important for "for".
         do keptChildren <- child :: keptChildren
-        do document.EnsureChildAppended(parent, child)
+        do document.EnsureChildAppendedAtIdx(parent, child, keptChildren.Length - 1)
     member _.RemoveObsoleteChildren() =
         let childrenForRemoval = document.GetChildren(parent) |> List.except keptChildren
         for child in childrenForRemoval do
@@ -167,6 +166,31 @@ module NodeModelBuilderBricks =
             let state = Some (Some thisElement, cs)
             result,state
 
+    let inline for'<'a,'v,'s,'c when 'a: not struct>
+        (
+            inpElems: seq<'a>,
+            [<InlineIfLambda>] body: 'a -> Vide<'v,'s,'c>
+        )
+        : Vide<'v list, Dictionary<'a, 's option>, 'c>
+        =
+        mkVide <| fun s ctx ->
+            let values,newItemStates =
+                // TODO: Here's perhaps a lot of potential for perf improvements
+                let lastElemStates = s |> Option.defaultValue (System.Collections.Generic.Dictionary())
+                [ for inpElem in inpElems do
+                    let matchingLastElem =
+                        lastElemStates
+                        |> Seq.tryFind (fun (k,s) -> k = inpElem)
+                        then lastElemStates.[idx] 
+                        else None
+                    let elemValue,newElemState =
+                        let videForElem = runVide (body inpElem)
+                        videForElem matchingLastElem ctx
+                    elemValue,newElemState
+                ]
+                |> List.unzip
+            values, Some newItemStates
+
     let inline yieldVide(v: Vide<_,_,_>) =
         v
     
@@ -221,7 +245,7 @@ type ComponentRetCnBaseBuilder<'n,'c
     member _.Return(x) = BuilderBricks.return'<_,HostContext<'c>>(x)
     member _.Delay(f) = BuilderBricks.delay<_,_,HostContext<'c>>(f)
     member _.Combine(a, b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
-    member _.For(seq, body) = BuilderBricks.for'<_,_,_,HostContext<'c>>(seq, body)
+    member _.For(seq, body) = NodeModelBuilderBricks.for'<_,_,_,HostContext<'c>>(seq, body)
 
 type RenderValC0BaseBuilder<'v,'e,'n,'c
         when 'n: equality
@@ -289,7 +313,7 @@ type RenderValCnBaseBuilder<'v,'e,'n,'c
     =
     inherit NodeBuilder<'e,'c>(createContext, createThisElement)
     member _.Combine(a, b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
-    member _.For(seq, body) = BuilderBricks.for'<_,_,_,HostContext<'c>>(seq, body)
+    member _.For(seq, body) = NodeModelBuilderBricks.for'<_,_,_,HostContext<'c>>(seq, body)
     member this.Run(v) = NodeModelBuilderBricks.run(this, v, (fun n v -> createResultVal n))
 
 type RenderPotCnBaseBuilder<'v,'e,'n,'c
@@ -300,7 +324,7 @@ type RenderPotCnBaseBuilder<'v,'e,'n,'c
     =
     inherit NodeBuilder<'e,'c>(createContext, createThisElement)
     member _.Combine(a, b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
-    member _.For(seq, body) = BuilderBricks.for'<_,_,_,HostContext<'c>>(seq, body)
+    member _.For(seq, body) = NodeModelBuilderBricks.for'<_,_,_,HostContext<'c>>(seq, body)
     member this.Run(v) = NodeModelBuilderBricks.run(this, v, (fun n v -> createResultVal n))
     member _.emitValue() = RenderValCnBaseBuilder(createContext, createThisElement, createResultVal)
 
@@ -312,7 +336,7 @@ type RenderRetCnBaseBuilder<'e,'n,'c
     =
     inherit NodeBuilder<'e,'c>(createContext, createThisElement)
     member _.Combine(a, b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
-    member _.For(seq, body) = BuilderBricks.for'<_,_,_,HostContext<'c>>(seq, body)
+    member _.For(seq, body) = NodeModelBuilderBricks.for'<_,_,_,HostContext<'c>>(seq, body)
     member this.Run(v) = NodeModelBuilderBricks.run(this, v, (fun n v -> v))
     member _.Return(x) = BuilderBricks.return'(x)
 

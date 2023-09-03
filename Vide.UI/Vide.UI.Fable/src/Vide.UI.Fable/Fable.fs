@@ -11,9 +11,22 @@ module Debug =
 
 type FableDocument() =
     interface INodeDocument<Node> with
-        member _.EnsureChildAppended(parent, child) =
-            if not (parent.contains child) then
-                parent.appendChild(child) |> ignore
+        member _.EnsureChildAppendedAtIdx(parent, child, idx) =
+            let insertChildAtRequestedIdx () = parent.insertBefore(child, parent.childNodes.Item idx) |> ignore
+            let childIdx =
+                let nodes = parent.childNodes
+                let rec loop i =
+                    if i >= nodes.length then None
+                    elif nodes.Item i = child then Some i
+                    else loop (i+1)
+                loop 0
+            // insert child at idx if it's not already there
+            match childIdx with
+            | None -> insertChildAtRequestedIdx ()
+            | Some childIdx when childIdx = idx -> ()
+            | _ ->
+                parent.removeChild(child) |> ignore
+                insertChildAtRequestedIdx ()
         member _.RemoveChild(parent, child) =
             parent.removeChild(child) |> ignore
         member _.GetChildren(parent) =

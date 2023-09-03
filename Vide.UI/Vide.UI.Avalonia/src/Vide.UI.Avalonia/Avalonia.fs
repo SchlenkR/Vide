@@ -18,15 +18,22 @@ type AvaloniaDocument() =
         let childTypeName = match child with Some child -> child.GetType().Name | None -> "-"
         Exception $"Cannot perform '{actionName}' to node of type {parent.GetType().Name} (child type = {childTypeName})."
     interface INodeDocument<Control> with
-        member _.EnsureChildAppended(parent, child) =
+        member _.EnsureChildAppendedAtIdx(parent, child, idx) =
             match box parent with
             | :? Panel as panel ->
-                if not (panel.Children.Contains(child)) then
-                    panel.Children.Add(child)
+                let children = panel.Children
+                let insertChildAtRequestedIdx () = children.Insert(idx, child)
+                match children.IndexOf(child) with
+                | -1 -> insertChildAtRequestedIdx ()
+                | currIdx when currIdx = idx -> ()
+                | _ ->
+                    children.Remove(child) |> ignore
+                    insertChildAtRequestedIdx ()
             | :? ContentControl as cc ->
+                // this could lead to strange behaviour when the API is not implemented correctly.
                 if cc.Content <> child then
                     cc.Content <- child
-            | _ -> raise <| makeEx parent (Some child) "EnsureChildAppended"
+            | _ -> raise <| makeEx parent (Some child) "EnsureChildAppendedAtIdx"
         member _.RemoveChild(parent, child) =
             match box parent with
             | :? Panel as panel -> panel.Children.Remove(child) |> ignore

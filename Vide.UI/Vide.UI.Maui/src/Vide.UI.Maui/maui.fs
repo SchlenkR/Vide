@@ -20,7 +20,8 @@ type MauiDocument() =
         let childTypeName = match child with Some child -> child.GetType().Name | None -> "-"
         Exception $"Cannot perform '{actionName}' to node of type {parent.GetType().Name} (child type = {childTypeName})."
     interface INodeDocument<IView> with
-        member _.EnsureChildAppended(parent, child) =
+        member _.EnsureChildAppendedAtIdx(parent, child, idx) =
+            failwith "TODO: respect idx"
             match box parent with
             | :? ICollection<IView> as viewColl ->
                 if not (viewColl.Contains(child)) then
