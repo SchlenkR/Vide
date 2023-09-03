@@ -62,6 +62,9 @@ Useful (already discovered)
         * RenderComponents (die die direkt auf ctx zugreuif)
     * Gutes Beispiel: Aus "input" eine "checkbox"-Komponente machen
     * Components with events
+* Elements list + Remove / change / etc.
+  * Provide an overload in BuilderBricks.for
+  * call it VideList :)
 
 
 Performance / Optimizations / Robustheit
@@ -76,7 +79,6 @@ Performance / Optimizations / Robustheit
 
 * Optimize "EvaluateView"
 * Perf
-  * inline (if lambda)
   * diffing
   * instead of storing attr and events in the builder, they should have a direct effect on the underlying HTMLElement
 * MemLeaks bei evt reg?
@@ -88,7 +90,6 @@ Samples
 ---
 * Conditional Attributes
 * Conditional Elements
-* Elements list + Remove from within element
 * State-Verschachtelungen (z.B. div in div mit jeweils State) oder State-In-List
 
 
@@ -145,6 +146,10 @@ HTML Api Gen
 
 Docu
 ---
+
+* Perf: 2versions: 
+  * a) SingleCaseDU
+  * b) Function type + InlineIfLambda
 
 * IMPORTANT: Do NOT do this, since this is a pitfall that I stumbled acrowss (TODO List Avalonia), and it causes really strange behaviour. Why? Controls are reused! Instead, it's absolutely necessary to always instanciate a new builder (Shadow a new type or use somehow other styling techniques):
     let Button = Button.Margin(Thickness 5.0)
