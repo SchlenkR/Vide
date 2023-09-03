@@ -5,7 +5,7 @@ open Vide
 type DspBuilder() =
     inherit VideBaseBuilder()
     member _.Bind(m, f) = BuilderBricks.bind(m, f)
-    member _.Zero() = BuilderBricks.zero()
+    member _.Zero() = BuilderBricks.zeroFixedState()
     member _.Return(x) = BuilderBricks.return' x
     member _.ReturnFrom(v) = v
 

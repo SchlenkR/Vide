@@ -47,18 +47,19 @@ module Vide =
             let v,s = (runVide v) s ctx
             proj v, s
 
-    // why 's and not unit? -> see comment in "VideBuilder.Zero"
+    // ----- zero:
+    // why are there 2 'zero' functions? -> see comment in "VideBuilder.Zero"
+    // ------------------
+
     [<GeneralizableValue>]
-    let zero<'c> : Vide<unit,unit,'c> =
+    let zeroFixedState<'c> : Vide<unit,unit,'c> =
         mkVide <| fun s ctx -> (),None
 
-    // this "zero", but the form where state is variable
-    // -> see comment in "VideBuilder.Zero"
-    // -> we don't really need that, only as "elseForget" or cases
-    // with similar semantics.
-    ////[<GeneralizableValue>]
-    ////let empty<'s,'c> : Vide<unit,'s,'c> =
-    ////    fun s ctx -> (),None
+    [<GeneralizableValue>]
+    let zeroAdaptiveState<'s,'c> : Vide<unit,'s,'c> =
+        mkVide <| fun s ctx -> (),s
+
+    // ------------------
 
     [<GeneralizableValue>]
     let ctx<'c> : Vide<'c,unit,'c> =
@@ -94,15 +95,25 @@ module BuilderBricks =
         =
         v
 
+    // -----------------------
+    // Zero:
+    // -----------------------
     // This zero (with "unit" as state) is required for multiple returns.
     // Another zero (with 's as state) is required for "if"s without an "else".
     // We cannot have both, which means: We cannot have "if"s without "else".
     // This is ok (and not unfortunate), because the developer has to make a
     // decision about what should happen: "elseForget" or "elsePreserve".
-    let zero<'c>
+    // -----------------------
+    
+    let zeroFixedState<'c>
         ()
         : Vide<unit,unit,'c>
-        = Vide.zero<'c>
+        = Vide.zeroFixedState<'c>
+
+    let zeroAdaptiveState<'c>
+        ()
+        : Vide<unit,'s,'c>
+        = Vide.zeroAdaptiveState<'s,'c>
 
     let inline delay<'v,'s,'c>
         ([<InlineIfLambda>] f: unit -> Vide<'v,'s,'c>)
@@ -201,4 +212,3 @@ module Keywords =
     [<GeneralizableValue>]
     let elseForget<'s,'c> : Vide<unit,'s,'c> = 
         mkVide <| fun s ctx -> (),None
-        //Vide.empty<'s,'c>

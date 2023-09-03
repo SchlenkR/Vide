@@ -8,7 +8,7 @@ type NodeModelBaseBuilder() =
     inherit VideBaseBuilder()
     // non-async
     member _.Bind(m, f) = BuilderBricks.bind(m, f)
-    member _.Zero() = BuilderBricks.zero()
+    member _.Zero() = BuilderBricks.zeroFixedState()
     // async
     member _.Bind(m, f) = AsyncBuilderBricks.bind(m, f)
     member _.Delay(f) = AsyncBuilderBricks.delay(f)
