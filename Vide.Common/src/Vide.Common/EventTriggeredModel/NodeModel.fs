@@ -471,3 +471,4 @@ module Event =
 [<RequireQualifiedAccess>]
 module Seq =
     let keyed elems = elems |> Seq.map KVP
+    let selfKeyed elems = elems |> Seq.map (fun x -> KVP (x,x))
