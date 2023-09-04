@@ -24,8 +24,8 @@ let counter =
             TextBlock.Text($"Count = {count.Value}")
             
             HStack {
-                Button.Click(fun _ -> count -= 1) { "dec" }
-                Button.Click(fun _ -> count += 1) { "inc" }
+                Button.Click(fun _ -> count.Value - 1 |> count.Set) { "dec" }
+                Button.Click(fun _ -> count.Value + 1 |> count.Set) { "inc" }
             }
         }
     }
