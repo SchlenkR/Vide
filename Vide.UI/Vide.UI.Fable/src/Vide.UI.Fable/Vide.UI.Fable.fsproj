@@ -4,7 +4,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <Version>0.0.21</Version>
+    <Version>0.0.22</Version>
     <PackageReleaseNotes>
       - 0.0.7
         Added App.createAndStart
@@ -47,5 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Vide.Common\src\Vide.Common\Vide.Common.fsproj" />
+    <ProjectReference Include="..\..\..\..\Vide.Common\src\Vide.Common.UI\Vide.Common.UI.fsproj" />
   </ItemGroup>
 </Project>

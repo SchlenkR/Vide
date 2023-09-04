@@ -35,7 +35,7 @@ What to do:
 	* Vide.UI.Fable (.fsproj)
 	* Vide.UI.Fable dotnetTemplates (templates.fsproj)
 * Update Package Ref Version
-	* Vide.UI.Fable dotnetTemplates (AppName.fsproj)
+	* Vide.UI.Fable dotnetTemplates (TemplateAppName.fsproj)
 * Fablke
   * Check if all files are included correctly
   * Check the correct versions are referenced for Vide.UI.Fable in the template

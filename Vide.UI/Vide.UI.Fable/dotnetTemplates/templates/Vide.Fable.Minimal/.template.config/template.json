@@ -17,6 +17,6 @@
         "type": "project",
         "language": "F#"
     },
-    "sourceName": "AppName",
+    "sourceName": "TemplateAppName",
     "preferNameDirectory": true
 }

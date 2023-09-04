@@ -7,22 +7,25 @@
   <PropertyGroup>
     <Version>0.0.22</Version>
     <PackageReleaseNotes>
-      - 0.0.14
-        switch/case, keyword auto-opens
-      - 0.0.12
-        "emitValue" for RenderVal builders
-      - 0.0.8
-        Vide.else... conditional helper functions
     </PackageReleaseNotes>
     <PackageTags>f#;vide</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>Vide.Common</PackageId>
+    <PackageId>Vide.Common.UI</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Core.fs" />
+    <Compile Include="EventTriggeredCore.fs" />
+    <Compile Include="MutableValue.fs" />
+    <Compile Include="App.fs" />
+    <Compile Include="NodeModel.fs" />
+    <Compile Include="WebModel.fs" />
+    <Compile Include="WpfishModel.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vide.Common\Vide.Common.fsproj" />
   </ItemGroup>
 
   <ItemGroup>

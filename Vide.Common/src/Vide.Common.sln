@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Vide.Common", "Vide.Common\Vide.Common.fsproj", "{27A2E46A-453B-43B2-84FB-502DB2FB1329}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Vide.Common.Dsp", "Vide.Common.Dsp\Vide.Common.Dsp.fsproj", "{AFF50C6B-71CA-4857-A1C1-D47FDAECDDB4}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Vide.Common.UI", "Vide.Common.UI\Vide.Common.UI.fsproj", "{A7165B7B-DE6E-4FA9-9ED0-15E8BCD5B138}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{27A2E46A-453B-43B2-84FB-502DB2FB1329}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27A2E46A-453B-43B2-84FB-502DB2FB1329}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27A2E46A-453B-43B2-84FB-502DB2FB1329}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFF50C6B-71CA-4857-A1C1-D47FDAECDDB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFF50C6B-71CA-4857-A1C1-D47FDAECDDB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFF50C6B-71CA-4857-A1C1-D47FDAECDDB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFF50C6B-71CA-4857-A1C1-D47FDAECDDB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7165B7B-DE6E-4FA9-9ED0-15E8BCD5B138}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7165B7B-DE6E-4FA9-9ED0-15E8BCD5B138}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7165B7B-DE6E-4FA9-9ED0-15E8BCD5B138}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7165B7B-DE6E-4FA9-9ED0-15E8BCD5B138}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -7,7 +7,7 @@
     <Compile Include="Playback.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Vide.Common\src\Vide.Common\Vide.Common.fsproj" />
+    <ProjectReference Include="..\..\..\Vide.Common\src\Vide.Common.Dsp\Vide.Common.Dsp.fsproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NAudio" Version="2.2.0" />
