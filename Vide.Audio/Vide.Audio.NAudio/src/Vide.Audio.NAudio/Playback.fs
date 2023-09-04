@@ -3,7 +3,7 @@ module Vide.Audio.NAudio
 open System.Threading
 open System.Threading.Tasks
 open Vide
-open Vide.Dsp
+open Vide.DSP
 open System
 open NAudio.Wave
 

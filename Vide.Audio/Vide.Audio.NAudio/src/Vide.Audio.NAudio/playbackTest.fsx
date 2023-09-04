@@ -6,8 +6,8 @@
 
 open System
 open Vide
-open Vide.Dsp
-open Vide.Dsp.Operators
+open Vide.DSP
+open Vide.DSP.Operators
 open Vide.Audio.NAudio
 
 let modulatedSignal = dsp {

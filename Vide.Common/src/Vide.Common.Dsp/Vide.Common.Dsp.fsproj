@@ -12,11 +12,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>Vide.Common.Dsp</PackageId>
+    <PackageId>Vide.Common.DSP</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Dsp.fs" />
+    <Compile Include="DSP.fs" />
     <Compile Include="BinOps.fs" />
     <Compile Include="DiscreteTime.fs" />
   </ItemGroup>

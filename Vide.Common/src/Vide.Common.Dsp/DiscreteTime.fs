@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module Vide.Dsp.DiscreteTime
+module Vide.DSP.DiscreteTime
 
 open System
 open Vide

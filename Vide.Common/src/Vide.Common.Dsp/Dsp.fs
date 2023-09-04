@@ -1,4 +1,4 @@
-namespace Vide.Dsp
+namespace Vide.DSP
 
 open Vide
 
