@@ -173,25 +173,6 @@ module BuilderBricks =
 type VideBaseBuilder() = class end
 
 [<AutoOpen>]
-module ControlFlow =
-    // TODO: More branches
-
-    type Branch2<'b1,'b2> =
-        | B1Of2 of 'b1
-        | B2Of2 of 'b2
-    
-    type Branch3<'b1,'b2,'b3> =
-        | B1Of3 of 'b1
-        | B2Of3 of 'b2
-        | B3Of3 of 'b3
-    
-    type Branch4<'b1,'b2,'b3,'b4> =
-        | B1Of4 of 'b1
-        | B2Of4 of 'b2
-        | B3Of4 of 'b3
-        | B4Of4 of 'b4
-
-[<AutoOpen>]
 module Keywords =
     
     [<GeneralizableValue>]
