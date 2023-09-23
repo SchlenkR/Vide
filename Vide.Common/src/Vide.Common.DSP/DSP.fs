@@ -84,7 +84,7 @@ module Fx =
 
 module Gen =
     let inline kleisli
-        ([<InlineIfLambda>] vide: Vide<_,_,'c>)
+        ([<IILShadowing.InlineIfLambda>] vide: Vide<_,_,'c>)
         ([<InlineIfLambda>] g: _ -> Vide<'v2,_,'c>)
         : Vide<_,_,'c>
         =

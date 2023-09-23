@@ -258,8 +258,8 @@ type ComponentRetCnBaseBuilder<'n,'c
     > () =
     inherit NodeModelBaseBuilder()
     member _.Return(x) = BuilderBricks.return'<_,HostContext<'c>>(x)
-    member _.Delay([<InlineIfLambda>] f) = BuilderBricks.delay<_,_,HostContext<'c>>(f)
-    member _.Combine([<InlineIfLambda>] a, [<InlineIfLambda>] b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
+    member inline _.Delay([<IILShadowing.InlineIfLambda>] f) = BuilderBricks.delay<_,_,HostContext<'c>>(f)
+    member inline _.Combine([<IILShadowing.InlineIfLambda>] a, [<IILShadowing.InlineIfLambda>] b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
     member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKVP<_,_,_,_,HostContext<'c>>(seq, body)
     member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKeyField<_,_,_,_,HostContext<'c>>(seq, body)
 
@@ -325,13 +325,13 @@ type RenderValCnBaseBuilder<'v,'e,'n,'c
         when 'n: equality
         and 'c :> NodeContext<'n>
     >
-    (createContext, createThisElement, createResultVal: 'e -> 'v) 
+    (createContext, createThisElement, createResultVal: 'e -> 'v)
     =
     inherit NodeBuilder<'e,'c>(createContext, createThisElement)
-    member _.Combine([<InlineIfLambda>] a, [<InlineIfLambda>] b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
+    member inline _.Combine([<IILShadowing.InlineIfLambda>] a, [<IILShadowing.InlineIfLambda>] b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
     member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKVP<_,_,_,_,HostContext<'c>>(seq, body)
     member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKeyField<_,_,_,_,HostContext<'c>>(seq, body)
-    member this.Run([<InlineIfLambda>] v) = NodeModelBuilderBricks.run(this, v, (fun n v -> createResultVal n))
+    member this.Run(v) = NodeModelBuilderBricks.run(this, v, (fun n v -> createResultVal n))
 
 type RenderPotCnBaseBuilder<'v,'e,'n,'c
         when 'n: equality
@@ -340,10 +340,10 @@ type RenderPotCnBaseBuilder<'v,'e,'n,'c
     (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
     inherit NodeBuilder<'e,'c>(createContext, createThisElement)
-    member _.Combine([<InlineIfLambda>] a, [<InlineIfLambda>] b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
+    member inline _.Combine([<IILShadowing.InlineIfLambda>] a, [<IILShadowing.InlineIfLambda>] b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
     member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKVP<_,_,_,_,HostContext<'c>>(seq, body)
     member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKeyField<_,_,_,_,HostContext<'c>>(seq, body)
-    member this.Run([<InlineIfLambda>] v) = NodeModelBuilderBricks.run(this, v, (fun n v -> createResultVal n))
+    member this.Run(v) = NodeModelBuilderBricks.run(this, v, (fun n v -> createResultVal n))
     member _.emitValue() = RenderValCnBaseBuilder(createContext, createThisElement, createResultVal)
 
 type RenderRetCnBaseBuilder<'e,'n,'c
@@ -353,10 +353,10 @@ type RenderRetCnBaseBuilder<'e,'n,'c
     (createContext, createThisElement) 
     =
     inherit NodeBuilder<'e,'c>(createContext, createThisElement)
-    member _.Combine([<InlineIfLambda>] a, [<InlineIfLambda>] b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
+    member inline _.Combine([<IILShadowing.InlineIfLambda>] a, [<IILShadowing.InlineIfLambda>] b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
     member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKVP<_,_,_,_,HostContext<'c>>(seq, body)
     member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKeyField<_,_,_,_,HostContext<'c>>(seq, body)
-    member this.Run([<InlineIfLambda>] v) = NodeModelBuilderBricks.run(this, v, (fun n v -> v))
+    member inline this.Run([<IILShadowing.InlineIfLambda>] v) = NodeModelBuilderBricks.run(this, v, (fun n v -> v))
     member _.Return(x) = BuilderBricks.return'(x)
 
 
