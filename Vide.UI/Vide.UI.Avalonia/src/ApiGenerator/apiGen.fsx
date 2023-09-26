@@ -1,7 +1,16 @@
 #r "nuget: Avalonia,11.0.0"
 
 open System
+open System.Reflection
 open Avalonia
+
+module Fsi =
+    let printProps (props: PropertyInfo seq) =
+        props
+        |> Seq.map (fun p -> $"{p.Name}: {p.PropertyType.Name}")
+        |> Seq.iter (fun p -> printfn " - %s" p)
+    let printPropsOfType (t: Type) =
+        t.GetProperties() |> printProps
 
 let lc,cc,pc =
     let controlType = typeof<Controls.Control>
@@ -32,3 +41,8 @@ let lc,cc,pc =
 
 // TODO: Multiple content / Content
 // TODO: Animations
+// TODO: Styles
+// TODO: Attached properties
+
+let t = typeof<Controls.Grid>
+Fsi.printPropsOfType t
