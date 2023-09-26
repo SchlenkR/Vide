@@ -66,32 +66,70 @@ type BindExtensions =
     //        .Text(value)
     //        .TextInput(fun x -> setter(x.node.Text))
 
-[<Extension>]
-type ConvenienceExtensions =
+// TODO
 
-    [<Extension>]
-    static member inline Margin<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'c> and 'e :> Avalonia.Controls.Control>
-        (this: 'nb, value) = this.Margin(Avalonia.Thickness(value))
+// [<Extension>]
+// type ConvenienceExtensions =
 
-    [<Extension>]
-    static member inline Margin<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'c> and 'e :> Avalonia.Controls.Control>
-        (this: 'nb, leftRight, topBottom) = this.Margin(Avalonia.Thickness(leftRight, topBottom))
+//     [<Extension>]
+//     static member inline Margin<'nb,'e,'n,'c 
+//             when 'nb :> NodeBuilder<'e,'c> 
+//             and 'e :> Avalonia.Controls.Control
+//             and 'nb : (member Margin: Avalonia.Thickness -> unit)
+//         > 
+//         (this: 'nb, value)
+//         = 
+//         this.Margin(Avalonia.Thickness(value))
 
-    [<Extension>]
-    static member inline MarginLeft<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'c> and 'e :> Avalonia.Controls.Control>
-        (this: 'nb, value) = this.Margin(Avalonia.Thickness(value, 0, 0, 0))
+//     [<Extension>]
+//     static member inline Margin<'nb,'e,'n,'c 
+//             when 'nb :> NodeBuilder<'e,'c> 
+//             and 'e :> Avalonia.Controls.Control
+//             and 'nb : (member Margin: Avalonia.Thickness -> unit)
+//         > 
+//         (this: 'nb, leftRight, topBottom) 
+//         = 
+//         this.Margin(Avalonia.Thickness(leftRight, topBottom))
 
-    [<Extension>]
-    static member inline MarginTop<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'c> and 'e :> Avalonia.Controls.Control>
-        (this: 'nb, value) = this.Margin(Avalonia.Thickness(0, value, 0, 0))
+//     [<Extension>]
+//     static member inline MarginLeft<'nb,'e,'n,'c 
+//             when 'nb :> NodeBuilder<'e,'c> 
+//             and 'e :> Avalonia.Controls.Control
+//             and 'nb : (member Margin: Avalonia.Thickness -> unit)
+//         > 
+//         (this: 'nb, value)
+//         = 
+//         this.Margin(Avalonia.Thickness(value, 0, 0, 0))
 
-    [<Extension>]
-    static member inline MarginRight<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'c> and 'e :> Avalonia.Controls.Control>
-        (this: 'nb, value) = this.Margin(Avalonia.Thickness(0, 0, value, 0))
+//     [<Extension>]
+//     static member inline MarginTop<'nb,'e,'n,'c 
+//             when 'nb :> NodeBuilder<'e,'c> 
+//             and 'e :> Avalonia.Controls.Control
+//             and 'nb : (member Margin: Avalonia.Thickness -> unit)
+//         > 
+//         (this: 'nb, value) 
+//         = 
+//         this.Margin(Avalonia.Thickness(0, value, 0, 0))
 
-    [<Extension>]
-    static member inline MarginBottom<'nb,'e,'n,'c when 'nb :> NodeBuilder<'e,'c> and 'e :> Avalonia.Controls.Control>
-        (this: 'nb, value) = this.Margin(Avalonia.Thickness(0, 0, 0, value))
+//     [<Extension>]
+//     static member inline MarginRight<'nb,'e,'n,'c 
+//             when 'nb :> NodeBuilder<'e,'c> 
+//             and 'e :> Avalonia.Controls.Control
+//             and 'nb : (member Margin: Avalonia.Thickness -> unit)
+//         > 
+//         (this: 'nb, value) 
+//         = 
+//         this.Margin(Avalonia.Thickness(0, 0, value, 0))
+
+//     [<Extension>]
+//     static member inline MarginBottom<'nb,'e,'n,'c 
+//             when 'nb :> NodeBuilder<'e,'c> 
+//             and 'e :> Avalonia.Controls.Control
+//             and 'nb : (member Margin: Avalonia.Thickness -> unit)
+//         > 
+//         (this: 'nb, value) 
+//         = 
+//         this.Margin(Avalonia.Thickness(0, 0, 0, value))
 
     
 // Define some Aliases for convenience
