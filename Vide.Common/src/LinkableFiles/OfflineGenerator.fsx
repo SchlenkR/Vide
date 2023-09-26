@@ -1,11 +1,9 @@
 #r "nuget: Trulla"
 
-let numberOfBranches = [2..16]
-
 open System.IO
 open Trulla
 
-let [<Literal>] renderTemplate = """
+let [<Literal>] trullaTemplate = """
 (*
     This file is intended to be included in Vide projects via link.
     The reason for this is that `vide` CE builder instance can only be defined
@@ -43,25 +41,29 @@ type VideBaseBuilder with     {{for b in branches}}
 
     """
 
+type Tmpl = Template<trullaTemplate>
 
-type Tmpl = Template<renderTemplate>
+let renderTemplate numberOfBranches outFile =
+    let templateModel =
+        Tmpl.Root(
+            [
+                for b in 2..numberOfBranches do
+                    Tmpl.b(
+                        [ for x in 1..b do x.ToString() ],
+                        b.ToString())
+            ])
 
-let templateModel =
-    Tmpl.Root(
-        [
-            for b in numberOfBranches do
-                Tmpl.b(
-                    [ for x in 1..b do x.ToString()],
-                    b.ToString())
-        ])
+    // Render and print it:
+    let renderedTemplate = Tmpl.Render templateModel
 
-// Render and print it:
-let renderedTemplate = Tmpl.Render templateModel
-
-do printfn $"{renderedTemplate}"
-
-do
-    let outFile = Path.Combine(__SOURCE_DIRECTORY__, "Vide.Common.ControlFlow.fs")
+    printfn $"{renderedTemplate}"
+    
     if File.Exists(outFile) then
         File.Delete(outFile)
     File.WriteAllText(outFile, renderedTemplate)
+
+    ()
+
+let private  TEST () =
+    let outFile = Path.Combine(__SOURCE_DIRECTORY__, "Vide.Common.ControlFlow.fs")
+    renderTemplate 5 outFile
