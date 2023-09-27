@@ -48,7 +48,7 @@ type PropertiesExtensions =
 type EventsExtensions =
     {{for evt in events}}
     [<Extension>]
-    static member inline {{evt.name}}<'nb,'e,'c, when 
+    static member inline {{evt.name}}<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
             and 'e: (member add_{{evt.name}}: (EventHandler<{{evt.argsType}}> -> unit))

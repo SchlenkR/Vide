@@ -4304,11 +4304,11 @@ type PropertiesExtensions =
 type EventsExtensions =
     
     [<Extension>]
-    static member inline System.EventHandler<Avalonia.Interactivity.RoutedEventArgs><'nb,'e,'c, when 
+    static member inline CopyingToClipboard<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
-            and 'e: (member add_System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>: (EventHandler<CopyingToClipboard> -> unit))
-            and 'e: (member remove_System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>: (EventHandler<CopyingToClipboard> -> unit))
+            and 'e: (member add_CopyingToClipboard: (EventHandler<System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>> -> unit))
+            and 'e: (member remove_CopyingToClipboard: (EventHandler<System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>> -> unit))
         > 
         (this: 'nb, handler)
         =
@@ -4316,15 +4316,15 @@ type EventsExtensions =
             // TODO: Remove handler on unmount
             let videEventHandler = Event.handle x.node x.host handler
             let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
-            x.node.add_System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>(dotnetEventHandler)
+            x.node.add_CopyingToClipboard(dotnetEventHandler)
         )
     
     [<Extension>]
-    static member inline System.EventHandler<Avalonia.Interactivity.RoutedEventArgs><'nb,'e,'c, when 
+    static member inline CuttingToClipboard<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
-            and 'e: (member add_System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>: (EventHandler<CuttingToClipboard> -> unit))
-            and 'e: (member remove_System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>: (EventHandler<CuttingToClipboard> -> unit))
+            and 'e: (member add_CuttingToClipboard: (EventHandler<System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>> -> unit))
+            and 'e: (member remove_CuttingToClipboard: (EventHandler<System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>> -> unit))
         > 
         (this: 'nb, handler)
         =
@@ -4332,15 +4332,15 @@ type EventsExtensions =
             // TODO: Remove handler on unmount
             let videEventHandler = Event.handle x.node x.host handler
             let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
-            x.node.add_System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>(dotnetEventHandler)
+            x.node.add_CuttingToClipboard(dotnetEventHandler)
         )
     
     [<Extension>]
-    static member inline System.EventHandler<Avalonia.Interactivity.RoutedEventArgs><'nb,'e,'c, when 
+    static member inline PastingFromClipboard<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
-            and 'e: (member add_System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>: (EventHandler<PastingFromClipboard> -> unit))
-            and 'e: (member remove_System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>: (EventHandler<PastingFromClipboard> -> unit))
+            and 'e: (member add_PastingFromClipboard: (EventHandler<System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>> -> unit))
+            and 'e: (member remove_PastingFromClipboard: (EventHandler<System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>> -> unit))
         > 
         (this: 'nb, handler)
         =
@@ -4348,15 +4348,15 @@ type EventsExtensions =
             // TODO: Remove handler on unmount
             let videEventHandler = Event.handle x.node x.host handler
             let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
-            x.node.add_System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>(dotnetEventHandler)
+            x.node.add_PastingFromClipboard(dotnetEventHandler)
         )
     
     [<Extension>]
-    static member inline System.EventHandler<Avalonia.Controls.TextChangedEventArgs><'nb,'e,'c, when 
+    static member inline TextChanged<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
-            and 'e: (member add_System.EventHandler<Avalonia.Controls.TextChangedEventArgs>: (EventHandler<TextChanged> -> unit))
-            and 'e: (member remove_System.EventHandler<Avalonia.Controls.TextChangedEventArgs>: (EventHandler<TextChanged> -> unit))
+            and 'e: (member add_TextChanged: (EventHandler<System.EventHandler<Avalonia.Controls.TextChangedEventArgs>> -> unit))
+            and 'e: (member remove_TextChanged: (EventHandler<System.EventHandler<Avalonia.Controls.TextChangedEventArgs>> -> unit))
         > 
         (this: 'nb, handler)
         =
@@ -4364,15 +4364,15 @@ type EventsExtensions =
             // TODO: Remove handler on unmount
             let videEventHandler = Event.handle x.node x.host handler
             let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
-            x.node.add_System.EventHandler<Avalonia.Controls.TextChangedEventArgs>(dotnetEventHandler)
+            x.node.add_TextChanged(dotnetEventHandler)
         )
     
     [<Extension>]
-    static member inline System.EventHandler<Avalonia.Controls.TextChangingEventArgs><'nb,'e,'c, when 
+    static member inline TextChanging<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
-            and 'e: (member add_System.EventHandler<Avalonia.Controls.TextChangingEventArgs>: (EventHandler<TextChanging> -> unit))
-            and 'e: (member remove_System.EventHandler<Avalonia.Controls.TextChangingEventArgs>: (EventHandler<TextChanging> -> unit))
+            and 'e: (member add_TextChanging: (EventHandler<System.EventHandler<Avalonia.Controls.TextChangingEventArgs>> -> unit))
+            and 'e: (member remove_TextChanging: (EventHandler<System.EventHandler<Avalonia.Controls.TextChangingEventArgs>> -> unit))
         > 
         (this: 'nb, handler)
         =
@@ -4380,15 +4380,15 @@ type EventsExtensions =
             // TODO: Remove handler on unmount
             let videEventHandler = Event.handle x.node x.host handler
             let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
-            x.node.add_System.EventHandler<Avalonia.Controls.TextChangingEventArgs>(dotnetEventHandler)
+            x.node.add_TextChanging(dotnetEventHandler)
         )
     
     [<Extension>]
-    static member inline System.EventHandler<Avalonia.Interactivity.RoutedEventArgs><'nb,'e,'c, when 
+    static member inline Click<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
-            and 'e: (member add_System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>: (EventHandler<Click> -> unit))
-            and 'e: (member remove_System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>: (EventHandler<Click> -> unit))
+            and 'e: (member add_Click: (EventHandler<System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>> -> unit))
+            and 'e: (member remove_Click: (EventHandler<System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>> -> unit))
         > 
         (this: 'nb, handler)
         =
@@ -4396,15 +4396,15 @@ type EventsExtensions =
             // TODO: Remove handler on unmount
             let videEventHandler = Event.handle x.node x.host handler
             let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
-            x.node.add_System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>(dotnetEventHandler)
+            x.node.add_Click(dotnetEventHandler)
         )
     
     [<Extension>]
-    static member inline System.EventHandler<Avalonia.Interactivity.RoutedEventArgs><'nb,'e,'c, when 
+    static member inline HorizontalSnapPointsChanged<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
-            and 'e: (member add_System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>: (EventHandler<HorizontalSnapPointsChanged> -> unit))
-            and 'e: (member remove_System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>: (EventHandler<HorizontalSnapPointsChanged> -> unit))
+            and 'e: (member add_HorizontalSnapPointsChanged: (EventHandler<System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>> -> unit))
+            and 'e: (member remove_HorizontalSnapPointsChanged: (EventHandler<System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>> -> unit))
         > 
         (this: 'nb, handler)
         =
@@ -4412,15 +4412,15 @@ type EventsExtensions =
             // TODO: Remove handler on unmount
             let videEventHandler = Event.handle x.node x.host handler
             let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
-            x.node.add_System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>(dotnetEventHandler)
+            x.node.add_HorizontalSnapPointsChanged(dotnetEventHandler)
         )
     
     [<Extension>]
-    static member inline System.EventHandler<Avalonia.Interactivity.RoutedEventArgs><'nb,'e,'c, when 
+    static member inline VerticalSnapPointsChanged<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
-            and 'e: (member add_System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>: (EventHandler<VerticalSnapPointsChanged> -> unit))
-            and 'e: (member remove_System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>: (EventHandler<VerticalSnapPointsChanged> -> unit))
+            and 'e: (member add_VerticalSnapPointsChanged: (EventHandler<System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>> -> unit))
+            and 'e: (member remove_VerticalSnapPointsChanged: (EventHandler<System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>> -> unit))
         > 
         (this: 'nb, handler)
         =
@@ -4428,15 +4428,15 @@ type EventsExtensions =
             // TODO: Remove handler on unmount
             let videEventHandler = Event.handle x.node x.host handler
             let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
-            x.node.add_System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>(dotnetEventHandler)
+            x.node.add_VerticalSnapPointsChanged(dotnetEventHandler)
         )
     
     [<Extension>]
-    static member inline System.EventHandler<Avalonia.Controls.ScrollChangedEventArgs><'nb,'e,'c, when 
+    static member inline ScrollChanged<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
-            and 'e: (member add_System.EventHandler<Avalonia.Controls.ScrollChangedEventArgs>: (EventHandler<ScrollChanged> -> unit))
-            and 'e: (member remove_System.EventHandler<Avalonia.Controls.ScrollChangedEventArgs>: (EventHandler<ScrollChanged> -> unit))
+            and 'e: (member add_ScrollChanged: (EventHandler<System.EventHandler<Avalonia.Controls.ScrollChangedEventArgs>> -> unit))
+            and 'e: (member remove_ScrollChanged: (EventHandler<System.EventHandler<Avalonia.Controls.ScrollChangedEventArgs>> -> unit))
         > 
         (this: 'nb, handler)
         =
@@ -4444,7 +4444,7 @@ type EventsExtensions =
             // TODO: Remove handler on unmount
             let videEventHandler = Event.handle x.node x.host handler
             let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
-            x.node.add_System.EventHandler<Avalonia.Controls.ScrollChangedEventArgs>(dotnetEventHandler)
+            x.node.add_ScrollChanged(dotnetEventHandler)
         )
     
 

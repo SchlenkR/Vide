@@ -112,8 +112,7 @@ module Assembly =
     let getAttachedProperties (asm: Assembly) =
         [
             for t in asm.GetTypes() do 
-                for ap in Type.getAttachedProperties t do
-                    ap
+                yield! Type.getAttachedProperties t
         ]
 
 module Model =
@@ -195,7 +194,7 @@ module Model =
         let eventModels =
             [ for wc,_ in types do yield! Type.getEvents wc.typ ]
             |> List.distinct
-            |> List.map (fun e -> Tmpl.evt(e.name, Type.getFullName e.eventArgsType))
+            |> List.map (fun e -> Tmpl.evt(Type.getFullName e.eventArgsType, e.name))
 
         Tmpl.Root(apModels, controlModels, eventModels, propertyModels)
 
