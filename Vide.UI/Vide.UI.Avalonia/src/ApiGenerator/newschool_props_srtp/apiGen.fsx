@@ -232,10 +232,129 @@ let commonAugmentations =
 
 
 
-genApiForAllTypesInAssembly 
-    commonOutPath 
-    commonAugmentations 
-    typeof<Controls.Control>.Assembly
+// genApiForAllTypesInAssembly 
+//     commonOutPath 
+//     commonAugmentations 
+//     typeof<Controls.Control>.Assembly
+
+
+
+[
+    typeof<Avalonia.Controls.AutoCompleteBox>
+    typeof<Avalonia.Controls.Border>
+    typeof<Avalonia.Controls.Button>
+    typeof<Avalonia.Controls.ButtonSpinner>
+    typeof<Avalonia.Controls.CalendarDatePicker>
+    typeof<Avalonia.Controls.Calendar>
+    typeof<Avalonia.Controls.Canvas>
+    typeof<Avalonia.Controls.Carousel>
+    typeof<Avalonia.Controls.CheckBox>
+    typeof<Avalonia.Controls.ComboBox>
+    typeof<Avalonia.Controls.ComboBoxItem>
+    typeof<Avalonia.Controls.ContentControl>
+    typeof<Avalonia.Controls.ContextMenu>
+    typeof<Avalonia.Controls.Control>
+    typeof<Avalonia.Controls.DataValidationErrors>
+    typeof<Avalonia.Controls.DatePicker>
+    typeof<Avalonia.Controls.DatePickerPresenter>
+    typeof<Avalonia.Controls.TimePicker>
+    typeof<Avalonia.Controls.TimePickerPresenter>
+    typeof<Avalonia.Controls.Decorator>
+    typeof<Avalonia.Controls.DockPanel>
+    typeof<Avalonia.Controls.DropDownButton>
+    typeof<Avalonia.Controls.Expander>
+    // typeof<Avalonia.Controls.ExperimentalAcrylicBorder>
+    typeof<Avalonia.Controls.FlyoutPresenter>
+    typeof<Avalonia.Controls.MenuFlyoutPresenter>
+    typeof<Avalonia.Controls.Grid>
+    typeof<Avalonia.Controls.GridSplitter>
+    // typeof<Avalonia.Controls.Image>                ----- xxxxxxxxxxxxxxxxxxxxxxxx
+    typeof<Avalonia.Controls.ItemsControl>
+    typeof<Avalonia.Controls.Label>
+    typeof<Avalonia.Controls.LayoutTransformControl>
+    typeof<Avalonia.Controls.ListBox>
+    typeof<Avalonia.Controls.ListBoxItem>
+    typeof<Avalonia.Controls.MaskedTextBox>
+    typeof<Avalonia.Controls.Menu>
+    typeof<Avalonia.Controls.MenuItem>
+    typeof<Avalonia.Controls.NativeControlHost>
+    typeof<Avalonia.Controls.NativeMenuBar>
+    typeof<Avalonia.Controls.ReversibleStackPanel>
+    typeof<Avalonia.Controls.NumericUpDown>
+    typeof<Avalonia.Controls.Panel>
+    typeof<Avalonia.Controls.PathIcon>
+    typeof<Avalonia.Controls.ProgressBar>
+    // typeof<Avalonia.Controls.RefreshContainer>
+    // typeof<Avalonia.Controls.RefreshVisualizer>
+    typeof<Avalonia.Controls.RadioButton>
+    typeof<Avalonia.Controls.RelativePanel>
+    typeof<Avalonia.Controls.RepeatButton>
+    typeof<Avalonia.Controls.ScrollViewer>
+    typeof<Avalonia.Controls.SelectableTextBlock>
+    typeof<Avalonia.Controls.Separator>
+    typeof<Avalonia.Controls.Slider>
+    typeof<Avalonia.Controls.SplitButton>
+    typeof<Avalonia.Controls.ToggleSplitButton>
+    typeof<Avalonia.Controls.SplitView>
+    typeof<Avalonia.Controls.StackPanel>
+    typeof<Avalonia.Controls.TabControl>
+    typeof<Avalonia.Controls.TabItem>
+    typeof<Avalonia.Controls.TextBlock>
+    typeof<Avalonia.Controls.TextBox>
+    // typeof<Avalonia.Controls.ThemeVariantScope>
+    typeof<Avalonia.Controls.TickBar>
+    typeof<Avalonia.Controls.ToggleSwitch>
+    typeof<Avalonia.Controls.ToolTip>
+    typeof<Avalonia.Controls.TransitioningContentControl>
+    typeof<Avalonia.Controls.TreeView>
+    typeof<Avalonia.Controls.TreeViewItem>
+    typeof<Avalonia.Controls.UserControl>
+    typeof<Avalonia.Controls.Viewbox>
+    typeof<Avalonia.Controls.VirtualizingCarouselPanel>
+    typeof<Avalonia.Controls.VirtualizingStackPanel>
+    typeof<Avalonia.Controls.Window>
+    typeof<Avalonia.Controls.WrapPanel>
+    typeof<Avalonia.Controls.Shapes.Arc>
+    typeof<Avalonia.Controls.Shapes.Ellipse>
+    typeof<Avalonia.Controls.Shapes.Line>
+    typeof<Avalonia.Controls.Shapes.Path>
+    typeof<Avalonia.Controls.Shapes.Polygon>
+    typeof<Avalonia.Controls.Shapes.Polyline>
+    typeof<Avalonia.Controls.Shapes.Rectangle>
+    typeof<Avalonia.Controls.Shapes.Sector>
+    typeof<Avalonia.Controls.Presenters.ContentPresenter>
+    typeof<Avalonia.Controls.Presenters.ItemsPresenter>
+    typeof<Avalonia.Controls.Presenters.ScrollContentPresenter>
+    typeof<Avalonia.Controls.Presenters.TextPresenter>
+    typeof<Avalonia.Controls.Notifications.NotificationCard>
+    typeof<Avalonia.Controls.Embedding.EmbeddableControlRoot>
+    typeof<Avalonia.Controls.Chrome.CaptionButtons>
+    typeof<Avalonia.Controls.Chrome.TitleBar>
+    typeof<Avalonia.Controls.Primitives.CalendarButton>
+    typeof<Avalonia.Controls.Primitives.CalendarDayButton>
+    typeof<Avalonia.Controls.Primitives.CalendarItem>
+    typeof<Avalonia.Controls.Primitives.DateTimePickerPanel>
+    typeof<Avalonia.Controls.Primitives.AccessText>
+    typeof<Avalonia.Controls.Primitives.AdornerLayer>
+    typeof<Avalonia.Controls.Primitives.ChromeOverlayLayer>
+    typeof<Avalonia.Controls.Primitives.HeaderedContentControl>
+    typeof<Avalonia.Controls.Primitives.HeaderedItemsControl>
+    typeof<Avalonia.Controls.Primitives.HeaderedSelectingItemsControl>
+    typeof<Avalonia.Controls.Primitives.LightDismissOverlayLayer>
+    typeof<Avalonia.Controls.Primitives.OverlayLayer>
+    typeof<Avalonia.Controls.Primitives.Popup>
+    typeof<Avalonia.Controls.Primitives.ScrollBar>
+    typeof<Avalonia.Controls.Primitives.SelectingItemsControl>
+    typeof<Avalonia.Controls.Primitives.TabStrip>
+    typeof<Avalonia.Controls.Primitives.TabStripItem>
+    typeof<Avalonia.Controls.Primitives.TemplatedControl>
+    typeof<Avalonia.Controls.Primitives.Thumb>
+    typeof<Avalonia.Controls.Primitives.ToggleButton>
+    typeof<Avalonia.Controls.Primitives.Track>
+    typeof<Avalonia.Controls.Primitives.UniformGrid>
+    // typeof<Avalonia.Controls.Primitives.VisualLayerManager>
+]
+|> genApiForGivenTypes commonOutPath commonAugmentations 
 
 
 let private FSI_TEST () =
@@ -280,120 +399,3 @@ let private FSI_TEST () =
     getWrappedTypesInAssembly typeof<Controls.Control>.Assembly
     |> List.map (fun x -> x.typ)
     |> printTypes
-
-    [
-        // typeof<Avalonia.Controls.AutoCompleteBox>
-        typeof<Avalonia.Controls.Border>
-        typeof<Avalonia.Controls.Button>
-        // typeof<Avalonia.Controls.ButtonSpinner>
-        // typeof<Avalonia.Controls.CalendarDatePicker>
-        // typeof<Avalonia.Controls.Calendar>
-        typeof<Avalonia.Controls.Canvas>
-        // typeof<Avalonia.Controls.Carousel>
-        typeof<Avalonia.Controls.CheckBox>
-        typeof<Avalonia.Controls.ComboBox>
-        // typeof<Avalonia.Controls.ComboBoxItem>
-        typeof<Avalonia.Controls.ContentControl>
-        // typeof<Avalonia.Controls.ContextMenu>
-        typeof<Avalonia.Controls.Control>
-        // typeof<Avalonia.Controls.DataValidationErrors>
-        typeof<Avalonia.Controls.DatePicker>
-        // typeof<Avalonia.Controls.DatePickerPresenter>
-        typeof<Avalonia.Controls.TimePicker>
-        // typeof<Avalonia.Controls.TimePickerPresenter>
-        // typeof<Avalonia.Controls.Decorator>
-        typeof<Avalonia.Controls.DockPanel>
-        // typeof<Avalonia.Controls.DropDownButton>
-        typeof<Avalonia.Controls.Expander>
-        // typeof<Avalonia.Controls.ExperimentalAcrylicBorder>
-        // typeof<Avalonia.Controls.FlyoutPresenter>
-        // typeof<Avalonia.Controls.MenuFlyoutPresenter>
-        typeof<Avalonia.Controls.Grid>
-        // typeof<Avalonia.Controls.GridSplitter>
-        // typeof<Avalonia.Controls.Image>
-        // typeof<Avalonia.Controls.ItemsControl>
-        typeof<Avalonia.Controls.Label>
-        // typeof<Avalonia.Controls.LayoutTransformControl>
-        // typeof<Avalonia.Controls.ListBox>
-        // typeof<Avalonia.Controls.ListBoxItem>
-        // typeof<Avalonia.Controls.MaskedTextBox>
-        // typeof<Avalonia.Controls.Menu>
-        // typeof<Avalonia.Controls.MenuItem>
-        // typeof<Avalonia.Controls.NativeControlHost>
-        // typeof<Avalonia.Controls.NativeMenuBar>
-        // typeof<Avalonia.Controls.ReversibleStackPanel>
-        // typeof<Avalonia.Controls.NumericUpDown>
-        // typeof<Avalonia.Controls.Panel>
-        // typeof<Avalonia.Controls.PathIcon>
-        // typeof<Avalonia.Controls.ProgressBar>
-        // typeof<Avalonia.Controls.RefreshContainer>
-        // typeof<Avalonia.Controls.RefreshVisualizer>
-        // typeof<Avalonia.Controls.RadioButton>
-        // typeof<Avalonia.Controls.RelativePanel>
-        // typeof<Avalonia.Controls.RepeatButton>
-        // typeof<Avalonia.Controls.ScrollViewer>
-        // typeof<Avalonia.Controls.SelectableTextBlock>
-        // typeof<Avalonia.Controls.Separator>
-        // typeof<Avalonia.Controls.Slider>
-        // typeof<Avalonia.Controls.SplitButton>
-        // typeof<Avalonia.Controls.ToggleSplitButton>
-        // typeof<Avalonia.Controls.SplitView>
-        typeof<Avalonia.Controls.StackPanel>
-        // typeof<Avalonia.Controls.TabControl>
-        // typeof<Avalonia.Controls.TabItem>
-        typeof<Avalonia.Controls.TextBlock>
-        typeof<Avalonia.Controls.TextBox>
-        // typeof<Avalonia.Controls.ThemeVariantScope>
-        // typeof<Avalonia.Controls.TickBar>
-        // typeof<Avalonia.Controls.ToggleSwitch>
-        // typeof<Avalonia.Controls.ToolTip>
-        // typeof<Avalonia.Controls.TransitioningContentControl>
-        // typeof<Avalonia.Controls.TreeView>
-        // typeof<Avalonia.Controls.TreeViewItem>
-        // typeof<Avalonia.Controls.UserControl>
-        // typeof<Avalonia.Controls.Viewbox>
-        // typeof<Avalonia.Controls.VirtualizingCarouselPanel>
-        // typeof<Avalonia.Controls.VirtualizingStackPanel>
-        // typeof<Avalonia.Controls.Window>
-        typeof<Avalonia.Controls.WrapPanel>
-        // typeof<Avalonia.Controls.Shapes.Arc>
-        // typeof<Avalonia.Controls.Shapes.Ellipse>
-        // typeof<Avalonia.Controls.Shapes.Line>
-        // typeof<Avalonia.Controls.Shapes.Path>
-        // typeof<Avalonia.Controls.Shapes.Polygon>
-        // typeof<Avalonia.Controls.Shapes.Polyline>
-        // typeof<Avalonia.Controls.Shapes.Rectangle>
-        // typeof<Avalonia.Controls.Shapes.Sector>
-        // typeof<Avalonia.Controls.Presenters.ContentPresenter>
-        // typeof<Avalonia.Controls.Presenters.ItemsPresenter>
-        // typeof<Avalonia.Controls.Presenters.ScrollContentPresenter>
-        // typeof<Avalonia.Controls.Presenters.TextPresenter>
-        // typeof<Avalonia.Controls.Notifications.NotificationCard>
-        // typeof<Avalonia.Controls.Embedding.EmbeddableControlRoot>
-        // typeof<Avalonia.Controls.Chrome.CaptionButtons>
-        // typeof<Avalonia.Controls.Chrome.TitleBar>
-        // typeof<Avalonia.Controls.Primitives.CalendarButton>
-        // typeof<Avalonia.Controls.Primitives.CalendarDayButton>
-        // typeof<Avalonia.Controls.Primitives.CalendarItem>
-        // typeof<Avalonia.Controls.Primitives.DateTimePickerPanel>
-        // typeof<Avalonia.Controls.Primitives.AccessText>
-        // typeof<Avalonia.Controls.Primitives.AdornerLayer>
-        // typeof<Avalonia.Controls.Primitives.ChromeOverlayLayer>
-        // typeof<Avalonia.Controls.Primitives.HeaderedContentControl>
-        // typeof<Avalonia.Controls.Primitives.HeaderedItemsControl>
-        // typeof<Avalonia.Controls.Primitives.HeaderedSelectingItemsControl>
-        // typeof<Avalonia.Controls.Primitives.LightDismissOverlayLayer>
-        // typeof<Avalonia.Controls.Primitives.OverlayLayer>
-        // typeof<Avalonia.Controls.Primitives.Popup>
-        // typeof<Avalonia.Controls.Primitives.ScrollBar>
-        // typeof<Avalonia.Controls.Primitives.SelectingItemsControl>
-        // typeof<Avalonia.Controls.Primitives.TabStrip>
-        // typeof<Avalonia.Controls.Primitives.TabStripItem>
-        // typeof<Avalonia.Controls.Primitives.TemplatedControl>
-        // typeof<Avalonia.Controls.Primitives.Thumb>
-        // typeof<Avalonia.Controls.Primitives.ToggleButton>
-        // typeof<Avalonia.Controls.Primitives.Track>
-        // typeof<Avalonia.Controls.Primitives.UniformGrid>
-        // typeof<Avalonia.Controls.Primitives.VisualLayerManager>
-    ]
-    |> genApiForGivenTypes commonOutPath commonAugmentations 
