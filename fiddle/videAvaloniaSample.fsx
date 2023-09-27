@@ -4,6 +4,9 @@
 #r "nuget: Vide.UI.Avalonia, 0.0.23"
 
 
+// EVAL ONLY ONCE PER FSI SESSION
+
+
 // ---------------------------------------------------------------
 // ...some gibberish to make the fiddle work
 // ---------------------------------------------------------------
