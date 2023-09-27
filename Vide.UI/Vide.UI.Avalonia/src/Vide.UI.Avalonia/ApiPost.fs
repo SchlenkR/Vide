@@ -71,9 +71,24 @@ type BindExtensions =
 [<Extension>]
 type ConvenienceExtensions =
 
+    // This was a test for SRTP props
+    // [<Extension>]
+    // static member inline Click<'nb,'e,'c,'args when 
+    //         'nb :> NodeBuilder<'e,'c>
+    //         and 'e :> Avalonia.Controls.Control
+    //         and 'e: (member add_Click: (EventHandler<'args> -> unit))
+    //     > 
+    //     (this: 'nb, handler)
+    //     =
+    //     this.onInit(fun x ->
+    //         let wrappedHandler = Event.handle x.node x.host handler
+    //         let dotnetEventHandler = EventHandler<_>(fun _ args -> wrappedHandler args)
+    //         x.node.add_Click(dotnetEventHandler)
+    //         )
+
     [<Extension>]
-    static member inline Margin<'nb,'e,'n,'c 
-            when 'nb :> NodeBuilder<'e,'c> 
+    static member inline Margin<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
             and 'e : (member get_Margin: unit -> Avalonia.Thickness)
             and 'e : (member set_Margin: Avalonia.Thickness -> unit)

@@ -1450,11 +1450,11 @@ type ButtonExtensions =
         // Events
         
         
-        [<Extension>]
-        static member Click(this: #ControlBuilders.Button, handler) =
-            this.onInit(fun x ->
-                let wrappedHandler = Event.handle x.node x.host handler
-                x.node.Click.Add(wrappedHandler))
+        // [<Extension>]
+        // static member Click(this: #ControlBuilders.Button, handler) =
+        //     this.onInit(fun x ->
+        //         let wrappedHandler = Event.handle x.node x.host handler
+        //         x.node.Click.Add(wrappedHandler))
         
         [<Extension>]
         static member TemplateApplied(this: #ControlBuilders.Button, handler) =

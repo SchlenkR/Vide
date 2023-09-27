@@ -20,9 +20,8 @@ myType.OnClick()
 
 
 
-let inline handleClickAvalonia<'a when 'a: (member add_Click: EventHandler<RoutedEventArgs> -> unit)> handler (x: 'a) =
-    let handler = EventHandler<RoutedEventArgs>(handler)
-    x.add_Click handler
+let inline handleClickAvalonia<'a,'args when 'a: (member add_Click: EventHandler<'args> -> unit)> handler (x: 'a) =
+    x.add_Click(EventHandler<_>(handler))
 
 let btn = Avalonia.Controls.Button()
 
@@ -61,3 +60,10 @@ let printMethods (t: Type) =
         printfn $"{x.Name} (typ = {x.MemberType}) (args = [ {args} ]) : {getTypeName x.ReturnType}")
 
 printMethods typeof<Avalonia.Controls.Button>
+
+
+
+
+type Controls = class end
+type Controls with static member DoIt() = ()
+type Controls with static member DoIt2() = ()

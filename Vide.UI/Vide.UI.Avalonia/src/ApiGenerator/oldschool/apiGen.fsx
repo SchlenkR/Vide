@@ -207,7 +207,7 @@ let private FSI_TEST () =
     
     controlsToWrap
     |> mkTemplateModelForTypes
-    |> writeTemplate (Path.Combine(__SOURCE_DIRECTORY__, "../Vide.UI.Avalonia/Api.fs"))
+    |> writeTemplate (Path.Combine(__SOURCE_DIRECTORY__, "../../Vide.UI.Avalonia/Api.fs"))
 
     let getClassHierarchy (t: Type) =
         let stopType = typeof<AvaloniaObject>

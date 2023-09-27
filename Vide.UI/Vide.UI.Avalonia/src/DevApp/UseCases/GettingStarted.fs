@@ -13,6 +13,31 @@ open type Vide.UI.Avalonia.Controls
 let helloWorld =
     vide { "Hello World" }
 
+open System
+open System.Runtime.CompilerServices
+open Avalonia.Interactivity
+
+[<Extension>]
+type Extensions =
+    [<Extension>]
+    static member inline Click2<'nb,^e,'n,'c 
+            when 'nb :> NodeBuilder<^e,'c> 
+            and ^e :> Avalonia.Controls.Control
+            and ^e : (member Click: IEvent<EventHandler<RoutedEventArgs>,RoutedEventArgs>)
+        > 
+        (this: 'nb, handler) 
+        =
+        this.onInit(fun x ->
+            // let wrappedHandler = Event.handle x.node x.host handler
+            // let click = x.node.Click
+            // let event = x.node.Click
+            // Event.add wrappedHandler x.node.Click.Publish
+            Event.add handler x.node.Click
+        )
+
+let btn = Avalonia.Controls.Button()
+let click = btn.Click
+        
 let counter =
     vide {
         let! count = Vide.ofMutable 0
@@ -24,8 +49,8 @@ let counter =
             TextBlock.Text($"Count = {count.Value}")
             
             HStack {
-                Button.Click(fun _ -> count.Value - 1 |> count.Set) { "dec" }
-                Button.Click(fun _ -> count.Value + 1 |> count.Set) { "inc" }
+                Button.Click2(fun _ -> count.Value - 1 |> count.Set) { "dec" }
+                Button.Click2(fun _ -> count.Value + 1 |> count.Set) { "inc" }
             }
         }
     }

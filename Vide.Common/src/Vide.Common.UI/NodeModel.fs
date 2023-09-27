@@ -454,7 +454,8 @@ module Event =
             host: IHost
             mutable requestEvaluation: bool
         }
-    
+
+    // TODO: InlineIfLambda
     let inline handle
         (node: 'e)
         (host: IHost)
