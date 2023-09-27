@@ -75,20 +75,25 @@ module Type =
             && p.CanRead && p.GetMethod <> null && p.GetMethod.IsPublic
             && p.GetIndexParameters().Length = 0
         )
+        |> Seq.map (fun p -> {| name = p.Name; propType = p.PropertyType |})
+        |> Seq.toList
 
     let getEvents (t: Type) =
-        let methods = 
-            t.GetMethods(
-                BindingFlags.Public 
-                ||| BindingFlags.Instance
-                ||| BindingFlags.DeclaredOnly)
-            |> Seq.filter (fun m -> m.Name.StartsWith("add_") || m.Name.StartsWith("remove_"))
+        let methods = t.GetMethods(BindingFlags.Public ||| BindingFlags.Instance)
         [
-            for method in methods do
-                // Yeah, that's dirty. But we generate code that will be compiled, so no runtime ex anyway.
-                let eventName = method.Name.Split("_").[1]
-                let eventArgsType = method.GetParameters().[0].ParameterType
-                {| name = eventName; eventArgsType = eventArgsType |}
+            for m in methods do
+                // OMG that's all so dirty.
+                // But we generate code that will be compiled afterwards.
+                match m.GetParameters() with
+                | [| arg1 |] when 
+                    arg1.ParameterType.GenericTypeArguments.Length = 1
+                    && (m.Name.StartsWith("add_") || m.Name.StartsWith("remove_"))
+                    ->
+                        let evtName = m.Name.Split("_").[1]
+                        let evtHandlerType = m.GetParameters().[0].ParameterType
+                        {| name = evtName; eventHandlerType = evtHandlerType |}
+
+                | _ -> ()
         ]
 
     let getAttachedProperties (t: Type) =
@@ -189,12 +194,14 @@ module Model =
             |> List.choose id
         let propertyModels =
             [ for wc,_ in types do yield! Type.getProperties wc.typ ]
-            |> List.distinct
-            |> List.map (fun p -> Tmpl.prop(p.Name, Type.getFullName p.PropertyType))
+            |> List.distinctBy (fun p -> p.name, p.propType.FullName)
+            |> List.sortBy (fun x -> x.name)
+            |> List.map (fun p -> Tmpl.prop(p.name, Type.getFullName p.propType))
         let eventModels =
             [ for wc,_ in types do yield! Type.getEvents wc.typ ]
             |> List.distinct
-            |> List.map (fun e -> Tmpl.evt(Type.getFullName e.eventArgsType, e.name))
+            |> List.sortBy (fun x -> x.name)
+            |> List.map (fun e -> Tmpl.evt(Type.getFullName e.eventHandlerType, e.name))
 
         Tmpl.Root(apModels, controlModels, eventModels, propertyModels)
 
@@ -205,26 +212,26 @@ let writeTemplate outFile templateModel =
         File.Delete(outFile)
     File.WriteAllText(outFile, renderedTemplate)
 
-let private FSI_TEST () =
-
-    let controlsToWrap =
-        [
-            typeof<Controls.TextBlock>, None
-            typeof<Controls.TextBox>, Some Controls.TextBox.TextProperty.Name
-            typeof<Controls.Button>, None
-            typeof<Controls.CheckBox>, Some Controls.CheckBox.IsCheckedProperty.Name
-            typeof<Controls.Grid>, None
-            typeof<Controls.DockPanel>, None
-            typeof<Controls.StackPanel>, None
-            typeof<Controls.ScrollViewer>, None
-        ]
-    
-    controlsToWrap
+let genApi () =
+    [
+        typeof<Controls.TextBlock>, None
+        typeof<Controls.TextBox>, Some Controls.TextBox.TextProperty.Name
+        typeof<Controls.Button>, None
+        typeof<Controls.CheckBox>, Some Controls.CheckBox.IsCheckedProperty.Name
+        typeof<Controls.Grid>, None
+        typeof<Controls.DockPanel>, None
+        typeof<Controls.StackPanel>, None
+        typeof<Controls.ScrollViewer>, None
+    ]
     |> Model.mkTemplateModelForTypes
     |> writeTemplate (Path.Combine(__SOURCE_DIRECTORY__, "../../Vide.UI.Avalonia/Api.fs"))
 
 
 
+genApi ()
+
+
+let private FSI_TEST () =
 
     let getClassHierarchy (t: Type) =
         let stopType = typeof<AvaloniaObject>

@@ -20,12 +20,9 @@ type AvaloniaControl = Avalonia.Controls.Control
 
 type Controls = class end
 
-
-module ControlBuilders =
 {{for control in controls}}
-    type {{control.controlBuilderName}} () =
-        inherit {{control.videBuilderName}}<{{control.potGenArg}}{{control.wrappedControlTypeName}}>({{control.ctor}})
-    type Controls with static member {{control.controlBuilderName}} = {{control.controlBuilderName}}()
+type {{control.controlBuilderName}}Builder () = inherit {{control.videBuilderName}}<{{control.potGenArg}}{{control.wrappedControlTypeName}}>({{control.ctor}})
+type Controls with static member {{control.controlBuilderName}} = {{control.controlBuilderName}}Builder()
 {{end}}
 
 
@@ -51,8 +48,8 @@ type EventsExtensions =
     static member inline {{evt.name}}<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
-            and 'e: (member add_{{evt.name}}: (EventHandler<{{evt.argsType}}> -> unit))
-            and 'e: (member remove_{{evt.name}}: (EventHandler<{{evt.argsType}}> -> unit))
+            and 'e: (member add_{{evt.name}}: {{evt.handlerType}} -> unit)
+            and 'e: (member remove_{{evt.name}}: {{evt.handlerType}} -> unit)
         > 
         (this: 'nb, handler)
         =
