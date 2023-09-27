@@ -67,3 +67,23 @@ printMethods typeof<Avalonia.Controls.Button>
 type Controls = class end
 type Controls with static member DoIt() = ()
 type Controls with static member DoIt2() = ()
+
+
+
+
+
+type MyPropType() =
+    member val Margin = 100 with get, set
+
+let inline setMargin<^a 
+        when ^a: (member get_Margin: unit -> int)
+        and ^a: (member set_Margin: int -> unit)
+    > (this: ^a) value
+    =
+    this.set_Margin(value)
+    let margin = this.get_Margin()
+    printfn $"margin = {margin}"
+
+let inst = MyPropType()
+setMargin inst 333
+

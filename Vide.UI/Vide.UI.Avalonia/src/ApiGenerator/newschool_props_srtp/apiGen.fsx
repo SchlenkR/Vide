@@ -32,13 +32,15 @@ and BuilderMode =
 type WrappableControl = { typ: Type; kind: ControlKind }
 
 module Type =
-    let rec getName (t: Type) =
+    let rec mkName proj (t: Type) =
         match t.GenericTypeArguments with
-        | [| |] -> t.Name
+        | [| |] -> proj t
         | args ->
-            let args = args |> Array.map getName |> String.concat ", "
-            let tyNameWithoutApostrophe = t.Name.Split("`")[0]
+            let args = args |> Array.map (mkName proj) |> String.concat ", "
+            let tyNameWithoutApostrophe = (proj t).Split("`")[0]
             $"""{tyNameWithoutApostrophe}<{args}>"""
+    let rec getName (t: Type) = mkName (fun t -> t.Name) t
+    let rec getFullName (t: Type) = mkName (fun t -> t.FullName) t
 
     let toWrappedControl (t: Type) =
         let controlType = typeof<Controls.Control>
@@ -75,7 +77,19 @@ module Type =
         )
 
     let getEvents (t: Type) =
-        t.GetEvents()
+        let methods = 
+            t.GetMethods(
+                BindingFlags.Public 
+                ||| BindingFlags.Instance
+                ||| BindingFlags.DeclaredOnly)
+            |> Seq.filter (fun m -> m.Name.StartsWith("add_") || m.Name.StartsWith("remove_"))
+        [
+            for method in methods do
+                // Yeah, that's dirty. But we generate code that will be compiled, so no runtime ex anyway.
+                let eventName = method.Name.Split("_").[1]
+                let eventArgsType = method.GetParameters().[0].ParameterType
+                {| name = eventName; eventArgsType = eventArgsType |}
+        ]
 
     let getAttachedProperties (t: Type) =
         [
@@ -119,7 +133,7 @@ module Model =
             match potPropertyName with 
             | Some prop ->
                 let prop = wc.typ.GetProperty(prop)
-                Pot {| propName = prop.Name; propTypeName = Type.getName prop.PropertyType |}
+                Pot {| propName = prop.Name; propTypeName = Type.getFullName prop.PropertyType |}
             | None -> mode
         let getCtor mode =
             match mode with
@@ -175,10 +189,16 @@ module Model =
             ]
             |> List.choose id
         let propertyModels =
-            [
-                
-            ]
-        Tmpl.Root(apModels, controlModels, [], [])
+            [ for wc,_ in types do yield! Type.getProperties wc.typ ]
+            |> List.distinct
+            |> List.map (fun p -> Tmpl.prop(p.Name, Type.getFullName p.PropertyType))
+        let eventModels =
+            [ for wc,_ in types do yield! Type.getEvents wc.typ ]
+            |> List.distinct
+            |> List.map (fun e -> Tmpl.evt(e.name, Type.getFullName e.eventArgsType))
+
+        Tmpl.Root(apModels, controlModels, eventModels, propertyModels)
+
 
 let writeTemplate outFile templateModel =
     let renderedTemplate = Tmpl.Render templateModel
@@ -204,6 +224,9 @@ let private FSI_TEST () =
     |> Model.mkTemplateModelForTypes
     |> writeTemplate (Path.Combine(__SOURCE_DIRECTORY__, "../../Vide.UI.Avalonia/Api.fs"))
 
+
+
+
     let getClassHierarchy (t: Type) =
         let stopType = typeof<AvaloniaObject>
         let rec loop (t: Type) =
@@ -212,8 +235,9 @@ let private FSI_TEST () =
             | bt when bt = stopType -> [stopType]
             | bt ->bt :: loop bt
         loop t
+    
     let printTypes types =
-        for t in types do printfn "%s" (getTypeName t)
+        for t in types do printfn "%s" (Type.getName t)
 
     getClassHierarchy typeof<Controls.DockPanel> |> printTypes
     

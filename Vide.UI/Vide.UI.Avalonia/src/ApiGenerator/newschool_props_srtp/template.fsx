@@ -25,7 +25,7 @@ module ControlBuilders =
 {{for control in controls}}
     type {{control.controlBuilderName}} () =
         inherit {{control.videBuilderName}}<{{control.potGenArg}}{{control.wrappedControlTypeName}}>({{control.ctor}})
-    type Controls with static member {{control.controlBuilderName}} = ControlBuilders.{{control.controlBuilderName}}()
+    type Controls with static member {{control.controlBuilderName}} = {{control.controlBuilderName}}()
 {{end}}
 
 
@@ -39,8 +39,8 @@ type PropertiesExtensions =
             and 'e : (member get_{{prop.name}}: unit -> {{prop.typeName}})
             and 'e : (member set_{{prop.name}}: {{prop.typeName}} -> unit)
         >
-        (this: 'nb, value) =
-            this.onEval(fun x -> if x.node.{{prop.name}} <> value then x.node.{{prop.name}} <- value)
+        (this: 'nb, value: {{prop.typeName}}) =
+            this.onEval(fun x -> if x.node.get_{{prop.name}}() <> value then x.node.set_{{prop.name}}(value))
     {{end}}
     
 
@@ -48,11 +48,11 @@ type PropertiesExtensions =
 type EventsExtensions =
     {{for evt in events}}
     [<Extension>]
-    static member inline {{evt.name}}<'nb,'e,'c,'args when 
+    static member inline {{evt.name}}<'nb,'e,'c, when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
-            and 'e: (member add_{{evt.name}}: (EventHandler<'args> -> unit))
-            and 'e: (member remove_{{evt.name}}: (EventHandler<'args> -> unit))
+            and 'e: (member add_{{evt.name}}: (EventHandler<{{evt.argsType}}> -> unit))
+            and 'e: (member remove_{{evt.name}}: (EventHandler<{{evt.argsType}}> -> unit))
         > 
         (this: 'nb, handler)
         =
