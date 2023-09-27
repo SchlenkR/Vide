@@ -23,20 +23,20 @@ let view = vide {
         |> Vide.ofMutable
     let setItems items = todoList.Value <- { todoList.Value with items = items }
         
-    DockPanel.Margin(Thickness 4) {
+    DockPanel.Margin(4) {
         H1
             .HorizontalAlignment(HorizontalAlignment.Center)
             .DockPanel().Dock(Dock.Top)
             .Text("My TODO List")
         DockPanel
-            .Margin(Thickness 4) 
+            .Margin(4) 
             .DockPanel().Dock(Dock.Bottom) {
             
             let! itemName = Vide.ofMutable ""
 
             Button
                 .DockPanel().Dock(Dock.Right)
-                .Margin(Thickness 0)
+                .Margin(0)
                 .IsEnabled(String.IsNullOrWhiteSpace(itemName.Value) |> not)
                 .onInit(fun x -> x.node.IsDefault <- true)
                 .Click(fun _ ->
@@ -52,7 +52,7 @@ let view = vide {
             TextBox.bind(itemName)
         }
 
-        VStack.Margin(Thickness 4) {
+        VStack.Margin(4) {
             for item in todoList.Value.items do
                 DockPanel {
                     Button

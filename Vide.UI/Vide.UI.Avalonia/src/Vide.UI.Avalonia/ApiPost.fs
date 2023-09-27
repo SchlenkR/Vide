@@ -68,18 +68,20 @@ type BindExtensions =
 
 // TODO
 
-// [<Extension>]
-// type ConvenienceExtensions =
+[<Extension>]
+type ConvenienceExtensions =
 
-//     [<Extension>]
-//     static member inline Margin<'nb,'e,'n,'c 
-//             when 'nb :> NodeBuilder<'e,'c> 
-//             and 'e :> Avalonia.Controls.Control
-//             and 'nb : (member Margin: Avalonia.Thickness -> unit)
-//         > 
-//         (this: 'nb, value)
-//         = 
-//         this.Margin(Avalonia.Thickness(value))
+    [<Extension>]
+    static member inline Margin<'nb,'e,'n,'c 
+            when 'nb :> NodeBuilder<'e,'c> 
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_Margin: unit -> Avalonia.Thickness)
+            and 'e : (member set_Margin: Avalonia.Thickness -> unit)
+        > 
+        (this: 'nb, value: float)
+        =
+        let value = Avalonia.Thickness value
+        this.onEval(fun x -> if x.node.Margin <> value then x.node.Margin <- value)
 
 //     [<Extension>]
 //     static member inline Margin<'nb,'e,'n,'c 
@@ -130,6 +132,8 @@ type BindExtensions =
 //         (this: 'nb, value) 
 //         = 
 //         this.Margin(Avalonia.Thickness(0, 0, 0, value))
+
+
 
     
 // Define some Aliases for convenience

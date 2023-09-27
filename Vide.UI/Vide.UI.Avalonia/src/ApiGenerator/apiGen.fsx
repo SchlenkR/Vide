@@ -37,7 +37,7 @@ let rec getTypeName (t: Type) =
     | args ->
         let args = args |> Array.map getTypeName |> String.concat ", "
         let tyNameWithoutApostrophe = t.Name.Split("`")[0]
-        $"{tyNameWithoutApostrophe}<{args}>"
+        $"""{tyNameWithoutApostrophe}<{args}>"""
 
 let toWrappedControl (t: Type) =
     let controlType = typeof<Controls.Control>
@@ -193,15 +193,32 @@ let writeTemplate outFile templateModel =
 
 let private FSI_TEST () =
 
-    [
-        typeof<Controls.TextBlock>, None
-        typeof<Controls.TextBox>, Some Controls.TextBox.TextProperty.Name
-        typeof<Controls.Button>, None
-        typeof<Controls.CheckBox>, Some Controls.CheckBox.IsCheckedProperty.Name
-        typeof<Controls.Grid>, None
-        typeof<Controls.DockPanel>, None
-        typeof<Controls.StackPanel>, None
-        typeof<Controls.ScrollViewer>, None
-    ]
+    let controlsToWrap =
+        [
+            typeof<Controls.TextBlock>, None
+            typeof<Controls.TextBox>, Some Controls.TextBox.TextProperty.Name
+            typeof<Controls.Button>, None
+            typeof<Controls.CheckBox>, Some Controls.CheckBox.IsCheckedProperty.Name
+            typeof<Controls.Grid>, None
+            typeof<Controls.DockPanel>, None
+            typeof<Controls.StackPanel>, None
+            typeof<Controls.ScrollViewer>, None
+        ]
+    
+    controlsToWrap
     |> mkTemplateModelForTypes
     |> writeTemplate (Path.Combine(__SOURCE_DIRECTORY__, "../Vide.UI.Avalonia/Api.fs"))
+
+    let getClassHierarchy (t: Type) =
+        let stopType = typeof<AvaloniaObject>
+        let rec loop (t: Type) =
+            match t.BaseType with
+            | null -> []
+            | bt when bt = stopType -> [stopType]
+            | bt ->bt :: loop bt
+        loop t
+    let printTypes types =
+        for t in types do printfn "%s" (getTypeName t)
+
+    getClassHierarchy typeof<Controls.DockPanel> |> printTypes
+    
