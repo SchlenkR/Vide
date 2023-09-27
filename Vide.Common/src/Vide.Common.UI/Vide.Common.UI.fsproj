@@ -5,7 +5,8 @@
 
   <!-- NuGet config -->
   <PropertyGroup>
-    <Version>0.0.22</Version>
+    <Description>Vide.Common.UI provides base functionality for any UI backend.</Description>
+    <Version>0.0.23</Version>
     <PackageReleaseNotes>
     </PackageReleaseNotes>
     <PackageTags>f#;vide</PackageTags>
