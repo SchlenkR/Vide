@@ -19,29 +19,56 @@ type AvaloniaControl = Avalonia.Controls.Control
 type Controls = class end
 
 
+type BorderBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Border>()
+type Controls with static member Border = BorderBuilder()
+
+type ButtonBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Button>()
+type Controls with static member Button = ButtonBuilder()
+
+type CanvasBuilder () = inherit PanelRetBuilder<Avalonia.Controls.Canvas>()
+type Controls with static member Canvas = CanvasBuilder()
+
+type CheckBoxBuilder () = inherit ContentLeafPotBuilder<System.Nullable<System.Boolean>, Avalonia.Controls.CheckBox>(fun node -> node.IsChecked)
+type Controls with static member CheckBox = CheckBoxBuilder()
+
+type ComboBoxBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.ComboBox>()
+type Controls with static member ComboBox = ComboBoxBuilder()
+
+type ContentControlBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.ContentControl>()
+type Controls with static member ContentControl = ContentControlBuilder()
+
+type ControlBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Control>()
+type Controls with static member Control = ControlBuilder()
+
+type DatePickerBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.DatePicker>()
+type Controls with static member DatePicker = DatePickerBuilder()
+
+type TimePickerBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.TimePicker>()
+type Controls with static member TimePicker = TimePickerBuilder()
+
+type DockPanelBuilder () = inherit PanelRetBuilder<Avalonia.Controls.DockPanel>()
+type Controls with static member DockPanel = DockPanelBuilder()
+
+type ExpanderBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Expander>()
+type Controls with static member Expander = ExpanderBuilder()
+
+type GridBuilder () = inherit PanelRetBuilder<Avalonia.Controls.Grid>()
+type Controls with static member Grid = GridBuilder()
+
+type LabelBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Label>()
+type Controls with static member Label = LabelBuilder()
+
+type StackPanelBuilder () = inherit PanelRetBuilder<Avalonia.Controls.StackPanel>()
+type Controls with static member StackPanel = StackPanelBuilder()
+
 type TextBlockBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.TextBlock>()
 type Controls with static member TextBlock = TextBlockBuilder()
 
 type TextBoxBuilder () = inherit ContentLeafPotBuilder<System.String, Avalonia.Controls.TextBox>(fun node -> node.Text)
 type Controls with static member TextBox = TextBoxBuilder()
 
-type ButtonBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Button>()
-type Controls with static member Button = ButtonBuilder()
-
-type CheckBoxBuilder () = inherit ContentLeafPotBuilder<System.Nullable<System.Boolean>, Avalonia.Controls.CheckBox>(fun node -> node.IsChecked)
-type Controls with static member CheckBox = CheckBoxBuilder()
-
-type GridBuilder () = inherit PanelRetBuilder<Avalonia.Controls.Grid>()
-type Controls with static member Grid = GridBuilder()
-
-type DockPanelBuilder () = inherit PanelRetBuilder<Avalonia.Controls.DockPanel>()
-type Controls with static member DockPanel = DockPanelBuilder()
-
-type StackPanelBuilder () = inherit PanelRetBuilder<Avalonia.Controls.StackPanel>()
-type Controls with static member StackPanel = StackPanelBuilder()
-
-type ScrollViewerBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.ScrollViewer>()
-type Controls with static member ScrollViewer = ScrollViewerBuilder()
+type WrapPanelBuilder () = inherit PanelRetBuilder<Avalonia.Controls.WrapPanel>()
+type Controls with static member WrapPanel = WrapPanelBuilder()
 
 
 
@@ -69,16 +96,6 @@ type PropertiesExtensions =
             this.onEval(fun x -> if x.node.get_AcceptsTab() <> value then x.node.set_AcceptsTab(value))
     
     [<Extension>]
-    static member inline AllowAutoHide<'nb,'e,'c when 
-            'nb :> NodeBuilder<'e,'c>
-            and 'e :> Avalonia.Controls.Control
-            and 'e : (member get_AllowAutoHide: unit -> System.Boolean)
-            and 'e : (member set_AllowAutoHide: System.Boolean -> unit)
-        >
-        (this: 'nb, value: System.Boolean) =
-            this.onEval(fun x -> if x.node.get_AllowAutoHide() <> value then x.node.set_AllowAutoHide(value))
-    
-    [<Extension>]
     static member inline AreHorizontalSnapPointsRegular<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
@@ -97,6 +114,16 @@ type PropertiesExtensions =
         >
         (this: 'nb, value: System.Boolean) =
             this.onEval(fun x -> if x.node.get_AreVerticalSnapPointsRegular() <> value then x.node.set_AreVerticalSnapPointsRegular(value))
+    
+    [<Extension>]
+    static member inline AutoScrollToSelectedItem<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_AutoScrollToSelectedItem: unit -> System.Boolean)
+            and 'e : (member set_AutoScrollToSelectedItem: System.Boolean -> unit)
+        >
+        (this: 'nb, value: System.Boolean) =
+            this.onEval(fun x -> if x.node.get_AutoScrollToSelectedItem() <> value then x.node.set_AutoScrollToSelectedItem(value))
     
     [<Extension>]
     static member inline Background<'nb,'e,'c when 
@@ -139,14 +166,14 @@ type PropertiesExtensions =
             this.onEval(fun x -> if x.node.get_BorderThickness() <> value then x.node.set_BorderThickness(value))
     
     [<Extension>]
-    static member inline BringIntoViewOnFocusChange<'nb,'e,'c when 
+    static member inline BoxShadow<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
-            and 'e : (member get_BringIntoViewOnFocusChange: unit -> System.Boolean)
-            and 'e : (member set_BringIntoViewOnFocusChange: System.Boolean -> unit)
+            and 'e : (member get_BoxShadow: unit -> Avalonia.Media.BoxShadows)
+            and 'e : (member set_BoxShadow: Avalonia.Media.BoxShadows -> unit)
         >
-        (this: 'nb, value: System.Boolean) =
-            this.onEval(fun x -> if x.node.get_BringIntoViewOnFocusChange() <> value then x.node.set_BringIntoViewOnFocusChange(value))
+        (this: 'nb, value: Avalonia.Media.BoxShadows) =
+            this.onEval(fun x -> if x.node.get_BoxShadow() <> value then x.node.set_BoxShadow(value))
     
     [<Extension>]
     static member inline CaretBrush<'nb,'e,'c when 
@@ -167,6 +194,16 @@ type PropertiesExtensions =
         >
         (this: 'nb, value: System.Int32) =
             this.onEval(fun x -> if x.node.get_CaretIndex() <> value then x.node.set_CaretIndex(value))
+    
+    [<Extension>]
+    static member inline Child<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_Child: unit -> Avalonia.Controls.Control)
+            and 'e : (member set_Child: Avalonia.Controls.Control -> unit)
+        >
+        (this: 'nb, value: Avalonia.Controls.Control) =
+            this.onEval(fun x -> if x.node.get_Child() <> value then x.node.set_Child(value))
     
     [<Extension>]
     static member inline ClickMode<'nb,'e,'c when 
@@ -197,6 +234,16 @@ type PropertiesExtensions =
         >
         (this: 'nb, value: System.Boolean) =
             this.onEval(fun x -> if x.node.get_ClipToBounds() <> value then x.node.set_ClipToBounds(value))
+    
+    [<Extension>]
+    static member inline ClockIdentifier<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_ClockIdentifier: unit -> System.String)
+            and 'e : (member set_ClockIdentifier: System.String -> unit)
+        >
+        (this: 'nb, value: System.String) =
+            this.onEval(fun x -> if x.node.get_ClockIdentifier() <> value then x.node.set_ClockIdentifier(value))
     
     [<Extension>]
     static member inline ColumnDefinitions<'nb,'e,'c when 
@@ -249,6 +296,16 @@ type PropertiesExtensions =
             this.onEval(fun x -> if x.node.get_ContentTemplate() <> value then x.node.set_ContentTemplate(value))
     
     [<Extension>]
+    static member inline ContentTransition<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_ContentTransition: unit -> Avalonia.Animation.IPageTransition)
+            and 'e : (member set_ContentTransition: Avalonia.Animation.IPageTransition -> unit)
+        >
+        (this: 'nb, value: Avalonia.Animation.IPageTransition) =
+            this.onEval(fun x -> if x.node.get_ContentTransition() <> value then x.node.set_ContentTransition(value))
+    
+    [<Extension>]
     static member inline ContextFlyout<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
@@ -299,6 +356,36 @@ type PropertiesExtensions =
             this.onEval(fun x -> if x.node.get_DataContext() <> value then x.node.set_DataContext(value))
     
     [<Extension>]
+    static member inline DayFormat<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_DayFormat: unit -> System.String)
+            and 'e : (member set_DayFormat: System.String -> unit)
+        >
+        (this: 'nb, value: System.String) =
+            this.onEval(fun x -> if x.node.get_DayFormat() <> value then x.node.set_DayFormat(value))
+    
+    [<Extension>]
+    static member inline DayVisible<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_DayVisible: unit -> System.Boolean)
+            and 'e : (member set_DayVisible: System.Boolean -> unit)
+        >
+        (this: 'nb, value: System.Boolean) =
+            this.onEval(fun x -> if x.node.get_DayVisible() <> value then x.node.set_DayVisible(value))
+    
+    [<Extension>]
+    static member inline DisplayMemberBinding<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_DisplayMemberBinding: unit -> Avalonia.Data.IBinding)
+            and 'e : (member set_DisplayMemberBinding: Avalonia.Data.IBinding -> unit)
+        >
+        (this: 'nb, value: Avalonia.Data.IBinding) =
+            this.onEval(fun x -> if x.node.get_DisplayMemberBinding() <> value then x.node.set_DisplayMemberBinding(value))
+    
+    [<Extension>]
     static member inline Effect<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
@@ -307,6 +394,16 @@ type PropertiesExtensions =
         >
         (this: 'nb, value: Avalonia.Media.IEffect) =
             this.onEval(fun x -> if x.node.get_Effect() <> value then x.node.set_Effect(value))
+    
+    [<Extension>]
+    static member inline ExpandDirection<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_ExpandDirection: unit -> Avalonia.Controls.ExpandDirection)
+            and 'e : (member set_ExpandDirection: Avalonia.Controls.ExpandDirection -> unit)
+        >
+        (this: 'nb, value: Avalonia.Controls.ExpandDirection) =
+            this.onEval(fun x -> if x.node.get_ExpandDirection() <> value then x.node.set_ExpandDirection(value))
     
     [<Extension>]
     static member inline FlowDirection<'nb,'e,'c when 
@@ -409,6 +506,26 @@ type PropertiesExtensions =
             this.onEval(fun x -> if x.node.get_Foreground() <> value then x.node.set_Foreground(value))
     
     [<Extension>]
+    static member inline Header<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_Header: unit -> System.Object)
+            and 'e : (member set_Header: System.Object -> unit)
+        >
+        (this: 'nb, value: System.Object) =
+            this.onEval(fun x -> if x.node.get_Header() <> value then x.node.set_Header(value))
+    
+    [<Extension>]
+    static member inline HeaderTemplate<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_HeaderTemplate: unit -> Avalonia.Controls.Templates.IDataTemplate)
+            and 'e : (member set_HeaderTemplate: Avalonia.Controls.Templates.IDataTemplate -> unit)
+        >
+        (this: 'nb, value: Avalonia.Controls.Templates.IDataTemplate) =
+            this.onEval(fun x -> if x.node.get_HeaderTemplate() <> value then x.node.set_HeaderTemplate(value))
+    
+    [<Extension>]
     static member inline Height<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
@@ -437,36 +554,6 @@ type PropertiesExtensions =
         >
         (this: 'nb, value: Avalonia.Layout.HorizontalAlignment) =
             this.onEval(fun x -> if x.node.get_HorizontalContentAlignment() <> value then x.node.set_HorizontalContentAlignment(value))
-    
-    [<Extension>]
-    static member inline HorizontalScrollBarVisibility<'nb,'e,'c when 
-            'nb :> NodeBuilder<'e,'c>
-            and 'e :> Avalonia.Controls.Control
-            and 'e : (member get_HorizontalScrollBarVisibility: unit -> Avalonia.Controls.Primitives.ScrollBarVisibility)
-            and 'e : (member set_HorizontalScrollBarVisibility: Avalonia.Controls.Primitives.ScrollBarVisibility -> unit)
-        >
-        (this: 'nb, value: Avalonia.Controls.Primitives.ScrollBarVisibility) =
-            this.onEval(fun x -> if x.node.get_HorizontalScrollBarVisibility() <> value then x.node.set_HorizontalScrollBarVisibility(value))
-    
-    [<Extension>]
-    static member inline HorizontalSnapPointsAlignment<'nb,'e,'c when 
-            'nb :> NodeBuilder<'e,'c>
-            and 'e :> Avalonia.Controls.Control
-            and 'e : (member get_HorizontalSnapPointsAlignment: unit -> Avalonia.Controls.Primitives.SnapPointsAlignment)
-            and 'e : (member set_HorizontalSnapPointsAlignment: Avalonia.Controls.Primitives.SnapPointsAlignment -> unit)
-        >
-        (this: 'nb, value: Avalonia.Controls.Primitives.SnapPointsAlignment) =
-            this.onEval(fun x -> if x.node.get_HorizontalSnapPointsAlignment() <> value then x.node.set_HorizontalSnapPointsAlignment(value))
-    
-    [<Extension>]
-    static member inline HorizontalSnapPointsType<'nb,'e,'c when 
-            'nb :> NodeBuilder<'e,'c>
-            and 'e :> Avalonia.Controls.Control
-            and 'e : (member get_HorizontalSnapPointsType: unit -> Avalonia.Controls.Primitives.SnapPointsType)
-            and 'e : (member set_HorizontalSnapPointsType: Avalonia.Controls.Primitives.SnapPointsType -> unit)
-        >
-        (this: 'nb, value: Avalonia.Controls.Primitives.SnapPointsType) =
-            this.onEval(fun x -> if x.node.get_HorizontalSnapPointsType() <> value then x.node.set_HorizontalSnapPointsType(value))
     
     [<Extension>]
     static member inline HotKey<'nb,'e,'c when 
@@ -539,6 +626,16 @@ type PropertiesExtensions =
             this.onEval(fun x -> if x.node.get_IsDefault() <> value then x.node.set_IsDefault(value))
     
     [<Extension>]
+    static member inline IsDropDownOpen<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_IsDropDownOpen: unit -> System.Boolean)
+            and 'e : (member set_IsDropDownOpen: System.Boolean -> unit)
+        >
+        (this: 'nb, value: System.Boolean) =
+            this.onEval(fun x -> if x.node.get_IsDropDownOpen() <> value then x.node.set_IsDropDownOpen(value))
+    
+    [<Extension>]
     static member inline IsEnabled<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
@@ -547,6 +644,16 @@ type PropertiesExtensions =
         >
         (this: 'nb, value: System.Boolean) =
             this.onEval(fun x -> if x.node.get_IsEnabled() <> value then x.node.set_IsEnabled(value))
+    
+    [<Extension>]
+    static member inline IsExpanded<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_IsExpanded: unit -> System.Boolean)
+            and 'e : (member set_IsExpanded: System.Boolean -> unit)
+        >
+        (this: 'nb, value: System.Boolean) =
+            this.onEval(fun x -> if x.node.get_IsExpanded() <> value then x.node.set_IsExpanded(value))
     
     [<Extension>]
     static member inline IsHitTestVisible<'nb,'e,'c when 
@@ -569,26 +676,6 @@ type PropertiesExtensions =
             this.onEval(fun x -> if x.node.get_IsReadOnly() <> value then x.node.set_IsReadOnly(value))
     
     [<Extension>]
-    static member inline IsScrollChainingEnabled<'nb,'e,'c when 
-            'nb :> NodeBuilder<'e,'c>
-            and 'e :> Avalonia.Controls.Control
-            and 'e : (member get_IsScrollChainingEnabled: unit -> System.Boolean)
-            and 'e : (member set_IsScrollChainingEnabled: System.Boolean -> unit)
-        >
-        (this: 'nb, value: System.Boolean) =
-            this.onEval(fun x -> if x.node.get_IsScrollChainingEnabled() <> value then x.node.set_IsScrollChainingEnabled(value))
-    
-    [<Extension>]
-    static member inline IsScrollInertiaEnabled<'nb,'e,'c when 
-            'nb :> NodeBuilder<'e,'c>
-            and 'e :> Avalonia.Controls.Control
-            and 'e : (member get_IsScrollInertiaEnabled: unit -> System.Boolean)
-            and 'e : (member set_IsScrollInertiaEnabled: System.Boolean -> unit)
-        >
-        (this: 'nb, value: System.Boolean) =
-            this.onEval(fun x -> if x.node.get_IsScrollInertiaEnabled() <> value then x.node.set_IsScrollInertiaEnabled(value))
-    
-    [<Extension>]
     static member inline IsTabStop<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
@@ -597,6 +684,16 @@ type PropertiesExtensions =
         >
         (this: 'nb, value: System.Boolean) =
             this.onEval(fun x -> if x.node.get_IsTabStop() <> value then x.node.set_IsTabStop(value))
+    
+    [<Extension>]
+    static member inline IsTextSearchEnabled<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_IsTextSearchEnabled: unit -> System.Boolean)
+            and 'e : (member set_IsTextSearchEnabled: System.Boolean -> unit)
+        >
+        (this: 'nb, value: System.Boolean) =
+            this.onEval(fun x -> if x.node.get_IsTextSearchEnabled() <> value then x.node.set_IsTextSearchEnabled(value))
     
     [<Extension>]
     static member inline IsThreeState<'nb,'e,'c when 
@@ -627,6 +724,66 @@ type PropertiesExtensions =
         >
         (this: 'nb, value: System.Boolean) =
             this.onEval(fun x -> if x.node.get_IsVisible() <> value then x.node.set_IsVisible(value))
+    
+    [<Extension>]
+    static member inline ItemContainerTheme<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_ItemContainerTheme: unit -> Avalonia.Styling.ControlTheme)
+            and 'e : (member set_ItemContainerTheme: Avalonia.Styling.ControlTheme -> unit)
+        >
+        (this: 'nb, value: Avalonia.Styling.ControlTheme) =
+            this.onEval(fun x -> if x.node.get_ItemContainerTheme() <> value then x.node.set_ItemContainerTheme(value))
+    
+    [<Extension>]
+    static member inline ItemHeight<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_ItemHeight: unit -> System.Double)
+            and 'e : (member set_ItemHeight: System.Double -> unit)
+        >
+        (this: 'nb, value: System.Double) =
+            this.onEval(fun x -> if x.node.get_ItemHeight() <> value then x.node.set_ItemHeight(value))
+    
+    [<Extension>]
+    static member inline ItemTemplate<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_ItemTemplate: unit -> Avalonia.Controls.Templates.IDataTemplate)
+            and 'e : (member set_ItemTemplate: Avalonia.Controls.Templates.IDataTemplate -> unit)
+        >
+        (this: 'nb, value: Avalonia.Controls.Templates.IDataTemplate) =
+            this.onEval(fun x -> if x.node.get_ItemTemplate() <> value then x.node.set_ItemTemplate(value))
+    
+    [<Extension>]
+    static member inline ItemWidth<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_ItemWidth: unit -> System.Double)
+            and 'e : (member set_ItemWidth: System.Double -> unit)
+        >
+        (this: 'nb, value: System.Double) =
+            this.onEval(fun x -> if x.node.get_ItemWidth() <> value then x.node.set_ItemWidth(value))
+    
+    [<Extension>]
+    static member inline ItemsPanel<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_ItemsPanel: unit -> Avalonia.Controls.ITemplate<Avalonia.Controls.Panel>)
+            and 'e : (member set_ItemsPanel: Avalonia.Controls.ITemplate<Avalonia.Controls.Panel> -> unit)
+        >
+        (this: 'nb, value: Avalonia.Controls.ITemplate<Avalonia.Controls.Panel>) =
+            this.onEval(fun x -> if x.node.get_ItemsPanel() <> value then x.node.set_ItemsPanel(value))
+    
+    [<Extension>]
+    static member inline ItemsSource<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_ItemsSource: unit -> System.Collections.IEnumerable)
+            and 'e : (member set_ItemsSource: System.Collections.IEnumerable -> unit)
+        >
+        (this: 'nb, value: System.Collections.IEnumerable) =
+            this.onEval(fun x -> if x.node.get_ItemsSource() <> value then x.node.set_ItemsSource(value))
     
     [<Extension>]
     static member inline LastChildFill<'nb,'e,'c when 
@@ -669,6 +826,16 @@ type PropertiesExtensions =
             this.onEval(fun x -> if x.node.get_Margin() <> value then x.node.set_Margin(value))
     
     [<Extension>]
+    static member inline MaxDropDownHeight<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_MaxDropDownHeight: unit -> System.Double)
+            and 'e : (member set_MaxDropDownHeight: System.Double -> unit)
+        >
+        (this: 'nb, value: System.Double) =
+            this.onEval(fun x -> if x.node.get_MaxDropDownHeight() <> value then x.node.set_MaxDropDownHeight(value))
+    
+    [<Extension>]
     static member inline MaxHeight<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
@@ -709,6 +876,16 @@ type PropertiesExtensions =
             this.onEval(fun x -> if x.node.get_MaxWidth() <> value then x.node.set_MaxWidth(value))
     
     [<Extension>]
+    static member inline MaxYear<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_MaxYear: unit -> System.DateTimeOffset)
+            and 'e : (member set_MaxYear: System.DateTimeOffset -> unit)
+        >
+        (this: 'nb, value: System.DateTimeOffset) =
+            this.onEval(fun x -> if x.node.get_MaxYear() <> value then x.node.set_MaxYear(value))
+    
+    [<Extension>]
     static member inline MinHeight<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
@@ -729,6 +906,46 @@ type PropertiesExtensions =
             this.onEval(fun x -> if x.node.get_MinWidth() <> value then x.node.set_MinWidth(value))
     
     [<Extension>]
+    static member inline MinYear<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_MinYear: unit -> System.DateTimeOffset)
+            and 'e : (member set_MinYear: System.DateTimeOffset -> unit)
+        >
+        (this: 'nb, value: System.DateTimeOffset) =
+            this.onEval(fun x -> if x.node.get_MinYear() <> value then x.node.set_MinYear(value))
+    
+    [<Extension>]
+    static member inline MinuteIncrement<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_MinuteIncrement: unit -> System.Int32)
+            and 'e : (member set_MinuteIncrement: System.Int32 -> unit)
+        >
+        (this: 'nb, value: System.Int32) =
+            this.onEval(fun x -> if x.node.get_MinuteIncrement() <> value then x.node.set_MinuteIncrement(value))
+    
+    [<Extension>]
+    static member inline MonthFormat<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_MonthFormat: unit -> System.String)
+            and 'e : (member set_MonthFormat: System.String -> unit)
+        >
+        (this: 'nb, value: System.String) =
+            this.onEval(fun x -> if x.node.get_MonthFormat() <> value then x.node.set_MonthFormat(value))
+    
+    [<Extension>]
+    static member inline MonthVisible<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_MonthVisible: unit -> System.Boolean)
+            and 'e : (member set_MonthVisible: System.Boolean -> unit)
+        >
+        (this: 'nb, value: System.Boolean) =
+            this.onEval(fun x -> if x.node.get_MonthVisible() <> value then x.node.set_MonthVisible(value))
+    
+    [<Extension>]
     static member inline Name<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
@@ -747,16 +964,6 @@ type PropertiesExtensions =
         >
         (this: 'nb, value: System.String) =
             this.onEval(fun x -> if x.node.get_NewLine() <> value then x.node.set_NewLine(value))
-    
-    [<Extension>]
-    static member inline Offset<'nb,'e,'c when 
-            'nb :> NodeBuilder<'e,'c>
-            and 'e :> Avalonia.Controls.Control
-            and 'e : (member get_Offset: unit -> Avalonia.Vector)
-            and 'e : (member set_Offset: Avalonia.Vector -> unit)
-        >
-        (this: 'nb, value: Avalonia.Vector) =
-            this.onEval(fun x -> if x.node.get_Offset() <> value then x.node.set_Offset(value))
     
     [<Extension>]
     static member inline Opacity<'nb,'e,'c when 
@@ -809,6 +1016,26 @@ type PropertiesExtensions =
             this.onEval(fun x -> if x.node.get_PasswordChar() <> value then x.node.set_PasswordChar(value))
     
     [<Extension>]
+    static member inline PlaceholderForeground<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_PlaceholderForeground: unit -> Avalonia.Media.IBrush)
+            and 'e : (member set_PlaceholderForeground: Avalonia.Media.IBrush -> unit)
+        >
+        (this: 'nb, value: Avalonia.Media.IBrush) =
+            this.onEval(fun x -> if x.node.get_PlaceholderForeground() <> value then x.node.set_PlaceholderForeground(value))
+    
+    [<Extension>]
+    static member inline PlaceholderText<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_PlaceholderText: unit -> System.String)
+            and 'e : (member set_PlaceholderText: System.String -> unit)
+        >
+        (this: 'nb, value: System.String) =
+            this.onEval(fun x -> if x.node.get_PlaceholderText() <> value then x.node.set_PlaceholderText(value))
+    
+    [<Extension>]
     static member inline RenderTransform<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
@@ -859,6 +1086,36 @@ type PropertiesExtensions =
             this.onEval(fun x -> if x.node.get_RowDefinitions() <> value then x.node.set_RowDefinitions(value))
     
     [<Extension>]
+    static member inline SelectedDate<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_SelectedDate: unit -> System.Nullable<System.DateTimeOffset>)
+            and 'e : (member set_SelectedDate: System.Nullable<System.DateTimeOffset> -> unit)
+        >
+        (this: 'nb, value: System.Nullable<System.DateTimeOffset>) =
+            this.onEval(fun x -> if x.node.get_SelectedDate() <> value then x.node.set_SelectedDate(value))
+    
+    [<Extension>]
+    static member inline SelectedIndex<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_SelectedIndex: unit -> System.Int32)
+            and 'e : (member set_SelectedIndex: System.Int32 -> unit)
+        >
+        (this: 'nb, value: System.Int32) =
+            this.onEval(fun x -> if x.node.get_SelectedIndex() <> value then x.node.set_SelectedIndex(value))
+    
+    [<Extension>]
+    static member inline SelectedItem<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_SelectedItem: unit -> System.Object)
+            and 'e : (member set_SelectedItem: System.Object -> unit)
+        >
+        (this: 'nb, value: System.Object) =
+            this.onEval(fun x -> if x.node.get_SelectedItem() <> value then x.node.set_SelectedItem(value))
+    
+    [<Extension>]
     static member inline SelectedText<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
@@ -867,6 +1124,36 @@ type PropertiesExtensions =
         >
         (this: 'nb, value: System.String) =
             this.onEval(fun x -> if x.node.get_SelectedText() <> value then x.node.set_SelectedText(value))
+    
+    [<Extension>]
+    static member inline SelectedTime<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_SelectedTime: unit -> System.Nullable<System.TimeSpan>)
+            and 'e : (member set_SelectedTime: System.Nullable<System.TimeSpan> -> unit)
+        >
+        (this: 'nb, value: System.Nullable<System.TimeSpan>) =
+            this.onEval(fun x -> if x.node.get_SelectedTime() <> value then x.node.set_SelectedTime(value))
+    
+    [<Extension>]
+    static member inline SelectedValue<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_SelectedValue: unit -> System.Object)
+            and 'e : (member set_SelectedValue: System.Object -> unit)
+        >
+        (this: 'nb, value: System.Object) =
+            this.onEval(fun x -> if x.node.get_SelectedValue() <> value then x.node.set_SelectedValue(value))
+    
+    [<Extension>]
+    static member inline SelectedValueBinding<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_SelectedValueBinding: unit -> Avalonia.Data.IBinding)
+            and 'e : (member set_SelectedValueBinding: Avalonia.Data.IBinding -> unit)
+        >
+        (this: 'nb, value: Avalonia.Data.IBinding) =
+            this.onEval(fun x -> if x.node.get_SelectedValueBinding() <> value then x.node.set_SelectedValueBinding(value))
     
     [<Extension>]
     static member inline SelectionBrush<'nb,'e,'c when 
@@ -947,6 +1234,16 @@ type PropertiesExtensions =
         >
         (this: 'nb, value: System.Object) =
             this.onEval(fun x -> if x.node.get_Tag() <> value then x.node.set_Tag(value))
+    
+    [<Extension>]
+    static member inline Target<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_Target: unit -> Avalonia.Input.IInputElement)
+            and 'e : (member set_Target: Avalonia.Input.IInputElement -> unit)
+        >
+        (this: 'nb, value: Avalonia.Input.IInputElement) =
+            this.onEval(fun x -> if x.node.get_Target() <> value then x.node.set_Target(value))
     
     [<Extension>]
     static member inline Template<'nb,'e,'c when 
@@ -1079,36 +1376,6 @@ type PropertiesExtensions =
             this.onEval(fun x -> if x.node.get_VerticalContentAlignment() <> value then x.node.set_VerticalContentAlignment(value))
     
     [<Extension>]
-    static member inline VerticalScrollBarVisibility<'nb,'e,'c when 
-            'nb :> NodeBuilder<'e,'c>
-            and 'e :> Avalonia.Controls.Control
-            and 'e : (member get_VerticalScrollBarVisibility: unit -> Avalonia.Controls.Primitives.ScrollBarVisibility)
-            and 'e : (member set_VerticalScrollBarVisibility: Avalonia.Controls.Primitives.ScrollBarVisibility -> unit)
-        >
-        (this: 'nb, value: Avalonia.Controls.Primitives.ScrollBarVisibility) =
-            this.onEval(fun x -> if x.node.get_VerticalScrollBarVisibility() <> value then x.node.set_VerticalScrollBarVisibility(value))
-    
-    [<Extension>]
-    static member inline VerticalSnapPointsAlignment<'nb,'e,'c when 
-            'nb :> NodeBuilder<'e,'c>
-            and 'e :> Avalonia.Controls.Control
-            and 'e : (member get_VerticalSnapPointsAlignment: unit -> Avalonia.Controls.Primitives.SnapPointsAlignment)
-            and 'e : (member set_VerticalSnapPointsAlignment: Avalonia.Controls.Primitives.SnapPointsAlignment -> unit)
-        >
-        (this: 'nb, value: Avalonia.Controls.Primitives.SnapPointsAlignment) =
-            this.onEval(fun x -> if x.node.get_VerticalSnapPointsAlignment() <> value then x.node.set_VerticalSnapPointsAlignment(value))
-    
-    [<Extension>]
-    static member inline VerticalSnapPointsType<'nb,'e,'c when 
-            'nb :> NodeBuilder<'e,'c>
-            and 'e :> Avalonia.Controls.Control
-            and 'e : (member get_VerticalSnapPointsType: unit -> Avalonia.Controls.Primitives.SnapPointsType)
-            and 'e : (member set_VerticalSnapPointsType: Avalonia.Controls.Primitives.SnapPointsType -> unit)
-        >
-        (this: 'nb, value: Avalonia.Controls.Primitives.SnapPointsType) =
-            this.onEval(fun x -> if x.node.get_VerticalSnapPointsType() <> value then x.node.set_VerticalSnapPointsType(value))
-    
-    [<Extension>]
     static member inline Watermark<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
@@ -1127,6 +1394,36 @@ type PropertiesExtensions =
         >
         (this: 'nb, value: System.Double) =
             this.onEval(fun x -> if x.node.get_Width() <> value then x.node.set_Width(value))
+    
+    [<Extension>]
+    static member inline WrapSelection<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_WrapSelection: unit -> System.Boolean)
+            and 'e : (member set_WrapSelection: System.Boolean -> unit)
+        >
+        (this: 'nb, value: System.Boolean) =
+            this.onEval(fun x -> if x.node.get_WrapSelection() <> value then x.node.set_WrapSelection(value))
+    
+    [<Extension>]
+    static member inline YearFormat<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_YearFormat: unit -> System.String)
+            and 'e : (member set_YearFormat: System.String -> unit)
+        >
+        (this: 'nb, value: System.String) =
+            this.onEval(fun x -> if x.node.get_YearFormat() <> value then x.node.set_YearFormat(value))
+    
+    [<Extension>]
+    static member inline YearVisible<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_YearVisible: unit -> System.Boolean)
+            and 'e : (member set_YearVisible: System.Boolean -> unit)
+        >
+        (this: 'nb, value: System.Boolean) =
+            this.onEval(fun x -> if x.node.get_YearVisible() <> value then x.node.set_YearVisible(value))
     
     [<Extension>]
     static member inline ZIndex<'nb,'e,'c when 
@@ -1205,6 +1502,86 @@ type EventsExtensions =
             let videEventHandler = Event.handle x.node x.host handler
             let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
             x.node.add_Click(dotnetEventHandler)
+        )
+    
+    [<Extension>]
+    static member inline Collapsed<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e: (member add_Collapsed: System.EventHandler<Avalonia.Interactivity.RoutedEventArgs> -> unit)
+            and 'e: (member remove_Collapsed: System.EventHandler<Avalonia.Interactivity.RoutedEventArgs> -> unit)
+        > 
+        (this: 'nb, handler)
+        =
+        this.onInit(fun x ->
+            // TODO: Remove handler on unmount
+            let videEventHandler = Event.handle x.node x.host handler
+            let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
+            x.node.add_Collapsed(dotnetEventHandler)
+        )
+    
+    [<Extension>]
+    static member inline Collapsing<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e: (member add_Collapsing: System.EventHandler<Avalonia.Interactivity.CancelRoutedEventArgs> -> unit)
+            and 'e: (member remove_Collapsing: System.EventHandler<Avalonia.Interactivity.CancelRoutedEventArgs> -> unit)
+        > 
+        (this: 'nb, handler)
+        =
+        this.onInit(fun x ->
+            // TODO: Remove handler on unmount
+            let videEventHandler = Event.handle x.node x.host handler
+            let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
+            x.node.add_Collapsing(dotnetEventHandler)
+        )
+    
+    [<Extension>]
+    static member inline ContainerClearing<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e: (member add_ContainerClearing: System.EventHandler<Avalonia.Controls.ContainerClearingEventArgs> -> unit)
+            and 'e: (member remove_ContainerClearing: System.EventHandler<Avalonia.Controls.ContainerClearingEventArgs> -> unit)
+        > 
+        (this: 'nb, handler)
+        =
+        this.onInit(fun x ->
+            // TODO: Remove handler on unmount
+            let videEventHandler = Event.handle x.node x.host handler
+            let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
+            x.node.add_ContainerClearing(dotnetEventHandler)
+        )
+    
+    [<Extension>]
+    static member inline ContainerIndexChanged<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e: (member add_ContainerIndexChanged: System.EventHandler<Avalonia.Controls.ContainerIndexChangedEventArgs> -> unit)
+            and 'e: (member remove_ContainerIndexChanged: System.EventHandler<Avalonia.Controls.ContainerIndexChangedEventArgs> -> unit)
+        > 
+        (this: 'nb, handler)
+        =
+        this.onInit(fun x ->
+            // TODO: Remove handler on unmount
+            let videEventHandler = Event.handle x.node x.host handler
+            let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
+            x.node.add_ContainerIndexChanged(dotnetEventHandler)
+        )
+    
+    [<Extension>]
+    static member inline ContainerPrepared<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e: (member add_ContainerPrepared: System.EventHandler<Avalonia.Controls.ContainerPreparedEventArgs> -> unit)
+            and 'e: (member remove_ContainerPrepared: System.EventHandler<Avalonia.Controls.ContainerPreparedEventArgs> -> unit)
+        > 
+        (this: 'nb, handler)
+        =
+        this.onInit(fun x ->
+            // TODO: Remove handler on unmount
+            let videEventHandler = Event.handle x.node x.host handler
+            let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
+            x.node.add_ContainerPrepared(dotnetEventHandler)
         )
     
     [<Extension>]
@@ -1317,6 +1694,38 @@ type EventsExtensions =
             let videEventHandler = Event.handle x.node x.host handler
             let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
             x.node.add_EffectiveViewportChanged(dotnetEventHandler)
+        )
+    
+    [<Extension>]
+    static member inline Expanded<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e: (member add_Expanded: System.EventHandler<Avalonia.Interactivity.RoutedEventArgs> -> unit)
+            and 'e: (member remove_Expanded: System.EventHandler<Avalonia.Interactivity.RoutedEventArgs> -> unit)
+        > 
+        (this: 'nb, handler)
+        =
+        this.onInit(fun x ->
+            // TODO: Remove handler on unmount
+            let videEventHandler = Event.handle x.node x.host handler
+            let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
+            x.node.add_Expanded(dotnetEventHandler)
+        )
+    
+    [<Extension>]
+    static member inline Expanding<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e: (member add_Expanding: System.EventHandler<Avalonia.Interactivity.CancelRoutedEventArgs> -> unit)
+            and 'e: (member remove_Expanding: System.EventHandler<Avalonia.Interactivity.CancelRoutedEventArgs> -> unit)
+        > 
+        (this: 'nb, handler)
+        =
+        this.onInit(fun x ->
+            // TODO: Remove handler on unmount
+            let videEventHandler = Event.handle x.node x.host handler
+            let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
+            x.node.add_Expanding(dotnetEventHandler)
         )
     
     [<Extension>]
@@ -1624,11 +2033,11 @@ type EventsExtensions =
         )
     
     [<Extension>]
-    static member inline ScrollChanged<'nb,'e,'c when 
+    static member inline SelectedDateChanged<'nb,'e,'c when 
             'nb :> NodeBuilder<'e,'c>
             and 'e :> Avalonia.Controls.Control
-            and 'e: (member add_ScrollChanged: System.EventHandler<Avalonia.Controls.ScrollChangedEventArgs> -> unit)
-            and 'e: (member remove_ScrollChanged: System.EventHandler<Avalonia.Controls.ScrollChangedEventArgs> -> unit)
+            and 'e: (member add_SelectedDateChanged: System.EventHandler<Avalonia.Controls.DatePickerSelectedValueChangedEventArgs> -> unit)
+            and 'e: (member remove_SelectedDateChanged: System.EventHandler<Avalonia.Controls.DatePickerSelectedValueChangedEventArgs> -> unit)
         > 
         (this: 'nb, handler)
         =
@@ -1636,7 +2045,39 @@ type EventsExtensions =
             // TODO: Remove handler on unmount
             let videEventHandler = Event.handle x.node x.host handler
             let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
-            x.node.add_ScrollChanged(dotnetEventHandler)
+            x.node.add_SelectedDateChanged(dotnetEventHandler)
+        )
+    
+    [<Extension>]
+    static member inline SelectedTimeChanged<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e: (member add_SelectedTimeChanged: System.EventHandler<Avalonia.Controls.TimePickerSelectedValueChangedEventArgs> -> unit)
+            and 'e: (member remove_SelectedTimeChanged: System.EventHandler<Avalonia.Controls.TimePickerSelectedValueChangedEventArgs> -> unit)
+        > 
+        (this: 'nb, handler)
+        =
+        this.onInit(fun x ->
+            // TODO: Remove handler on unmount
+            let videEventHandler = Event.handle x.node x.host handler
+            let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
+            x.node.add_SelectedTimeChanged(dotnetEventHandler)
+        )
+    
+    [<Extension>]
+    static member inline SelectionChanged<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e: (member add_SelectionChanged: System.EventHandler<Avalonia.Controls.SelectionChangedEventArgs> -> unit)
+            and 'e: (member remove_SelectionChanged: System.EventHandler<Avalonia.Controls.SelectionChangedEventArgs> -> unit)
+        > 
+        (this: 'nb, handler)
+        =
+        this.onInit(fun x ->
+            // TODO: Remove handler on unmount
+            let videEventHandler = Event.handle x.node x.host handler
+            let dotnetEventHandler = EventHandler<_>(fun _ args -> videEventHandler args)
+            x.node.add_SelectionChanged(dotnetEventHandler)
         )
     
     [<Extension>]
@@ -1803,12 +2244,7 @@ type EventsExtensions =
 
 module AttachedProperties =
     
-    type TextBlock<'nb,'e
-            when 'nb :> NodeBuilder<'e,AvaloniaContext>
-            and 'e :> AvaloniaControl>
-        = { target: 'nb }
-    
-    type Grid<'nb,'e
+    type Canvas<'nb,'e
             when 'nb :> NodeBuilder<'e,AvaloniaContext>
             and 'e :> AvaloniaControl>
         = { target: 'nb }
@@ -1818,7 +2254,12 @@ module AttachedProperties =
             and 'e :> AvaloniaControl>
         = { target: 'nb }
     
-    type ScrollViewer<'nb,'e
+    type Grid<'nb,'e
+            when 'nb :> NodeBuilder<'e,AvaloniaContext>
+            and 'e :> AvaloniaControl>
+        = { target: 'nb }
+    
+    type TextBlock<'nb,'e
             when 'nb :> NodeBuilder<'e,AvaloniaContext>
             and 'e :> AvaloniaControl>
         = { target: 'nb }
@@ -1826,75 +2267,31 @@ module AttachedProperties =
 
 
 [<Extension>]
-type TextBlockAttachedProperties =
+type CanvasAttachedProperties =
     
     // Entry
     
     [<Extension>]
-    static member inline TextBlock(this: #NodeBuilder<_,AvaloniaContext>)  =
-        { AttachedProperties.TextBlock.target = this }
+    static member inline Canvas(this: #NodeBuilder<_,AvaloniaContext>)  =
+        { AttachedProperties.Canvas.target = this }
 
     // Properties
     
     [<Extension>]
-    static member inline BaselineOffset(this: AttachedProperties.TextBlock<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.TextBlock.SetBaselineOffset(x.node, value))
+    static member inline Left(this: AttachedProperties.Canvas<_,_>, value) =
+        this.target.onEval(fun x -> x.node.SetValue(Avalonia.Controls.Canvas.LeftProperty, value) |> ignore)
     
     [<Extension>]
-    static member inline LineHeight(this: AttachedProperties.TextBlock<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.TextBlock.SetLineHeight(x.node, value))
+    static member inline Top(this: AttachedProperties.Canvas<_,_>, value) =
+        this.target.onEval(fun x -> x.node.SetValue(Avalonia.Controls.Canvas.TopProperty, value) |> ignore)
     
     [<Extension>]
-    static member inline LetterSpacing(this: AttachedProperties.TextBlock<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.TextBlock.SetLetterSpacing(x.node, value))
+    static member inline Right(this: AttachedProperties.Canvas<_,_>, value) =
+        this.target.onEval(fun x -> x.node.SetValue(Avalonia.Controls.Canvas.RightProperty, value) |> ignore)
     
     [<Extension>]
-    static member inline MaxLines(this: AttachedProperties.TextBlock<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.TextBlock.SetMaxLines(x.node, value))
-    
-    [<Extension>]
-    static member inline TextAlignment(this: AttachedProperties.TextBlock<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.TextBlock.SetTextAlignment(x.node, value))
-    
-    [<Extension>]
-    static member inline TextWrapping(this: AttachedProperties.TextBlock<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.TextBlock.SetTextWrapping(x.node, value))
-    
-    [<Extension>]
-    static member inline TextTrimming(this: AttachedProperties.TextBlock<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.TextBlock.SetTextTrimming(x.node, value))
-    
-
-[<Extension>]
-type GridAttachedProperties =
-    
-    // Entry
-    
-    [<Extension>]
-    static member inline Grid(this: #NodeBuilder<_,AvaloniaContext>)  =
-        { AttachedProperties.Grid.target = this }
-
-    // Properties
-    
-    [<Extension>]
-    static member inline Column(this: AttachedProperties.Grid<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.Grid.SetColumn(x.node, value))
-    
-    [<Extension>]
-    static member inline Row(this: AttachedProperties.Grid<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.Grid.SetRow(x.node, value))
-    
-    [<Extension>]
-    static member inline ColumnSpan(this: AttachedProperties.Grid<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.Grid.SetColumnSpan(x.node, value))
-    
-    [<Extension>]
-    static member inline RowSpan(this: AttachedProperties.Grid<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.Grid.SetRowSpan(x.node, value))
-    
-    [<Extension>]
-    static member inline IsSharedSizeScope(this: AttachedProperties.Grid<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.Grid.SetIsSharedSizeScope(x.node, value))
+    static member inline Bottom(this: AttachedProperties.Canvas<_,_>, value) =
+        this.target.onEval(fun x -> x.node.SetValue(Avalonia.Controls.Canvas.BottomProperty, value) |> ignore)
     
 
 [<Extension>]
@@ -1910,59 +2307,79 @@ type DockPanelAttachedProperties =
     
     [<Extension>]
     static member inline Dock(this: AttachedProperties.DockPanel<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.DockPanel.SetDock(x.node, value))
+        this.target.onEval(fun x -> x.node.SetValue(Avalonia.Controls.DockPanel.DockProperty, value) |> ignore)
     
 
 [<Extension>]
-type ScrollViewerAttachedProperties =
+type GridAttachedProperties =
     
     // Entry
     
     [<Extension>]
-    static member inline ScrollViewer(this: #NodeBuilder<_,AvaloniaContext>)  =
-        { AttachedProperties.ScrollViewer.target = this }
+    static member inline Grid(this: #NodeBuilder<_,AvaloniaContext>)  =
+        { AttachedProperties.Grid.target = this }
 
     // Properties
     
     [<Extension>]
-    static member inline BringIntoViewOnFocusChange(this: AttachedProperties.ScrollViewer<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.ScrollViewer.SetBringIntoViewOnFocusChange(x.node, value))
+    static member inline Column(this: AttachedProperties.Grid<_,_>, value) =
+        this.target.onEval(fun x -> x.node.SetValue(Avalonia.Controls.Grid.ColumnProperty, value) |> ignore)
     
     [<Extension>]
-    static member inline HorizontalScrollBarVisibility(this: AttachedProperties.ScrollViewer<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.ScrollViewer.SetHorizontalScrollBarVisibility(x.node, value))
+    static member inline Row(this: AttachedProperties.Grid<_,_>, value) =
+        this.target.onEval(fun x -> x.node.SetValue(Avalonia.Controls.Grid.RowProperty, value) |> ignore)
     
     [<Extension>]
-    static member inline HorizontalSnapPointsType(this: AttachedProperties.ScrollViewer<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.ScrollViewer.SetHorizontalSnapPointsType(x.node, value))
+    static member inline ColumnSpan(this: AttachedProperties.Grid<_,_>, value) =
+        this.target.onEval(fun x -> x.node.SetValue(Avalonia.Controls.Grid.ColumnSpanProperty, value) |> ignore)
     
     [<Extension>]
-    static member inline VerticalSnapPointsType(this: AttachedProperties.ScrollViewer<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.ScrollViewer.SetVerticalSnapPointsType(x.node, value))
+    static member inline RowSpan(this: AttachedProperties.Grid<_,_>, value) =
+        this.target.onEval(fun x -> x.node.SetValue(Avalonia.Controls.Grid.RowSpanProperty, value) |> ignore)
     
     [<Extension>]
-    static member inline HorizontalSnapPointsAlignment(this: AttachedProperties.ScrollViewer<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.ScrollViewer.SetHorizontalSnapPointsAlignment(x.node, value))
+    static member inline IsSharedSizeScope(this: AttachedProperties.Grid<_,_>, value) =
+        this.target.onEval(fun x -> x.node.SetValue(Avalonia.Controls.Grid.IsSharedSizeScopeProperty, value) |> ignore)
+    
+
+[<Extension>]
+type TextBlockAttachedProperties =
+    
+    // Entry
     
     [<Extension>]
-    static member inline VerticalSnapPointsAlignment(this: AttachedProperties.ScrollViewer<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.ScrollViewer.SetVerticalSnapPointsAlignment(x.node, value))
+    static member inline TextBlock(this: #NodeBuilder<_,AvaloniaContext>)  =
+        { AttachedProperties.TextBlock.target = this }
+
+    // Properties
     
     [<Extension>]
-    static member inline VerticalScrollBarVisibility(this: AttachedProperties.ScrollViewer<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.ScrollViewer.SetVerticalScrollBarVisibility(x.node, value))
+    static member inline BaselineOffset(this: AttachedProperties.TextBlock<_,_>, value) =
+        this.target.onEval(fun x -> x.node.SetValue(Avalonia.Controls.TextBlock.BaselineOffsetProperty, value) |> ignore)
     
     [<Extension>]
-    static member inline AllowAutoHide(this: AttachedProperties.ScrollViewer<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.ScrollViewer.SetAllowAutoHide(x.node, value))
+    static member inline LineHeight(this: AttachedProperties.TextBlock<_,_>, value) =
+        this.target.onEval(fun x -> x.node.SetValue(Avalonia.Controls.TextBlock.LineHeightProperty, value) |> ignore)
     
     [<Extension>]
-    static member inline IsScrollChainingEnabled(this: AttachedProperties.ScrollViewer<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.ScrollViewer.SetIsScrollChainingEnabled(x.node, value))
+    static member inline LetterSpacing(this: AttachedProperties.TextBlock<_,_>, value) =
+        this.target.onEval(fun x -> x.node.SetValue(Avalonia.Controls.TextBlock.LetterSpacingProperty, value) |> ignore)
     
     [<Extension>]
-    static member inline IsScrollInertiaEnabled(this: AttachedProperties.ScrollViewer<_,_>, value) =
-        this.target.onEval(fun x -> Avalonia.Controls.ScrollViewer.SetIsScrollInertiaEnabled(x.node, value))
+    static member inline MaxLines(this: AttachedProperties.TextBlock<_,_>, value) =
+        this.target.onEval(fun x -> x.node.SetValue(Avalonia.Controls.TextBlock.MaxLinesProperty, value) |> ignore)
+    
+    [<Extension>]
+    static member inline TextAlignment(this: AttachedProperties.TextBlock<_,_>, value) =
+        this.target.onEval(fun x -> x.node.SetValue(Avalonia.Controls.TextBlock.TextAlignmentProperty, value) |> ignore)
+    
+    [<Extension>]
+    static member inline TextWrapping(this: AttachedProperties.TextBlock<_,_>, value) =
+        this.target.onEval(fun x -> x.node.SetValue(Avalonia.Controls.TextBlock.TextWrappingProperty, value) |> ignore)
+    
+    [<Extension>]
+    static member inline TextTrimming(this: AttachedProperties.TextBlock<_,_>, value) =
+        this.target.onEval(fun x -> x.node.SetValue(Avalonia.Controls.TextBlock.TextTrimmingProperty, value) |> ignore)
     
 
 

@@ -84,7 +84,7 @@ type {{apOwner.typeName}}AttachedProperties =
     {{for ap in apOwner.properties}}
     [<Extension>]
     static member inline {{ap.name}}(this: AttachedProperties.{{apOwner.typeName}}<_,_>, value) =
-        this.target.onEval(fun x -> {{apOwner.fullTypeName}}.Set{{ap.name}}(x.node, value))
+        this.target.onEval(fun x -> x.node.SetValue({{apOwner.fullTypeName}}.{{ap.propName}}, value) |> ignore)
     {{end}}
 {{end}}
 

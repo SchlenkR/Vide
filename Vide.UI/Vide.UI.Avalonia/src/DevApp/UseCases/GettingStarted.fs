@@ -16,18 +16,20 @@ let helloWorld =
 let counter =
     vide {
         let! count = Vide.ofMutable 0
+        let tb = TextBlock.Text("sss")
+        yield tb
 
-        VStack
-            .HorizontalAlignment(HorizontalAlignment.Center) 
-            .VerticalAlignment(VerticalAlignment.Center) {
+        // VStack
+        //     .HorizontalAlignment(HorizontalAlignment.Center) 
+        //     .VerticalAlignment(VerticalAlignment.Center) {
 
-            TextBlock.Text($"Count = {count.Value}")
+        //     TextBlock.Text($"Count = {count.Value}")
             
-            HStack {
-                Button.Click(fun _ -> count.Value - 1 |> count.Set) { "dec" }
-                Button.Click(fun _ -> count.Value + 1 |> count.Set) { "inc" }
-            }
-        }
+        //     HStack {
+        //         Button.Click(fun _ -> count.Value - 1 |> count.Set) { "dec" }
+        //         Button.Click(fun _ -> count.Value + 1 |> count.Set) { "inc" }
+        //     }
+        // }
     }
 
 //let conditionalAttributes =
