@@ -115,6 +115,13 @@ module Type =
                         yield {| name = ap.Name; propName = f.Name |}
         ]
 
+module Assembly =
+    let getWrappedTypes (asm: Assembly) =
+        asm.ExportedTypes
+        |> List.ofSeq
+        |> List.map Type.toWrappedControl
+        |> List.choose id
+
 module Model =
     let mkTemplateModelForAPs t =
         let aps = Type.getAttachedProperties t
@@ -179,44 +186,40 @@ module Model =
 
         Tmpl.Root(apModels, controlModels, eventModels, propertyModels)
 
-let writeTemplate outFile templateModel =
-    let renderedTemplate = Tmpl.Render templateModel
-    if File.Exists(outFile) then
-        File.Delete(outFile)
-    File.WriteAllText(outFile, renderedTemplate)
+module WrappableControl =
+    let augment (controlTypeAugmentations) (wc: WrappableControl) =
+        controlTypeAugmentations
+        |> List.tryFind (fun (wcAug,_) -> wcAug.typ = wc.typ)
+        |> Option.map (fun (wc,p) ->
+            let prop = wc.typ.GetProperty(p)
+            let pot = Pot {| propName = prop.Name; propTypeName = Type.getFullName prop.PropertyType |}
+            { wc with kind = LeafControl pot }
+        )
+        |> Option.defaultValue wc
 
-let augmentType (controlTypeAugmentations) (wc: WrappableControl) =
-    controlTypeAugmentations
-    |> List.tryFind (fun (wcAug,_) -> wcAug.typ = wc.typ)
-    |> Option.map (fun (wc,p) ->
-        let prop = wc.typ.GetProperty(p)
-        let pot = Pot {| propName = prop.Name; propTypeName = Type.getFullName prop.PropertyType |}
-        { wc with kind = LeafControl pot }
-    )
-    |> Option.defaultValue wc
+module ApiGenerate =
+    let writeTemplate outFile templateModel =
+        let renderedTemplate = Tmpl.Render templateModel
+        if File.Exists(outFile) then
+            File.Delete(outFile)
+        File.WriteAllText(outFile, renderedTemplate)
 
-let genApiForWrappedControls augmentations outPath wcs =
-    wcs
-    |> List.map (augmentType augmentations)
-    |> Model.mkTemplateModelForTypes
-    |> writeTemplate outPath
+    let forWrappedControls augmentations outPath wcs =
+        wcs
+        |> List.map (WrappableControl.augment augmentations)
+        |> Model.mkTemplateModelForTypes
+        |> writeTemplate outPath
 
-let genApiForGivenTypes augmentations outPath types =
-    types
-    |> List.map Type.toWrappedControl
-    |> List.map (fun x -> x.Value)
-    |> genApiForWrappedControls outPath augmentations
+    let forGivenTypes augmentations outPath types =
+        types
+        |> List.map Type.toWrappedControl
+        |> List.map (fun x -> x.Value)
+        |> forWrappedControls outPath augmentations
 
-let getWrappedTypesInAssembly (asm: Assembly) =
-    asm.ExportedTypes
-    |> List.ofSeq
-    |> List.map Type.toWrappedControl
-    |> List.choose id
 
-let genApiForAllTypesInAssembly augmentations outPath (asm: Assembly) =
-    getWrappedTypesInAssembly asm
-    |> genApiForWrappedControls outPath augmentations
-
+    let forTypesInAssembly augmentations outPath (asm: Assembly) =
+        Assembly.getWrappedTypes asm
+        |> forWrappedControls outPath augmentations
 
 // -------------------------
 
@@ -236,7 +239,6 @@ let commonAugmentations =
 //     commonOutPath 
 //     commonAugmentations 
 //     typeof<Controls.Control>.Assembly
-
 
 
 [
@@ -354,7 +356,7 @@ let commonAugmentations =
     typeof<Avalonia.Controls.Primitives.UniformGrid>
     // typeof<Avalonia.Controls.Primitives.VisualLayerManager>
 ]
-|> genApiForGivenTypes commonOutPath commonAugmentations 
+|> ApiGenerate.forGivenTypes commonOutPath commonAugmentations 
 
 
 let private FSI_TEST () =
@@ -371,16 +373,15 @@ let private FSI_TEST () =
             typeof<Controls.ScrollViewer>
         ]
     
-    genApiForGivenTypes 
+    ApiGenerate.forGivenTypes 
         commonOutPath 
         commonAugmentations 
         testTypes
 
-    genApiForAllTypesInAssembly 
+    ApiGenerate.forTypesInAssembly
         commonOutPath 
         commonAugmentations 
         typeof<Controls.Control>.Assembly
-
 
     let getClassHierarchy (t: Type) =
         let stopType = typeof<AvaloniaObject>
@@ -396,6 +397,7 @@ let private FSI_TEST () =
 
     getClassHierarchy typeof<Controls.DockPanel> |> printTypes
     
-    getWrappedTypesInAssembly typeof<Controls.Control>.Assembly
+    typeof<Controls.Control>.Assembly
+    |> Assembly.getWrappedTypes
     |> List.map (fun x -> x.typ)
     |> printTypes
