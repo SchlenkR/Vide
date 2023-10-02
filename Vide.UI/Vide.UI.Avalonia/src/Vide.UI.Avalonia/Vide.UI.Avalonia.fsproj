@@ -3,11 +3,26 @@
     <TargetFrameworks>net7.0</TargetFrameworks>
     <RootNamespace>Vide.UI.Avalonia</RootNamespace>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <Version>0.0.23</Version>
+    <PackageReleaseNotes>
+    </PackageReleaseNotes>
+    <Description>Super simple declarative UIs for Avalonia without hassle.</Description>
+    <PackageTags>f#;vide;avalonia</PackageTags>
+    <PackageId>Vide.UI.Avalonia</PackageId>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="Avalonia.fs" />
     <Compile Include="ApiPre.fs" />
     <Compile Include="Api.fs" />
     <Compile Include="ApiPost.fs" />
+  </ItemGroup>
+    <ItemGroup>
+    <Content Include="*.fsproj; **\*.fs; **\*.fsi; *.js;" Exclude="**\*.fs.js; obj\**\*.fs" PackagePath="fable\" />
+    <None Include="..\..\..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\..\..\artwork\nuget_logo.png" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.0.0" />

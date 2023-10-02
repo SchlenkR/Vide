@@ -61,6 +61,10 @@ let printMethods (t: Type) =
 
 printMethods typeof<Avalonia.Controls.Button>
 
+printMethods typeof<Avalonia.Controls.TextBox>
+
+printMethods typeof<Avalonia.Controls.CheckBox>
+
 
 
 

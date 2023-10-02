@@ -25,11 +25,16 @@ type ControlKind =
     | LeafControl of BuilderMode
     | ContentControl of BuilderMode
     | PanelControl
+
 and BuilderMode =
     | Ret
     | Pot of {| propName: string; propTypeName: string |}
 
-type WrappableControl = { typ: Type; kind: ControlKind }
+type WrappableControl =
+    { 
+        typ: Type
+        kind: ControlKind 
+    }
 
 module Type =
     let rec mkName proj (t: Type) =
@@ -47,22 +52,23 @@ module Type =
         let contentControlType = typeof<Controls.ContentControl>
         let panelType = typeof<Controls.Panel>
 
-        let isInstanciatable=
+        let isInstanciatableAndNonGeneric =
             not t.IsAbstract
             && t.GetConstructor([||]) <> null
         let isUsablePanelControl = 
-            isInstanciatable
+            isInstanciatableAndNonGeneric
             && t.IsAssignableTo(panelType)
         let isUsableContentControl =
-            isInstanciatable
+            isInstanciatableAndNonGeneric
             && t.IsAssignableTo(contentControlType)
         let isUsableContentLeafControl=
-            isInstanciatable
+            isInstanciatableAndNonGeneric
             && t.IsAssignableTo(controlType)
             && not isUsablePanelControl
             && not isUsableContentControl
         
-        if isUsableContentLeafControl then Some (LeafControl Ret)
+        if t.IsGenericType then None
+        elif isUsableContentLeafControl then Some (LeafControl Ret)
         elif isUsableContentControl then Some (ContentControl Ret)
         elif isUsablePanelControl then Some PanelControl
         else None
@@ -75,20 +81,25 @@ module Type =
             && p.CanRead && p.GetMethod <> null && p.GetMethod.IsPublic
             && p.GetIndexParameters().Length = 0
         )
+        |> Seq.map (fun p -> {| name = p.Name; propType = p.PropertyType |})
+        |> Seq.toList
 
     let getEvents (t: Type) =
-        let methods = 
-            t.GetMethods(
-                BindingFlags.Public 
-                ||| BindingFlags.Instance
-                ||| BindingFlags.DeclaredOnly)
-            |> Seq.filter (fun m -> m.Name.StartsWith("add_") || m.Name.StartsWith("remove_"))
+        let methods = t.GetMethods(BindingFlags.Public ||| BindingFlags.Instance)
         [
-            for method in methods do
-                // Yeah, that's dirty. But we generate code that will be compiled, so no runtime ex anyway.
-                let eventName = method.Name.Split("_").[1]
-                let eventArgsType = method.GetParameters().[0].ParameterType
-                {| name = eventName; eventArgsType = eventArgsType |}
+            for m in methods do
+                // OMG that's all so dirty.
+                // But we generate code that will be compiled afterwards.
+                match m.GetParameters() with
+                | [| arg1 |] when 
+                    arg1.ParameterType.GenericTypeArguments.Length = 1
+                    && (m.Name.StartsWith("add_") || m.Name.StartsWith("remove_"))
+                    ->
+                        let evtName = m.Name.Split("_").[1]
+                        let evtHandlerType = m.GetParameters().[0].ParameterType
+                        {| name = evtName; eventHandlerType = evtHandlerType |}
+
+                | _ -> ()
         ]
 
     let getAttachedProperties (t: Type) =
@@ -97,23 +108,19 @@ module Type =
             for f in t.GetFields(BindingFlags.Public ||| BindingFlags.Static) do
                 if 
                     f.FieldType.GenericTypeArguments.Length > 0 
-                    && f.FieldType.GetGenericTypeDefinition() = attachedPropType 
+                    && f.FieldType.GetGenericTypeDefinition() = attachedPropType
                 then
-                    yield f.GetValue(null) :?> Avalonia.Data.Core.IPropertyInfo
+                    let ap = f.GetValue(null) :?> Avalonia.Data.Core.IPropertyInfo
+                    if ap.CanSet then
+                        yield {| name = ap.Name; propName = f.Name |}
         ]
 
 module Assembly =
-    let findWrappedControls (asm: Assembly) =
+    let getWrappedTypes (asm: Assembly) =
         asm.ExportedTypes
-        |> Seq.map Type.toWrappedControl
-        |> Seq.choose id
-        |> Seq.toList
-
-    let getAttachedProperties (asm: Assembly) =
-        [
-            for t in asm.GetTypes() do 
-                yield! Type.getAttachedProperties t
-        ]
+        |> List.ofSeq
+        |> List.map Type.toWrappedControl
+        |> List.choose id
 
 module Model =
     let mkTemplateModelForAPs t =
@@ -122,18 +129,12 @@ module Model =
             t.FullName,
             [
                 for ap in aps do
-                    Tmpl.ap(ap.Name)
+                    Tmpl.ap(ap.name, ap.propName)
             ],
             t.Name
         )
 
-    let mkTemplateModelForType potPropertyName wc =
-        let getMode mode =
-            match potPropertyName with 
-            | Some prop ->
-                let prop = wc.typ.GetProperty(prop)
-                Pot {| propName = prop.Name; propTypeName = Type.getFullName prop.PropertyType |}
-            | None -> mode
+    let mkTemplateModelForType wc =
         let getCtor mode =
             match mode with
             | Ret -> ""
@@ -149,15 +150,10 @@ module Model =
         let ctor,builderName,potGenArg =
             match wc.kind with
             | LeafControl mode ->
-                let mode = getMode mode
                 getCtor mode, $"ContentLeaf{getBuilderInfixName mode}Builder", getBuilderPotGenArg mode
             | ContentControl mode ->
-                let mode = getMode mode
                 getCtor mode, $"ContentLeaf{getBuilderInfixName mode}Builder", getBuilderPotGenArg mode
             | PanelControl ->
-                match potPropertyName with
-                | Some _ -> failwith "PanelControl can't have a mode!"
-                | _ -> ()
                 "", "PanelRetBuilder", ""
         Tmpl.control(
             wc.typ.Name,
@@ -167,64 +163,225 @@ module Model =
             wc.typ.FullName
         )
 
-    let mkTemplateModelForTypes types =
-        let types =
-            [
-                for t,potPropName in types do
-                    match Type.toWrappedControl t with
-                    | Some wc -> wc,potPropName
-                    | None -> failwith $"Can't wrap type {t.FullName}"
-            ]
+    let mkTemplateModelForTypes (wrappedTypes: WrappableControl list) =
         let controlModels =
-            [
-                for wc,potPropName in types do
-                    wc |> mkTemplateModelForType potPropName
-            ]
+            [ for wc in wrappedTypes do mkTemplateModelForType wc ]
         let apModels =
             [
-                for wc,_ in types do
+                for wc in wrappedTypes do
                     let ap = mkTemplateModelForAPs wc.typ
                     if ap.properties.Length = 0 then None else Some ap
             ]
             |> List.choose id
         let propertyModels =
-            [ for wc,_ in types do yield! Type.getProperties wc.typ ]
-            |> List.distinct
-            |> List.map (fun p -> Tmpl.prop(p.Name, Type.getFullName p.PropertyType))
+            [ for wc in wrappedTypes do yield! Type.getProperties wc.typ ]
+            |> List.distinctBy (fun p -> p.name, p.propType.FullName)
+            |> List.sortBy (fun x -> x.name)
+            |> List.map (fun p -> Tmpl.prop(p.name, Type.getFullName p.propType))
         let eventModels =
-            [ for wc,_ in types do yield! Type.getEvents wc.typ ]
+            [ for wc in wrappedTypes do yield! Type.getEvents wc.typ ]
             |> List.distinct
-            |> List.map (fun e -> Tmpl.evt(Type.getFullName e.eventArgsType, e.name))
+            |> List.sortBy (fun x -> x.name)
+            |> List.map (fun e -> Tmpl.evt(Type.getFullName e.eventHandlerType, e.name))
 
         Tmpl.Root(apModels, controlModels, eventModels, propertyModels)
 
+module WrappableControl =
+    let augment (controlTypeAugmentations) (wc: WrappableControl) =
+        controlTypeAugmentations
+        |> List.tryFind (fun (wcAug,_) -> wcAug.typ = wc.typ)
+        |> Option.map (fun (wc,p) ->
+            let prop = wc.typ.GetProperty(p)
+            let pot = Pot {| propName = prop.Name; propTypeName = Type.getFullName prop.PropertyType |}
+            { wc with kind = LeafControl pot }
+        )
+        |> Option.defaultValue wc
 
-let writeTemplate outFile templateModel =
-    let renderedTemplate = Tmpl.Render templateModel
-    if File.Exists(outFile) then
-        File.Delete(outFile)
-    File.WriteAllText(outFile, renderedTemplate)
+module ApiGenerate =
+    let writeTemplate outFile templateModel =
+        let renderedTemplate = Tmpl.Render templateModel
+        if File.Exists(outFile) then
+            File.Delete(outFile)
+        File.WriteAllText(outFile, renderedTemplate)
+
+    let forWrappedControls augmentations outPath wcs =
+        wcs
+        |> List.map (WrappableControl.augment augmentations)
+        |> Model.mkTemplateModelForTypes
+        |> writeTemplate outPath
+
+    let forGivenTypes augmentations outPath types =
+        types
+        |> List.map Type.toWrappedControl
+        |> List.map (fun x -> x.Value)
+        |> forWrappedControls outPath augmentations
+
+
+    let forTypesInAssembly augmentations outPath (asm: Assembly) =
+        Assembly.getWrappedTypes asm
+        |> forWrappedControls outPath augmentations
+
+// -------------------------
+
+
+let commonOutPath = Path.Combine(__SOURCE_DIRECTORY__, "../../Vide.UI.Avalonia/Api.fs")
+
+let commonAugmentations =
+    [
+        typeof<Controls.TextBox>, Controls.TextBox.TextProperty.Name
+        typeof<Controls.CheckBox>, Controls.CheckBox.IsCheckedProperty.Name
+    ]
+    |> List.map (fun (t,p) -> (Type.toWrappedControl t).Value, p)
+
+
+
+// genApiForAllTypesInAssembly 
+//     commonOutPath 
+//     commonAugmentations 
+//     typeof<Controls.Control>.Assembly
+
+
+[
+    typeof<Avalonia.Controls.AutoCompleteBox>
+    typeof<Avalonia.Controls.Border>
+    typeof<Avalonia.Controls.Button>
+    typeof<Avalonia.Controls.ButtonSpinner>
+    typeof<Avalonia.Controls.CalendarDatePicker>
+    typeof<Avalonia.Controls.Calendar>
+    typeof<Avalonia.Controls.Canvas>
+    typeof<Avalonia.Controls.Carousel>
+    typeof<Avalonia.Controls.CheckBox>
+    typeof<Avalonia.Controls.ComboBox>
+    typeof<Avalonia.Controls.ComboBoxItem>
+    typeof<Avalonia.Controls.ContentControl>
+    typeof<Avalonia.Controls.ContextMenu>
+    typeof<Avalonia.Controls.Control>
+    typeof<Avalonia.Controls.DataValidationErrors>
+    typeof<Avalonia.Controls.DatePicker>
+    typeof<Avalonia.Controls.DatePickerPresenter>
+    typeof<Avalonia.Controls.TimePicker>
+    typeof<Avalonia.Controls.TimePickerPresenter>
+    typeof<Avalonia.Controls.Decorator>
+    typeof<Avalonia.Controls.DockPanel>
+    typeof<Avalonia.Controls.DropDownButton>
+    typeof<Avalonia.Controls.Expander>
+    // typeof<Avalonia.Controls.ExperimentalAcrylicBorder>
+    typeof<Avalonia.Controls.FlyoutPresenter>
+    typeof<Avalonia.Controls.MenuFlyoutPresenter>
+    typeof<Avalonia.Controls.Grid>
+    typeof<Avalonia.Controls.GridSplitter>
+    // typeof<Avalonia.Controls.Image>                ----- xxxxxxxxxxxxxxxxxxxxxxxx
+    typeof<Avalonia.Controls.ItemsControl>
+    typeof<Avalonia.Controls.Label>
+    typeof<Avalonia.Controls.LayoutTransformControl>
+    typeof<Avalonia.Controls.ListBox>
+    typeof<Avalonia.Controls.ListBoxItem>
+    typeof<Avalonia.Controls.MaskedTextBox>
+    typeof<Avalonia.Controls.Menu>
+    typeof<Avalonia.Controls.MenuItem>
+    typeof<Avalonia.Controls.NativeControlHost>
+    typeof<Avalonia.Controls.NativeMenuBar>
+    typeof<Avalonia.Controls.ReversibleStackPanel>
+    typeof<Avalonia.Controls.NumericUpDown>
+    typeof<Avalonia.Controls.Panel>
+    typeof<Avalonia.Controls.PathIcon>
+    typeof<Avalonia.Controls.ProgressBar>
+    // typeof<Avalonia.Controls.RefreshContainer>
+    // typeof<Avalonia.Controls.RefreshVisualizer>
+    typeof<Avalonia.Controls.RadioButton>
+    typeof<Avalonia.Controls.RelativePanel>
+    typeof<Avalonia.Controls.RepeatButton>
+    typeof<Avalonia.Controls.ScrollViewer>
+    typeof<Avalonia.Controls.SelectableTextBlock>
+    typeof<Avalonia.Controls.Separator>
+    typeof<Avalonia.Controls.Slider>
+    typeof<Avalonia.Controls.SplitButton>
+    typeof<Avalonia.Controls.ToggleSplitButton>
+    typeof<Avalonia.Controls.SplitView>
+    typeof<Avalonia.Controls.StackPanel>
+    typeof<Avalonia.Controls.TabControl>
+    typeof<Avalonia.Controls.TabItem>
+    typeof<Avalonia.Controls.TextBlock>
+    typeof<Avalonia.Controls.TextBox>
+    // typeof<Avalonia.Controls.ThemeVariantScope>
+    typeof<Avalonia.Controls.TickBar>
+    typeof<Avalonia.Controls.ToggleSwitch>
+    typeof<Avalonia.Controls.ToolTip>
+    typeof<Avalonia.Controls.TransitioningContentControl>
+    typeof<Avalonia.Controls.TreeView>
+    typeof<Avalonia.Controls.TreeViewItem>
+    typeof<Avalonia.Controls.UserControl>
+    typeof<Avalonia.Controls.Viewbox>
+    typeof<Avalonia.Controls.VirtualizingCarouselPanel>
+    typeof<Avalonia.Controls.VirtualizingStackPanel>
+    typeof<Avalonia.Controls.Window>
+    typeof<Avalonia.Controls.WrapPanel>
+    typeof<Avalonia.Controls.Shapes.Arc>
+    typeof<Avalonia.Controls.Shapes.Ellipse>
+    typeof<Avalonia.Controls.Shapes.Line>
+    typeof<Avalonia.Controls.Shapes.Path>
+    typeof<Avalonia.Controls.Shapes.Polygon>
+    typeof<Avalonia.Controls.Shapes.Polyline>
+    typeof<Avalonia.Controls.Shapes.Rectangle>
+    typeof<Avalonia.Controls.Shapes.Sector>
+    typeof<Avalonia.Controls.Presenters.ContentPresenter>
+    typeof<Avalonia.Controls.Presenters.ItemsPresenter>
+    typeof<Avalonia.Controls.Presenters.ScrollContentPresenter>
+    typeof<Avalonia.Controls.Presenters.TextPresenter>
+    typeof<Avalonia.Controls.Notifications.NotificationCard>
+    typeof<Avalonia.Controls.Embedding.EmbeddableControlRoot>
+    typeof<Avalonia.Controls.Chrome.CaptionButtons>
+    typeof<Avalonia.Controls.Chrome.TitleBar>
+    typeof<Avalonia.Controls.Primitives.CalendarButton>
+    typeof<Avalonia.Controls.Primitives.CalendarDayButton>
+    typeof<Avalonia.Controls.Primitives.CalendarItem>
+    typeof<Avalonia.Controls.Primitives.DateTimePickerPanel>
+    typeof<Avalonia.Controls.Primitives.AccessText>
+    typeof<Avalonia.Controls.Primitives.AdornerLayer>
+    typeof<Avalonia.Controls.Primitives.ChromeOverlayLayer>
+    typeof<Avalonia.Controls.Primitives.HeaderedContentControl>
+    typeof<Avalonia.Controls.Primitives.HeaderedItemsControl>
+    typeof<Avalonia.Controls.Primitives.HeaderedSelectingItemsControl>
+    typeof<Avalonia.Controls.Primitives.LightDismissOverlayLayer>
+    typeof<Avalonia.Controls.Primitives.OverlayLayer>
+    typeof<Avalonia.Controls.Primitives.Popup>
+    typeof<Avalonia.Controls.Primitives.ScrollBar>
+    typeof<Avalonia.Controls.Primitives.SelectingItemsControl>
+    typeof<Avalonia.Controls.Primitives.TabStrip>
+    typeof<Avalonia.Controls.Primitives.TabStripItem>
+    typeof<Avalonia.Controls.Primitives.TemplatedControl>
+    typeof<Avalonia.Controls.Primitives.Thumb>
+    typeof<Avalonia.Controls.Primitives.ToggleButton>
+    typeof<Avalonia.Controls.Primitives.Track>
+    typeof<Avalonia.Controls.Primitives.UniformGrid>
+    // typeof<Avalonia.Controls.Primitives.VisualLayerManager>
+]
+|> ApiGenerate.forGivenTypes commonOutPath commonAugmentations 
+
 
 let private FSI_TEST () =
-
-    let controlsToWrap =
-        [
-            typeof<Controls.TextBlock>, None
-            typeof<Controls.TextBox>, Some Controls.TextBox.TextProperty.Name
-            typeof<Controls.Button>, None
-            typeof<Controls.CheckBox>, Some Controls.CheckBox.IsCheckedProperty.Name
-            typeof<Controls.Grid>, None
-            typeof<Controls.DockPanel>, None
-            typeof<Controls.StackPanel>, None
-            typeof<Controls.ScrollViewer>, None
+        
+    let testTypes = 
+            [
+            typeof<Controls.TextBlock>
+            typeof<Controls.TextBox>
+            typeof<Controls.Button>
+            typeof<Controls.CheckBox>
+            typeof<Controls.Grid>
+            typeof<Controls.DockPanel>
+            typeof<Controls.StackPanel>
+            typeof<Controls.ScrollViewer>
         ]
     
-    controlsToWrap
-    |> Model.mkTemplateModelForTypes
-    |> writeTemplate (Path.Combine(__SOURCE_DIRECTORY__, "../../Vide.UI.Avalonia/Api.fs"))
+    ApiGenerate.forGivenTypes 
+        commonOutPath 
+        commonAugmentations 
+        testTypes
 
-
-
+    ApiGenerate.forTypesInAssembly
+        commonOutPath 
+        commonAugmentations 
+        typeof<Controls.Control>.Assembly
 
     let getClassHierarchy (t: Type) =
         let stopType = typeof<AvaloniaObject>
@@ -236,7 +393,11 @@ let private FSI_TEST () =
         loop t
     
     let printTypes types =
-        for t in types do printfn "%s" (Type.getName t)
+        for t in types do printfn "%s" (Type.getFullName t)
 
     getClassHierarchy typeof<Controls.DockPanel> |> printTypes
     
+    typeof<Controls.Control>.Assembly
+    |> Assembly.getWrappedTypes
+    |> List.map (fun x -> x.typ)
+    |> printTypes

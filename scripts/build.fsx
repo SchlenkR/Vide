@@ -62,7 +62,10 @@ let pack proj =
 
 // TODO: git tag + release
 let publish () =
-    let nugetApiKey = Environment.environVar nugetPushEnvVarName
+    let nugetApiKey =
+        match Environment.environVar nugetPushEnvVarName with
+        | null -> failwith $"Environment variable {nugetPushEnvVarName} is not set"
+        | v -> v
     for p in !! $"{packPath}/*.nupkg" do
         Trace.trace $"NUGET push {p} ..."
         Shell.ExecSuccess ("dotnet", $"nuget push {p} -k {nugetApiKey} -s {nugetServer} --skip-duplicate")

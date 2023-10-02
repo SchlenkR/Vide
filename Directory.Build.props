@@ -1,10 +1,6 @@
 <Project>
 
   <PropertyGroup>
-    <Description>An approach for writing composable UIs in F# the simple way.</Description>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <Authors>Ronald Schlenker</Authors>
     <Copyright>Copyright 2023 Ronald Schlenker</Copyright>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
