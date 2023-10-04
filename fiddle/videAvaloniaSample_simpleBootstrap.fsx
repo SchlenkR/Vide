@@ -1,64 +1,7 @@
 
-#r "nuget: Avalonia, 11.0.0"
-#r "nuget: Avalonia.Desktop, 11.0.0"
-#r "nuget: Avalonia.Themes.Fluent, 11.0.0"
-#r "nuget: Vide.UI.Avalonia, 0.0.24"
+#load "Vide.Avalonia.Interactive.fsx"
 
-
-[<AutoOpen>]
-module VideApp =
-    open Avalonia
-    open Avalonia.Controls.ApplicationLifetimes
-    open Avalonia.Controls
-    open Avalonia.Themes.Fluent
-    open Avalonia.Threading
-
-    let mutable private host = None
-
-    let disp (f: unit -> 'a) =
-        Dispatcher.UIThread.InvokeAsync(f).GetTask()
-        |> Async.AwaitTask 
-        |> Async.RunSynchronously 
-
-    type App<'v,'s>(width: float, height: float) =
-        inherit Application()
-        override this.Initialize() =
-            this.Styles.Add(FluentTheme())
-            this.RequestedThemeVariant <- Styling.ThemeVariant.Dark
-        override this.OnFrameworkInitializationCompleted() =
-            match this.ApplicationLifetime with
-            | :? IClassicDesktopStyleApplicationLifetime as desktopLifetime ->
-                desktopLifetime.MainWindow <-
-                    let cc = ContentControl()
-                    do host <- Some cc
-                    Window(
-                        Background = Media.Brushes.DarkSlateBlue,
-                        Content = cc,
-                        Width = width,
-                        Height = height,
-                        WindowStartupLocation = WindowStartupLocation.CenterOwner
-                    )
-            | _ -> failwith "Unexpected ApplicationLifetime"
-
-    open FSharp.Compiler.Interactive
-
-    fsi.EventLoop <-
-        { new IEventLoop with 
-            member x.Run() =
-                AppBuilder
-                    .Configure(fun () -> App(390.0, 644.0))
-                    .UsePlatformDetect()
-                    .UseSkia()
-                    .StartWithClassicDesktopLifetime([||])
-                    |> ignore
-                false
-            member x.Invoke(f) = disp f
-            member x.ScheduleRestart() = ()
-        }
-
-    type Host =
-        static member Instance = host.Value
-
+open Vide.Avalonia.Interactive
 
 // ---------------------------------------------------------------
 // here starts the actual sample
@@ -75,7 +18,6 @@ and TodoItem = { text: string; mutable isDone: bool; key: int }
 
 let todoListView = vide {
     let! todoList = ofMutable {
-        log "Eval"
         {
             items = 
                 [
@@ -90,7 +32,7 @@ let todoListView = vide {
                 |> List.mapi (fun i x -> { text = x.text; isDone = x.isDone ;key = i })
         }
     }
-    
+
     let setItems items = todoList.Value <- { todoList.Value with items = items }
         
     DockPanel.Margin(4) {
@@ -142,31 +84,8 @@ let todoListView = vide {
 }
 
 
+let host,window = VideAppWindow.createAndShow 390.0 644.0
 
-VideApp.ForHost(Host.Instance).CreateAndStartWithUntypedState(todoListView) |> ignore
+VideApp.ForHost(host).CreateAndStartWithUntypedState(todoListView) |> ignore
 
-
-Host.Instance.Content <- null
-
-
-
-
-let ofMutable x =
-    mkVide <| fun s (ctx: HostContext<_>) ->
-        let s = s |> Option.defaultWith (fun () -> printfn "NEW"; MutableValue(x, ctx.host))
-        s, Some s
-
-let x = vide {
-    log "A"
-    let! x = ofMutable "Value 1"
-    log "B"
-    H1 { x.Value }
-    log "C"
-    let! y = ofMutable "Value 2"
-    log "D"
-    H1 { y.Value }
-    log "2"
-}
-
-
-x None 
+host.Content <- null
