@@ -5,7 +5,7 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <Version>0.0.23</Version>
+    <Version>0.0.24</Version>
     <PackageReleaseNotes>
     </PackageReleaseNotes>
     <Description>Super simple declarative UIs for the Web with Fable without hassle.</Description>

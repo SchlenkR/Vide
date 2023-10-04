@@ -16,13 +16,13 @@ type TodoList = { items: TodoItem list }
 and TodoItem = { name: string; mutable isDone: bool }
     
 let view = vide {
-    let! todoList = Vide.ofMutable { items = [] }
+    let! todoList = ofMutable {{ items = [] }}
     let setItems items = todoList.Value <- { todoList.Value with items = items }
         
     h1.class'("title") { "TODO List" }
     div {
         p {
-            let! itemName = Vide.ofMutable ""
+            let! itemName = ofMutable {""}
 
             input.bind(itemName)
             button

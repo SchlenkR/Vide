@@ -98,7 +98,7 @@ let asyncWithSubsequentResults =
         }
 
     vide {
-        let! currRes = Vide.ofMutable 0
+        let! currRes = ofMutable {0}
         div.class'("async-box") {
             $"Current component result: {currRes.Value}"
         }

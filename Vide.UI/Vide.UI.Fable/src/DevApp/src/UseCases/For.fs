@@ -11,7 +11,7 @@ let simpleFor =
 
 let statelessFor =
     vide {
-        let! items = Vide.ofMutable []
+        let! items = ofMutable {[]}
         let nextNum() = 0 :: items.Value |> List.max |> (+) 1
         let add1 _ = items.Value @ [nextNum()] |> items.Set
         let add100 _ = items.Value @ [ for _ in 0..100 do nextNum() ] |> items.Set
@@ -30,7 +30,7 @@ let statelessFor =
 
 let statefulFor =
     vide {
-        let! items = Vide.ofMutable []
+        let! items = ofMutable {[]}
         let nextNum() = 0 :: items.Value |> List.max |> (+) 1
         let add1 _ = items.Set <| items.Value @ [nextNum()]
         let add100 _ = items.Set <| items.Value @ [ for _ in 0..100 do nextNum() ]
@@ -47,7 +47,7 @@ let statefulFor =
                     items.Value |> List.except [x] |> items.Set
                 button.onclick(removeMe) { $"Remove {x}" }
 
-                let! count = Vide.ofMutable 0
+                let! count = ofMutable {0}
                 button.onclick(fun _ -> count.Set(count.Value - 1)) { "dec" }
                 $"{count.Value}  "
                 button.onclick(fun _ -> count.Set(count.Value + 1)) { "inc" }

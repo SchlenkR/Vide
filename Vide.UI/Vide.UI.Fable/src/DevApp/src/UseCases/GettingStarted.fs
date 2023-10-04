@@ -10,7 +10,7 @@ let helloWorld =
 
 let counter =
     vide {
-        let! count = Vide.ofMutable 0
+        let! count = ofMutable {0}
 
         span.id("tmp") { "HELLO" }
 
@@ -24,7 +24,7 @@ let counter =
 
 let conditionalAttributes =
     vide {
-        let! count = Vide.ofMutable 0
+        let! count = ofMutable {0}
 
         button.id("hitMe").onclick(fun _ -> count.Set(count.Value + 1)) {
             $"Hit me! Count = {count.Value}"

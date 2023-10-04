@@ -15,10 +15,23 @@ type MutableValue<'a when 'a: equality>(initial: 'a, evalManager: IHost) =
         with get() = state
         and set(value) = this.Set(value)
 
-module Vide =
-    
-    // TODO: Move to keywords? / rename to useState?
-    let ofMutable x =
+type StateCtor<'a> = StateCtor of (unit -> 'a)
+
+type VideBaseBuilder with
+    member _.Bind(StateCtor m, f) =
+        mkVide <| fun s ctx ->
+            let m = m ()
+            let bindRes = BuilderBricks.bind(m, f)
+            runVide bindRes s ctx
+
+type DelayedMutableBuilder() =
+    member _.Yield(x) =
         mkVide <| fun s (ctx: HostContext<_>) ->
             let s = s |> Option.defaultWith (fun () -> MutableValue(x, ctx.host))
             s, Some s
+    member _.Zero() = BuilderBricks.zeroAdaptiveState
+    member _.Combine(a, b) = BuilderBricks.combine(a, b ())
+    member _.Delay(f) = f
+    member _.Run(f) = StateCtor f
+
+let ofMutable = DelayedMutableBuilder()

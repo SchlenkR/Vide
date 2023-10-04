@@ -10,7 +10,7 @@ type TodoList = { items: TodoItem list }
 and TodoItem = { name: string; mutable isDone: bool; key: int }
 
 let view = vide {
-    let! todoList = 
+    let! todoList = ofMutable {
         { 
             items = [
                 { name = "Write Vide docu"; isDone = false; key = 0 }
@@ -20,7 +20,8 @@ let view = vide {
                 { name = "Wrap this list in ScrollViewer"; isDone = false; key = 4 }
             ] 
         }
-        |> Vide.ofMutable
+    }
+    
     let setItems items = todoList.Value <- { todoList.Value with items = items }
         
     DockPanel.Margin(4) {
@@ -32,7 +33,7 @@ let view = vide {
             .Margin(4) 
             .DockPanel().Dock(Dock.Bottom) {
             
-            let! itemName = Vide.ofMutable ""
+            let! itemName = ofMutable { "" }
 
             Button
                 .DockPanel().Dock(Dock.Right)

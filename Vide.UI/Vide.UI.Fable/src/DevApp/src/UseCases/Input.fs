@@ -14,7 +14,7 @@ let textInputReturnsValue =
     
 let textInputEvent = 
     vide {
-        let! enteredText = Vide.ofMutable ""
+        let! enteredText = ofMutable {""}
 
         div {
             $"You say: %s{enteredText.Value}"

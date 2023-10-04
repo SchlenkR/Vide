@@ -47,7 +47,7 @@ let shouldCompile2 =
 
 let shouldCompile3 =
     vide {
-        let! count = Vide.ofMutable 0
+        let! count = ofMutable {0}
 
         button.onclick(fun _ -> count += 1) {
             $"Hit me! Count = {count.Value}"

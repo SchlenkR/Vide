@@ -5,7 +5,7 @@ open type Vide.Html
 
 let ifElseWithForget =
     vide {
-        let! count = Vide.ofMutable 0
+        let! count = ofMutable {0}
 
         button.onclick(fun _ -> count += 1) {
             $"Hit me! Count = {count.Value}"
@@ -22,7 +22,7 @@ let ifElseWithForget =
 // TODO: That is not compiling (anymore; which is ok - document this)
 let ifElseWithPreserve =
     vide {
-        let! count = Vide.ofMutable 0
+        let! count = ofMutable {0}
 
         button.onclick(fun _ -> count += 1) {
             $"Hit me! Count = {count.Value}"
@@ -33,7 +33,7 @@ let ifElseWithPreserve =
                 $"You have the right to defend yourself!" 
             }
 
-            let! isAcknowledged = Vide.ofMutable false
+            let! isAcknowledged = ofMutable {false}
             input
                 .type'("checkbox")
                 .checked'(isAcknowledged.Value)

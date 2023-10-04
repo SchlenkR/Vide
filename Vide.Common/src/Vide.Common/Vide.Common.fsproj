@@ -5,7 +5,7 @@
 
   <!-- NuGet config -->
   <PropertyGroup>
-    <Version>0.0.23</Version>
+    <Version>0.0.24</Version>
     <PackageReleaseNotes>
     </PackageReleaseNotes>
     <PackageTags>f#;vide</PackageTags>

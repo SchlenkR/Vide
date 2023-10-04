@@ -5,7 +5,7 @@ open type Vide.Html
 
 let ifElseWithForget =
     vide {
-        let! count = Vide.ofMutable 0
+        let! count = ofMutable {0}
 
         button.onclick(fun _ -> count.Set(count.Value + 1)) {
             $"Hit me! Count = {count.Value}"
@@ -22,7 +22,7 @@ let ifElseWithForget =
 // TODO: That is not compiling (anymore; which is ok - document this)
 let ifElseWithPreserve =
     vide {
-        let! count = Vide.ofMutable 0
+        let! count = ofMutable {0}
 
         button.onclick(fun _ -> count.Set(count.Value + 1)) {
             $"Hit me! Count = {count.Value}"
@@ -33,7 +33,7 @@ let ifElseWithPreserve =
                 $"You have the right to defend yourself!" 
             }
 
-            let! isAcknowledged = Vide.ofMutable false
+            let! isAcknowledged = ofMutable {false}
             input.bind(isAcknowledged)
         else 
             elsePreserve
@@ -41,7 +41,7 @@ let ifElseWithPreserve =
 
 ////let yieldConditionalPreserve =
 ////    vide {
-////        let! count = Vide.ofMutable 0
+////        let! count = ofMutable {0}
 ////        button.onclick(fun _ -> count += 1) {
 ////            $"Hit me! Count = {count.Value}"
 ////        }
@@ -51,20 +51,20 @@ let ifElseWithPreserve =
 ////    }
 
 let componentWithIntState = vide {
-    let! state = Vide.ofMutable 0
+    let! state = ofMutable {0}
     p { $"Int: {state.Value}" }
     button.id("dec").onclick(fun _ -> state.Set(state.Value - 1)) { "dec" }
     button.id("inc").onclick(fun _ -> state.Set(state.Value + 1)) { "inc" }
 }
 
 let componentWithStringState = vide {
-    let! state = Vide.ofMutable "Hello"
+    let! state = ofMutable {"Hello"}
     p { $"String: {state.Value}" }
     input.bind(state)
 }
 
 let componentWithBooleanState = vide {
-    let! state = Vide.ofMutable true
+    let! state = ofMutable {true}
     p { $"Bool: {state.Value}" }
     input.bind(state)
 }
@@ -77,7 +77,7 @@ module MatchWithBranch =
         | View2
 
     let chooseView = vide {
-        let! count = Vide.ofMutable 0
+        let! count = ofMutable {0}
         button.id("dec").onclick(fun _ -> count.Set(count.Value - 1)) { "Previous View" }
         button.id("inc").onclick(fun _ -> count.Set(count.Value + 1)) { "Next View" }
         $" - View nr. {count.Value}"

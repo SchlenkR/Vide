@@ -7,7 +7,7 @@ open type Vide.Html
 
 // Document:
 // - here: mutable model (doesn't have to be that way)
-// - "Vide.ofMutable": This also doesn't have to be that way,
+// - "ofMutable": This also doesn't have to be that way,
 //   but it's an ideomatic building block of Vide (in depth: if not,
 //   emitting control statements like in LocSta would be necessary).
 
@@ -15,11 +15,11 @@ type TodoItem = { name: string; mutable isDone: bool }
 type TodoList = { items: TodoItem list }
     
 let view = vide {
-    let! todoList = Vide.ofMutable { items = [] }
+    let! todoList = ofMutable { { items = [] } }
         
     h1.class'("title") { "TODO List" }
     div {
-        let! itemName = Vide.ofMutable ""
+        let! itemName = ofMutable {""}
     
         p {
             let addItem () =

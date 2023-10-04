@@ -8,7 +8,7 @@ open type Vide.Html
 let visualComponentReturningValues =
     let visualCounter =
         vide {
-            let! count = Vide.ofMutable 0
+            let! count = ofMutable {0}
 
             button.onclick(fun _ -> count -= 1) { "dec" }
             button.onclick(fun _ -> count += 1) { "inc" }

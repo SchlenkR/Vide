@@ -12,7 +12,7 @@ let simpleVideDemo =
         P<StackPanel>(fun sl ->
             sl.HorizontalAlignment <- HorizontalAlignment.Center
             sl.VerticalAlignment <- VerticalAlignment.Center) {
-                let! count = Vide.ofMutable 5
+                let! count = ofMutable {5}
 
                 P<StackPanel>() {
                     for x in 0..count.Value do

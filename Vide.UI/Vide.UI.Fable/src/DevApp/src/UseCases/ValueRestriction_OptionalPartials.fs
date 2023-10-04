@@ -39,7 +39,7 @@ namespace ValueRestriction_OptionalPartials
 //                p { "Lorem ipsum dolor sit amet." } 
 //            },
 //            footer = vide { 
-//                let! intState = Vide.ofMutable 1
+//                let! intState = ofMutable {1}
 //                p { $"Footer with number: {intState.Value}" } 
 //            }
 //        )
@@ -66,7 +66,7 @@ module Alt_With_Turning_Into_Functions =
     let cards() = vide {
         Card(
             vide {
-                let! counter = Vide.ofMutable 0
+                let! counter = ofMutable {0}
                 $"The current count is {counter.Value} :)"
             },
             Some (vide { "Footer is here" })
@@ -102,7 +102,7 @@ module Alt_With_Specifying_GenArgs =
     let cards = vide {
         Card(
             vide {
-                let! counter = Vide.ofMutable 0
+                let! counter = ofMutable {0}
                 $"The current count is {counter.Value} :)"
             },
             Some (vide { "Footer is here" })
@@ -140,7 +140,7 @@ module Alt_With_VideNone =
     let cards = vide {
         Card(
             vide {
-                let! counter = Vide.ofMutable 0
+                let! counter = ofMutable {0}
                 $"The current count is {counter.Value} :)"
             },
             Some (vide { "Footer is here" })
@@ -191,11 +191,11 @@ module Alt_With_ArgsAsFunctions =
                 p { "Lorem ipsum dolor sit amet." } 
             },
             header = vide {
-                let! listState = Vide.ofMutable [1;2;3]
+                let! listState = ofMutable {[1;2;3]}
                 p { $"Header with elements: {listState.Value}" } 
             },
             footer = vide { 
-                let! intState = Vide.ofMutable 1
+                let! intState = ofMutable {1}
                 p { $"Footer with number: {intState.Value}" } 
             }
         )
