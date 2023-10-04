@@ -1,24 +1,26 @@
+
 #r "nuget: Avalonia, 11.0.0"
 #r "nuget: Avalonia.Desktop, 11.0.0"
 #r "nuget: Avalonia.Themes.Fluent, 11.0.0"
 #r "nuget: Vide.UI.Avalonia, 0.0.24"
 
 
-// EVAL ONLY ONCE PER FSI SESSION
-
-
-// ---------------------------------------------------------------
-// ...some gibberish to make the fiddle work
-// ---------------------------------------------------------------
+[<AutoOpen>]
 module VideApp =
     open Avalonia
     open Avalonia.Controls.ApplicationLifetimes
     open Avalonia.Controls
     open Avalonia.Themes.Fluent
-    open Vide
-    open Vide.UI.Avalonia
+    open Avalonia.Threading
 
-    type App<'v,'s>(content: Vide<'v,'s,HostContext<AvaloniaContext>>, width: float, height: float) =
+    let mutable private host = None
+
+    let disp (f: unit -> 'a) =
+        Dispatcher.UIThread.InvokeAsync(f).GetTask()
+        |> Async.AwaitTask 
+        |> Async.RunSynchronously 
+
+    type App<'v,'s>(width: float, height: float) =
         inherit Application()
         override this.Initialize() =
             this.Styles.Add(FluentTheme())
@@ -27,29 +29,35 @@ module VideApp =
             match this.ApplicationLifetime with
             | :? IClassicDesktopStyleApplicationLifetime as desktopLifetime ->
                 desktopLifetime.MainWindow <-
-                    let host = ContentControl()
-                    let window = Window(
+                    let cc = ContentControl()
+                    do host <- Some cc
+                    Window(
                         Background = Media.Brushes.DarkSlateBlue,
-                        Content = host,
+                        Content = cc,
                         Width = width,
                         Height = height,
                         WindowStartupLocation = WindowStartupLocation.CenterOwner
                     )
-                    let app = VideApp.ForHost(host).CreateAndStartWithUntypedState(content)
-                    do app.OnEvaluated(fun v s ->
-                        ()
-                        // System.Diagnostics.Debug.WriteLine($"Eval DONE ({app.EvaluationManager.EvaluationCount} cycles)")
-                    )
-                    window
             | _ -> failwith "Unexpected ApplicationLifetime"
 
-    let start content (size: {| width: float; height: float |}) =
-        AppBuilder
-            .Configure(fun () -> App(content, size.width, size.height))
-            .UsePlatformDetect()
-            .UseSkia()
-            .StartWithClassicDesktopLifetime([||])
-        |> ignore
+    open FSharp.Compiler.Interactive
+
+    fsi.EventLoop <-
+        { new IEventLoop with 
+            member x.Run() =
+                AppBuilder
+                    .Configure(fun () -> App(390.0, 644.0))
+                    .UsePlatformDetect()
+                    .UseSkia()
+                    .StartWithClassicDesktopLifetime([||])
+                    |> ignore
+                false
+            member x.Invoke(f) = disp f
+            member x.ScheduleRestart() = ()
+        }
+
+    type Host =
+        static member Instance = host.Value
 
 
 // ---------------------------------------------------------------
@@ -65,9 +73,10 @@ open type Vide.UI.Avalonia.AvaloniaControlsDefaults
 type TodoList = { items: TodoItem list }
 and TodoItem = { text: string; mutable isDone: bool; key: int }
 
-let view = vide {
+let todoListView = vide {
     let! todoList = ofMutable {
-        { 
+        log "Eval"
+        {
             items = 
                 [
                     {| text = "Write Vide docu"; isDone = false |}
@@ -133,4 +142,31 @@ let view = vide {
 }
 
 
-VideApp.start view {| width = 390.0; height = 644.0 |}
+
+VideApp.ForHost(Host.Instance).CreateAndStartWithUntypedState(todoListView) |> ignore
+
+
+Host.Instance.Content <- null
+
+
+
+
+let ofMutable x =
+    mkVide <| fun s (ctx: HostContext<_>) ->
+        let s = s |> Option.defaultWith (fun () -> printfn "NEW"; MutableValue(x, ctx.host))
+        s, Some s
+
+let x = vide {
+    log "A"
+    let! x = ofMutable "Value 1"
+    log "B"
+    H1 { x.Value }
+    log "C"
+    let! y = ofMutable "Value 2"
+    log "D"
+    H1 { y.Value }
+    log "2"
+}
+
+
+x None 
