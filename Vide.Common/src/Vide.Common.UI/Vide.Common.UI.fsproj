@@ -17,7 +17,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="EventTriggeredCore.fs" />
+    <Compile Include="Host.fs" />
+    <Compile Include="Async.fs" />
     <Compile Include="MutableValue.fs" />
     <Compile Include="App.fs" />
     <Compile Include="NodeModel.fs" />
