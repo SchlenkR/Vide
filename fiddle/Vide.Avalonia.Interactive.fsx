@@ -50,3 +50,8 @@ module VideAppWindow =
         | null -> failwith $"ApplicationLifetime is null"
         | alt -> failwith $"Unexpected ApplicationLifetime: {alt.GetType().FullName}"
 
+fsi.GetType().GetProperties()
+
+open FSharp.Compiler.Interactive
+
+typeof<IEventLoop>.Assembly

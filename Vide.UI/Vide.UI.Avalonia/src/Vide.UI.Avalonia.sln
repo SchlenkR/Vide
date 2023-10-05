@@ -9,6 +9,8 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.Common.UI", "..\..\..\
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Vide.UI.Avalonia", "Vide.UI.Avalonia\Vide.UI.Avalonia.fsproj", "{2C252739-36FC-48F1-B519-7DCA2E9A8FC0}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Vide.UI.Avalonia.Interactive", "Vide.UI.Avalonia.Interactive\Vide.UI.Avalonia.Interactive.fsproj", "{08F54B22-7E79-45C6-B524-58C0EE4AC10A}"
+EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "DevApp", "DevApp\DevApp.fsproj", "{3EFD27C1-86EF-427D-ABFB-893AEF8355E8}"
 EndProject
 Global
@@ -33,6 +35,10 @@ Global
 		{3EFD27C1-86EF-427D-ABFB-893AEF8355E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EFD27C1-86EF-427D-ABFB-893AEF8355E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EFD27C1-86EF-427D-ABFB-893AEF8355E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08F54B22-7E79-45C6-B524-58C0EE4AC10A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08F54B22-7E79-45C6-B524-58C0EE4AC10A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08F54B22-7E79-45C6-B524-58C0EE4AC10A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08F54B22-7E79-45C6-B524-58C0EE4AC10A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

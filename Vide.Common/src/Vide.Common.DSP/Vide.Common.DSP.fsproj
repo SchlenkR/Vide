@@ -3,17 +3,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
-  <!-- NuGet config -->
-  <PropertyGroup>
-    <Description>DSP the pure and simple way.</Description>
-    <Version>0.0.24</Version>
-    <PackageReleaseNotes>
-    </PackageReleaseNotes>
-    <PackageTags>f#;vide;dsp</PackageTags>
-  </PropertyGroup>
-
   <PropertyGroup>
     <PackageId>Vide.Common.DSP</PackageId>
+    <Description>DSP the pure and simple way.</Description>
+    <PackageTags>f#;vide;dsp</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,17 +3,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
-  <!-- NuGet config -->
-  <PropertyGroup>
-    <Description>Vide.Common.UI provides base functionality for any UI backend.</Description>
-    <Version>0.0.24</Version>
-    <PackageReleaseNotes>
-    </PackageReleaseNotes>
-    <PackageTags>f#;vide</PackageTags>
-  </PropertyGroup>
-
   <PropertyGroup>
     <PackageId>Vide.Common.UI</PackageId>
+    <Description>Vide.Common.UI provides base functionality for any UI backend.</Description>
+    <PackageTags>f#;vide</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

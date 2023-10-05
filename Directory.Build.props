@@ -1,6 +1,12 @@
 <Project>
 
   <PropertyGroup>
+    <Version>0.0.29</Version>
+    <PackageReleaseNotes>
+    </PackageReleaseNotes>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <Authors>Ronald Schlenker</Authors>
     <Copyright>Copyright 2023 Ronald Schlenker</Copyright>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

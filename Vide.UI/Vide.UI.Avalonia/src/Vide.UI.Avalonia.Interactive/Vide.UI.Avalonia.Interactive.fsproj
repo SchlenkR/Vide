@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net7.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>Vide.UI.Avalonia.Interactive</PackageId>
+    <Description>F# Interactive (FSI) extensions for Vide.UI.Avalonia</Description>
+    <PackageTags>f#;vide;avalonia;fsi</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Fsi.fs" />
+  </ItemGroup>
+    <ItemGroup>
+    <None Include="..\..\..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\..\..\artwork\nuget_logo.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.0.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="FSharp.Compiler.Interactive.Settings">
+      <HintPath>.\RefOnlyDependencies\dotnetsdk-7.0.400\FSharp.Compiler.Interactive.Settings.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vide.UI.Avalonia\Vide.UI.Avalonia.fsproj" />
+  </ItemGroup>
+</Project>

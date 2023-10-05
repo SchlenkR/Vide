@@ -1,5 +1,12 @@
 ﻿namespace Vide
 
+open System
+
+type OnEvalCallbackArgs<'v,'s> =
+    { value: 'v
+      currentState: 's option
+      duration: TimeSpan }
+
 type VideApp<'v,'s,'c>
     (
         content: Vide<'v,'s,HostContext<'c>>,
@@ -12,7 +19,7 @@ type VideApp<'v,'s,'c>
     let mutable hasPendingEvaluationRequests = false
     let mutable evaluationCount = 0uL
     let mutable suspendEvaluation = false
-    let mutable onEvaluated: ('v -> 's option -> unit) option = None
+    let mutable onEvaluated: (OnEvalCallbackArgs<'v,'s> -> unit) option = None
 
     // TODO: rename to IHost or IRoot
     interface IHost with
@@ -23,6 +30,8 @@ type VideApp<'v,'s,'c>
                 // During an evaluation, requests for another evaluation can
                 // occur, which have to be handled as _subsequent_ evaluations!
                 let rec eval () =
+                    let sw = System.Diagnostics.Stopwatch.StartNew()
+
                     do
                         hasPendingEvaluationRequests <- false
                         isEvaluating <- true
@@ -36,7 +45,9 @@ type VideApp<'v,'s,'c>
                         currentState <- newState
                         isEvaluating <- false
                         evaluationCount <- evaluationCount + 1uL
-                    do onEvaluated |> Option.iter (fun x -> x value currentState)
+                    do
+                        let diag = { value = value; currentState = currentState; duration = sw.Elapsed }
+                        onEvaluated |> Option.iter (fun callback -> callback diag)
                     if hasPendingEvaluationRequests then
                         eval ()
                 do
@@ -55,7 +66,10 @@ type VideApp<'v,'s,'c>
 
     member this.EvaluationManager = this :> IHost
     member _.CurrentState = currentState
-    member _.OnEvaluated(value) = onEvaluated <- Some value
+    member this.ForceState(state) =
+        do currentState <- Some state
+        this.EvaluationManager.RequestEvaluation()
+    member _.OnEvaluated(evaluationCallback) = onEvaluated <- Some evaluationCallback
     member _.OnEvaluated() = onEvaluated <- None
 
 type VideAppFactory<'c>(ctxCtor, ctxFin) =

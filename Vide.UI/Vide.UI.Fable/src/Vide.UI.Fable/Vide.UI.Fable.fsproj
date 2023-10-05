@@ -1,16 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
   
   <PropertyGroup>
-    <Version>0.0.24</Version>
-    <PackageReleaseNotes>
-    </PackageReleaseNotes>
+    <PackageId>Vide.UI.Fable</PackageId>
     <Description>Super simple declarative UIs for the Web with Fable without hassle.</Description>
     <PackageTags>f#;fable;fable-dotnet;fable-javascript;vide</PackageTags>
-    <PackageId>Vide.UI.Fable</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
