@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Fsi.fs" />
+    <Compile Include="Interactive.fs" />
   </ItemGroup>
     <ItemGroup>
     <None Include="..\..\..\..\README.md" Pack="true" PackagePath="\" />

@@ -26,7 +26,7 @@ let view = vide {
         
     DockPanel.Margin(4) {
         H1
-            .HorizontalAlignment(HorizontalAlignment.Center)
+            .HorizontalAlignment(HA.Center)
             .DockPanel().Dock(Dock.Top)
             .Text("My TODO List")
         DockPanel
@@ -50,7 +50,7 @@ let view = vide {
                     do itemName.Reset()) { 
                         "Add Item"
                 }
-            TextBox.bind(itemName)
+            TextBox.BindText(itemName)
         }
 
         VStack.Margin(4) {
@@ -62,9 +62,9 @@ let view = vide {
                         .Click(fun _ -> setItems (todoList.Value.items |> List.except [item]))
                         { "Remove" }
                     CheckBox
-                        .bind(item.isDone, fun value -> item.isDone <- value)
+                        .BindIsChecked(item.isDone, fun value -> item.isDone <- value)
                     TextBlock
-                        .VerticalAlignment(VerticalAlignment.Center)
+                        .VerticalAlignment(VA.Center)
                         .TextTrimming(TextTrimming.CharacterEllipsis)
                         .Text(item.name)
                 }

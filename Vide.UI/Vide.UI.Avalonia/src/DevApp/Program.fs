@@ -32,10 +32,6 @@ type App() =
                     WindowStartupLocation = WindowStartupLocation.CenterOwner
                 )
                 let app = VideApp.ForHost(host).CreateAndStart(fst demo)
-                do app.OnEvaluated(fun v s ->
-                    ()
-                    // System.Diagnostics.Debug.WriteLine($"Eval DONE ({app.EvaluationManager.EvaluationCount} cycles)")
-                )
                 window
         | _ -> failwith "Unexpected ApplicationLifetime"
 

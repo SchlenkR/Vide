@@ -97,6 +97,14 @@ type NodeBuilder<'e,'c>
     member _.CreateContext = createContext
     member _.CreateThisElement = createThisElement
 
+type YieldingNodeBuilder<'e,'c>
+    (
+        createContext: IHost -> 'e -> 'c,
+        createThisElement: IHost -> 'c -> 'e
+    ) =
+    inherit NodeBuilder<'e,'c>(createContext, createThisElement)
+
+
 module NodeModelBuilderBricks =
     // TODO: This is really, really weired. I think it's necessary to distinguish
     // between 'nthis and 'nhild on a general level (see branch of 2023-02-18 and many others)
@@ -228,6 +236,7 @@ module NodeModelBuilderBricks =
                 do ctx.ctx.ShowChild(textNode.node)
             (), Some textNode
 
+
 // ---------------------------------------------------------------------------------
 // The four (+1 base) basic builders for "vide { .. }" and renderers
 // Used for HTML elements like
@@ -292,13 +301,13 @@ type RenderRetC0BaseBuilder<'e,'n,'c
     member _.Return(x) = BuilderBricks.return'<_,HostContext<'c>>(x)
     member this.Run(v) = NodeModelBuilderBricks.run(this, v, (fun n v -> v))
 
-type RenderValC1BaseBuilder<'v,'e,'n,'c
+and RenderValC1BaseBuilder<'v,'e,'n,'c
         when 'n: equality
         and 'c :> NodeContext<'n>
     >
     (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
-    inherit NodeBuilder<'e,'c>(createContext, createThisElement)
+    inherit YieldingNodeBuilder<'e,'c>(createContext, createThisElement)
     member this.Run(v) = NodeModelBuilderBricks.run(this, v, (fun n v -> createResultVal n))
 
 type RenderPotC1BaseBuilder<'v,'e,'n,'c
@@ -307,7 +316,7 @@ type RenderPotC1BaseBuilder<'v,'e,'n,'c
     >
     (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
-    inherit NodeBuilder<'e,'c>(createContext, createThisElement)
+    inherit YieldingNodeBuilder<'e,'c>(createContext, createThisElement)
     member this.Run(v) = NodeModelBuilderBricks.run(this, v, (fun n v -> v))
     member _.emitValue() = RenderValC1BaseBuilder(createContext, createThisElement, createResultVal)
 
@@ -317,7 +326,7 @@ type RenderRetC1BaseBuilder<'e,'n,'c
     >
     (createContext, createThisElement) 
     =
-    inherit NodeBuilder<'e,'c>(createContext, createThisElement)
+    inherit YieldingNodeBuilder<'e,'c>(createContext, createThisElement)
     member _.Return(x) = BuilderBricks.return'<_,HostContext<'c>>(x)
     member this.Run(v) = NodeModelBuilderBricks.run(this, v, (fun n v -> v))
 
@@ -327,7 +336,7 @@ type RenderValCnBaseBuilder<'v,'e,'n,'c
     >
     (createContext, createThisElement, createResultVal: 'e -> 'v)
     =
-    inherit NodeBuilder<'e,'c>(createContext, createThisElement)
+    inherit YieldingNodeBuilder<'e,'c>(createContext, createThisElement)
     member inline _.Combine([<IILShadowing.InlineIfLambda>] a, [<IILShadowing.InlineIfLambda>] b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
     member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKVP<_,_,_,_,HostContext<'c>>(seq, body)
     member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKeyField<_,_,_,_,HostContext<'c>>(seq, body)
@@ -339,7 +348,7 @@ type RenderPotCnBaseBuilder<'v,'e,'n,'c
     >
     (createContext, createThisElement, createResultVal: 'e -> 'v) 
     =
-    inherit NodeBuilder<'e,'c>(createContext, createThisElement)
+    inherit YieldingNodeBuilder<'e,'c>(createContext, createThisElement)
     member inline _.Combine([<IILShadowing.InlineIfLambda>] a, [<IILShadowing.InlineIfLambda>] b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
     member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKVP<_,_,_,_,HostContext<'c>>(seq, body)
     member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKeyField<_,_,_,_,HostContext<'c>>(seq, body)
@@ -352,7 +361,7 @@ type RenderRetCnBaseBuilder<'e,'n,'c
     >
     (createContext, createThisElement) 
     =
-    inherit NodeBuilder<'e,'c>(createContext, createThisElement)
+    inherit YieldingNodeBuilder<'e,'c>(createContext, createThisElement)
     member inline _.Combine([<IILShadowing.InlineIfLambda>] a, [<IILShadowing.InlineIfLambda>] b) = BuilderBricks.combine<_,_,_,_,HostContext<'c>>(a, b)
     member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKVP<_,_,_,_,HostContext<'c>>(seq, body)
     member inline _.For(seq, body) = NodeModelBuilderBricks.forWithKeyField<_,_,_,_,HostContext<'c>>(seq, body)
@@ -366,9 +375,11 @@ type RenderRetCnBaseBuilder<'e,'n,'c
 //     - standard yields
 // -------------------------------------------------------------------
 
-// TODO: Instead of specifying all Render- and Comp-builders explicitly,
-//       could we just use NodeBuilder when there's no special treatment necessary?
-type NodeModelBaseBuilder with
+type ComponentRetCnBaseBuilder<'n,'c
+        when 'n : equality
+        and 'c :> NodeContext<'n>
+    > with
+    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
@@ -376,12 +387,24 @@ type NodeModelBaseBuilder with
     member _.Yield(b: RenderPotC1BaseBuilder<_,_,_,_>) = b {()}
     member _.Yield(b: RenderRetC1BaseBuilder<_,_,_>) = b {()}
     member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
-    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
     member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
     member _.Yield(op) = NodeModelBuilderBricks.yieldBuilderOp(op)
     member _.Yield(text) = NodeModelBuilderBricks.yieldText(text)
 
-    
+type YieldingNodeBuilder<'e,'c> with
+    member _.Yield(b: ComponentRetCnBaseBuilder<_,_>) = b {()}
+    member _.Yield(b: RenderValC0BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderPotC0BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderRetC0BaseBuilder<_,_,_>) = b {()}
+    member _.Yield(b: RenderValC1BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderPotC1BaseBuilder<_,_,_,_>) = b {()}
+    member _.Yield(b: RenderRetC1BaseBuilder<_,_,_>) = b {()}
+    member _.Yield(b: RenderRetCnBaseBuilder<_,_,_>) = b {()}
+    member _.Yield(v) = NodeModelBuilderBricks.yieldVide(v)
+    member _.Yield(op) = NodeModelBuilderBricks.yieldBuilderOp(op)
+    member _.Yield(text) = NodeModelBuilderBricks.yieldText(text)
+
+
 // ----------------------------------------------------------------------------
 // "Bind"s (every Content builder can bind every builder that returns values)
 // ----------------------------------------------------------------------------

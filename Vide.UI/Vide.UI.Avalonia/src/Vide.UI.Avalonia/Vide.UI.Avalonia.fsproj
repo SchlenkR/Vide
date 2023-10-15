@@ -14,6 +14,7 @@
     <Compile Include="ApiPre.fs" />
     <Compile Include="Api.fs" />
     <Compile Include="ApiPost.fs" />
+    <Compile Include="..\..\..\..\Vide.Common\src\LinkableFiles\Vide.Common.ControlFlow.fs" Link="Vide.Common.ControlFlow.fs" />
   </ItemGroup>
     <ItemGroup>
     <None Include="..\..\..\..\README.md" Pack="true" PackagePath="\" />

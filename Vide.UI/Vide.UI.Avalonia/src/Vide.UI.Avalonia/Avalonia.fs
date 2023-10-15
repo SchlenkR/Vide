@@ -1,4 +1,5 @@
-﻿namespace Vide.UI.Avalonia
+﻿// namespace must be Vide here because of linking control flow file
+namespace Vide
 
 open System
 open Avalonia.Controls
@@ -115,5 +116,5 @@ type VideApp =
         )
 
 [<AutoOpen>]
-module TopLevels =
+module VideBuilderInstance =
     let vide = ComponentRetCnBuilder()

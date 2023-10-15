@@ -2,7 +2,6 @@ namespace Vide.UI.Avalonia
 
 open System
 open System.Runtime.CompilerServices
-open Avalonia.Layout
 open Vide
 open Vide.UI.Avalonia
 
@@ -11,8 +10,8 @@ open type Vide.UI.Avalonia.Controls
 [<AutoOpen>]
 module AvaloniaControlsStaticMemberExtensions =
     type Vide.UI.Avalonia.Controls with
-        static member HStack = StackPanel.Orientation(Orientation.Horizontal)
-        static member VStack = StackPanel.Orientation(Orientation.Vertical)
+        static member HStack = StackPanel.Orientation(Avalonia.Layout.Orientation.Horizontal)
+        static member VStack = StackPanel.Orientation(Avalonia.Layout.Orientation.Vertical)
 
 module Nullable =
     let defaultValue v (n: Nullable<_>) =
@@ -22,31 +21,31 @@ module Nullable =
 type BindExtensions =
 
     [<Extension>]
-    static member bind(this: CheckBoxBuilder, value: MutableValue<Nullable<bool>>) =
+    static member BindIsChecked(this: CheckBoxBuilder, value: MutableValue<Nullable<bool>>) =
         this
             .IsChecked(value.Value)
             .IsCheckedChanged(fun x -> value.Value <- x.node.IsChecked)
 
     [<Extension>]
-    static member bind(this: CheckBoxBuilder, value: Nullable<bool>, setter: Nullable<bool> -> unit) =
+    static member BindIsChecked(this: CheckBoxBuilder, value: Nullable<bool>, setter: Nullable<bool> -> unit) =
         this
             .IsChecked(value)
             .IsCheckedChanged(fun x -> setter(x.node.IsChecked))
 
     [<Extension>]
-    static member bind(this: CheckBoxBuilder, value: MutableValue<bool>) =
+    static member BindIsChecked(this: CheckBoxBuilder, value: MutableValue<bool>) =
         this
             .IsChecked(value.Value)
             .IsCheckedChanged(fun x -> value.Value <- x.node.IsChecked |> Nullable.defaultValue false)
 
     [<Extension>]
-    static member bind(this: CheckBoxBuilder, value: bool, setter: bool -> unit) =
+    static member BindIsChecked(this: CheckBoxBuilder, value: bool, setter: bool -> unit) =
         this
             .IsChecked(value)
             .IsCheckedChanged(fun x -> setter(x.node.IsChecked |> Nullable.defaultValue false))
 
     [<Extension>]
-    static member bind(this: TextBoxBuilder, value: MutableValue<string>) =
+    static member BindText(this: TextBoxBuilder, value: MutableValue<string>) =
         this
             .Text(value.Value)
             .TextChanged(fun args ->
@@ -64,24 +63,8 @@ type BindExtensions =
     //        .Text(value)
     //        .TextInput(fun x -> setter(x.node.Text))
 
-// TODO
-
 [<Extension>]
 type ConvenienceExtensions =
-    // This was a test for SRTP props
-    // [<Extension>]
-    // static member inline Click<'nb,'e,'c,'args when
-    //         'nb :> NodeBuilder<'e,'c>
-    //         and 'e :> Avalonia.Controls.Control
-    //         and 'e: (member add_Click: (EventHandler<'args> -> unit))
-    //     >
-    //     (this: 'nb, handler)
-    //     =
-    //     this.onInit(fun x ->
-    //         let wrappedHandler = Event.handle x.node x.host handler
-    //         let dotnetEventHandler = EventHandler<_>(fun _ args -> wrappedHandler args)
-    //         x.node.add_Click(dotnetEventHandler)
-    //         )
 
     [<Extension>]
     static member inline Margin<'nb,'e,'c when
@@ -90,61 +73,48 @@ type ConvenienceExtensions =
             and 'e : (member get_Margin: unit -> Avalonia.Thickness)
             and 'e : (member set_Margin: Avalonia.Thickness -> unit)
         >
-        (this: 'nb, value: float)
+        (this: 'nb, value)
         =
         let value = Avalonia.Thickness value
         this.onEval(fun x -> if x.node.Margin <> value then x.node.Margin <- value)
 
-//     [<Extension>]
-//     static member inline Margin<'nb,'e,'n,'c
-//             when 'nb :> NodeBuilder<'e,'c>
-//             and 'e :> Avalonia.Controls.Control
-//             and 'nb : (member Margin: Avalonia.Thickness -> unit)
-//         >
-//         (this: 'nb, leftRight, topBottom)
-//         =
-//         this.Margin(Avalonia.Thickness(leftRight, topBottom))
-
-//     [<Extension>]
-//     static member inline MarginLeft<'nb,'e,'n,'c
-//             when 'nb :> NodeBuilder<'e,'c>
-//             and 'e :> Avalonia.Controls.Control
-//             and 'nb : (member Margin: Avalonia.Thickness -> unit)
-//         >
-//         (this: 'nb, value)
-//         =
-//         this.Margin(Avalonia.Thickness(value, 0, 0, 0))
-
-//     [<Extension>]
-//     static member inline MarginTop<'nb,'e,'n,'c
-//             when 'nb :> NodeBuilder<'e,'c>
-//             and 'e :> Avalonia.Controls.Control
-//             and 'nb : (member Margin: Avalonia.Thickness -> unit)
-//         >
-//         (this: 'nb, value)
-//         =
-//         this.Margin(Avalonia.Thickness(0, value, 0, 0))
-
-//     [<Extension>]
-//     static member inline MarginRight<'nb,'e,'n,'c
-//             when 'nb :> NodeBuilder<'e,'c>
-//             and 'e :> Avalonia.Controls.Control
-//             and 'nb : (member Margin: Avalonia.Thickness -> unit)
-//         >
-//         (this: 'nb, value)
-//         =
-//         this.Margin(Avalonia.Thickness(0, 0, value, 0))
-
-//     [<Extension>]
-//     static member inline MarginBottom<'nb,'e,'n,'c
-//             when 'nb :> NodeBuilder<'e,'c>
-//             and 'e :> Avalonia.Controls.Control
-//             and 'nb : (member Margin: Avalonia.Thickness -> unit)
-//         >
-//         (this: 'nb, value)
-//         =
-//         this.Margin(Avalonia.Thickness(0, 0, 0, value))
-
+    [<Extension>]
+    static member inline Margin<'nb,'e,'c when
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_Margin: unit -> Avalonia.Thickness)
+            and 'e : (member set_Margin: Avalonia.Thickness -> unit)
+        >
+        (this: 'nb, leftRight, topBottom)
+        =
+        let value = Avalonia.Thickness(leftRight, topBottom)
+        this.onEval(fun x -> if x.node.Margin <> value then x.node.Margin <- value)
+    
+    [<Extension>]
+    static member inline RowDefinitions<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_RowDefinitions: unit -> Avalonia.Controls.RowDefinitions)
+            and 'e : (member set_RowDefinitions: Avalonia.Controls.RowDefinitions -> unit)
+        >
+        (this: 'nb, value: string) =
+            // TODO: This is really dirty in the way that ToString is no guaranteed representation of the value.
+            this.onEval(fun x ->
+                if x.node.get_RowDefinitions().ToString() <> value
+                then x.node.set_RowDefinitions(Avalonia.Controls.RowDefinitions(value)))
+    
+    [<Extension>]
+    static member inline ColumnDefinitions<'nb,'e,'c when 
+            'nb :> NodeBuilder<'e,'c>
+            and 'e :> Avalonia.Controls.Control
+            and 'e : (member get_ColumnDefinitions: unit -> Avalonia.Controls.ColumnDefinitions)
+            and 'e : (member set_ColumnDefinitions: Avalonia.Controls.ColumnDefinitions -> unit)
+        >
+        (this: 'nb, value: string) =
+            // TODO: This is really dirty in the way that ToString is no guaranteed representation of the value.
+            this.onEval(fun x ->
+                if x.node.get_ColumnDefinitions().ToString() <> value
+                then x.node.set_ColumnDefinitions(Avalonia.Controls.ColumnDefinitions(value)))
 
 
 
@@ -153,8 +123,10 @@ type Dock = Avalonia.Controls.Dock
 type TextTrimming = Avalonia.Media.TextTrimming
 type FontWeight = Avalonia.Media.FontWeight
 type Thickness = Avalonia.Thickness
-type HorizontalAlignment = Avalonia.Layout.HorizontalAlignment
-type VerticalAlignment = Avalonia.Layout.VerticalAlignment
+type HA = Avalonia.Layout.HorizontalAlignment
+type VA = Avalonia.Layout.VerticalAlignment
+type Wrap = Avalonia.Media.TextWrapping
+type Orientation = Avalonia.Layout.Orientation
 
 
 // Some Defaults...

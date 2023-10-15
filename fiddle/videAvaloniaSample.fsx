@@ -36,7 +36,7 @@ module VideApp =
                         WindowStartupLocation = WindowStartupLocation.CenterOwner
                     )
                     let app = VideApp.ForHost(host).CreateAndStartWithUntypedState(content)
-                    do app.OnEvaluated(fun v s ->
+                    do app.OnEvaluated(fun diag ->
                         ()
                         // System.Diagnostics.Debug.WriteLine($"Eval DONE ({app.EvaluationManager.EvaluationCount} cycles)")
                     )

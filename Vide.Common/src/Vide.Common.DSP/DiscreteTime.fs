@@ -1,4 +1,3 @@
-[<AutoOpen>]
 module Vide.DSP.DiscreteTime
 
 open System

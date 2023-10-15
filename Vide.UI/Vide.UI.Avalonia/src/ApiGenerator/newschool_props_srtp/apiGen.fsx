@@ -152,7 +152,7 @@ module Model =
             | LeafControl mode ->
                 getCtor mode, $"ContentLeaf{getBuilderInfixName mode}Builder", getBuilderPotGenArg mode
             | ContentControl mode ->
-                getCtor mode, $"ContentLeaf{getBuilderInfixName mode}Builder", getBuilderPotGenArg mode
+                getCtor mode, $"ContentControl{getBuilderInfixName mode}Builder", getBuilderPotGenArg mode
             | PanelControl ->
                 "", "PanelRetBuilder", ""
         Tmpl.control(

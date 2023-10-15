@@ -1,5 +1,7 @@
 module Vide.UI.Avalonia.Interactive
 
+open Vide
+
 open Avalonia
 open Avalonia.Controls.ApplicationLifetimes
 open Avalonia.Controls
@@ -40,7 +42,7 @@ let guardInit () =
                 member _.ScheduleRestart() = ()
             }
 
-let createWindowAndShow width height =
+let createWindow width height =
     if not isEventLoopRunning then
         failwith "Avalonia event loop is not running yet. Split the first evaluation with #r and a call to 'ensureAvalonia' from subsequent evaluations."
     match Application.Current.ApplicationLifetime with
@@ -55,10 +57,8 @@ let createWindowAndShow width height =
     | null -> failwith $"ApplicationLifetime is null"
     | alt -> failwith $"Unexpected ApplicationLifetime: {alt.GetType().FullName}"
 
-let showView videView (window: Window) =
-    let host = ContentControl()
+let showView videView (host: ContentControl) =
     let videApp = VideApp.ForHost(host).CreateAndStart(videView)
-    do window.Content <- host
     videApp
     
 [<AutoOpen>]
@@ -145,3 +145,25 @@ module Dynamic =
                 try meth.Invoke(instance, [| |]) |> unbox<'R>
                 with _ -> failwithf "Failed to get value of '%s' property (of type '%s')" name typ.Name
     
+// TODO
+// let printState (s: obj) =
+//     let rec prec indentation (s: obj) =
+//         try
+//             if s = null then
+//                 printfn "%snull" indentation
+//             elif s.GetType().FullName.StartsWith("Microsoft.FSharp.Core.FSharpOption`1[[System.Tuple`2") then
+//                 try
+//                     let tuple = s?Value
+//                     let item1 = tuple?Item1
+//                     let item2 = tuple?Item2
+//                     printfn "%A" item1
+//                     prec (indentation + "  ") item2
+//                 with _ ->
+//                     printfn "%sNone" indentation
+//             else
+//                 printfn "%s%s" indentation (s.ToString())
+//         with e ->
+//             printfn "%s%s" indentation (e.ToString())
+//     prec "" s
+
+// printState videApp.CurrentState

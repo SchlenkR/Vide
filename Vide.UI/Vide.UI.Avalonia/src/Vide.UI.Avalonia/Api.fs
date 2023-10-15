@@ -25,10 +25,10 @@ type Controls with static member AutoCompleteBox = AutoCompleteBoxBuilder()
 type BorderBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Border>()
 type Controls with static member Border = BorderBuilder()
 
-type ButtonBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Button>()
+type ButtonBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.Button>()
 type Controls with static member Button = ButtonBuilder()
 
-type ButtonSpinnerBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.ButtonSpinner>()
+type ButtonSpinnerBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.ButtonSpinner>()
 type Controls with static member ButtonSpinner = ButtonSpinnerBuilder()
 
 type CalendarDatePickerBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.CalendarDatePicker>()
@@ -49,10 +49,10 @@ type Controls with static member CheckBox = CheckBoxBuilder()
 type ComboBoxBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.ComboBox>()
 type Controls with static member ComboBox = ComboBoxBuilder()
 
-type ComboBoxItemBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.ComboBoxItem>()
+type ComboBoxItemBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.ComboBoxItem>()
 type Controls with static member ComboBoxItem = ComboBoxItemBuilder()
 
-type ContentControlBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.ContentControl>()
+type ContentControlBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.ContentControl>()
 type Controls with static member ContentControl = ContentControlBuilder()
 
 type ContextMenuBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.ContextMenu>()
@@ -61,7 +61,7 @@ type Controls with static member ContextMenu = ContextMenuBuilder()
 type ControlBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Control>()
 type Controls with static member Control = ControlBuilder()
 
-type DataValidationErrorsBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.DataValidationErrors>()
+type DataValidationErrorsBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.DataValidationErrors>()
 type Controls with static member DataValidationErrors = DataValidationErrorsBuilder()
 
 type DatePickerBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.DatePicker>()
@@ -82,13 +82,13 @@ type Controls with static member Decorator = DecoratorBuilder()
 type DockPanelBuilder () = inherit PanelRetBuilder<Avalonia.Controls.DockPanel>()
 type Controls with static member DockPanel = DockPanelBuilder()
 
-type DropDownButtonBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.DropDownButton>()
+type DropDownButtonBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.DropDownButton>()
 type Controls with static member DropDownButton = DropDownButtonBuilder()
 
-type ExpanderBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Expander>()
+type ExpanderBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.Expander>()
 type Controls with static member Expander = ExpanderBuilder()
 
-type FlyoutPresenterBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.FlyoutPresenter>()
+type FlyoutPresenterBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.FlyoutPresenter>()
 type Controls with static member FlyoutPresenter = FlyoutPresenterBuilder()
 
 type MenuFlyoutPresenterBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.MenuFlyoutPresenter>()
@@ -103,7 +103,7 @@ type Controls with static member GridSplitter = GridSplitterBuilder()
 type ItemsControlBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.ItemsControl>()
 type Controls with static member ItemsControl = ItemsControlBuilder()
 
-type LabelBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Label>()
+type LabelBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.Label>()
 type Controls with static member Label = LabelBuilder()
 
 type LayoutTransformControlBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.LayoutTransformControl>()
@@ -112,7 +112,7 @@ type Controls with static member LayoutTransformControl = LayoutTransformControl
 type ListBoxBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.ListBox>()
 type Controls with static member ListBox = ListBoxBuilder()
 
-type ListBoxItemBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.ListBoxItem>()
+type ListBoxItemBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.ListBoxItem>()
 type Controls with static member ListBoxItem = ListBoxItemBuilder()
 
 type MaskedTextBoxBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.MaskedTextBox>()
@@ -145,16 +145,16 @@ type Controls with static member PathIcon = PathIconBuilder()
 type ProgressBarBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.ProgressBar>()
 type Controls with static member ProgressBar = ProgressBarBuilder()
 
-type RadioButtonBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.RadioButton>()
+type RadioButtonBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.RadioButton>()
 type Controls with static member RadioButton = RadioButtonBuilder()
 
 type RelativePanelBuilder () = inherit PanelRetBuilder<Avalonia.Controls.RelativePanel>()
 type Controls with static member RelativePanel = RelativePanelBuilder()
 
-type RepeatButtonBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.RepeatButton>()
+type RepeatButtonBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.RepeatButton>()
 type Controls with static member RepeatButton = RepeatButtonBuilder()
 
-type ScrollViewerBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.ScrollViewer>()
+type ScrollViewerBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.ScrollViewer>()
 type Controls with static member ScrollViewer = ScrollViewerBuilder()
 
 type SelectableTextBlockBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.SelectableTextBlock>()
@@ -166,13 +166,13 @@ type Controls with static member Separator = SeparatorBuilder()
 type SliderBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Slider>()
 type Controls with static member Slider = SliderBuilder()
 
-type SplitButtonBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.SplitButton>()
+type SplitButtonBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.SplitButton>()
 type Controls with static member SplitButton = SplitButtonBuilder()
 
-type ToggleSplitButtonBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.ToggleSplitButton>()
+type ToggleSplitButtonBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.ToggleSplitButton>()
 type Controls with static member ToggleSplitButton = ToggleSplitButtonBuilder()
 
-type SplitViewBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.SplitView>()
+type SplitViewBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.SplitView>()
 type Controls with static member SplitView = SplitViewBuilder()
 
 type StackPanelBuilder () = inherit PanelRetBuilder<Avalonia.Controls.StackPanel>()
@@ -181,7 +181,7 @@ type Controls with static member StackPanel = StackPanelBuilder()
 type TabControlBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.TabControl>()
 type Controls with static member TabControl = TabControlBuilder()
 
-type TabItemBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.TabItem>()
+type TabItemBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.TabItem>()
 type Controls with static member TabItem = TabItemBuilder()
 
 type TextBlockBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.TextBlock>()
@@ -193,13 +193,13 @@ type Controls with static member TextBox = TextBoxBuilder()
 type TickBarBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.TickBar>()
 type Controls with static member TickBar = TickBarBuilder()
 
-type ToggleSwitchBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.ToggleSwitch>()
+type ToggleSwitchBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.ToggleSwitch>()
 type Controls with static member ToggleSwitch = ToggleSwitchBuilder()
 
-type ToolTipBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.ToolTip>()
+type ToolTipBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.ToolTip>()
 type Controls with static member ToolTip = ToolTipBuilder()
 
-type TransitioningContentControlBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.TransitioningContentControl>()
+type TransitioningContentControlBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.TransitioningContentControl>()
 type Controls with static member TransitioningContentControl = TransitioningContentControlBuilder()
 
 type TreeViewBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.TreeView>()
@@ -208,7 +208,7 @@ type Controls with static member TreeView = TreeViewBuilder()
 type TreeViewItemBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.TreeViewItem>()
 type Controls with static member TreeViewItem = TreeViewItemBuilder()
 
-type UserControlBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.UserControl>()
+type UserControlBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.UserControl>()
 type Controls with static member UserControl = UserControlBuilder()
 
 type ViewboxBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Viewbox>()
@@ -220,7 +220,7 @@ type Controls with static member VirtualizingCarouselPanel = VirtualizingCarouse
 type VirtualizingStackPanelBuilder () = inherit PanelRetBuilder<Avalonia.Controls.VirtualizingStackPanel>()
 type Controls with static member VirtualizingStackPanel = VirtualizingStackPanelBuilder()
 
-type WindowBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Window>()
+type WindowBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.Window>()
 type Controls with static member Window = WindowBuilder()
 
 type WrapPanelBuilder () = inherit PanelRetBuilder<Avalonia.Controls.WrapPanel>()
@@ -262,10 +262,10 @@ type Controls with static member ScrollContentPresenter = ScrollContentPresenter
 type TextPresenterBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Presenters.TextPresenter>()
 type Controls with static member TextPresenter = TextPresenterBuilder()
 
-type NotificationCardBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Notifications.NotificationCard>()
+type NotificationCardBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.Notifications.NotificationCard>()
 type Controls with static member NotificationCard = NotificationCardBuilder()
 
-type EmbeddableControlRootBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Embedding.EmbeddableControlRoot>()
+type EmbeddableControlRootBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.Embedding.EmbeddableControlRoot>()
 type Controls with static member EmbeddableControlRoot = EmbeddableControlRootBuilder()
 
 type CaptionButtonsBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Chrome.CaptionButtons>()
@@ -274,10 +274,10 @@ type Controls with static member CaptionButtons = CaptionButtonsBuilder()
 type TitleBarBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Chrome.TitleBar>()
 type Controls with static member TitleBar = TitleBarBuilder()
 
-type CalendarButtonBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Primitives.CalendarButton>()
+type CalendarButtonBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.Primitives.CalendarButton>()
 type Controls with static member CalendarButton = CalendarButtonBuilder()
 
-type CalendarDayButtonBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Primitives.CalendarDayButton>()
+type CalendarDayButtonBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.Primitives.CalendarDayButton>()
 type Controls with static member CalendarDayButton = CalendarDayButtonBuilder()
 
 type CalendarItemBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Primitives.CalendarItem>()
@@ -295,7 +295,7 @@ type Controls with static member AdornerLayer = AdornerLayerBuilder()
 type ChromeOverlayLayerBuilder () = inherit PanelRetBuilder<Avalonia.Controls.Primitives.ChromeOverlayLayer>()
 type Controls with static member ChromeOverlayLayer = ChromeOverlayLayerBuilder()
 
-type HeaderedContentControlBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Primitives.HeaderedContentControl>()
+type HeaderedContentControlBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.Primitives.HeaderedContentControl>()
 type Controls with static member HeaderedContentControl = HeaderedContentControlBuilder()
 
 type HeaderedItemsControlBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Primitives.HeaderedItemsControl>()
@@ -322,7 +322,7 @@ type Controls with static member SelectingItemsControl = SelectingItemsControlBu
 type TabStripBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Primitives.TabStrip>()
 type Controls with static member TabStrip = TabStripBuilder()
 
-type TabStripItemBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Primitives.TabStripItem>()
+type TabStripItemBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.Primitives.TabStripItem>()
 type Controls with static member TabStripItem = TabStripItemBuilder()
 
 type TemplatedControlBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Primitives.TemplatedControl>()
@@ -331,7 +331,7 @@ type Controls with static member TemplatedControl = TemplatedControlBuilder()
 type ThumbBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Primitives.Thumb>()
 type Controls with static member Thumb = ThumbBuilder()
 
-type ToggleButtonBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Primitives.ToggleButton>()
+type ToggleButtonBuilder () = inherit ContentControlRetBuilder<Avalonia.Controls.Primitives.ToggleButton>()
 type Controls with static member ToggleButton = ToggleButtonBuilder()
 
 type TrackBuilder () = inherit ContentLeafRetBuilder<Avalonia.Controls.Primitives.Track>()

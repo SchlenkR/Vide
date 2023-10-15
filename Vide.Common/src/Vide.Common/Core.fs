@@ -71,12 +71,9 @@ module Vide =
     let ctx<'c> : Vide<'c,unit,'c> =
         mkVide <| fun s ctx -> ctx,None
 
-module BuilderBricks =
     let inline bind<'v1,'s1,'v2,'s2,'c>
-        (
-            m: Vide<'v1,'s1,'c>,
-            [<InlineIfLambda>] f: 'v1 -> Vide<'v2,'s2,'c>
-        ) 
+        ([<InlineIfLambda>] f: 'v1 -> Vide<'v2,'s2,'c>)
+        (m: Vide<'v1,'s1,'c>)
         : Vide<'v2,'s1 option * 's2 option,'c>
         =
         mkVide <| fun s ctx ->
@@ -88,6 +85,36 @@ module BuilderBricks =
             let f = runVide (f mv)
             let fv,fs = f fs ctx
             fv, Some (ms,fs)
+
+    let inline ofSeqWithDefault ([<InlineIfLambda>] defaultFunc) (sequence: seq<_>) =
+        mkVide <| fun s ctx ->
+            let enumerator =
+                let newEnum () =
+                    let x = sequence.GetEnumerator()
+                    if not (x.MoveNext()) then defaultFunc () else x
+                match s with
+                | None -> newEnum ()
+                | Some (x: System.Collections.Generic.IEnumerator<_>) ->
+                    if x.MoveNext() then x else newEnum ()
+            enumerator.Current, Some enumerator
+    
+    let ofSeqWithDefaultValue defaultValue (sequence: seq<_>) =
+        ofSeqWithDefault (fun () -> defaultValue) sequence
+    
+    let ofSeq (sequence: seq<_>) =
+        ofSeqWithDefault (fun () -> failwith "Empty sequences are not supported.") sequence
+
+    // TODO: ofList / ofArray
+
+module BuilderBricks =
+    let inline bind<'v1,'s1,'v2,'s2,'c>
+        (
+            m: Vide<'v1,'s1,'c>,
+            [<InlineIfLambda>] f: 'v1 -> Vide<'v2,'s2,'c>
+        ) 
+        : Vide<'v2,'s1 option * 's2 option,'c>
+        =
+        Vide.bind f m
 
     let return'<'v,'c>
         (x: 'v)

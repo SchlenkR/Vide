@@ -3,7 +3,8 @@
 open System
 
 type OnEvalCallbackArgs<'v,'s> =
-    { value: 'v
+    { evaluationCount: uint64
+      value: 'v
       currentState: 's option
       duration: TimeSpan }
 
@@ -46,7 +47,13 @@ type VideApp<'v,'s,'c>
                         isEvaluating <- false
                         evaluationCount <- evaluationCount + 1uL
                     do
-                        let diag = { value = value; currentState = currentState; duration = sw.Elapsed }
+                        let diag = 
+                            { 
+                                evaluationCount = evaluationCount
+                                value = value
+                                currentState = currentState
+                                duration = sw.Elapsed
+                            }
                         onEvaluated |> Option.iter (fun callback -> callback diag)
                     if hasPendingEvaluationRequests then
                         eval ()

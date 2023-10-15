@@ -4,11 +4,16 @@
 #r "nuget: Avalonia.Desktop, 11.0.0"
 #r "nuget: Avalonia.Themes.Fluent, 11.0.0"
 #r "nuget: Vide.UI.Avalonia, 0.0.24"
-#load "../Vide.UI.Avalonia.Interactive/fsi.fs"
 
-open Vide.UI.Avalonia
-open Vide.UI.Avalonia.Interactive.Dynamic
-Interactive.guardInit ()
+// #r "nuget: Vide.UI.Avalonia"
+// #load "../Vide.UI.Avalonia.Interactive/Interactive.fs"
+#I @"..\Vide.UI.Avalonia.Interactive\bin\Debug\net7.0"
+#r "Vide.Common.dll"
+#r "Vide.Common.UI.dll"
+#r "Vide.UI.Avalonia.dll"
+#r "Vide.UI.Avalonia.Interactive.dll"
+
+Vide.UI.Avalonia.Interactive.guardInit ()
 
 // ^ -------------------------------------------------------------
 // |_ This is the boilerplate to make the sample work in fsi.
@@ -23,6 +28,8 @@ Interactive.guardInit ()
 
 open System
 open Vide
+open Vide.UI.Avalonia
+open Vide.UI.Avalonia.Interactive.Dynamic
 open type Vide.UI.Avalonia.Controls
 open type Vide.UI.Avalonia.AvaloniaControlsDefaults
 
@@ -50,7 +57,7 @@ let view = vide {
         
     DockPanel.Margin(4) {
         H1
-            .HorizontalAlignment(HorizontalAlignment.Center)
+            .HorizontalAlignment(HA.Center)
             .DockPanel().Dock(Dock.Top)
             .Text("My TODO List")
         DockPanel
@@ -88,7 +95,7 @@ let view = vide {
                     CheckBox
                         .bind(item.isDone, fun value -> item.isDone <- value)
                     TextBlock
-                        .VerticalAlignment(VerticalAlignment.Center)
+                        .VerticalAlignment(VA.Center)
                         .TextTrimming(TextTrimming.CharacterEllipsis)
                         .Text(item.text)
                 }
@@ -97,29 +104,7 @@ let view = vide {
 }
 
 
-// The view defined above is shown in a new window.
-let videApp = 
-    Interactive.createWindowAndShow 300. 500.
-    |> Interactive.showView view
+let window = Interactive.createWindow 300. 500.
+let videApp = Interactive.showView view window
 
-let printState (s: obj) =
-    let rec prec indentation (s: obj) =
-        try
-            if s = null then
-                printfn "%snull" indentation
-            elif s.GetType().FullName.StartsWith("Microsoft.FSharp.Core.FSharpOption`1[[System.Tuple`2") then
-                try
-                    let tuple = s?Value
-                    let item1 = tuple?Item1
-                    let item2 = tuple?Item2
-                    printfn "%A" item1
-                    prec (indentation + "  ") item2
-                with _ ->
-                    printfn "%sNone" indentation
-            else
-                printfn "%s%s" indentation (s.ToString())
-        with e ->
-            printfn "%s%s" indentation (e.ToString())
-    prec "" s
-
-videApp.OnEvaluated(fun v s -> printfn "EVAL")
+videApp.OnEvaluated(fun diag -> printfn $"EVAL (count = {diag.evaluationCount})")
