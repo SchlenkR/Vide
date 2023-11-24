@@ -31,8 +31,7 @@ type VideApp<'v,'s,'c>
                 // During an evaluation, requests for another evaluation can
                 // occur, which have to be handled as _subsequent_ evaluations!
                 let rec eval () =
-                    let sw = System.Diagnostics.Stopwatch.StartNew()
-
+                    let startTime = DateTime.Now
                     do
                         hasPendingEvaluationRequests <- false
                         isEvaluating <- true
@@ -52,7 +51,7 @@ type VideApp<'v,'s,'c>
                                 evaluationCount = evaluationCount
                                 value = value
                                 currentState = currentState
-                                duration = sw.Elapsed
+                                duration = DateTime.Now - startTime
                             }
                         onEvaluated |> Option.iter (fun callback -> callback diag)
                     if hasPendingEvaluationRequests then

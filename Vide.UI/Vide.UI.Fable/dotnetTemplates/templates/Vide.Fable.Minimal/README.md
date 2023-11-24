@@ -14,6 +14,4 @@ Then start the dev server:
 $ npm run dev
 ```
 
-open http://localhost:3000
-
-...enjoy!
+open your browser at the address listed in the terminal and... enjoy!
