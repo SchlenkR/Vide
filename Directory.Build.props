@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <Version>0.0.33</Version>
+    <Version>0.0.34</Version>
     <PackageReleaseNotes>
     </PackageReleaseNotes>
   </PropertyGroup>
