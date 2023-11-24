@@ -4,6 +4,7 @@ open System.Threading
 open System.Threading.Tasks
 open Vide
 open Vide.DSP
+open Vide.DSP.DiscreteTime
 open System
 open NAudio.Wave
 

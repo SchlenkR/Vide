@@ -2,12 +2,14 @@
 
 #I "../Vide.Audio.NAudio/bin/Debug/netstandard2.0"
 #r "Vide.Common.dll"
+#r "Vide.Common.DSP.dll"
 #r "Vide.Audio.NAudio.dll"
 
 open System
 open Vide
 open Vide.DSP
 open Vide.DSP.Operators
+open Vide.DSP.DiscreteTime
 open Vide.Audio.NAudio
 
 let modulatedSignal = dsp {
