@@ -11,7 +11,7 @@ $ npm i
 Then start the dev server:
 
 ```
-$ npm start
+$ npm run dev
 ```
 
 open http://localhost:3000
