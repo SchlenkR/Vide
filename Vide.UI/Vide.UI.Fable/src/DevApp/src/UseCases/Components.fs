@@ -4,7 +4,6 @@ open Vide
 open type Vide.Html
 
 
-// TODO: If that's not a function, we will have som val restr issues. Examine those!
 let visualComponentReturningValues =
     let visualCounter =
         vide {
