@@ -2,6 +2,16 @@
 
 Vide offers a unique approach for writing state-aware functions and composing them in a convenient and easy way. It is used for UI libraries targeting various platforms and technologies, streaming / DSP, workflow engines and perhaps more.
 
+<h1>
+  Vide is not actively maintained at the moment in regards of 
+  <ul>
+    <li>new features</li>
+    <li>bug-fixes</li>
+    <li>security updates</li>
+    <li>keeping up with runtimes and dependencies</li>
+  </ul>
+</h1>
+
 ## Status
 
 - Vide.UI.Fable: It's usable, and the API is stable (although there are no battle-tested real-world apps donw with it). V1 release aimed for Q3 2023.
