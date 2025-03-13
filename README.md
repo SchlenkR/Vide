@@ -1,3 +1,15 @@
+<div align="center">
+   <h2>🎁 <strong>Win a PXL-Clock - Watch How on YouTube</strong> 🎁</h2>
+   <a href="https://youtu.be/q5-QTpEMGdU"><img src="https://img.youtube.com/vi/q5-QTpEMGdU/0.jpg" alt="Watch the PXL-JAM video" style="width: 60%;"></a>
+   <p>YouTube</p>
+</div>
+
+The PXL PAM 2024 is a fun and engaging way to come together and have a joyful time!
+Watch the video or check out our [PXL-JAM repo](https://github.com/CuminAndPotato/PXL-JAM/)!
+
+---
+
+
 # Vide
 
 Vide offers a unique approach for writing state-aware functions and composing them in a convenient and easy way. It is used for UI libraries targeting various platforms and technologies, streaming / DSP, workflow engines and perhaps more.
