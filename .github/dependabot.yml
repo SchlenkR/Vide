@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directories:
+      - /Vide.UI/Vide.UI.Fable/src/Tests
+      - /Vide.UI/Vide.UI.Fable/src/DevApp
+      - /Vide.UI/Vide.UI.Fable/dotnetTemplates/templates/Vide.Fable.Minimal
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      dev-dependencies:
+        patterns:
+          - "*"

@@ -9,7 +9,7 @@
     "build": "npm run clean && dotnet fable ./src/DevApp.fsproj -o ./build --noCache --run vite build"
   },
   "devDependencies": {
-    "rimraf": "^5.0.0",
-    "vite": "^4.4.4"
+    "rimraf": "^6.1.3",
+    "vite": "^8.2.0"
   }
 }
